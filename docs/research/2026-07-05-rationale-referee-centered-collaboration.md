@@ -22,7 +22,7 @@ Referee-centered collaboration（レフェリー中心の協働）は、この�
 
 ## 多エージェント時代の Referee：エスカレーションと承認は違う
 
-「決定点の所有者」という Referee の定義は、単一のエージェントを人間が見張るという構図に依存しない。生成の実行は複数の LLM に分割でき（AutoGen: Wu et al., [arXiv:2308.08155](https://arxiv.org/abs/2308.08155)）、不確実性の高い問いだけを強い推論役へ委譲するカスケード構成は、精度を保ったままコストを大幅に下げることが実証されている（Yue et al., [arXiv:2310.03094](https://arxiv.org/abs/2310.03094)）。Anthropic 自身も、強いモデルをリードに、軽いモデルを並列ワーカーに置くオーケストレーター・ワーカー構成を実運用し、単体構成を上回る成果を報告した（[How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)）。この構図が一般化すると、魅力的な誘惑がひとつ生まれる。「Referee もまた、この階層の最上位に置かれた、いちばん賢い推論リソースにすぎないのではないか」という再解釈である。
+「決定点の所有者」という Referee の定義は、単一のエージェントを人間が見張るという構図に依存しない。生成の実行は複数の LLM に分割でき（AutoGen: Wu et al., [arXiv:2308.08155](https://arxiv.org/abs/2308.08155)）、不確実性の高い問いだけを強い推論役へ委譲するカスケード構成は、精度を保ったままコストを大幅に下げることが実証されている（Yue et al., [arXiv:2310.03094](https://arxiv.org/abs/2310.03094)）。Anthropic 自身も、強いモデルをリードに、軽いモデルを並列ワーカーに置くオーケストレーター・ワーカー構成を実運用し、単体構成を上回る成果を報告した（[How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)。ベンダー内部評価の自己報告）。この構図が一般化すると、魅力的な誘惑がひとつ生まれる。「Referee もまた、この階層の最上位に置かれた、いちばん賢い推論リソースにすぎないのではないか」という再解釈である。
 
 この再解釈は、情報の流れとしてはエレガントだが、責任の設計としては誤りである。強いモデルへの相談と、人間への承認要求は、どちらも「上位へのエスカレーション」に見えても意味が全く違う。前者は答えの質を上げるための手段であり、何度でもやり直せる。後者はプロジェクトの責任と監査可能性を確定させる行為であり、承認の記録が残り、その決定に人間が拘束される。エージェントチームがどれほど階層化されても、Referee は「最も賢いアドバイザー」として階層に溶け込むのではなく、「決定と責任の所有者」として階層の外側からゲートを握り続ける。協働が「推論リソースのルーティング」だけに還元された瞬間、責任の所在は再び曖昧に戻ってしまうからだ。
 
@@ -79,4 +79,4 @@ AI モデルの基礎能力が向上し、より「賢く」なったとして�
    - Anthropic. *Building effective agents*. https://www.anthropic.com/research/building-effective-agents （取得 2026-07-16）
    - Wu, Q. et al. "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation." arXiv:2308.08155. https://arxiv.org/abs/2308.08155 （取得 2026-07-16）
    - Yue, M. et al. "Large Language Model Cascades with Mixture of Thoughts Representations for Cost-efficient Reasoning." ICLR 2024 / arXiv:2310.03094. https://arxiv.org/abs/2310.03094 （取得 2026-07-16）
-   - Anthropic. *How we built our multi-agent research system*. https://www.anthropic.com/engineering/built-multi-agent-research-system （取得 2026-07-16）
+   - Anthropic. *How we built our multi-agent research system*. https://www.anthropic.com/engineering/built-multi-agent-research-system （取得 2026-07-16。ベンダー内部評価の自己報告）

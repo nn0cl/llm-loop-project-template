@@ -56,9 +56,12 @@ Referee の監督下でエージェントが安全に導入作業を代行でき
 1. **導入先リポジトリを working directory にして** agent session を開きます
    （テンプレートの checkout 側ではありません）。
 2. テンプレートの checkout パスと、やるべきタスクを伝えます。copy script
-   を実行すること、何をコピーし何をスキップしたかを報告すること、そして
-   Referee が承認していない導入先固有の事実（スタック、データストア、
-   provider、ドメインモデル）は推測せずに止まること。
+   は**テンプレート checkout 側のフルパスで**実行させます（コピー前の
+   導入先には `scripts/` がまだ存在しないため。例:
+   `~/dev/llm-project-template/scripts/copy-ai-collaboration-files.sh --target .`）。
+   何をコピーし何をスキップしたかを報告すること、そして Referee が承認して
+   いない導入先固有の事実（スタック、データストア、provider、ドメイン
+   モデル）は推測せずに止まること。
 3. エージェントが placeholder を埋めたり Feature Path の作業を始めたりする
    前に、diff を必ず自分でレビューします。エージェントは `AGENTS.md` の
    Prime Directive に従い、推測せず止まって確認を求めるべきです。
@@ -107,7 +110,10 @@ scaffolding として導入されたファイルの中には、その後プロ�
 以下のリストは
 [`scripts/lib/collaboration-template-paths.sh`](scripts/lib/collaboration-template-paths.sh)
 ——copy/update script が使っているのと同じリスト——を、削除の安全度で分類
-したものです。
+したものです。ただしこれは 2026-07-16 時点の手作業によるスナップショット
+であり、自動生成ではありません。その後テンプレートが変更されている場合、
+正は常にテンプレートリポジトリのパスリストと `ci.yml` の `required_files`
+であり、この節はそれらより遅れている可能性があります。
 
 ### そのまま削除してよい（純粋なテンプレートのツール類）
 

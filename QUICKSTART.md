@@ -53,9 +53,12 @@ The short version:
 1. Open an agent session **with the target repository as the working
    directory**, not the template checkout.
 2. Tell the agent the path to the template checkout and the task: run the
-   copy script, report what it skipped versus copied, and stop before
-   filling in any target-specific fact (stack, datastore, provider, domain
-   model) that has not been Referee-approved.
+   copy script **from that checkout by its full path** (the target has no
+   `scripts/` yet — e.g.
+   `~/dev/llm-project-template/scripts/copy-ai-collaboration-files.sh --target .`),
+   report what it skipped versus copied, and stop before filling in any
+   target-specific fact (stack, datastore, provider, domain model) that has
+   not been Referee-approved.
 3. Review the diff yourself before the agent fills placeholders or starts any
    Feature Path work. The agent should stop and ask, per `AGENTS.md`'s Prime
    Directive, rather than guess.
@@ -103,7 +106,10 @@ recorded under this template's own rules.
 The list below follows
 [`scripts/lib/collaboration-template-paths.sh`](scripts/lib/collaboration-template-paths.sh) —
 the same list the copy/update scripts use — split by how safe each item is to
-delete outright.
+delete outright. It is a hand-maintained snapshot (as of 2026-07-16), not
+generated from those files: if the template has changed since, the paths
+list and `ci.yml`'s `required_files` in the template repository are the
+authority, and this section may lag behind them.
 
 ### Safe to delete outright (template tooling only)
 
