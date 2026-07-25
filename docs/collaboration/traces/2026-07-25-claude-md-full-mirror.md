@@ -3,12 +3,12 @@
 ## Request
 
 - Date: 2026-07-25
-- User request: review and, on confirmation, implement a third-adopter
+- User request: review and, on confirmation, implement an adopter-feedback
   (qpex) process-feedback finding as a new local issue (LISS-0018) in
   `llm-project-template`.
 - Current phase: process/docs, Architecture Path (revises an Accepted ADR).
 - Canonical issue or work plan:
-  `docs/issues/LISS-0018-third-adopter-claude-md-full-mirror.md`.
+  `docs/issues/LISS-0018-another-adopter-claude-md-full-mirror.md`.
 - AI planning record: this trace; see Cost / Reasoning Control below.
 
 ## Context Ledger
@@ -75,6 +75,49 @@
   converging on this issue's actual scope. See LISS-0018 Context for the
   final scope rationale.
 
+### Attempt 2 (Adjudicator review pass)
+
+- Agent: Claude Code (Claude Sonnet 5), same interactive session.
+- Environment: same branch, after Attempt 1's commit.
+- Scope: Adjudicator-driven correction pass on Attempt 1's output. Six
+  errors found on review, three specific to the ADR text and three
+  inherited into both the ADR and LISS-0018:
+  1. A `PreToolUse`-hook quote was misattributed to *Automate actions with
+     hooks* (hooks-guide) when both sentences are actually from *How Claude
+     remembers your project* (memory page).
+  2. One of those misattributed sentences ("Hooks execute as shell commands
+     at fixed lifecycle events and apply regardless of what Claude
+     decides to do.") does appear verbatim, but on the memory page's
+     troubleshooting section, not hooks-guide — the ADR's citation pointed
+     to the wrong URL.
+  3. "literal full mirrors" / "literal text for CLAUDE.md,
+     copilot-instructions.md, and .grok/rules/*.md" overstated actual file
+     structure (compare headings across the three files — they differ) and
+     directly contradicted this same change's own LISS-0018 text, which
+     correctly describes the `CLAUDE.md` rewrite as "a condensed,
+     Claude-native restatement... not a literal splice."
+  4. "third adopter" collided with LISS-0006, which already uses "a third
+     adopter round" for an unrelated project (a rhythm/music-learning
+     game). Renamed throughout (including the issue filename) to "another
+     adopter (qpex)".
+  5. "`@import` and literal duplication load identically" overstated
+     Anthropic's actual text, which says imported content still loads into
+     context at launch but does not claim the two mechanisms are
+     equivalent in all respects.
+  6. Bullet-point phrasing made it ambiguous whether both failure modes (A:
+     design-check omission, B: decision-gate skip) were repeated, when only
+     A was recorded as repeated and B as a single occurrence.
+- Result: all six corrected in `docs/architecture/adr/0006-prompt-instruction-change-control.md`
+  and `docs/issues/LISS-0018-another-adopter-claude-md-full-mirror.md`
+  (renamed from the `...third-adopter...` filename); this trace updated to
+  record the correction.
+- Attempt boundary: same session, second commit.
+- Notes: items 1–3 were not present in LISS-0018 itself (it already cited
+  the hooks-guide permission-mode quote correctly and already described the
+  `CLAUDE.md` rewrite as non-literal) — they were introduced only when
+  drafting the ADR revisit section. Items 4–6 were inherited into both
+  files from Attempt 1's initial drafting and required fixes in both.
+
 ## Optional Reference Total
 
 - Value: not tracked.
@@ -96,7 +139,11 @@
 - Avoided LLM work: none applicable — this is inherently a
   judgment/synthesis task (reconciling contradictory documentation, honest
   evidence weighing).
-- Rework caused by AI output: none yet; this is the first attempt.
+- Rework caused by AI output: yes — Attempt 2 corrected six accuracy issues
+  in Attempt 1's ADR/issue text (citation misattribution, an overstated
+  "literal mirror" claim, an issue-numbering collision with LISS-0006, an
+  overstated "load identically" claim, and an ambiguous repetition claim).
+  Caught by Adjudicator review, not self-caught.
 
 ## Adjudicator Decisions
 
@@ -135,7 +182,7 @@
 - `docs/architecture/adr/0006-prompt-instruction-change-control.md` (new
   2026-07-25 decision round; updated Decision/Consequences/Enforcement
   file-by-file descriptions).
-- `docs/issues/LISS-0018-third-adopter-claude-md-full-mirror.md` (new).
+- `docs/issues/LISS-0018-another-adopter-claude-md-full-mirror.md` (new).
 - `docs/collaboration/traces/2026-07-25-claude-md-full-mirror.md` (this
   file, new).
 

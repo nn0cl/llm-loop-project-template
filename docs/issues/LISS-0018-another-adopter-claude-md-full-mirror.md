@@ -1,4 +1,4 @@
-# LISS-0018: Third-adopter finding — `@AGENTS.md` import does not guarantee behavioral adherence for Claude Code
+# LISS-0018: Another adopter's finding (qpex) — `@AGENTS.md` import does not guarantee behavioral adherence for Claude Code
 
 ## Metadata
 
@@ -14,12 +14,12 @@
 
 ## Summary
 
-- A third adopter (qpex, a QPex language toolchain project also running this
+- Another adopter (qpex, a QPex language toolchain project also running this
   template's agent contract) reported that `CLAUDE.md`'s `@AGENTS.md` import
   worked correctly at the technical level — the current `AGENTS.md` content
   was verifiably present in a live Claude Code session's context — but Claude
-  Code still repeatedly failed to follow two specific instructions from that
-  imported content in the same session.
+  Code still failed to follow two specific instructions from that imported
+  content in the same session (one omitted repeatedly, one missed once).
 - This is independent of, and not a continuation of, LISS-0005 (second
   adopter feedback); it is a distinct incident about a different mechanism.
 - This repo's own `docs/architecture/adr/0006-prompt-instruction-change-control.md`
@@ -58,9 +58,10 @@
    — `@AGENTS.md` import confirmed present in context, including same-day
    Approval Model / Explicit Batch and Approval Source Rules additions — yet
    Claude Code (A) repeatedly omitted the mandatory `[DESIGN CHECK]` scaffold
-   for Feature/Architecture Path requests, and (B) began Phase 2 Green
-   implementation without stopping at an unchecked Adjudicator Decision Point
-   left open in `docs/issues/LISS-0048-operator-return-typecheck-gap.md`.)
+   for Feature/Architecture Path requests across multiple turns, and (B) on
+   one occasion began Phase 2 Green implementation without stopping at an
+   unchecked Adjudicator Decision Point left open in
+   `docs/issues/LISS-0048-operator-return-typecheck-gap.md`.)
 2. `docs/architecture/adr/0006-prompt-instruction-change-control.md` gets a
    new dated decision round (same pattern as its existing LISS-0015 revisit)
    recording the qpex finding, the Anthropic-docs verification below, and the
@@ -75,17 +76,18 @@
 - Depends on:
 - Blocks:
 - Related: LISS-0005 (second adopter feedback; same adopter-feedback
-  category, no direct content overlap — this issue is an independent, third
+  category, no direct content overlap — this issue is an independent
   incident, not a follow-up to LISS-0005's still-unimplemented items).
 
 ## Adjudicator Decision Points
 
 - The causal mechanism behind the qpex incident is **not settled by this
-  issue**. Anthropic's own docs state `@import` and literal duplication load
-  identically into context ("Splitting into imports helps organization but
-  doesn't reduce context, since imported files load at launch"); the
-  documented adherence drivers are total line count, instruction specificity,
-  and absence of cross-file conflicts — not the import mechanism itself. The
+  issue**. Anthropic's own docs do not say `@import` and literal duplication
+  load identically — only that imported content still enters the context
+  window at launch ("Splitting into imports helps organization but doesn't
+  reduce context, since imported files load at launch"), so it is not exempt
+  from the documented adherence drivers: total line count, instruction
+  specificity, and absence of cross-file conflicts. The
   full-mirror fix may help only incidentally (if the rewrite is also more
   concise/specific than the content it replaced), not because it stopped
   being an import. Left open for future re-examination if the gap recurs
@@ -128,7 +130,7 @@
 
 ## References
 
-- qpex third-adopter incident report (relayed by the Adjudicator in session,
+- qpex adopter-feedback incident report (relayed by the Adjudicator in session,
   2026-07-25), citing qpex's own ADR 0006 revision and
   `docs/collaboration/traces/2026-07-25-claude-md-full-mirror.md`.
 - Anthropic, *How Claude remembers your project*.

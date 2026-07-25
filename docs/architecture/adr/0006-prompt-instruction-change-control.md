@@ -100,7 +100,7 @@ This gap is tracked in `docs/collaboration/process-gap-register.md`.
 The Claude Code branch of the decision above (2026-07-16) reasoned that
 `@path` imports are "a guaranteed content-inlining mechanism, not a
 hope-based pointer," and that this "removes the... objection" that justified
-Copilot's full mirror. A third adopter (qpex, LISS-0018) reported a concrete
+Copilot's full mirror. Another adopter (qpex, LISS-0018) reported a concrete
 incident that contradicts the practical conclusion, even though it does not
 contradict the technical premise:
 
@@ -108,9 +108,10 @@ contradict the technical premise:
   `AGENTS.md` content, including same-day additions, was verifiably present
   in a live session's context.
 - In that same session, Claude Code still (A) repeatedly omitted the
-  mandatory `[DESIGN CHECK]` scaffold for Feature/Architecture Path requests,
-  and (B) began Phase 2 Green implementation without stopping at an unchecked
-  Adjudicator Decision Point left open in the active local issue.
+  mandatory `[DESIGN CHECK]` scaffold for Feature/Architecture Path requests
+  across multiple turns, and (B) on one occasion began Phase 2 Green
+  implementation without stopping at an unchecked Adjudicator Decision Point
+  left open in the active local issue.
 
 Anthropic's own current documentation (fetched 2026-07-25) both supports and
 complicates the fix this finding motivates:
@@ -121,23 +122,28 @@ complicates the fix this finding motivates:
   project*](https://code.claude.com/docs/en/memory))
 - Complicates the specific "import vs. literal text" causal story: "Splitting
   into imports helps organization but doesn't reduce context, since imported
-  files load at launch." Per Anthropic, `@import` and literal duplication
-  load identically; the documented adherence drivers are total line count
-  ("target under 200 lines... longer files consume more context and reduce
-  adherence"), instruction specificity, and absence of cross-file conflicts —
-  not the import mechanism itself. Converting `CLAUDE.md` to a full mirror is
-  therefore not confirmed to fix the root cause; it may help only if the
-  rewrite is also more concise and specific than what it replaced.
-- Names a stronger, deterministic alternative for exactly this failure class
-  that this revision does **not** adopt yet: "To block an action regardless
-  of what Claude decides, use a **PreToolUse hook** instead... Hooks execute
-  as shell commands at fixed lifecycle events and apply regardless of what
-  Claude decides to do." ([*Automate actions with
-  hooks*](https://code.claude.com/docs/en/hooks-guide)) A hook could plausibly
-  gate failure mode B, but requires reshaping local-issue "Adjudicator
-  Decision Points" into a machine-checkable format first; not built in
-  LISS-0018. Failure mode A is not naturally hook-gatable by the same
-  mechanism.
+  files load at launch." ([*How Claude remembers your
+  project*](https://code.claude.com/docs/en/memory)) Anthropic does not state
+  that `@import` and literal duplication load identically — only that
+  imported content still enters the context window at launch, so it is not
+  exempt from the documented adherence drivers: total line count ("target
+  under 200 lines... longer files consume more context and reduce
+  adherence"), instruction specificity, and absence of cross-file conflicts.
+  Converting `CLAUDE.md` to a full mirror is therefore not confirmed to fix
+  the root cause; it may help only if the rewrite is also more concise and
+  specific than what it replaced.
+- Also from the same memory page: "To block an action regardless of what
+  Claude decides, use a **PreToolUse hook** instead" — a stronger,
+  deterministic alternative for exactly this failure class that this
+  revision does **not** adopt yet. The separate *Automate actions with hooks*
+  page confirms the mechanism: "`PreToolUse` hooks fire before any
+  permission-mode check, in every permission mode, including `dontAsk`...
+  blocks the tool even in `bypassPermissions` mode."
+  ([hooks-guide](https://code.claude.com/docs/en/hooks-guide)) A hook could
+  plausibly gate failure mode B, but requires reshaping local-issue
+  "Adjudicator Decision Points" into a machine-checkable format first; not
+  built in LISS-0018. Failure mode A is not naturally hook-gatable by the
+  same mechanism.
 
 Decision: given the uncertainty above, and on Adjudicator instruction not to
 block this fix on resolving the causal mechanism, `CLAUDE.md` moves to a full
@@ -165,9 +171,14 @@ canonical definition of the agent operating contract file set.
 - Per LISS-0015 (Cursor) and LISS-0018 (Claude Code, 2026-07-25): the
   consistency check means the five files resolve to equivalent effective
   content, not that they are literal duplicates. `CLAUDE.md`,
-  `copilot-instructions.md`, and `.grok/rules/*.md` are literal full mirrors;
-  `.cursor/rules/*.mdc` plus Cursor's native root `AGENTS.md` loading
-  together supply the shared contract for Cursor.
+  `copilot-instructions.md`, and `.grok/rules/*.md` are each independently
+  phrased, full-coverage mirrors of `AGENTS.md`'s effective content for their
+  own tool (not literal, byte-identical text of `AGENTS.md` or of each
+  other — compare their differing headings, e.g. `CLAUDE.md` keeps a
+  dedicated "Approval Model" section that `copilot-instructions.md` folds
+  into "Mandatory Design Check" instead); `.cursor/rules/*.mdc` plus
+  Cursor's native root `AGENTS.md` loading together supply the shared
+  contract for Cursor.
 
 ## Consequences
 
@@ -201,9 +212,10 @@ Negative:
   to `AGENTS.md` needs a matching manual edit in `CLAUDE.md`, the same
   maintenance cost already accepted for Copilot and Grok.
 - The causal mechanism behind the qpex incident that motivated this reversal
-  is not confirmed (see LISS-0018 Adjudicator Decision Points); if
-  Anthropic's "import loads identically to literal text" documentation is
-  the accurate model, this change may not address the root cause by itself.
+  is not confirmed (see LISS-0018 Adjudicator Decision Points); if line count
+  and specificity are the real adherence drivers, as Anthropic's own
+  documentation suggests, this change may not address the root cause by
+  itself.
 - If Cursor ever stopped auto-applying root `AGENTS.md`, shared rules would
   disappear from Cursor sessions unless `.mdc` or another binding were
   restored — watch product docs when upgrading Cursor.
@@ -218,9 +230,10 @@ Code review should reject:
 - agent operating contract changes that leave `AGENTS.md`, `CLAUDE.md`,
   `.github/copilot-instructions.md`, `.grok/rules/*.md`, and
   `.cursor/rules/*.mdc` inconsistent with each other in effective content
-  (literal text for `CLAUDE.md`, `copilot-instructions.md`, and
-  `.grok/rules/*.md`; effective union of `.cursor/rules/*.mdc` plus native
-  root `AGENTS.md` for Cursor).
+  (full-coverage effective-content mirror, independently phrased per tool,
+  for `CLAUDE.md`, `copilot-instructions.md`, and `.grok/rules/*.md`;
+  effective union of `.cursor/rules/*.mdc` plus native root `AGENTS.md` for
+  Cursor).
 
 CI should reject:
 
