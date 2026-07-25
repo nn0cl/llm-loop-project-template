@@ -66,14 +66,20 @@
 - Estimate variance: not applicable.
 - Variance reason: not applicable.
 - Scope: draft and revise `docs/issues/LISS-0018-*.md`; revise
-  `docs/architecture/adr/0006-prompt-instruction-change-control.md`; rewrite
-  `CLAUDE.md` as a full mirror; add this trace.
-- Result: completed, pending Adjudicator PR review.
+  `docs/architecture/adr/0006-prompt-instruction-change-control.md`;
+  rewrite `CLAUDE.md` as an effective-content mirror of `AGENTS.md`
+  (condensed restatement, not a literal splice — see LISS-0018 Acceptance
+  Note 1); add this trace.
+- Result: local edits and commit completed; no pull request opened.
 - Attempt boundary: single interactive session, no retries.
 - Notes: scope changed twice during the session (original two-item draft
   dropped in full; a branch/PR-granularity sub-topic also dropped) before
-  converging on this issue's actual scope. See LISS-0018 Context for the
-  final scope rationale.
+  converging on this issue's actual scope, per user redirection rather than
+  AI error. Separately, the `CLAUDE.md` draft itself was revised once within
+  this attempt (an initial 231-line condensed version was replaced with the
+  245-line version actually committed, after self-review found it had
+  dropped concrete document filenames — see LISS-0018 Acceptance Note 1).
+  See LISS-0018 Context for the final scope rationale.
 
 ### Attempt 2 (Adjudicator review pass)
 
@@ -139,11 +145,16 @@
 - Avoided LLM work: none applicable — this is inherently a
   judgment/synthesis task (reconciling contradictory documentation, honest
   evidence weighing).
-- Rework caused by AI output: yes — Attempt 2 corrected six accuracy issues
-  in Attempt 1's ADR/issue text (citation misattribution, an overstated
-  "literal mirror" claim, an issue-numbering collision with LISS-0006, an
-  overstated "load identically" claim, and an ambiguous repetition claim).
-  Caught by Adjudicator review, not self-caught.
+- Rework caused by AI output: two distinct kinds, do not conflate them.
+  (a) Within Attempt 1, before any external review: scope was narrowed twice
+  at the user's direction (not AI error), and the `CLAUDE.md` draft was
+  revised once by self-review (231→245 lines, restoring dropped filenames) —
+  self-caught, not Adjudicator-triggered. (b) Attempt 2 is genuine
+  Adjudicator-triggered rework: it corrected six accuracy issues in Attempt
+  1's ADR/issue text (citation misattribution, an overstated "literal
+  mirror" claim, an issue-numbering collision with LISS-0006, an overstated
+  "load identically" claim, and an ambiguous repetition claim) — caught by
+  Adjudicator review, not self-caught.
 
 ## Adjudicator Decisions
 
@@ -178,7 +189,8 @@
 
 ## Changed Files
 
-- `CLAUDE.md` (rewritten as full mirror, `@AGENTS.md` import removed).
+- `CLAUDE.md` (rewritten as an effective-content mirror of `AGENTS.md`,
+  condensed restatement, `@AGENTS.md` import removed).
 - `docs/architecture/adr/0006-prompt-instruction-change-control.md` (new
   2026-07-25 decision round; updated Decision/Consequences/Enforcement
   file-by-file descriptions).
@@ -188,14 +200,22 @@
 
 ## Next Safe Action
 
-- Open a pull request from `process/liss-0018-claude-md-full-mirror` to
-  `main`, left unmerged, requesting explicit Adjudicator review per
+- The branch is committed locally only; the Adjudicator explicitly declined
+  to push or open a PR in this session. When the Adjudicator decides to
+  proceed, open a pull request from
+  `process/liss-0018-claude-md-full-mirror` to `main`, left unmerged,
+  requesting explicit Adjudicator review per
   `docs/collaboration/prompt-instruction-change-control.md`. Do not merge
   without that review.
 
 ## Notes
 
-- `.grok/rules/*.md` and `.cursor/rules/*.mdc` were checked for relevant
-  mirrored content and require no edits: neither previously referenced
-  `@AGENTS.md` for Claude Code's mechanism, so this change does not
-  introduce new inconsistency there.
+- `.grok/rules/*.md` and `.cursor/rules/*.mdc` were checked and require no
+  edits for this specific change: neither previously referenced
+  `@AGENTS.md` as *Claude Code's* import mechanism, so this change does not
+  introduce a *new* inconsistency there. This is a narrow claim — it does
+  not mean the five contract files are fully consistent with each other in
+  general. Pre-existing gaps such as `.github/copilot-instructions.md` and
+  `.grok/rules/*.md` lacking a dedicated "Approval Model" section (present
+  in `AGENTS.md` and now in `CLAUDE.md`) were neither introduced nor
+  resolved by this change and are out of scope here.
