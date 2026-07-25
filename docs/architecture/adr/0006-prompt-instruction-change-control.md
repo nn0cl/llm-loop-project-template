@@ -95,6 +95,60 @@ require Adjudicator review specifically, or get enforced by CI.
 
 This gap is tracked in `docs/collaboration/process-gap-register.md`.
 
+### 2026-07-25 revisit: Claude Code's `@AGENTS.md` import (LISS-0018)
+
+The Claude Code branch of the decision above (2026-07-16) reasoned that
+`@path` imports are "a guaranteed content-inlining mechanism, not a
+hope-based pointer," and that this "removes the... objection" that justified
+Copilot's full mirror. A third adopter (qpex, LISS-0018) reported a concrete
+incident that contradicts the practical conclusion, even though it does not
+contradict the technical premise:
+
+- The `@AGENTS.md` import worked exactly as documented — the day's current
+  `AGENTS.md` content, including same-day additions, was verifiably present
+  in a live session's context.
+- In that same session, Claude Code still (A) repeatedly omitted the
+  mandatory `[DESIGN CHECK]` scaffold for Feature/Architecture Path requests,
+  and (B) began Phase 2 Green implementation without stopping at an unchecked
+  Adjudicator Decision Point left open in the active local issue.
+
+Anthropic's own current documentation (fetched 2026-07-25) both supports and
+complicates the fix this finding motivates:
+
+- Supports treating imported content as no more binding than any other
+  CLAUDE.md prose: "Claude treats them \[CLAUDE.md / auto memory] as context,
+  not enforced configuration." ([*How Claude remembers your
+  project*](https://code.claude.com/docs/en/memory))
+- Complicates the specific "import vs. literal text" causal story: "Splitting
+  into imports helps organization but doesn't reduce context, since imported
+  files load at launch." Per Anthropic, `@import` and literal duplication
+  load identically; the documented adherence drivers are total line count
+  ("target under 200 lines... longer files consume more context and reduce
+  adherence"), instruction specificity, and absence of cross-file conflicts —
+  not the import mechanism itself. Converting `CLAUDE.md` to a full mirror is
+  therefore not confirmed to fix the root cause; it may help only if the
+  rewrite is also more concise and specific than what it replaced.
+- Names a stronger, deterministic alternative for exactly this failure class
+  that this revision does **not** adopt yet: "To block an action regardless
+  of what Claude decides, use a **PreToolUse hook** instead... Hooks execute
+  as shell commands at fixed lifecycle events and apply regardless of what
+  Claude decides to do." ([*Automate actions with
+  hooks*](https://code.claude.com/docs/en/hooks-guide)) A hook could plausibly
+  gate failure mode B, but requires reshaping local-issue "Adjudicator
+  Decision Points" into a machine-checkable format first; not built in
+  LISS-0018. Failure mode A is not naturally hook-gatable by the same
+  mechanism.
+
+Decision: given the uncertainty above, and on Adjudicator instruction not to
+block this fix on resolving the causal mechanism, `CLAUDE.md` moves to a full
+mirror as a precautionary measure consistent with how Copilot's weaker,
+documented "read-and-apply, not strict enforcement" risk was already handled
+— treating Claude Code's observed gap the same way pending further evidence,
+rather than waiting for a confirmed mechanism. Whether to pursue
+`PreToolUse`-hook enforcement, and whether recurrence should prompt
+reconsidering Claude Code's status among this template's supported agents,
+are both left open in LISS-0018 and not decided here.
+
 ## Decision
 
 Adopt `docs/collaboration/prompt-instruction-change-control.md` as the
@@ -108,12 +162,12 @@ canonical definition of the agent operating contract file set.
   contract change, including small wording changes.
 - Enforce the trace requirement in CI: a pull request that changes a
   contract file must also add a trace file.
-- Per LISS-0015: the consistency check means the five files resolve to
-  equivalent effective content, not that they are literal duplicates.
-  `CLAUDE.md` resolves through its `@AGENTS.md` import; `.cursor/rules/*.mdc`
-  plus Cursor's native root `AGENTS.md` loading together supply the shared
-  contract; `copilot-instructions.md` and `.grok/rules/*.md` remain literal
-  full mirrors.
+- Per LISS-0015 (Cursor) and LISS-0018 (Claude Code, 2026-07-25): the
+  consistency check means the five files resolve to equivalent effective
+  content, not that they are literal duplicates. `CLAUDE.md`,
+  `copilot-instructions.md`, and `.grok/rules/*.md` are literal full mirrors;
+  `.cursor/rules/*.mdc` plus Cursor's native root `AGENTS.md` loading
+  together supply the shared contract for Cursor.
 
 ## Consequences
 
@@ -125,12 +179,12 @@ Positive:
   changing agent behavior.
 - Every contract change has a recorded reason and expected behavior change.
 - CI gives an automated signal instead of relying only on Adjudicator memory.
-- `CLAUDE.md`'s `@AGENTS.md` import removes one full hand-maintained
-  duplicate; a future change to `AGENTS.md`'s imported sections no longer
-  needs a matching manual edit in `CLAUDE.md`.
 - Cursor `.mdc` files no longer carry redundant `@AGENTS.md` references or
   full shared-section mirrors; shared content rides on native `AGENTS.md`
   auto-apply.
+- `CLAUDE.md` as a full mirror removes the open question of whether an
+  imported instruction binds Claude Code's behavior as strongly as text
+  physically present in the file it treats as its own contract (LISS-0018).
 
 Negative:
 
@@ -139,10 +193,17 @@ Negative:
 - Requires keeping the file list in
   `docs/collaboration/prompt-instruction-change-control.md` up to date as new
   contract-like files are introduced.
-- The consistency check can no longer be a simple text diff for `CLAUDE.md`
-  or for Cursor (`.mdc` + native `AGENTS.md`); a reviewer must confirm the
-  effective union still matches `AGENTS.md`, which is a judgment call rather
-  than a byte comparison.
+- The consistency check can no longer be a simple text diff for Cursor
+  (`.mdc` + native `AGENTS.md`); a reviewer must confirm the effective union
+  still matches `AGENTS.md`, which is a judgment call rather than a byte
+  comparison.
+- `CLAUDE.md` is now a full hand-maintained duplicate again: a future change
+  to `AGENTS.md` needs a matching manual edit in `CLAUDE.md`, the same
+  maintenance cost already accepted for Copilot and Grok.
+- The causal mechanism behind the qpex incident that motivated this reversal
+  is not confirmed (see LISS-0018 Adjudicator Decision Points); if
+  Anthropic's "import loads identically to literal text" documentation is
+  the accurate model, this change may not address the root cause by itself.
 - If Cursor ever stopped auto-applying root `AGENTS.md`, shared rules would
   disappear from Cursor sessions unless `.mdc` or another binding were
   restored — watch product docs when upgrading Cursor.
@@ -157,9 +218,9 @@ Code review should reject:
 - agent operating contract changes that leave `AGENTS.md`, `CLAUDE.md`,
   `.github/copilot-instructions.md`, `.grok/rules/*.md`, and
   `.cursor/rules/*.mdc` inconsistent with each other in effective content
-  (literal text for `copilot-instructions.md` and `.grok/rules/*.md`;
-  resolved content via `@AGENTS.md` for `CLAUDE.md`; effective union of
-  `.cursor/rules/*.mdc` plus native root `AGENTS.md` for Cursor).
+  (literal text for `CLAUDE.md`, `copilot-instructions.md`, and
+  `.grok/rules/*.md`; effective union of `.cursor/rules/*.mdc` plus native
+  root `AGENTS.md` for Cursor).
 
 CI should reject:
 

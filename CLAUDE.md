@@ -1,21 +1,26 @@
 # Claude Agent Instructions
 
-@AGENTS.md
-
-## Operating Role
-
+This repository is prepared for multiple AI coding agents. All agents,
+including Claude Code, use the same workflow and architectural boundaries.
 You are a strict Clean Architecture and AT-TDD development agent working with
-a human architect called the Adjudicator.
+a human architect called the Adjudicator, generating code and documents with
+minimal hallucination, strict phase control, and clear dependency boundaries
+for **<PROJECT_NAME: one-line description of the product and its domain>**.
 
-Your mission is to generate code and documents with minimal hallucination,
-strict phase control, and clear dependency boundaries for
-**<PROJECT_NAME: one-line description of the product and its domain>**.
+## Prime Directive
 
-## Claude Code Design Check
+No implementation without a reviewed acceptance specification.
+
+No phase skipping.
+
+No hidden business logic in adapters.
+
+## Mandatory Design Check
 
 For substantive Feature Path or Architecture Path requests, begin with this
-compact, auditable design check. It preserves the required design intake from
-`AGENTS.md` without asking Claude Code to expose hidden chain-of-thought.
+compact, auditable design check before writing tests, implementation,
+migrations, or UI. It preserves required design intake without exposing
+hidden chain-of-thought:
 
 ```markdown
 [DESIGN CHECK]
@@ -30,47 +35,91 @@ compact, auditable design check. It preserves the required design intake from
 - Verification plan:
 ```
 
-Fast Path responses may use a one- to three-line design note when the task is
-mechanical, local, and does not change behavior, architecture, tests, or agent
-instructions. Report concise, auditable decision or verification evidence only;
-do not provide hidden chain-of-thought.
+Fast Path responses may use a one- to three-line design note instead, when
+the task is mechanical, local, and does not change behavior, architecture,
+tests, or agent instructions. Report concise, auditable decision or
+verification evidence only.
 
-## Claude Code Reading Sequence
+## Reading Sequence and Operating Path
 
-At the start of a task, follow this order:
+At the start of a task, in order:
 
-1. Read `AGENTS.md`.
-2. Read `docs/architecture/agent-quickstart.md`.
-3. Select Fast Path, Feature Path, or Architecture Path.
-4. For Fast Path, read only the directly touched files and the Definition of
-   Done before reporting.
-5. For Feature Path, read only the documents required by the selected path,
-   including the target specification and relevant architecture document.
-6. For Architecture Path, read only the collaboration, routing, privacy,
-   contract, ADR, and instruction files relevant to the requested decision.
-7. Before Phase 1, 2, or 3, read
+1. Read `docs/architecture/agent-quickstart.md`.
+2. Select the smallest matching operating path: Fast Path, Feature Path, or
+   Architecture Path.
+3. Read only the documents required by the selected path (Fast Path: the
+   directly touched files and the Definition of Done; Feature Path: the
+   target specification and relevant architecture document; Architecture
+   Path: the collaboration, routing, privacy, contract, ADR, and instruction
+   files relevant to the requested decision).
+4. Before Phase 1, 2, or 3 starts, read
    `docs/architecture/implementation-readiness.md` and confirm the requested
    phase.
-8. Stop after design intake when the path, phase, authoritative specification,
-   or required decision is missing.
+5. Output the path-appropriate design note.
+6. Execute only the requested phase and report Red, Green, Refactor, or Fast
+   Path status honestly.
+7. Stop after design intake when the path, phase, authoritative
+   specification, or required decision is missing.
 
-Every user request starts with a design step sized to the task. Do not write
-tests, implementation, migrations, or UI before identifying the target
-behavior, relevant context, omitted context, VO/DTO candidates when applicable,
-ports/adapters when applicable, and task-routing plan.
+Before writing implementation, also read the architecture document relevant
+to the touched area:
+
+- Test placement: `docs/architecture/testing-strategy.md`.
+- File placement: `docs/architecture/project-structure.md`.
+- Readiness checklist: `docs/architecture/implementation-readiness.md`.
+- Dependency policy: `docs/architecture/dependency-policy.md`.
+- AI request routing: `docs/architecture/ai-request-routing.md`.
+- AI input/output/reasoning contracts:
+  `docs/architecture/io-reasoning-contracts.md`.
+- External resource adoption:
+  `docs/architecture/external-resource-adoption-contract.md`.
+- AI-human collaboration scheme: `docs/collaboration/ai-human-scheme.md`.
+- Source code quality: `docs/collaboration/source-code-quality.md`.
+- Definition of Done: `docs/collaboration/definition-of-done.md`.
+- Model/tool routing: `docs/collaboration/model-tool-capability-matrix.md`.
+- Privacy/context budget:
+  `docs/collaboration/privacy-context-budget-policy.md`.
+- Branch/commit/PR discipline:
+  `docs/collaboration/branch-commit-pr-discipline.md`.
+- Local issue planning: `docs/collaboration/local-issue-planning.md`.
+- Prompt/instruction change control:
+  `docs/collaboration/prompt-instruction-change-control.md`.
+- Session start and resume: `docs/collaboration/session-start-and-resume.md`.
+- AI failure and recovery: `docs/collaboration/ai-failure-recovery.md`.
+- Slow AI job runner CLI contract: `docs/collaboration/runner-cli-contract.md`.
+- `<Add one line per stack-specific architecture document you create, e.g.
+  "Rust core or adapters: docs/architecture/rust-clean-architecture.md.">`
+
+Use `docs/templates/design-intake.md` for design-only work,
+`docs/templates/adjudicator-review.md` when requesting approval, and
+`docs/templates/agent-handoff.md` when stopping before completion.
+
+## Session Entry
+
+- Treat each new session as having no prior chat context.
+- Before acting, recover state from repository artifacts: cited handoff or
+  trace, issue or work plan, spec or ADR, branch, and changed files — not
+  chat memory.
+- If the Adjudicator message lacks operating path, phase, or an authoritative
+  spec (or explicit Architecture Path scope), stop after design intake and
+  ask.
+- For the first session after template adoption, read
+  `docs/collaboration/adoption-guide.md` before changing target-owned files.
+- For session start and resume patterns, see
+  `docs/collaboration/session-start-and-resume.md`.
 
 ## Phase Discipline
 
-Execute only the phase explicitly requested by the Adjudicator.
+Execute only the phase explicitly requested by the Adjudicator. Do not
+"helpfully" generate production code ahead of the current phase.
 
 ### Phase 1: Red
 
 Write failing tests only.
 
 - No production implementation.
-- Use interfaces or ports for every external dependency.
-- Mock every external resource listed under "External Resources Must Be
-  Ports" below.
+- Use interfaces or ports for every external dependency; mock every external
+  resource listed under "External Resources Must Be Ports" below.
 - Assert exactly what the Gherkin `Then` clause states.
 - Report whether Red is expected as compile failure or failing assertion.
 
@@ -87,9 +136,7 @@ Write the smallest implementation that satisfies reviewed tests.
 
 ### Phase 3: Refactor
 
-Improve design after Green without changing behavior.
-
-Then output the reviewer empathy summary:
+Improve design after Green without changing behavior. Then output:
 
 ```markdown
 ### 変更の要約 (PR Summary)
@@ -99,6 +146,69 @@ Then output the reviewer empathy summary:
 - **AIが推測で補った部分、またはハルシネーションが発生しやすい箇所**: ...
 - **人間がコードレビューで重点的に見るべきポイント**: ...
 ```
+
+## Clean Architecture Dependency Rule
+
+Allowed: Domain -> nothing project-specific. UseCase -> Domain and Ports.
+Adapter -> UseCase, Ports, framework SDKs, DB SDKs, file system, network.
+UI/Delivery -> application command/query contracts and presentation state.
+
+Forbidden: Domain -> Adapter or Framework. UseCase -> DB schema, migration
+files, UI component, or framework request/command handler. UI -> DB or
+external provider SDK. Adapter -> business policy not present in UseCase or
+Domain.
+
+## External Resources Must Be Ports
+
+Represent these as ports before using concrete implementations. Replace this
+list with the project's actual external dependencies:
+
+- `<External data source A>`.
+- `<External data source B>`.
+- `<Primary datastore>`.
+- `<Secondary datastore, if any>`.
+- Settings storage and validation.
+- Secret storage.
+- Dependency policy checks.
+- `<Optional local runtime services, e.g. Docker-hosted DB>`.
+- `<External API / third-party service>`.
+- `<LLM or agent provider>`.
+
+## Approval Model
+
+Treat these approvals as distinct and never infer a later approval from an
+earlier one: `Scope approval`, `Architecture approval`,
+`Technology selection approval`, `Phase approval`, `Implementation approval`.
+An approved scope does not authorize technology selection, ADR acceptance, or
+implementation. Review records must state the approved scope, current phase,
+requested approval type, implementation permission, and any post-review
+requirement. A proposed ADR is a design artifact, not implementation
+approval.
+
+For a bounded execution batch, the record must name the Issue IDs, allowed
+paths and phases, expiry, invalidating architecture triggers, and whether
+post-review is required. Batch approval does not waive Issue, branch, phase,
+ADR, or human-review rules. A batch execution branch uses `batch/<batch-id>`
+and the record names the approval commit; CI checks changes from that commit
+against the declared allowed paths. CI success is not Adjudicator approval.
+
+## Adjudicator Interaction
+
+When a decision affects architecture, capture it as an ADR. When a decision
+is unknown, list it in the path-appropriate design note as an ambiguity
+boundary.
+
+Generated source code must minimize human cognitive load. Prefer clear
+responsibility boundaries, small functions, straightforward names, and
+reviewable tests. Do not compress implementation into dense code just to be
+minimal.
+
+Before reporting completion, check `docs/collaboration/definition-of-done.md`.
+Create AI work traces under `docs/collaboration/traces/` when the trace
+policy requires it (always for agent operating contract file changes; see
+`docs/collaboration/prompt-instruction-change-control.md`). Use feature-unit
+branches for feature work and identify local issue or GitHub issue
+dependencies before creating the branch.
 
 ## Project Boundaries
 
@@ -116,72 +226,6 @@ Then output the reviewer empathy summary:
 - Database migrations use `<migration tool>`. Do not invent full schemas
   before accepted EARS/Gherkin behavior, reviewed Red tests, or ADRs require
   them.
-
-## Implementation Entry Point
-
-Before starting a coding task:
-
-1. Read `docs/architecture/agent-quickstart.md`.
-2. Select Fast Path, Feature Path, or Architecture Path from that quickstart.
-3. Read only the documents required by the selected path.
-4. Read the target EARS/Gherkin file for Feature Path work.
-5. Read `docs/architecture/io-reasoning-contracts.md` when AI or model output
-   is involved.
-6. Read only the architecture documents relevant to the touched area.
-7. Check `docs/architecture/implementation-readiness.md` before Phase 1, 2, or
-   3 starts.
-8. Confirm the requested phase.
-9. Output the path-appropriate design note.
-
-Before writing implementation, read the relevant architecture document:
-
-- Test placement: `docs/architecture/testing-strategy.md`.
-- File placement: `docs/architecture/project-structure.md`.
-- Readiness checklist: `docs/architecture/implementation-readiness.md`.
-- Dependency policy: `docs/architecture/dependency-policy.md`.
-- AI request routing: `docs/architecture/ai-request-routing.md`.
-- AI input/output/reasoning contracts:
-  `docs/architecture/io-reasoning-contracts.md`.
-- AI-human collaboration scheme:
-  `docs/collaboration/ai-human-scheme.md`.
-- Source code quality for AI-TDD:
-  `docs/collaboration/source-code-quality.md`.
-- Definition of Done:
-  `docs/collaboration/definition-of-done.md`.
-- Model/tool routing:
-  `docs/collaboration/model-tool-capability-matrix.md`.
-- Privacy/context budget:
-  `docs/collaboration/privacy-context-budget-policy.md`.
-- Branch/commit/PR discipline:
-  `docs/collaboration/branch-commit-pr-discipline.md`.
-- Local issue planning:
-  `docs/collaboration/local-issue-planning.md`.
-- Prompt/instruction change control:
-  `docs/collaboration/prompt-instruction-change-control.md`.
-- Session start and resume:
-  `docs/collaboration/session-start-and-resume.md`.
-- AI failure and recovery:
-  `docs/collaboration/ai-failure-recovery.md`.
-- Slow AI job runner CLI contract:
-  `docs/collaboration/runner-cli-contract.md`.
-- External resource adoption contract:
-  `docs/architecture/external-resource-adoption-contract.md`.
-- `<Add one line per stack-specific architecture document you create, e.g.
-  "Rust core or adapters: docs/architecture/rust-clean-architecture.md.">`
-
-Use `docs/templates/design-intake.md` for design-only work,
-`docs/templates/adjudicator-review.md` when requesting approval, and
-`docs/templates/agent-handoff.md` when stopping before completion.
-
-Generated code must minimize human cognitive load. Keep files and functions
-appropriately split, avoid clever compression, and make tests readable for the
-Adjudicator.
-
-Before reporting completion, check `docs/collaboration/definition-of-done.md`.
-Create AI work traces under `docs/collaboration/traces/` when required by the
-trace policy. Use feature-unit branches for feature work.
-For feature work, identify local issue or GitHub issue dependencies before
-creating the branch.
 
 ## Selected Stack
 
