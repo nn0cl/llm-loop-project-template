@@ -6,7 +6,7 @@
 
 ---
 
-A chat window is not a project artifact. Decisions, plans, and payload context left only in chat history bury themselves in logs and fall off the context window. An agent may move freely inside a sandbox; the wiring that integrates its work—plans, history, approval flows—must live outside the sandbox: repository, CI, and human process ([The Agent is a Sandbox](./2026-07-07-rationale-saas-agent-as-sandbox.md)).
+A chat window is not a project artifact. Decisions, plans, and payload context left only in chat history bury themselves in logs and fall off the context window. An agent may move freely inside a session; the wiring that integrates its work—plans, history, approval flows—must live outside the session: repository, CI, and human process ([Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md)).
 
 Plans, instructions, and work histories belong in plain text in the repository, under the same review, CI, and version control as source. Anything that changes system behavior changes with a reason, a review trace, and a diff.
 
@@ -24,7 +24,7 @@ For lightweight tasks such as editing reading materials, the Adjudicator may exp
 
 Placing architecture decisions in repository history goes back to Michael Nygard’s ADR proposal ([Cognitect](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)). In human-only teams ADRs may act as short memos of context and outcome. When agents lose session context, **leaving ADRs as “past notes” is too weak**: models lean on generic training priors and may violate local decisions.
 
-So this template treats ADRs on the normative side as **binding decisions**, contract files (`AGENTS.md` and peers) as how those decisions are enforced in sessions, and issues/traces as change procedure (ADR 0005 / 0006). That is not physical enforcement ([The Agent is a Sandbox](./2026-07-07-rationale-saas-agent-as-sandbox.md)). Lessig’s “Code is Law” is a famous **analogy**—code shapes behavior—which helps say “repository rules steer generated code,” but it is **not a legal system**. Review and CI back documented decisions and process, not a metaphoric judiciary.
+So this template treats ADRs on the normative side as **binding decisions**, contract files (`AGENTS.md` and peers) as how those decisions are enforced in sessions, and issues/traces as change procedure (ADR 0005 / 0006). That is not physical enforcement ([Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md)). Lessig’s “Code is Law” is a famous **analogy**—code shapes behavior—which helps say “repository rules steer generated code,” but it is **not a legal system**. Review and CI back documented decisions and process, not a metaphoric judiciary.
 
 In AI collaboration, which files are loaded and which phase is open already shape implementation. Changing behavior requires changing contracts through the prescribed procedure—more than classical ADR memo culture alone.
 

@@ -99,7 +99,7 @@ accepted -> adopted                                         ← 信頼利用へ�
 総論から読み始める。
 
 - [完成形](2026-07-05-rationale-target-end-state.md)
-- [エージェントはサンドボックスである](2026-07-07-rationale-saas-agent-as-sandbox.md)
+- [確率的世界との対峙](2026-07-07-rationale-saas-agent-as-sandbox.md)
 - [Adjudicator とフェーズ](2026-07-05-rationale-adjudicator-centered-collaboration.md)
 - [設計先行とコンテキスト](2026-07-05-rationale-design-first-minimal-context.md)
 - [出力の契約](2026-07-05-rationale-ai-output-contracts.md)

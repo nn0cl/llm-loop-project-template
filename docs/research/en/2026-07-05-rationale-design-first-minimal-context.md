@@ -6,7 +6,7 @@
 
 ---
 
-When running LLMs, competing over "clever prompts" misses the engineering point. The hard work is boundary control, as in module design: what to pass, what to omit, which tool owns which operation. The most reliable control on an autonomous coding agent is the design of its payload. Include/omit choices are the integration layer that tells the sandbox what to see and what not to guess ([The Agent is a Sandbox](./2026-07-07-rationale-saas-agent-as-sandbox.md)).
+When running LLMs, competing over "clever prompts" misses the engineering point. The hard work is boundary control, as in module design: what to pass, what to omit, which tool owns which operation. The most reliable control on an autonomous coding agent is the design of its payload. Include/omit choices are the integration layer that tells the agent what to see and what not to guess ([Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md)).
 
 I treat context selection as a reviewable design artifact, not personal prompt craft. Every request starts with design; tests and implementation follow.
 

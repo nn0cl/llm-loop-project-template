@@ -6,7 +6,7 @@
 
 ---
 
-As documentation grows, the line between “rules to obey” and “background reading” blurs. Humans skip; agents treat everything in context as influence. So normal task inputs are an allowlist, and reading material sits outside it (see [../README.md](../README.md); same point as the target-end-state and sandbox essays).
+As documentation grows, the line between “rules to obey” and “background reading” blurs. Humans skip; agents treat everything in context as influence. So normal task inputs are an allowlist, and reading material sits outside it (see [../README.md](../README.md); same point as [Target End State](./2026-07-05-rationale-target-end-state.md) and [Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md)).
 
 Three tiers: Architecture, Collaboration, Research. Agents’ normal inputs are the first two. Investigations and philosophy stay as sourced reading for humans; only agreed conclusions promote one-way into ADRs / collaboration / issues. Editing `docs/research/` alone does not change the operational template.
 
