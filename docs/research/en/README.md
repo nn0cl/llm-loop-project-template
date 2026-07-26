@@ -83,16 +83,17 @@ resume), and human checkpoints designed against Bainbridge's "Ironies of
 Automation". Deliberately leaves domain, stack, and datastore decisions
 to the adopting project.
 
-### [The agent is a sandbox: an architecture of freedom and control](2026-07-07-rationale-saas-agent-as-sandbox.md)
+### [Facing the probabilistic world that coding agents present](2026-07-07-rationale-saas-agent-as-sandbox.md)
 
-Vendor sandboxes (GitHub Copilot, Cursor) provide OS-level safety —
-isolated, ephemeral execution — but never semantic safety: they cannot
-stop an architecture violation or a spec misunderstanding. The team must
-supply the integration layer itself: operating-path allowlists, a shared
-constitution in the repository, design intake, Adjudicator approval gates,
-and PR review. Covers tiered agent teams (LLM cascades, learned routing,
-orchestrator-worker patterns) and why hierarchy does not dissolve the
-human's distinct responsibility.
+Coding agents explore path-dependent candidates rather than delivering a
+unique finished form. Code-generation research (pass@k, AlphaCode-style
+filter-and-cluster) shows breadth of sampling helps reach functional
+solutions, but fluency and passing tests do not prove a unique correct
+answer. The essay reframes collaboration as facing that probabilistic
+world: narrow possibilities before generation (Operating Paths, Design
+Intake, `[DESIGN CHECK]`), receive candidates under Agent / Deterministic
+Tool / Adjudicator responsibilities, and use AT-TDD phases so acceptance
+stays a human act rather than an extension of generation.
 
 ### [The Adjudicator and phases: automation's ironies and the design of responsibility](2026-07-05-rationale-adjudicator-centered-collaboration.md)
 

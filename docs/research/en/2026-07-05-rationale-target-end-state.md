@@ -8,7 +8,7 @@
 
 Having AI write code is no longer a surprise or technical magic. What is surprising in modern development is how often "nothing remains" of a project after that generation burst: scattered chat fragments and a sudden multi-hundred-line diff. Who approved what and when, why that design won over alternatives, and where the next developer should start reading—the most valuable contexts in software engineering—vanish into the mist. I do not call such non-reproducible generative work "software engineering."
 
-Coding agents move with surprising freedom inside their sandboxes. Freedom of the parts and integration into one project are different problems. For AI and humans to collaborate long-term, the **team** needs structure: Operating Paths, operational contracts, the Adjudicator's approval loop, and persisted artifacts. That premise is expanded in [The Agent is a Sandbox](./2026-07-07-rationale-saas-agent-as-sandbox.md).
+Coding agents move with surprising freedom inside a given scope. Freedom of the parts and integration into one project are different problems. For AI and humans to collaborate long-term, the **team** needs structure: Operating Paths, operational contracts, the Adjudicator's approval loop, and persisted artifacts. That premise is expanded in [Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md).
 
 This template does not aim to be a magic box where AI finishes everything for humans. It provides "Scaffolding" so AI and humans can **collaborate** sustainably—moving ad-hoc chat into a process that is reproducible and reviewable. That is not "slow down now and bolt governance on later." It places the trio—Adjudicator, Agent, and Deterministic Tool—plus contracts, artifacts, and approval points up front as system premises. Governance is not a tax on speed; it is how rapid generation becomes a sustainable product.
 
@@ -70,7 +70,7 @@ As Bainbridge's irony of automation ([ScienceDirect](https://www.sciencedirect.c
 
 The following discourses expand the fundamental philosophy stated in this manuscript into specific themes.
 
-- [The Agent is a Sandbox](./2026-07-07-rationale-saas-agent-as-sandbox.md)
+- [Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md)
 - [The Adjudicator and Phases](./2026-07-05-rationale-adjudicator-centered-collaboration.md)
 - [Design First and Context](./2026-07-05-rationale-design-first-minimal-context.md)
 - [Output Contracts](./2026-07-05-rationale-ai-output-contracts.md)

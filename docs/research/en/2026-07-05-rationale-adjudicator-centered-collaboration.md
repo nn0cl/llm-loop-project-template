@@ -8,7 +8,7 @@
 
 Agreeing that “human-in-the-loop is necessary” is not enough. Without designing human placement, teams drift toward watching every token or merging without review—unsustainable or irresponsible.
 
-The third path is structural collaboration: the Adjudicator owns decision points; generation and mechanical verification go to the agent (and deterministic tools). Role detail lives in `docs/collaboration/ai-human-scheme.md` and [The Agent is a Sandbox](./2026-07-07-rationale-saas-agent-as-sandbox.md); this essay focuses on **decision points, phases, and responsibility**. Documented boundaries are the premise (ADR 0003).
+The third path is structural collaboration: the Adjudicator owns decision points; generation and mechanical verification go to the agent (and deterministic tools). Role detail lives in `docs/collaboration/ai-human-scheme.md` and [Facing the Probabilistic World](./2026-07-07-rationale-saas-agent-as-sandbox.md); this essay focuses on **decision points, phases, and responsibility**. Documented boundaries are the premise (ADR 0003).
 
 ## Do Not Make Humans "Constant Monitors": Beyond the Irony of Automation
 
