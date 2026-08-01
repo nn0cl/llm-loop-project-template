@@ -85,7 +85,8 @@ APIs)?>`
 
 - `adr/0001-design-first-ai-request-routing.md`
 - `adr/0002-input-output-reasoning-contracts.md`
-- `adr/0003-ai-human-collaboration-governance.md`
+- `adr/0003-ai-human-collaboration-governance.md` — governance model
+  superseded by ADR 0013; kept as the model this project tests.
 - `adr/0004-human-readable-source-code-quality.md`
 - `adr/0005-local-issue-planning.md`
 - `adr/0006-prompt-instruction-change-control.md`
@@ -94,6 +95,10 @@ APIs)?>`
 - `adr/0009-bug-planning-and-ai-usage-records.md`
 - `adr/0010-ai-failure-recovery-and-runner-cli-contract.md`
 - `adr/0011-external-resource-adoption-contract.md`
+- `adr/0012-rename-referee-to-adjudicator.md` — role definition superseded by
+  ADR 0013.
+- `adr/0013-director-centered-planning-and-closed-loop.md` — the governing
+  decision for the current operating model.
 
 ## Remaining Technology Evaluation
 
