@@ -37,10 +37,11 @@ Reasons this matters:
 - Nesting a second `.git` inside your project's working tree is a common
   source of accidental submodule confusion and stray commits; a sibling
   checkout avoids that class of mistake entirely.
-- This template's own maintenance history (local issues, traces, sample
-  rollout spec) stays out of your project's repository. The copy script
-  already excludes those paths, but a sibling checkout makes the separation
-  obvious to anyone looking at the two working trees side by side.
+- This template's own maintenance records stay out of your project's
+  repository. The copy script excludes those paths, and as of 2026-08-02 the
+  template's working tree carries none of them anyway — but a sibling
+  checkout still makes the separation obvious to anyone looking at the two
+  working trees side by side.
 
 ## 2. Let an agent do the introduction
 

@@ -36,7 +36,7 @@ collaboration_template_exclude_paths=(
   "docs/collaboration/agreements/*.md"
   "docs/collaboration/reviews/*.md"
   "docs/issues/LISS-*.md"
-  "docs/specs/template-rollout.md"
+  "docs/specs/*.md"
 )
 
 is_collaboration_template_excluded() {

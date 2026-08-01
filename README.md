@@ -287,11 +287,19 @@ target project's accepted architecture or feature specifications.
     └── lib/collaboration-template-paths.sh
 ```
 
-Template-maintenance local issues, traces, and the sample rollout spec
-remain in this repository for audit history, but the copy/update scripts
-exclude them from adopting projects. New target repositories receive the
-empty `.gitkeep` folders and create their own local issues, traces, and
-specs.
+### Record state
+
+The record directories in this repository are empty. On 2026-08-02 the
+Director reset them: the local issues, work plans, traces, review records,
+design agreements, and sample rollout spec accumulated while building the
+template were removed from the working tree, so the repository presents the
+same initial state an adopting project starts from. Git history was kept
+deliberately — every removed record is still reachable there, and the commit
+that cleared them is the record of the decision.
+
+The copy/update scripts exclude those paths from adopting projects in any
+case. New target repositories receive the empty `.gitkeep` folders and create
+their own agreements, reviews, traces, issues, and specs.
 
 ## Core rules worth remembering
 
