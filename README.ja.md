@@ -1,4 +1,4 @@
-# LLM Project Template 日本語ガイド
+# LLM Loop Project Template 日本語ガイド
 
 [English README](README.md) · [Quickstart: 導入とアンインストール](QUICKSTART.ja.md)
 

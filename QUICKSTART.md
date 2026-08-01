@@ -15,13 +15,13 @@ project:
 
 ```text
 ~/dev/
-├── my-target-project/      # your project, its own git history
-└── llm-project-template/   # this template, cloned separately
+├── my-target-project/           # your project, its own git history
+└── llm-loop-project-template/   # this template, cloned separately
 ```
 
 ```bash
 cd ~/dev
-git clone <this-repository-url> llm-project-template
+git clone <this-repository-url> llm-loop-project-template
 ```
 
 Reasons this matters:
@@ -55,7 +55,7 @@ The short version:
 2. Tell the agent the path to the template checkout and the task: run the
    copy script **from that checkout by its full path** (the target has no
    `scripts/` yet — e.g.
-   `~/dev/llm-project-template/scripts/copy-ai-collaboration-files.sh --target .`),
+   `~/dev/llm-loop-project-template/scripts/copy-ai-collaboration-files.sh --target .`),
    report what it skipped versus copied, and stop before filling in any
    target-specific fact (stack, datastore, provider, domain model) that has
    not been Referee-approved.

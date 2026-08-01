@@ -58,7 +58,7 @@ GitFlow は `develop` を `main` の上流（アップストリーム）に置�
 - 分岐の階層設計（flag → 設定 → port/adapter → 恒久 per-target ブランチは最終手段であり別 ADR を要求する）
 - 各 release ブランチの EOL（End of Life）とロック方針
 
-この提案は、`llm-project-template` の運用規則をこの research 文書だけで変えるものではない。規範化するのであれば、どの論点を ADR や collaboration 文書へ持ち上げるべきか——その整理までが本稿の仕事である。
+この提案は、`llm-loop-project-template` の運用規則をこの research 文書だけで変えるものではない。規範化するのであれば、どの論点を ADR や collaboration 文書へ持ち上げるべきか——その整理までが本稿の仕事である。
 
 ## 参考文献
 

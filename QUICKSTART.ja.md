@@ -17,13 +17,13 @@ git リポジトリとしては置きません。
 
 ```text
 ~/dev/
-├── my-target-project/      # 導入先プロジェクト（自分の git 履歴を持つ）
-└── llm-project-template/   # このテンプレート（別に clone する）
+├── my-target-project/           # 導入先プロジェクト（自分の git 履歴を持つ）
+└── llm-loop-project-template/   # このテンプレート（別に clone する）
 ```
 
 ```bash
 cd ~/dev
-git clone <このリポジトリの URL> llm-project-template
+git clone <このリポジトリの URL> llm-loop-project-template
 ```
 
 理由は次のとおりです。
@@ -58,7 +58,7 @@ Referee の監督下でエージェントが安全に導入作業を代行でき
 2. テンプレートの checkout パスと、やるべきタスクを伝えます。copy script
    は**テンプレート checkout 側のフルパスで**実行させます（コピー前の
    導入先には `scripts/` がまだ存在しないため。例:
-   `~/dev/llm-project-template/scripts/copy-ai-collaboration-files.sh --target .`）。
+   `~/dev/llm-loop-project-template/scripts/copy-ai-collaboration-files.sh --target .`）。
    何をコピーし何をスキップしたかを報告すること、そして Referee が承認して
    いない導入先固有の事実（スタック、データストア、provider、ドメイン
    モデル）は推測せずに止まること。
