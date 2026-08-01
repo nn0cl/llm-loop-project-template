@@ -50,7 +50,9 @@ Done when:
 - external dependencies are mocked through ports or interfaces.
 - expected Red state is reported.
 - Phase 2 is not started before the Reviewer persona, running in a separate
-  context, has approved the tests on the record.
+  context, has approved the tests on the record. "On the record" means a
+  review record under `docs/collaboration/reviews/`, written with
+  `docs/templates/review-record.md`.
 
 ## Phase 2 Done: Green
 

@@ -54,6 +54,7 @@ Use this after the initial assessment has been discussed with the Director.
 ```markdown
 Design agreement:
 
+- Recorded at: `docs/collaboration/agreements/<YYYY-MM-DD-adoption>.md`.
 - Operating path: Architecture Path.
 - Scope: initial template adoption cleanup only.
 - Do not implement application behavior.
@@ -85,6 +86,10 @@ Apply only the approved placeholder updates and report verification.
 Use this only after a target-owned specification exists.
 
 ```markdown
+Covering design agreement:
+
+- `docs/collaboration/agreements/<YYYY-MM-DD-SLUG>.md`
+
 Target specification:
 
 - `docs/specs/<FEATURE_SPEC>.md`
@@ -92,6 +97,11 @@ Target specification:
 Current phase:
 
 - Phase 1: Red
+
+Active persona:
+
+- Implementer. The Reviewer runs afterward in a separate context and records
+  its decision under `docs/collaboration/reviews/`.
 
 Task:
 

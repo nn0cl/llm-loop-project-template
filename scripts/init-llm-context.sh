@@ -38,6 +38,7 @@ required_files=(
   "docs/architecture/agent-quickstart.md"
   "docs/at-tdd/process.md"
   "docs/collaboration/ai-human-scheme.md"
+  "docs/collaboration/personas.md"
   "docs/architecture/ai-request-routing.md"
   "docs/architecture/io-reasoning-contracts.md"
   "docs/architecture/implementation-readiness.md"
@@ -74,9 +75,11 @@ Before implementing anything:
 Use a compact design note for Fast Path work. Use the full [DESIGN CHECK] scaffold
 for Feature Path and Architecture Path work.
 Execute only the phase named for the task in the plan under the covering design
-agreement (docs/collaboration/agreements/). State the active persona. Issue no
-approval without recorded deterministic verification output, and never approve
-work produced by the same context.
+agreement (docs/collaboration/agreements/). State the active persona; the
+persona definitions are in docs/collaboration/personas.md. Issue no approval
+without recorded deterministic verification output, and never approve work
+produced by the same context. Reviewer decisions are recorded under
+docs/collaboration/reviews/ using docs/templates/review-record.md.
 Do not introduce target-project domain behavior, datastore choices, provider
 choices, or stack-specific architecture unless an accepted specification or ADR
 requires it.

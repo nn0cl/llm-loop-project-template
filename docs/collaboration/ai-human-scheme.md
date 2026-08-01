@@ -183,7 +183,8 @@ Phase 3 Refactor:
 
 Every review:
 
-- review record naming searched failure scenarios, grounds, and decision.
+- review record naming searched failure scenarios, grounds, and decision,
+  stored under `docs/collaboration/reviews/`.
 
 ## Decision Gates
 
