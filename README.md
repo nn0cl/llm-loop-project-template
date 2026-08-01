@@ -13,10 +13,21 @@ under which constraints — and the feedback given on each deliverable the
 agents produce. That model treats standing human judgment as the thing that
 keeps generated work correct.
 
-This project removes human presence from the development loop entirely. No
-Adjudicator inside the loop, no phase-transition approval, no human review gate
-on deliverables. The loop runs on artifacts alone: the specifications,
-contracts, tests, and traces that the agents themselves write, read, and check.
+This project removes human presence from the development *loop*. Not from the
+project — from the loop.
+
+**Where the human is.** The Director states the direction, builds the detailed
+plan with the Planner persona through dialogue, and reaches an explicit design
+agreement that closes the design phase. Planning is a conversation, not a
+review of a finished artifact, and the agreement is mutual: the Director agrees
+the plan describes what they want built, and the AI agrees it is executable
+without further interpretation.
+
+**Where the human is not.** Everything after that agreement. No
+phase-transition approval, no test review before implementation, no sign-off on
+deliverables. Review and approval inside the loop are performed by AI personas —
+Implementer, Reviewer, Arbiter — and the loop does not stop for a human. It
+stops only to reopen the design agreement, naming what is unsettled.
 
 The claim under test is that correctness in AI-assisted development comes from
 the written contract and its verification, not from a human standing in the
@@ -25,28 +36,46 @@ model is not the necessary condition it is assumed to be. If it does not, the
 failure modes are the finding — and they have to be visible in the artifacts
 rather than absorbed by a human patching them in real time.
 
-### Current state
+### What keeps AI self-approval honest
 
-This repository starts as a full-history fork of `llm-project-template`, whose
-operating contract is Adjudicator-centered by design: it stops agents at phase
-boundaries and requires human approval to continue. Those contracts are still
-in place, and the rest of this README and everything under `docs/` still
-describes them as written.
+An AI approving its own work is worthless unless it is constrained. Three
+constraints apply to every approval issued inside the loop, and an approval
+failing any of them does not count:
 
-Reconciling them with the direction above — deciding what stands in for the
-human at each stop point, and what evidence a closed loop must produce in place
-of an approval — is the work this project exists to do. Until that work lands,
-read the inherited documents as the baseline being tested, not as the target
-design.
+1. **Context separation.** The Reviewer runs in a context separate from the one
+   that produced the work, and receives only artifacts, specifications,
+   contracts, and tool output. The Implementer's reasoning is not admissible as
+   justification.
+2. **Deterministic precondition.** No approval without recorded deterministic
+   verification output. AI judgment is additive to tests, linters, and boundary
+   checks — never a substitute for them.
+3. **Falsification burden.** The Reviewer approves by naming the failure
+   scenarios it searched for and the grounds on which each does not occur. "No
+   problems found" is not an approval.
+
+### What did not change
+
+Three invariants carry over from `llm-project-template` unchanged, and removing
+human approval raises rather than lowers their cost — no human downstream will
+reconstruct missing rationale:
+
+1. **Every decision produces a document.**
+2. **Every executed fact leaves evidence.**
+3. **Every claim states its grounds.**
+
+The governing decision is
+[ADR 0013](docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md).
+The operating model is defined in
+[ai-human-scheme.md](docs/collaboration/ai-human-scheme.md),
+[personas.md](docs/collaboration/personas.md), and
+[design-agreement.md](docs/collaboration/design-agreement.md).
 
 ---
 
-The rest of this README describes the inherited template as it stands today.
-
 This repository is a starter template for a **Clean Architecture + AT-TDD**
-development workflow where a human architect (the "Adjudicator") and one or more
-AI coding agents (Claude, Copilot, Codex, Grok, Cursor, etc.) collaborate under
-a shared, written operating contract.
+development workflow where a human Director and one or more AI coding agents
+(Claude, Copilot, Codex, Grok, Cursor, etc.) work under a shared, written
+operating contract.
 
 In this repository, **AT-TDD** is a local shorthand for an **ATDD + TDD hybrid
 workflow**: acceptance specifications drive failing tests, reviewed tests drive
@@ -62,10 +91,16 @@ installed.
 ## What this template gives you
 
 - A **phase-gated workflow** (Design Intake -> Red -> Green -> Refactor) that
-  every agent must follow, with explicit stop points for human review.
-- A **Adjudicator-centered collaboration scheme**: the human approves phase
-  transitions, ADRs, and ambiguous decisions; agents produce reviewable,
-  minimal, phase-correct artifacts.
+  every agent must follow, with a Reviewer approval between phases.
+- A **Director-bounded collaboration scheme**: the human sets direction, plans
+  through dialogue, and signs one design agreement; the closed loop runs on
+  named personas that produce reviewable, minimal, phase-correct artifacts.
+- **Persona definitions** (Planner, Specifier, Implementer, Reviewer, Arbiter)
+  with responsibilities, admissible inputs, required outputs, and rules for
+  adding task-specific personas.
+- **Anti-rubber-stamp constraints** on AI approval: context separation, a
+  deterministic-verification precondition, and a falsification burden on the
+  reviewer.
 - **Agent operating contract files** (`AGENTS.md`, `CLAUDE.md`,
   `.github/copilot-instructions.md`, `.grok/rules/`, `.cursor/rules/`) kept
   in sync by a documented change-control rule and a CI check. Codex reads
@@ -77,8 +112,9 @@ installed.
 - **Local issue and work-plan planning** under `docs/issues/` and
   `docs/work-plans/`, usable before or alongside GitHub Issues.
 - **AI work traces** under `docs/collaboration/traces/` for auditability.
-- **Reusable templates** for design intake, Adjudicator review, agent handoff,
-  work traces, local issues, work plans, Gherkin features, and ADRs.
+- **Reusable templates** for design agreements, review records, design intake,
+  agent handoff, work traces, local issues, work plans, Gherkin features, and
+  ADRs.
 - A **CI skeleton** that checks the contract files exist, checks that
   ADRs are numbered, and enforces that contract-file changes come with a
   trace.
@@ -150,7 +186,7 @@ scripts/init-llm-context.sh .
 Paste the generated prompt into the first LLM session for that repository. The
 prompt tells the agent which operating documents to read, which phase gates to
 respect, how to choose Fast Path / Feature Path / Architecture Path, and when
-to stop for Adjudicator approval. It does not select the target project's stack,
+to return a reopening request. It does not select the target project's stack,
 datastore, LLM provider, external APIs, or domain behavior.
 
 Target-local onboarding lives in
@@ -167,8 +203,8 @@ architecture layers. Before using it on a real project:
    script can fill the project name, domain summary, and stack placeholders
    when `--project-name`, `--domain-summary`, and `--stack` are provided;
    runtime boundaries, datastore, migration tool, external resources, and
-   stack-specific architecture documents still need Adjudicator-approved
-   target facts.
+   stack-specific architecture documents still need target facts settled in a
+   design agreement with the Director.
 2. Add one architecture document per architectural area you actually have
    (e.g. `backend-architecture.md`, `frontend-architecture.md`,
    `persistence.md`). Use `docs/architecture/project-structure.md` and
@@ -228,7 +264,8 @@ target project's accepted architecture or feature specifications.
 │   └── workflows/ci.yml
 └── docs/
     ├── at-tdd/process.md           # phase discipline
-    ├── collaboration/              # process rules (Adjudicator scheme, DoD, privacy, branching, ...)
+    ├── collaboration/              # process rules (scheme, personas, DoD, privacy, branching, ...)
+    │   ├── agreements/             # design agreement records (the one human gate)
     │   └── traces/                 # AI work trace log (per-task audit trail)
     ├── templates/                  # design intake, handoff, trace, issue, work-plan, ADR, Gherkin
     │   └── examples/               # filled-in stack-specific examples, for reference only
@@ -253,14 +290,17 @@ specs.
 
 ## Core rules worth remembering
 
-- No implementation without a reviewed acceptance specification.
-- No phase skipping. Only the Adjudicator-selected phase runs.
+- No execution without a recorded design agreement.
+- No approval without deterministic verification output.
+- No approval by the context that produced the work.
+- No phase skipping. Only the phase named in the plan runs.
 - No hidden business logic in adapters, UI components, or framework handlers.
 - Every external resource is represented as a port before it is used.
 - Every task starts with path-appropriate design intake: compact note for Fast
-  Path, full `[THOUGHT]` for Feature Path or Architecture Path.
-- Changing an agent operating contract file requires a stated reason, Adjudicator
-  review, and a trace under `docs/collaboration/traces/` (CI enforced).
+  Path, full `[DESIGN CHECK]` for Feature Path or Architecture Path.
+- Changing an agent operating contract file requires a stated reason, a
+  covering design agreement, Reviewer approval, and a trace under
+  `docs/collaboration/traces/` (CI enforced).
 
 ## License
 

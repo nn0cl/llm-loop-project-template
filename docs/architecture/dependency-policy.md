@@ -55,8 +55,8 @@ The note should cover:
   delivery layer, build tooling, or test-only support. It must not leak into
   domain code.
 
-If any item is unknown, list it as an ambiguity and stop for Adjudicator decision
-or an ADR when the decision affects architecture.
+If any item is unknown, list it as an ambiguity and return a reopening request,
+or raise an ADR when the decision affects architecture.
 
 ## Import-Boundary Checks
 

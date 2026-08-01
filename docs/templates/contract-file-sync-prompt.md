@@ -50,8 +50,10 @@ Fill these in before starting (the sync script's output names them):
    restructured a section the adopter had customized), do not guess; list it
    as an open question instead of silently picking a side.
 5. Show the proposed result and the list of open questions from step 4 to the
-   Adjudicator for review before committing. Do not commit an AI-assisted
-   contract-file merge without Adjudicator review, per
+   Director, and reach a design agreement covering the change before
+   committing. Changing an operating contract changes the rules the loop runs
+   under, so it is a design-phase decision — not something the loop settles
+   for itself. Obtain Reviewer approval from a separate context as well, per
    `docs/collaboration/prompt-instruction-change-control.md`.
 6. Once approved, write the file and record the change like any other
    contract-file edit: a stated reason, and an AI work trace under
@@ -61,6 +63,6 @@ Fill these in before starting (the sync script's output names them):
 ## Output
 
 - Proposed file content: (write it to the target path once approved)
-- Open questions needing an explicit Adjudicator decision:
+- Open questions needing an explicit Director decision:
 - What was preserved from the adopter's version:
 - What was adopted from the new template version:

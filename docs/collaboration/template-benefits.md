@@ -30,7 +30,7 @@ Expected result:
 
 - fewer guessed features.
 - less rework from misunderstood behavior.
-- clearer Adjudicator review points.
+- clearer review points for a separate reviewing context.
 
 ### Phase Skipping
 
@@ -93,10 +93,11 @@ Expected result:
 
 ## Who Benefits
 
-### Adjudicator
+### Director
 
-The Adjudicator gets explicit review gates, ADR hooks, handoff records, and a clear
-place to reject assumptions.
+The Director gets one substantive gate — the design agreement — instead of a
+queue of per-artifact approvals, plus ADR hooks, handoff records, and
+artifacts that can be inspected at any time without blocking the loop.
 
 ### AI Coding Agents
 

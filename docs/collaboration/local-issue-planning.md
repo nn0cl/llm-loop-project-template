@@ -60,7 +60,8 @@ Each local issue should record:
 - blocks.
 - related branch.
 - acceptance notes.
-- Adjudicator decision points.
+- decisions the design agreement does not settle, each as a reopening request
+  or an explicit deferral with its settling condition.
 - an AI planning record when the current planning size is `M` or larger.
 
 ## Bug Planning
@@ -72,10 +73,10 @@ than copying mutable details.
 
 A separate issue or work plan is optional only when all of these are true:
 
-- the bug is within the current Adjudicator-approved scope.
+- the bug is within the scope of a recorded design agreement.
 - its planning size is `S`.
 - the expected behavior is explicit in an accepted specification, an accepted
-  test, or established behavior approved by the Adjudicator.
+  test, or behavior the design agreement records as established.
 - the correction remains within one file or one feature area.
 - it does not change an architecture boundary, data model, migration,
   dependency, security policy, privacy policy, or external contract.
@@ -92,9 +93,10 @@ Minor bug; fixed within approved scope; separate plan not required
 ```
 
 Use the existing approved plan when the bug is already within its scope. If an
-accepted test already reproduces the bug, record the Red result and obtain
-Adjudicator confirmation before Phase 2. If no accepted test reproduces it, add a
-regression test in Phase 1 and wait for review before Phase 2. Create a new
+accepted test already reproduces the bug, record the Red result with its
+deterministic output and obtain Reviewer approval before Phase 2. If no
+accepted test reproduces it, add a regression test in Phase 1 and obtain
+Reviewer approval before Phase 2. Create a new
 issue or work-plan entry when scope, expected behavior, dependencies, or
 boundaries are uncertain. Record but do not mix a bug that is outside the
 current scope.
@@ -158,8 +160,8 @@ Allowed dependency meanings:
 - `parent`: this issue is part of a larger work item.
 - `related`: useful context, but not an ordering constraint.
 
-Agents must not start work on an issue with unresolved `depends_on` entries
-unless the Adjudicator explicitly waives the dependency.
+Agents must not start work on an issue with unresolved `depends_on` entries.
+An unresolved dependency is a reopening request, not a judgment call.
 
 Agents must not implement issue work directly on `main` or the trunk branch.
 Every local issue or GitHub Issue requires a dedicated branch before any
@@ -213,7 +215,7 @@ Do not require GitHub network access for local planning.
 
 ## Review Rule
 
-Adjudicator review is required when:
+A reopening request to the Director is required when:
 
 - issue dependencies are unclear.
 - an issue is split or merged.

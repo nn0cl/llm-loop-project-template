@@ -16,9 +16,10 @@ After adoption, the target project may and should design its domain model
 inside this process, based on:
 
 - accepted EARS/Gherkin specifications.
-- Adjudicator decisions.
+- decisions recorded in a design agreement with the Director.
 - ADRs when the decision affects architecture or long-term policy.
-- Phase 1 tests reviewed before Phase 2 implementation.
+- Phase 1 tests reviewed and approved by a separate context before Phase 2
+  implementation.
 
 In other words, the template must not ship a domain model. The adopted project
 uses the template workflow to discover and implement its own domain model.
@@ -35,7 +36,8 @@ uses the template workflow to discover and implement its own domain model.
 7. List early dependency candidates and apply the adoption checklist in
    `docs/architecture/dependency-policy.md`.
 8. Start with Feature Path Phase 0 design intake.
-9. Ask the Adjudicator to approve Phase 1 Red before writing tests.
+9. Reach a design agreement with the Director covering the first tasks before
+   writing tests.
 
 Do not create a full domain layer, persistence schema, provider adapter, or UI
 structure before a specification, ADR, or reviewed test requires it.
@@ -82,14 +84,15 @@ For each feature:
 5. Produce the path-appropriate design note.
 6. For new dependencies, check vulnerability reports, version-matched examples,
    troubleshooting depth, minimal real-file tests, and POC feasibility.
-7. Execute only the Adjudicator-approved phase.
+7. Execute only the phase named for this task in the covering design
+   agreement.
 8. Run deterministic verification when available.
 9. Record trace and cost/reasoning control signals when required.
-10. Stop at phase gates for Adjudicator review.
+10. Stop at phase gates for Reviewer approval from a separate context.
 
-## Stop and Ask
+## Stop and Reopen
 
-Stop for Adjudicator decision when:
+Stop the loop and return a reopening request to the Director when:
 
 - the target behavior is not specified.
 - the requested phase is unclear.

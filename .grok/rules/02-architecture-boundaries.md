@@ -2,7 +2,9 @@
 
 ## Phase Gate
 
-Only execute the phase explicitly requested by the human Adjudicator.
+Only execute the phase named for the task in the plan under the covering design
+agreement. If no design agreement covers the task, do not start — return it to
+the design phase.
 
 Do not implement ahead of the current phase. Do not "helpfully" generate
 production code during Phase 1.
@@ -30,7 +32,7 @@ reviewed Phase 1 tests.
   provider clients, and file adapters free of business decisions.
 - Do not add behavior not specified by EARS, Gherkin, or reviewed tests.
 
-### Phase 3: Refactor and Reviewer Empathy
+### Phase 3: Refactor
 
 Refactor only after Green. Behavior and assertions must not change.
 
@@ -40,9 +42,12 @@ After refactoring, output:
 ### 変更の要約 (PR Summary)
 - **何を目的として何を変更したか**: ...
 
+### 検証の根拠 (Verification Evidence)
+- **実行した決定性チェックとその出力**: ...
+
 ### 残存リスク・検証の溝 (Verification Gap)
 - **AIが推測で補った部分、またはハルシネーションが発生しやすい箇所**: ...
-- **人間がコードレビューで重点的に見るべきポイント**: ...
+- **Reviewer ペルソナが反証を試みるべきポイント**: ...
 ```
 
 ## Clean Architecture Dependency Rule
@@ -92,6 +97,7 @@ list with the project's actual external dependencies (see `AGENTS.md` and
 - Do not treat free-form AI prose as trusted domain data. Validate output
   schemas, source references, confidence, and review status before use.
 - Do not generate dense or multi-responsibility code. Keep source code
-  appropriately split and readable for human review.
+  appropriately split and readable for the next reader — a reviewing persona,
+  a future agent, or the Director inspecting artifacts.
 - If a dependency is unknown, add an interface boundary or an ADR question.
 - If a behavior is not in the specification, do not implement it.

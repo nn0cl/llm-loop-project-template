@@ -192,8 +192,7 @@ Agents operating under this template's contract only read what
 Architecture Path lists name explicitly (see `AGENTS.md`). This file is
 deliberately absent from all three lists, and from
 `scripts/lib/collaboration-template-paths.sh`, so it is never copied into an
-adopting project and never becomes part of an agent's ordinary read path —
-the same treatment `docs/research/` gets, for the same reason.
+adopting project and never becomes part of an agent's ordinary read path.
 
 That guarantee is architectural, not physical. A tool whose own harness loads
 an entire repository tree into context regardless of this template's

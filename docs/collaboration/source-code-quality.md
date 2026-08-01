@@ -1,6 +1,7 @@
 # Source Code Quality for AI-TDD Collaboration
 
-Generated code must be easy for a human Adjudicator to review.
+Generated code must be easy to review — by the Reviewer persona in a separate
+context, by a future agent, and by the Director inspecting artifacts.
 
 This is a collaboration rule, not an application-internal design decision.
 

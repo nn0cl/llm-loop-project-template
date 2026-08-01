@@ -29,7 +29,7 @@
 - Blocks:
 - Related:
 
-## Adjudicator Decision Points
+## Decisions Not Settled by the Design Agreement
 
 - 
 

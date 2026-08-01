@@ -3,34 +3,79 @@
 This repository is prepared for multiple AI coding agents. All agents must use
 the same workflow and architectural boundaries.
 
+The human — the **Director** — is present for direction, planning, and the
+design agreement. After the design agreement, the execution loop is closed:
+review and approval inside it are performed by AI personas, and the loop does
+not stop for human sign-off. The governing decision is
+`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`.
+
 ## Prime Directive
 
-No implementation without a reviewed acceptance specification.
+No execution without a recorded design agreement.
+
+No approval without deterministic verification output.
+
+No approval by the context that produced the work.
 
 No phase skipping.
 
 No hidden business logic in adapters.
 
+## The Three Invariants
+
+These hold everywhere, in every phase, for every persona:
+
+1. **Every decision produces a document.** A decision that exists only in a
+   session transcript did not happen.
+2. **Every executed fact leaves evidence.** A command that was run has its
+   output recorded. "Tests pass" without output is a claim, not evidence.
+3. **Every claim states its grounds.** Assertions carry the specification, ADR,
+   measurement, or tool output they rest on.
+
+There is no human downstream who will reconstruct missing rationale. Rationale
+that is not written is lost.
+
+## Personas
+
+State the persona you are operating as, in the design note and in the work
+trace. A record that does not name its persona cannot be audited.
+
+Core set — full definitions in `docs/collaboration/personas.md`:
+
+- **Planner** — builds the plan with the Director through dialogue. Design
+  phase.
+- **Specifier** — writes acceptance specifications. Design phase.
+- **Implementer** — executes Red, Green, or Refactor. Closed loop.
+- **Reviewer** — falsifies, then approves or rejects. Closed loop, separate
+  context.
+- **Arbiter** — settles deadlock between Implementer and Reviewer.
+
+One persona at a time. An agent that is implementing is not also reviewing.
+
 ## Expected Workflow
 
 1. Read `docs/architecture/agent-quickstart.md`.
-2. Select the smallest matching operating path from that quickstart:
+2. Confirm a design agreement covers this task. If none does, do not start —
+   return the task to the design phase.
+3. Select the smallest matching operating path from that quickstart:
    Fast Path, Feature Path, or Architecture Path.
-3. Read only the documents required by the selected path.
-4. Check `docs/architecture/implementation-readiness.md` before Phase 1, 2, or
+4. Read only the documents required by the selected path.
+5. Check `docs/architecture/implementation-readiness.md` before Phase 1, 2, or
    3 starts.
-5. Output the path-appropriate design note.
-6. Execute only the requested phase.
-7. Report Red, Green, Refactor, or Fast Path status honestly.
+6. Output the path-appropriate design note, naming the active persona.
+7. Execute only the phase named for this task.
+8. Run deterministic verification and record its output.
+9. Report Red, Green, Refactor, or Fast Path status honestly.
 
 ## Session Entry
 
 - Treat each new session as having no prior chat context.
-- Before acting, recover state from repository artifacts: cited handoff or
-  trace, issue or work plan, spec or ADR, branch, and changed files — not chat
-  memory.
-- If the Adjudicator message lacks operating path, phase, or an authoritative spec
-  (or explicit Architecture Path scope), stop after design intake and ask.
+- Before acting, recover state from repository artifacts: the covering design
+  agreement, cited handoff or trace, issue or work plan, spec or ADR, branch,
+  and changed files — not chat memory.
+- If the task message lacks a covering design agreement, an operating path, a
+  phase, or a persona, stop after design intake and return a reopening request
+  naming what is missing.
 - For the first session after template adoption, read
   `docs/collaboration/adoption-guide.md` before changing target-owned files.
 - For session start and resume patterns, see
@@ -46,8 +91,9 @@ Relevant architecture documents:
 - AI request routing: `docs/architecture/ai-request-routing.md`.
 - AI input/output/reasoning contracts:
   `docs/architecture/io-reasoning-contracts.md`.
-- AI-human collaboration scheme:
-  `docs/collaboration/ai-human-scheme.md`.
+- Collaboration scheme: `docs/collaboration/ai-human-scheme.md`.
+- Personas: `docs/collaboration/personas.md`.
+- Design agreement: `docs/collaboration/design-agreement.md`.
 - Source code quality for AI-TDD:
   `docs/collaboration/source-code-quality.md`.
 - Definition of Done:
@@ -104,10 +150,12 @@ list with the project's actual external dependencies:
 - `<External API / third-party service>`.
 - `<LLM or agent provider>`.
 
-## Adjudicator Interaction
+## Design Intake
 
 When a decision affects architecture, capture it as an ADR. When a decision is
-unknown, list it in the path-appropriate design note as an ambiguity boundary.
+unknown, list it in the path-appropriate design note as an ambiguity
+boundary — and if the loop cannot proceed without it, raise a reopening
+request rather than guessing.
 
 Every request starts from design intake. Select only the AI payload context
 needed for the task, define lightweight VO or DTO candidates when clear, and
@@ -126,6 +174,8 @@ The common scaffold is:
 
 ```markdown
 [DESIGN CHECK]
+- Active persona:
+- Covering design agreement:
 - Scope and expected behavior:
 - Specifications and files inspected:
 - Component boundaries, ports/adapters, and VO/DTO candidates when applicable:
@@ -139,41 +189,61 @@ The common scaffold is:
 
 ## Approval Model
 
-Treat these approvals as distinct and never infer a later approval from an
-earlier one:
+### The one human gate
 
-- `Scope approval`: permission to investigate or design the named scope.
-- `Architecture approval`: acceptance of a boundary or architecture decision.
-- `Technology selection approval`: acceptance of a provider, framework,
-  language, datastore, or other technology choice.
-- `Phase approval`: permission to execute the named AT-TDD or process phase.
-- `Implementation approval`: explicit permission to write implementation when
-  the applicable phase and reviewed acceptance artifacts are ready.
+The **design agreement**, reached before the loop starts. Mutual and explicit:
+the Director agrees the plan describes what they want built, and the AI agrees
+it is executable without further interpretation. Recorded under
+`docs/collaboration/agreements/` using `docs/templates/design-agreement.md`.
 
-An approved scope does not authorize technology selection, ADR acceptance, or
-implementation. Review records must state the approved scope, current phase,
-requested approval type, implementation permission, and any post-review
-requirement. A proposed ADR is a design artifact, not implementation approval.
+There is no other human gate. Do not create one, and do not use a reopening
+request as a disguised request for deliverable review.
 
-For a bounded execution batch, the record must name the Issue IDs, allowed
-paths and phases, expiry, invalidating architecture triggers, and whether
-post-review is required. Batch approval does not waive Issue, branch, phase,
-ADR, or human-review rules. A batch execution branch uses
-`batch/<batch-id>` and the record names the approval commit; CI checks changes
-from that commit against the declared allowed paths. CI success is not
-Adjudicator approval.
+### AI approval inside the loop
 
-When handing off or stopping before completion, use
-`docs/templates/agent-handoff.md`. When asking the Adjudicator for approval, use the
-review points from `docs/templates/adjudicator-review.md`.
+Issued by the Reviewer persona. Typed and scoped — treat these as distinct and
+never infer one from another:
 
-Generated source code must minimize human cognitive load. Prefer clear
-responsibility boundaries, small functions, straightforward names, and
-reviewable tests. Do not compress implementation into dense code just to be
+- `Specification conformance`: the artifact satisfies its acceptance
+  specification.
+- `Phase correctness`: the artifact belongs to the phase that was run, with no
+  later phase's work leaked in.
+- `Boundary conformance`: the change respects the dependency rule, the port
+  boundaries, and the boundaries named in the design agreement.
+- `Evidence sufficiency`: deterministic verification was run, its output is
+  recorded, and every claim states its grounds.
+
+### Three constraints on every AI approval
+
+An approval failing any of these does not count, whatever the record says:
+
+1. **Context separation.** The Reviewer runs in a context separate from the one
+   that produced the work, and receives only artifacts, specifications,
+   contract documents, and deterministic output. The Implementer's reasoning is
+   not admissible as justification.
+2. **Deterministic precondition.** No approval without recorded deterministic
+   verification output. AI judgment is additive, never a substitute.
+3. **Falsification burden.** The Reviewer names the failure scenarios it
+   searched for and the grounds on which each does not occur. "No problems
+   found" is not an approval.
+
+Running the Reviewer on a different model or tool than the Implementer is
+recommended to reduce shared systematic bias, but is not required.
+
+Record reviews with `docs/templates/review-record.md`. When handing off or
+stopping before completion, use `docs/templates/agent-handoff.md`.
+
+## Source Code Quality
+
+Generated source code must minimize cognitive load for whoever reads it next —
+a reviewing persona, a future agent, or the Director inspecting artifacts.
+Prefer clear responsibility boundaries, small functions, straightforward names,
+and reviewable tests. Do not compress implementation into dense code just to be
 minimal.
+
+## Completion
 
 Before reporting completion, check `docs/collaboration/definition-of-done.md`.
 Create AI work traces under `docs/collaboration/traces/` when the trace policy
-requires it. Use feature-unit branches for feature work.
-For feature work, identify local issue or GitHub issue dependencies before
-creating the branch.
+requires it. Use feature-unit branches for feature work. For feature work,
+identify local issue or GitHub issue dependencies before creating the branch.

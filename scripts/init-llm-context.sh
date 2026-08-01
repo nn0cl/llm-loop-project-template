@@ -73,13 +73,17 @@ Before implementing anything:
 
 Use a compact design note for Fast Path work. Use the full [DESIGN CHECK] scaffold
 for Feature Path and Architecture Path work.
-Execute only the phase explicitly requested by the human Adjudicator.
+Execute only the phase named for the task in the plan under the covering design
+agreement (docs/collaboration/agreements/). State the active persona. Issue no
+approval without recorded deterministic verification output, and never approve
+work produced by the same context.
 Do not introduce target-project domain behavior, datastore choices, provider
 choices, or stack-specific architecture unless an accepted specification or ADR
 requires it.
 
-If no target specification or phase has been provided yet, stop after design
-intake and ask the Adjudicator for the missing specification or phase approval.
+If no covering design agreement, target specification, phase, or persona has
+been provided yet, stop after design intake and return a reopening request
+naming what is missing.
 
 For later sessions and resume patterns, see
 docs/collaboration/session-start-and-resume.md.

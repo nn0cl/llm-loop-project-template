@@ -25,10 +25,11 @@ Keep `.gitkeep` files in both folders until concrete examples are added.
 Create golden examples for:
 
 - design intake notes.
-- Adjudicator review requests.
+- review records issued by the Reviewer persona.
 - agent handoff notes.
 - Phase 1 Red test requests.
-- Phase 3 reviewer empathy summaries.
+- Phase 3 verification gap summaries.
+- design agreement records.
 - prompt or instruction change proposals.
 
 Do not create golden examples that depend on private user data, real secrets,
@@ -42,8 +43,8 @@ AI collaboration artifacts should be evaluated for:
 - visible assumptions.
 - small and relevant payload selection.
 - omitted context explanation.
-- Adjudicator decision points.
-- deterministic verification summary.
+- reopening requests and explicit deferrals.
+- deterministic verification output, not a summary of it.
 - low cognitive load.
 - absence of secrets and unrelated large context.
 
@@ -61,5 +62,5 @@ Use human review for:
 
 - clarity.
 - sufficiency of assumptions.
-- quality of reviewer empathy summary.
-- whether the artifact helps or burdens the Adjudicator.
+- quality of the verification gap summary.
+- whether the artifact lets a separate context re-run the same check.

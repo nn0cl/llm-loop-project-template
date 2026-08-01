@@ -6,14 +6,14 @@ Use this as the first short entry point before coding.
 
 Each new LLM session starts without prior chat context.
 
-1. Read the Adjudicator message for operating path, phase, spec or ADR, issue,
-   and branch.
+1. Read the task message for the covering design agreement, operating path,
+   phase, persona, spec or ADR, issue, and branch.
 2. If resuming, read the cited handoff or trace before other documents.
 3. Recover progress from repository artifacts, not from assumed chat history.
-4. If path, phase, or authoritative scope is missing, stop after design intake
-   and ask the Adjudicator.
+4. If the covering agreement, path, phase, persona, or authoritative scope is
+   missing, stop after design intake and return a reopening request.
 
-For Adjudicator checklists and resume examples, see
+For session-entry checklists and resume examples, see
 `docs/collaboration/session-start-and-resume.md`.
 
 ## Operating Paths
@@ -72,8 +72,9 @@ Read:
 7. `docs/architecture/io-reasoning-contracts.md` when AI/model output is
    involved.
 
-Output the full `[DESIGN CHECK]` scaffold and stop for Adjudicator approval when a new
-architecture or process decision is required.
+Output the full `[DESIGN CHECK]` scaffold and return a reopening request when a
+new architecture or process decision is required that the design agreement does
+not settle.
 
 ## Design First
 
@@ -97,18 +98,22 @@ contract fields when it explicitly states that they are not involved.
 
 ## Phase Rule
 
-Only execute the phase explicitly requested by the Adjudicator.
+Only execute the phase named for the task in the plan under the covering design
+agreement.
 
 - Phase 1: failing tests only.
 - Phase 2: minimum implementation only.
-- Phase 3: refactor and reviewer empathy summary.
+- Phase 3: refactor and verification gap summary.
 
-Phase transitions require Adjudicator approval. Do not start Phase 2 from
-unreviewed Phase 1 tests.
+Phase transitions require Reviewer approval. Do not start Phase 2 from Phase 1
+tests that no separate context has reviewed.
 
-Approval is typed and scoped. Scope approval authorizes investigation or
-design only; architecture, technology selection, phase, and implementation
-approval must be explicit. A proposed ADR is not implementation authorization.
+Approval is typed and scoped: `Specification conformance`, `Phase
+correctness`, `Boundary conformance`, `Evidence sufficiency`. Never infer one
+from another. Every approval must satisfy context separation, the
+deterministic precondition, and the falsification burden — see
+`docs/collaboration/ai-human-scheme.md`. A proposed ADR is not implementation
+authorization.
 
 Return to Architecture Path when a change introduces a subsystem, language,
 framework, datastore, concurrency or transaction boundary, authentication or
@@ -123,7 +128,7 @@ approved scope, clear from existing behavior or specification, low risk, and
 verified in the same attempt.
 
 Omitting a separate planning artifact does not permit skipping Phase 1, Phase
-2, Phase 3, deterministic verification, or Adjudicator review gates.
+2, Phase 3, deterministic verification, or Reviewer approval gates.
 
 When a bug is size `M` or larger, needs a second execution attempt, changes
 boundaries, or remains ambiguous, record it in a local issue or active work
@@ -153,7 +158,8 @@ plan before continuing.
 
 ## Stop Conditions
 
-Stop and ask for Adjudicator decision or ADR when the task requires choosing:
+Stop and return a reopening request, or raise an ADR, when the task requires
+choosing something the design agreement does not settle:
 
 - `<Persistence engine or schema details beyond the accepted baseline>`.
 - `<Vector DB / embedding model or dimensions>`.
