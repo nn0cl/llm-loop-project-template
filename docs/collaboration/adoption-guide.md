@@ -162,8 +162,7 @@ full-mirror shared sections from `AGENTS.md`. Grounds: Cursor lists
 ([Rules](https://cursor.com/docs/rules.md);
 [Help: Rules](https://cursor.com/help/customization/rules.md)); live session
 confirmed separate injection of root `AGENTS.md` alongside always-apply
-`.mdc` files — see ADR 0006 and
-`docs/collaboration/traces/2026-07-16-cursor-mdc-drop-agents-ref.md`. Keep
+`.mdc` files — see ADR 0006, which carries the verification detail. Keep
 the `.mdc` set for phase-gate detail, Decision Gates, and other Cursor-side
 complements rather than relying on `AGENTS.md` alone.
 

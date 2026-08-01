@@ -42,6 +42,5 @@ AIエージェントの自律性が高まるにつれ、人間の役割が「単
 - 関連: ADR 0013: Director-Centered Planning and an AI-Closed Execution Loop
 - この ADR はかつて rationale essay 集への参照を持っていたが、当該ディレクトリ
   は Director の指示により 2026-08-02 に削除された。参照先が存在しないため
-  リンクは復元せず削除した。経緯は
-  `docs/collaboration/traces/2026-08-02-director-model-contract-rewrite.md`
-  に記録されている。
+  リンクは復元せず削除した。経緯は同日の作業 trace に記録されており、その
+  trace 自体も同日の record reset で削除されたため、現在は git 履歴に残る。

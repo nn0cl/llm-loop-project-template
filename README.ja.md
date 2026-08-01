@@ -192,9 +192,18 @@ scripts/init-llm-context.sh .
 
 出力された prompt を、そのリポジトリの最初の AI session に貼ります。
 
-このテンプレート自身の保守用 local issue、trace、sample rollout spec は監査履歴
-としてこの repository には残しますが、導入先にはコピーしません。導入先には空の
-`.gitkeep` 付きディレクトリだけを配り、導入先自身の issue、trace、spec を作ります。
+### 記録の状態
+
+このリポジトリの記録ディレクトリは空です。2026-08-02 に Director がリセット
+しました。テンプレートを作る過程で溜まった local issue、work plan、trace、
+review record、設計合意、sample rollout spec を作業ツリーから削除し、導入先
+プロジェクトが始めるのと同じ初期状態にしてあります。git 履歴は意図的に残して
+あり、削除された記録はすべてそこから辿れます。削除した commit 自体が、その
+決定の記録です。
+
+いずれにせよ copy/update script はこれらのパスを導入先には配りません。導入先
+には空の `.gitkeep` 付きディレクトリだけを配り、導入先自身の agreement、
+review、trace、issue、spec を作ります。
 
 ## 既存リポジトリへ途中導入する
 

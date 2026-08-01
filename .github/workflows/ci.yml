@@ -148,7 +148,7 @@ jobs:
           test -f "$tmp/target/docs/specs/.gitkeep"
           ! ls "$tmp/target/docs/issues/"LISS-*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/collaboration/traces/"*.md >/dev/null 2>&1
-          test ! -f "$tmp/target/docs/specs/template-rollout.md"
+          ! ls "$tmp/target/docs/specs/"*.md >/dev/null 2>&1
           if grep -R -n -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \
             "$tmp/target/AGENTS.md" \
             "$tmp/target/CLAUDE.md" \

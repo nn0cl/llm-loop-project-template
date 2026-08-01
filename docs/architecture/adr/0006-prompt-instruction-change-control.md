@@ -62,8 +62,8 @@ vendor:
      `AGENTS.md` as its own always-applied workspace rule *and* the three
      `alwaysApply` `.mdc` files; `@AGENTS.md` prose inside `.mdc` bodies was
      not expanded inline. Shared Expected Workflow / dependency-rule content
-     was present via the `AGENTS.md` injection. Trace:
-     `docs/collaboration/traces/2026-07-16-cursor-mdc-drop-agents-ref.md`.
+     was present via the `AGENTS.md` injection. The session trace was cleared
+     in the 2026-08-02 record reset and remains in git history.
 
   Conclusion: omitting shared sections from `.mdc` (and omitting `@AGENTS.md`
   there) does not drop them from Cursor Agent context while root `AGENTS.md`
