@@ -1,6 +1,11 @@
 # LLM Loop Project Template 日本語ガイド
 
 [English README](README.md) · [Quickstart: 導入とアンインストール](QUICKSTART.ja.md)
+ · [Changelog](CHANGELOG.md)
+
+**契約バージョン: v1.0.0。** このリポジトリの運用契約は初版です。導入先
+プロジェクトがバージョンを指定して導入・参照できる単位になっています。
+各版が何を含むかは [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
 ## プロジェクトの方向性
 
@@ -57,7 +62,7 @@ AI が自分の成果物を承認することは、制約がなければ無価�
 3. **あらゆる主張は根拠を述べる。**
 
 決定記録は
-[ADR 0013](docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md)。
+[ADR 0001](docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md)。
 運用モデルの定義は
 [ai-human-scheme.md](docs/collaboration/ai-human-scheme.md)、
 [personas.md](docs/collaboration/personas.md)、

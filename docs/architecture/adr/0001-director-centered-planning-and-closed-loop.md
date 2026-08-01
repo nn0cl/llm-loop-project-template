@@ -1,25 +1,18 @@
-# ADR 0013: Director-Centered Planning and an AI-Closed Execution Loop
+# ADR 0001: Director-Centered Planning and an AI-Closed Execution Loop
 
 ## Status
 
-Accepted
-
-Supersedes the governance model of ADR 0003 (AI-Human Collaboration
-Governance). ADR 0003 remains in the record as the decision this project is
-built to test; it is no longer normative.
-
-Supersedes the role definition of ADR 0012 (Rename Referee to Adjudicator).
-The human role is renamed again, to `Director`, because its responsibilities
-change rather than only its label.
+Accepted. This is the governing decision of the first edition; every other ADR
+in this set operates under it.
 
 ## Context
 
 This repository is a counter-validation project against the human-intervention
 model. Under that model a human is present at two points: the initial framing
 decision, and feedback on every deliverable an agent produces. The governance
-inherited from ADR 0003 encodes the second point directly — a human Adjudicator
-approves each phase transition, reviews Phase 1 tests before implementation,
-and signs off on completion.
+this template started from encoded the second point directly — a human
+approved each phase transition, reviewed Phase 1 tests before implementation,
+and signed off on completion.
 
 That design assumes standing human judgment is what keeps generated work
 correct. This project exists to test the competing claim: that correctness

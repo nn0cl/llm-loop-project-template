@@ -4,7 +4,7 @@ This document defines how the human and the AI personas collaborate in this
 repository. It does not define application internals.
 
 The governing decision is
-`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`.
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
 
 The shape is: a human is present for direction, planning, and the design
 agreement. After the design agreement, the execution loop is closed — review
@@ -266,4 +266,4 @@ Unacceptable work is:
 - turning AI prose into accepted design without an ADR or a design agreement.
 - dense or multi-responsibility source code that is hard to review.
 - reintroducing a human approval gate inside the loop without an ADR
-  superseding ADR 0013.
+  superseding ADR 0001.

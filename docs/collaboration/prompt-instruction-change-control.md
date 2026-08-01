@@ -40,9 +40,8 @@ A pull request that changes an agent operating contract file requires:
   `.github/copilot-instructions.md`, `.grok/rules/*.md`, and
   `.cursor/rules/*.mdc` still agree with each other in effective content
   after the change, when the change touches shared phase, dependency, or
-  read-order rules. Per ADR 0006 (extended by LISS-0015 and revised by
-  LISS-0018): agreement means equivalent effective content, not a literal
-  text match — Cursor's effective content is the union of
+  read-order rules. Per ADR 0006: agreement means equivalent effective
+  content, not a literal text match — Cursor's effective content is the union of
   `.cursor/rules/*.mdc` (Cursor complements only) and Cursor's native root
   `AGENTS.md` auto-apply (no `@AGENTS.md` inside `.mdc`), while `CLAUDE.md`,
   `.github/copilot-instructions.md`, and `.grok/rules/*.md` are literal full

@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-ADR 0002 defines general input, output, and reasoning contracts for
+ADR 0003 defines general input, output, and reasoning contracts for
 AI-assisted tasks. `docs/architecture/dependency-policy.md` defines an
 adoption checklist for software dependencies (packages, libraries, provider
 SDKs, CLI tools, test helpers). Neither document states a rule for adopting
@@ -14,14 +14,14 @@ a *resource* — AI-generated or human-sourced — that is not a software
 dependency: a generated artifact, a downloaded dataset, a third-party
 content asset, or similar.
 
-External feedback from real usage of this template (Adjudicator-supplied,
+External feedback from real usage of this template (Director-supplied,
 2026-07-13) showed this gap in practice: generated output was treated as
 usable before any human verdict was recorded on it.
 
 An earlier draft of this ADR defined the contract using image-specific
 vocabulary (orientation, dimensions, crop policy, alpha/channel policy) and
 a deterministic-vs-human boundary table naming specific artifact properties.
-The Adjudicator rejected that draft: this template must avoid describing
+The Director rejected that draft: this template must avoid describing
 specific technologies, and the actual principle needed is more general —
 **no resource that originates outside the project's own reviewed work is
 adopted without passing an explicit, recorded check, whether that resource
@@ -39,8 +39,8 @@ a media-specific one.
    human-sourced external content/data resources. It explicitly does not
    cover software packages, libraries, SDKs, CLI tools, or test helpers —
    those remain covered by `dependency-policy.md`.
-2. This document extends ADR 0002 for the resources it covers. It does not
-   modify or override ADR 0002's general input/output/reasoning contract for
+2. This document extends ADR 0003 for the resources it covers. It does not
+   modify or override ADR 0003's general input/output/reasoning contract for
    any AI-assisted task type, and it does not modify or override
    `dependency-policy.md`'s software-dependency adoption checklist.
 3. Define a generic adoption lifecycle:
@@ -52,7 +52,7 @@ a media-specific one.
    when an AI produced it.
 4. The check record states: resource source, what was checked, check method
    (deterministic tool name/version, or human reviewer plus criteria),
-   verdict, and timestamp — reusing ADR 0002's source-reference and
+   verdict, and timestamp — reusing ADR 0003's source-reference and
    review-status shape rather than inventing a new schema.
 5. The template does not prescribe concrete per-resource-type check
    criteria. It does not name fields like image dimensions or audio sample
@@ -70,7 +70,7 @@ a media-specific one.
    actually works as expected is itself a capability-matrix concern (see ADR
    0010's verified/inferred/unknown compatibility state).
 7. ADR 0010's rule that a candidate record already carrying a human verdict
-   is never deleted or overwritten on resume (LISS-0008) is one
+   is never deleted or overwritten on resume is one
    domain-specific instance of this ADR's general adoption-check rule,
    applied to AI generation job outputs. It does not duplicate this ADR's
    schema.
@@ -98,7 +98,7 @@ Positive:
   adopting it.
 - Stays technology-neutral: no image, audio, or dataset vocabulary becomes
   required template terminology.
-- Reuses ADR 0002's contract shape and `dependency-policy.md`'s adoption-
+- Reuses ADR 0003's contract shape and `dependency-policy.md`'s adoption-
   checklist spirit instead of introducing a third, incompatible pattern.
 - Clarifies the boundary with `dependency-policy.md`, avoiding overlap
   between software-dependency adoption and content/data-resource adoption.
@@ -109,7 +109,7 @@ Negative:
   ignore but must be aware exists.
 - Projects adopting this contract must define their own concrete check
   criteria; the ADR defines the contract shape, not project-specific values.
-- Two documents (ADR 0002's and this one) must be kept consistent over time
+- Two documents (ADR 0003's and this one) must be kept consistent over time
   as both evolve.
 
 ## Enforcement

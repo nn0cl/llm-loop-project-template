@@ -29,7 +29,7 @@ The human — the **Director** — is present for direction, planning, and the
 design agreement. After the design agreement, the execution loop is closed:
 review and approval inside it are performed by AI personas, and the loop does
 not stop for human sign-off. The governing decision is
-`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`.
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
 
 ## Prime Directive
 

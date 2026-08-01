@@ -15,7 +15,7 @@ The human — the **Director** — is present for direction, planning, and the
 design agreement. After the design agreement, the execution loop is closed:
 review and approval inside it are performed by AI personas, and the loop does
 not stop for human sign-off. The governing decision is
-`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`.
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
 
 ## The Three Invariants
 
@@ -90,6 +90,11 @@ Every approval must satisfy all three constraints, or it does not count:
 
 A proposed ADR is not implementation authorization. CI success is not an
 approval; it is one of the deterministic inputs an approval requires.
+
+Record reviews with `docs/templates/review-record.md`, stored under
+`docs/collaboration/reviews/`. Record design agreements with
+`docs/templates/design-agreement.md`. When stopping before completion, use
+`docs/templates/agent-handoff.md`.
 
 ## Session Entry
 

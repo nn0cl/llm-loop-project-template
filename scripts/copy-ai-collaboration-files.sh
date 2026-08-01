@@ -179,13 +179,19 @@ write_version_marker() {
   source_ref="$(git -C "$repo_root" rev-parse HEAD 2>/dev/null || echo "unknown")"
   local source_origin
   source_origin="$(git -C "$repo_root" remote get-url origin 2>/dev/null || echo "$repo_root")"
+  local source_edition
+  source_edition="$(git -C "$repo_root" describe --tags 2>/dev/null \
+    || echo "untagged")"
 
   cat > "$target/.collaboration-template-version" <<MARKER
 # Records which commit of the AI-human collaboration template this project
 # last synced against. Read by scripts/update-ai-collaboration-files.sh.
 # Do not edit by hand except to correct the source.
+# 'edition' is derived from the template's git tags and is informational;
+# 'ref' is the value the update script actually resolves against.
 source: $source_origin
 ref: $source_ref
+edition: $source_edition
 MARKER
 }
 
