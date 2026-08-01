@@ -97,6 +97,11 @@ Relevant architecture documents:
 - AI request routing: `docs/architecture/ai-request-routing.md`.
 - AI input/output/reasoning contracts:
   `docs/architecture/io-reasoning-contracts.md`.
+- External resource adoption:
+  `docs/architecture/external-resource-adoption-contract.md`.
+- AI failure and recovery: `docs/collaboration/ai-failure-recovery.md`.
+- Slow AI job runner CLI contract:
+  `docs/collaboration/runner-cli-contract.md`.
 - Collaboration scheme: `docs/collaboration/ai-human-scheme.md`.
 - Personas: `docs/collaboration/personas.md`.
 - Design agreement: `docs/collaboration/design-agreement.md`.
@@ -143,6 +148,25 @@ output showing Green.
 deterministic output showing behavior is preserved, and state the remaining
 verification gap: what was inferred rather than verified, and where a
 Reviewer should try to falsify the result.
+
+**Minor Fix Path.** A review-finding correction may use this path only when it
+is planning size `S`, preserves the accepted specification, changes no
+specification, ADR, port, data model, dependency, or architecture boundary,
+and is expected to finish in one attempt. Record a compact design note, make
+the minimum correction, run deterministic verification, and obtain separate
+Reviewer confirmation. Escalate to Feature Path or Architecture Path when any
+condition stops being true, including a second attempt. Actionable
+review findings are tracked as `Type: review-finding` in `docs/issues/LISS-*.md`;
+their lifecycle is `proposed -> accepted -> in_progress -> resolved -> closed`.
+Use `wont_do` only with a grounded Arbiter decision record.
+
+**Preflight Validation.** Before independent Reviewer review, run deterministic
+checks and record a `pass` or `fail` result with command output, scope result,
+and the next action. A `fail` returns the work to the Implementer. A `pass`
+only permits submission to the independent Reviewer; it is not approval and
+cannot set `wont_do` or `closed`. A lightweight model may assist with checklist
+and document-consistency checks but may not issue final approval. The producer
+of Preflight cannot review the same change.
 
 ## Reopening the Design Agreement
 

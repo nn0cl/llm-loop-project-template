@@ -17,6 +17,9 @@ A task is not done unless:
 - changed files are listed in the final response or handoff.
 - assumptions and open decisions are visible.
 - deterministic verification was run or explicitly marked not applicable.
+- applicable Preflight Validation was recorded with its result, command output,
+  scope result, and next action; Preflight pass did not replace independent
+  Reviewer approval.
 - the active persona, covering design agreement, current phase, and approval
   type are explicit when review or phase work is involved.
 - deterministic verification output is recorded, not merely asserted.

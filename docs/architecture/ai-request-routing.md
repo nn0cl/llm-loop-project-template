@@ -113,6 +113,26 @@ Route tasks by risk and complexity:
 - Privacy-sensitive provider choice: stronger reasoning model, and a reopening
   request when the design agreement does not settle it.
 
+### Review-finding and minor-fix routing
+
+| Operation | Minimum route | Escalate when |
+| --- | --- | --- |
+| Extract a concrete finding from a review record | Lightweight reasoning model | evidence is ambiguous or privacy-sensitive |
+| Create/update ISSUE metadata | Code assistant or deterministic tool | state transition is disputed |
+| Verify formatting, links, and tests | Deterministic tool | never replace a failing signal with model judgment |
+| Narrow Minor Fix Path correction | Code assistant or lightweight reasoning model | specification, ADR, port, data-model, dependency, architecture-boundary, or second-attempt changes |
+| Independent closure review | Strong reasoning agent in separate context | never self-review |
+| Arbiter decision on a disputed finding | Strong reasoning agent | contract or agreement is underspecified; reopen |
+| Preflight deterministic checks | Deterministic tool | any failing signal returns to Implementer |
+| Preflight document-consistency checklist | Lightweight reasoning model | ambiguity, privacy risk, or semantic judgment |
+
+Every non-default route records its capability class, displayed model and
+reasoning setting when available, compatibility state, and escalation reason.
+
+Preflight output must record `pass` or `fail`, each check, command/output
+evidence, scope result, and next action. A Preflight `pass` never replaces an
+independent Reviewer.
+
 Escalate to a stronger reasoning agent only when ambiguity, cross-boundary
 change, privacy risk, or instruction conflict is present. Downgrade to a
 deterministic tool or code assistant when the task is mechanical, local, and

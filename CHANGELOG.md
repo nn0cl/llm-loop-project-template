@@ -8,6 +8,35 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
+## v1.0.1 — Reviewer rejection fixes (2026-08-02)
+
+The first edition was reviewed by a Reviewer persona in a separate context, on
+a different model, and **rejected**. Five defects, all reproduced
+independently before being fixed. No rule changed meaning; the mirrors were
+brought into agreement and the tooling was corrected.
+
+- **CI rejected the Reviewer's own output.** The traceability gate's `case`
+  pattern `docs/collaboration/*.md` also matched nested record directories,
+  because `*` matches `/` in a shell `case` glob. A pull request containing
+  only a review record was classified as a contract change with no
+  accompanying trace, and failed. The Reviewer persona's single deliverable
+  was therefore unlandable. Record directories are now matched before the
+  contract pattern, and
+  `docs/collaboration/prompt-instruction-change-control.md` names all three of
+  them as records rather than only `traces/`.
+- `AGENTS.md` did not point to `external-resource-adoption-contract.md`,
+  `ai-failure-recovery.md`, or `runner-cli-contract.md`. Only `CLAUDE.md` did.
+- `.github/copilot-instructions.md` had no reopening-trigger list, which every
+  other contract file carries.
+- `CLAUDE.md`'s `Selected Stack` section used a placeholder whose wording the
+  copy script never substituted and CI's smoke test never checked, so it
+  shipped unfilled while CI reported the target clean. The placeholder now
+  matches, and the smoke test's check is case-insensitive.
+- `CHANGELOG.md` was not asserted by CI's `required_files`.
+
+The review record is at
+`docs/collaboration/reviews/2026-08-02-contract-first-edition-review.md`.
+
 ## v1.0.0 — First edition (2026-08-02)
 
 The first edition an adopting project can install and cite by version. It is

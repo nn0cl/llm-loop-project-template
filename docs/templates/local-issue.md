@@ -5,6 +5,8 @@
 - Local issue ID:
 - GitHub issue:
 - Status:
+- `Status` is the authoritative lifecycle field. For `Type: review-finding`,
+  use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase:
 - Type:
 - Priority:
@@ -21,6 +23,20 @@
 ## Acceptance Notes
 
 - 
+
+## Review Finding Record
+
+<!-- Required when Type is `review-finding`; otherwise write N/A. -->
+
+- Originating review record:
+- Affected artifact:
+- Failure scenario:
+- Reviewer grounds:
+- Dispute raised by:
+- Arbiter decision record:
+- Changed files:
+- Deterministic verification output:
+- Separate Reviewer closure record:
 
 ## Dependencies
 
@@ -54,6 +70,7 @@
 - Created at:
 - Planning size:
 - Intended execution route:
+- Compatibility state: Verified | Inferred | Unknown (with reason)
 - Intended scope:
 - Estimated token range:
 - Estimated token midpoint:

@@ -21,6 +21,7 @@
 
 - Model/assistant/tool:
 - Reason:
+- Compatibility state: Verified | Inferred | Unknown, with reason:
 - Privacy constraints:
 
 ## AI Execution Records
@@ -65,6 +66,15 @@ that the metric, source, and attribution boundary are compatible.
 - Escalation reason:
 - Avoided LLM work:
 - Rework caused by AI output:
+
+## Preflight Validation
+
+- Required: yes | no
+- Result: pass | fail | N/A
+- Checks and command output:
+- Scope result:
+- Next action:
+- Independent Reviewer still required: yes
 
 ## Decisions Carried
 
