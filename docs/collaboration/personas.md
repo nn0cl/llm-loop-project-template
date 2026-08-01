@@ -95,7 +95,9 @@ a preference.
   reasoning the Implementer used to produce the work — that reasoning is not
   admissible as justification.
 - **Outputs**: a review record naming the failure scenarios searched for, the
-  grounds on which each does not occur, and the resulting decision.
+  grounds on which each does not occur, and the resulting decision. Written
+  with `docs/templates/review-record.md` and stored under
+  `docs/collaboration/reviews/`.
 - **Done when**: the record would let a third party re-run the same search.
 - **Must not**: approve without recorded deterministic verification output;
   approve with "no problems found" and no named scenarios; review work it

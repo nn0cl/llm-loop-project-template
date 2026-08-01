@@ -45,8 +45,9 @@ Reasons this matters:
 ## 2. Let an agent do the introduction
 
 You can run the shell commands below yourself, but this template is built so
-an AI coding agent can safely perform the introduction under Referee
-supervision. Ready-to-paste prompts are in
+an AI coding agent can safely perform the introduction under Director
+supervision. Adoption happens in the design phase, before any closed loop
+exists, so the Director is present throughout it. Ready-to-paste prompts are in
 [`docs/templates/examples/adoption-prompts.md`](docs/templates/examples/adoption-prompts.md).
 The short version:
 
@@ -57,15 +58,19 @@ The short version:
    `scripts/` yet — e.g.
    `~/dev/llm-loop-project-template/scripts/copy-ai-collaboration-files.sh --target .`),
    report what it skipped versus copied, and stop before filling in any
-   target-specific fact (stack, datastore, provider, domain model) that has
-   not been Referee-approved.
+   target-specific fact (stack, datastore, provider, domain model) that the
+   Director has not settled.
 3. Review the diff yourself before the agent fills placeholders or starts any
    Feature Path work. The agent should stop and ask, per `AGENTS.md`'s Prime
    Directive, rather than guess.
+4. Record the settled facts as your first design agreement under
+   `docs/collaboration/agreements/`, using
+   [`docs/templates/design-agreement.md`](docs/templates/design-agreement.md).
+   Nothing runs in the closed loop until one exists.
 
 This mirrors the ordinary Fast Path / Architecture Path discipline the
 template applies to every other task. Adoption is not a special case that
-skips Referee review.
+skips the design agreement.
 
 ## 3. Install
 
@@ -106,7 +111,7 @@ recorded under this template's own rules.
 The list below follows
 [`scripts/lib/collaboration-template-paths.sh`](scripts/lib/collaboration-template-paths.sh) —
 the same list the copy/update scripts use — split by how safe each item is to
-delete outright. It is a hand-maintained snapshot (as of 2026-07-16), not
+delete outright. It is a hand-maintained snapshot (as of 2026-08-02), not
 generated from those files: if the template has changed since, the paths
 list and `ci.yml`'s `required_files` in the template repository are the
 authority, and this section may lag behind them.
@@ -124,8 +129,8 @@ section.
 - `scripts/lib/collaboration-template-paths.sh`
 - `.collaboration-template-version` (the sync marker at your repo root)
 - `.collaboration-template-ignore`, if you created one
-- `docs/templates/` (design-intake, handoff, trace, issue, work-plan, ADR,
-  Gherkin templates)
+- `docs/templates/` (design-agreement, review-record, design-intake, handoff,
+  trace, issue, work-plan, ADR, Gherkin templates)
 - `docs/at-tdd/process.md`
 
 ### Review first — these are the operating contract itself
@@ -142,9 +147,9 @@ want — versus, say, relaxing one rule — before removing:
 Do not `rm -rf` these. Remove only the template-authored files inside them
 and keep anything your project added:
 
-- `docs/architecture/adr/0001-*.md` through `0011-*.md` are the process ADRs
-  this template ships with; remove only those eleven, and keep any ADR your
-  project numbered afterward (0012 and up).
+- `docs/architecture/adr/0001-*.md` through `0013-*.md` are the process ADRs
+  this template ships with; remove only those thirteen, and keep any ADR your
+  project numbered afterward (0014 and up).
 - `docs/architecture/` otherwise holds a mix of template-provided files
   (`agent-quickstart.md`, `implementation-readiness.md`,
   `ai-request-routing.md`, `io-reasoning-contracts.md`,
@@ -152,9 +157,12 @@ and keep anything your project added:
   `README.md`) and the stack-specific documents your project wrote inside the
   same folder. Remove the template files individually; keep the rest.
 - `docs/collaboration/` is almost entirely template-provided process docs,
-  but `docs/collaboration/traces/` and any file your project edited to
-  record real decisions are your project's audit history. Consider archiving
-  instead of deleting if you might want that history later.
+  but `docs/collaboration/agreements/`, `docs/collaboration/reviews/`,
+  `docs/collaboration/traces/`, and any file your project edited to record
+  real decisions are your project's audit history — the design agreements it
+  signed, the review decisions issued against them, and the traces of the work
+  itself. Consider archiving instead of deleting if you might want that
+  history later.
 - `docs/issues/`, `docs/work-plans/`, `docs/specs/`, `docs/evaluation/` are
   scaffolding directories the template ships empty (`.gitkeep` only). By the
   time you are uninstalling, they almost certainly hold real project
@@ -167,7 +175,7 @@ and keep anything your project added:
   project documents" step asserts the existence of nearly every file this
   template installs — including the scripts, templates, and process docs
   listed as safe to delete above — and "Check architecture decision
-  records" asserts ADRs 0001–0011. Deleting anything before trimming those
+  records" asserts ADRs 0001–0013. Deleting anything before trimming those
   lists makes CI fail on the next push. Rewrite or remove those steps to
   match what you actually keep.
 

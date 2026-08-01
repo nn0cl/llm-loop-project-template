@@ -98,6 +98,9 @@ LLM provider、ドメインモデルを事前には決めません。それら�
 - ループ内の承認は Reviewer ペルソナが別コンテキストで行う。
 - 決定性検証の出力なしに承認しない。成果物を作ったコンテキストは承認しない。
 - 人間 Director が承認するのは設計合意ただ一つ。細かい承認はしない。
+- 記録は 3 か所に残す。設計合意は `docs/collaboration/agreements/`、
+  Reviewer の判断は `docs/collaboration/reviews/`、作業の trace は
+  `docs/collaboration/traces/`。
 - AI に渡す context は最小限にする。
 - 高度な reasoning が本当に必要だったかを trace に軽く残す。
 - AI output は信頼済みデータとして扱わず、構造・根拠・review status を確認する。
@@ -243,7 +246,8 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
 5. 承認された phase だけを実行する。
 6. deterministic verification を走らせる。
 7. 必要なら trace と cost/reasoning control を残す。
-8. phase gate で Reviewer ペルソナの承認を別コンテキストで受ける。
+8. phase gate で Reviewer ペルソナの承認を別コンテキストで受け、その判断を
+   `docs/collaboration/reviews/` に review record として残す。
 
 ドメインモデルは、この流れの中で決めて構いません。むしろ導入後のプロジェクト
 では、仕様と review 済み test に基づいて domain model を育てることが想定されて

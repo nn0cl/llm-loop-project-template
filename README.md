@@ -111,7 +111,10 @@ installed.
   fallback reading.
 - **Local issue and work-plan planning** under `docs/issues/` and
   `docs/work-plans/`, usable before or alongside GitHub Issues.
-- **AI work traces** under `docs/collaboration/traces/` for auditability.
+- **Three record directories** that make the loop auditable: design agreements
+  under `docs/collaboration/agreements/`, Reviewer decisions under
+  `docs/collaboration/reviews/`, and AI work traces under
+  `docs/collaboration/traces/`.
 - **Reusable templates** for design agreements, review records, design intake,
   agent handoff, work traces, local issues, work plans, Gherkin features, and
   ADRs.
@@ -220,8 +223,9 @@ architecture layers. Before using it on a real project:
    stack-specific jobs (lint, test, dependency policy) once those tools
    exist.
 6. Renumber/extend `docs/architecture/adr/` as real architecture decisions are
-   made. The eleven ADRs included here (0001-0011) describe the collaboration
-   process itself and normally do not need to change.
+   made. The thirteen ADRs included here (0001-0013) describe the collaboration
+   process itself and normally do not need to change; number your project's own
+   decisions from 0014 up.
 
 ## Introduce into an existing repository
 
@@ -266,11 +270,12 @@ target project's accepted architecture or feature specifications.
     ├── at-tdd/process.md           # phase discipline
     ├── collaboration/              # process rules (scheme, personas, DoD, privacy, branching, ...)
     │   ├── agreements/             # design agreement records (the one human gate)
+    │   ├── reviews/                # Reviewer persona decisions (approve/reject records)
     │   └── traces/                 # AI work trace log (per-task audit trail)
-    ├── templates/                  # design intake, handoff, trace, issue, work-plan, ADR, Gherkin
+    ├── templates/                  # design agreement, review record, design intake, handoff, trace, issue, ADR, Gherkin
     │   └── examples/               # filled-in stack-specific examples, for reference only
     ├── architecture/               # Clean Architecture rules, quickstart, readiness checklist
-    │   └── adr/                    # architecture decision records (0001-0011 = process ADRs)
+    │   └── adr/                    # architecture decision records (0001-0013 = process ADRs)
     ├── specs/                      # EARS/Gherkin feature specifications
     ├── issues/                     # local issue files (LISS-0000 style)
     ├── work-plans/                 # multi-issue work plans

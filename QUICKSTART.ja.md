@@ -48,8 +48,9 @@ git clone <このリポジトリの URL> llm-loop-project-template
 ## 2. エージェントに導入作業を任せる
 
 以下の shell コマンドを自分で実行しても構いませんが、このテンプレートは
-Referee の監督下でエージェントが安全に導入作業を代行できるように設計され
-ています。そのまま貼り付けられる prompt は
+Director の監督下でエージェントが安全に導入作業を代行できるように設計され
+ています。導入作業は閉じたループが始まる前の設計フェーズで行われるため、
+その間 Director は最初から最後まで同席します。そのまま貼り付けられる prompt は
 [`docs/templates/examples/adoption-prompts.md`](docs/templates/examples/adoption-prompts.md)
 にあります。要点は次のとおりです。
 
@@ -59,16 +60,20 @@ Referee の監督下でエージェントが安全に導入作業を代行でき
    は**テンプレート checkout 側のフルパスで**実行させます（コピー前の
    導入先には `scripts/` がまだ存在しないため。例:
    `~/dev/llm-loop-project-template/scripts/copy-ai-collaboration-files.sh --target .`）。
-   何をコピーし何をスキップしたかを報告すること、そして Referee が承認して
+   何をコピーし何をスキップしたかを報告すること、そして Director が決めて
    いない導入先固有の事実（スタック、データストア、provider、ドメイン
    モデル）は推測せずに止まること。
 3. エージェントが placeholder を埋めたり Feature Path の作業を始めたりする
    前に、diff を必ず自分でレビューします。エージェントは `AGENTS.md` の
    Prime Directive に従い、推測せず止まって確認を求めるべきです。
+4. 決まった事実を、最初の設計合意として
+   [`docs/templates/design-agreement.md`](docs/templates/design-agreement.md)
+   を使って `docs/collaboration/agreements/` に記録します。設計合意が 1 つも
+   ない状態では、閉じたループは何も実行しません。
 
 これは、このテンプレートが他のあらゆるタスクに課している通常の Fast Path /
 Architecture Path の規律をそのまま踏襲したものです。導入作業だからといって
-Referee レビューを省略してよい特例にはなりません。
+設計合意を省略してよい特例にはなりません。
 
 ## 3. 導入する
 
@@ -110,7 +115,7 @@ scaffolding として導入されたファイルの中には、その後プロ�
 以下のリストは
 [`scripts/lib/collaboration-template-paths.sh`](scripts/lib/collaboration-template-paths.sh)
 ——copy/update script が使っているのと同じリスト——を、削除の安全度で分類
-したものです。ただしこれは 2026-07-16 時点の手作業によるスナップショット
+したものです。ただしこれは 2026-08-02 時点の手作業によるスナップショット
 であり、自動生成ではありません。その後テンプレートが変更されている場合、
 正は常にテンプレートリポジトリのパスリストと `ci.yml` の `required_files`
 であり、この節はそれらより遅れている可能性があります。
@@ -128,8 +133,8 @@ scaffolding として導入されたファイルの中には、その後プロ�
 - `scripts/lib/collaboration-template-paths.sh`
 - `.collaboration-template-version`（導入先リポジトリ直下の同期マーカー）
 - `.collaboration-template-ignore`（作成していれば）
-- `docs/templates/`（design-intake、handoff、trace、issue、work-plan、ADR、
-  Gherkin の各テンプレート）
+- `docs/templates/`（design-agreement、review-record、design-intake、handoff、
+  trace、issue、work-plan、ADR、Gherkin の各テンプレート）
 - `docs/at-tdd/process.md`
 
 ### 先に確認する——これらは運用契約そのもの
@@ -147,9 +152,9 @@ scaffolding として導入されたファイルの中には、その後プロ�
 これらは `rm -rf` しないでください。フォルダ内のテンプレート由来ファイル
 だけを取り除き、プロジェクトが追加したものは残します。
 
-- `docs/architecture/adr/0001-*.md` から `0011-*.md` までは、このテンプレー
-  トが同梱する process ADR です。この 11 件だけを削除し、プロジェクトが
-  その後採番した ADR（0012 以降）は残します。
+- `docs/architecture/adr/0001-*.md` から `0013-*.md` までは、このテンプレー
+  トが同梱する process ADR です。この 13 件だけを削除し、プロジェクトが
+  その後採番した ADR（0014 以降）は残します。
 - `docs/architecture/` はそれ以外にも、テンプレート提供ファイル
   （`agent-quickstart.md`、`implementation-readiness.md`、
   `ai-request-routing.md`、`io-reasoning-contracts.md`、
@@ -158,10 +163,12 @@ scaffolding として導入されたファイルの中には、その後プロ�
   architecture document が混在します。テンプレート提供ファイルだけを個別
   に削除し、残りは保持します。
 - `docs/collaboration/` はほぼ全体がテンプレート提供の process 文書です
-  が、`docs/collaboration/traces/` や、実際の決定を記録するために
-  プロジェクトが編集したファイルは、プロジェクト自身の監査履歴です。
-  あとで参照したくなる可能性があるなら、削除ではなく archive を検討して
-  ください。
+  が、`docs/collaboration/agreements/`、`docs/collaboration/reviews/`、
+  `docs/collaboration/traces/` や、実際の決定を記録するために
+  プロジェクトが編集したファイルは、プロジェクト自身の監査履歴です——
+  結んだ設計合意、それに対して出された review 判断、そして作業そのものの
+  trace です。あとで参照したくなる可能性があるなら、削除ではなく archive を
+  検討してください。
 - `docs/issues/`、`docs/work-plans/`、`docs/specs/`、`docs/evaluation/` は
   テンプレートが空（`.gitkeep` のみ）の状態で配る scaffolding 用ディレクト
   リです。アンインストールを検討する頃には、ほぼ確実に実際のプロジェクト
@@ -174,7 +181,7 @@ scaffolding として導入されたファイルの中には、その後プロ�
   「Check required project documents」step は、上の「そのまま削除して
   よい」節に挙げたスクリプト・テンプレート・process 文書を含む、この
   テンプレートが導入するほぼすべてのファイルの存在を検査し、
-  「Check architecture decision records」step は ADR 0001〜0011 を検査
+  「Check architecture decision records」step は ADR 0001〜0013 を検査
   します。リストを削る前に何かを削除すると、次の push で CI が落ちます。
   実際に残す内容に合わせて step を書き換えるか削除してください。
 

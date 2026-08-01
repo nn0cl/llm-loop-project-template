@@ -5,6 +5,10 @@ Use this when the Reviewer persona issues a decision inside the execution loop.
 A review that does not satisfy all three constraints below does not count as an
 approval, whatever this record says.
 
+Store the completed record at
+`docs/collaboration/reviews/YYYY-MM-DD-<slug>.md`, and link it from the pull
+request. A review that leaves no record did not happen.
+
 ## Constraints (all three must hold)
 
 - [ ] **Context separation.** This review runs in a context separate from the

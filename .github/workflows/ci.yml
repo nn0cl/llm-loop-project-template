@@ -79,6 +79,7 @@ jobs:
             "docs/templates/contract-file-sync-prompt.md"
             "docs/collaboration/traces/.gitkeep"
             "docs/collaboration/agreements/.gitkeep"
+            "docs/collaboration/reviews/.gitkeep"
             "docs/issues/.gitkeep"
             "docs/work-plans/.gitkeep"
             "docs/evaluation/golden-examples/.gitkeep"
@@ -139,9 +140,11 @@ jobs:
           test -f "$tmp/target/docs/issues/.gitkeep"
           test -f "$tmp/target/docs/collaboration/traces/.gitkeep"
           test -f "$tmp/target/docs/collaboration/agreements/.gitkeep"
+          test -f "$tmp/target/docs/collaboration/reviews/.gitkeep"
           test -f "$tmp/target/docs/templates/design-agreement.md"
           test -f "$tmp/target/docs/templates/review-record.md"
           ! ls "$tmp/target/docs/collaboration/agreements/"*.md >/dev/null 2>&1
+          ! ls "$tmp/target/docs/collaboration/reviews/"*.md >/dev/null 2>&1
           test -f "$tmp/target/docs/specs/.gitkeep"
           ! ls "$tmp/target/docs/issues/"LISS-*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/collaboration/traces/"*.md >/dev/null 2>&1
