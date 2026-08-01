@@ -101,6 +101,14 @@ compatibility is safe to act on automatically.
 | YAML validation | Deterministic tool | not normally |
 | Dependency checks | Deterministic tool | not normally |
 | Privacy-sensitive context routing | Strong reasoning agent | required; reopening request if the agreement does not cover it |
+| Review-finding extraction and ISSUE drafting | Lightweight reasoning model | required when evidence is ambiguous |
+| Review-finding metadata/state synchronization | Code assistant or deterministic tool | required when a transition is disputed |
+| Minor Fix Path implementation | Code assistant or lightweight reasoning model | required when it changes a specification, ADR, port, data model, dependency, architecture boundary, leaves size S, or needs a second attempt |
+| Minor Fix Path closure review | Strong reasoning agent in a separate context | always required |
+| Disputed finding / Arbiter decision | Strong reasoning agent | reopen when neither position is grounded |
+| Preflight Validation | Deterministic tool first; lightweight reasoning model for checklist assistance | never issue approval; fail returns to Implementer |
+| Preflight deterministic checks | Deterministic tool | any failing signal returns to Implementer |
+| Preflight document-consistency checklist | Lightweight reasoning model | ambiguity or semantic judgment |
 
 ## Escalation Rules
 

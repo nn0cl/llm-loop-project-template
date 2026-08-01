@@ -83,9 +83,8 @@ APIs)?>`
 
 ## Accepted Decisions
 
-The first edition ships eleven process ADRs. `0001` governs; the rest operate
-under it. A project adopting this template numbers its own decisions from
-`0012` up.
+The first edition ships thirteen process ADRs. `0001` governs; the rest operate
+under it.
 
 - `adr/0001-director-centered-planning-and-closed-loop.md` — the governing
   decision: who plans, who approves, and what closes the loop.
@@ -99,6 +98,8 @@ under it. A project adopting this template numbers its own decisions from
 - `adr/0009-bug-planning-and-ai-usage-records.md`
 - `adr/0010-ai-failure-recovery-and-runner-cli-contract.md`
 - `adr/0011-external-resource-adoption-contract.md`
+- `adr/0012-review-issues-minor-fix-and-model-routing.md`
+- `adr/0013-preflight-validation-before-independent-review.md`
 
 ## Remaining Technology Evaluation
 

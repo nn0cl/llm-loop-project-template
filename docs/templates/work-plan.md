@@ -70,6 +70,21 @@ attempt starts. Link to a local issue record instead of duplicating it. -->
 - Reason it is unblocked:
 - Reopening request needed:
 
+## Minor Fix Path
+
+Use only when the issue is planning size `S`, preserves accepted behavior, and
+is expected to finish in one attempt. It must not change a specification, ADR,
+port, data model, dependency, or architecture boundary. Record a compact
+design note, deterministic verification, and separate Reviewer confirmation.
+Escalate to Feature Path or Architecture Path if any condition stops being
+true, including when a second attempt is needed.
+
+## Preflight Validation
+
+Run deterministic checks before independent review. Record `pass` or `fail`,
+the exact checks and outputs, scope result, and next action. `pass` permits
+submission only; it never replaces the separate Reviewer.
+
 ## Risks
 
 - 

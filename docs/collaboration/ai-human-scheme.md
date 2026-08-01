@@ -70,6 +70,9 @@ Director states direction
   -> Phase 0 Design Intake      (Implementer, per task)
   -> Phase 1 Red                (Implementer)
   -> Deterministic verification
+  -> Preflight Validation        (Implementer / deterministic tool)
+  -> fail -> Implementer correction and repeat Preflight
+  -> pass
   -> Review                     (Reviewer, separate context)
   -> Phase 2 Green              (Implementer)
   -> Deterministic verification
@@ -85,6 +88,10 @@ Director states direction
 
 Everything below the double line runs without human presence. The loop stops
 only for a reopening request, never for approval of work already done.
+
+Preflight Validation is a submission check, not an approval. It may reject a
+change for missing evidence or mechanical inconsistency, but it cannot approve
+specification conformance, set `wont_do`, or close an ISSUE.
 
 ## Approval Model
 

@@ -30,6 +30,8 @@ request. A review that leaves no record did not happen.
 - Reviewing persona / model / tool:
 - Approval type: specification-conformance | phase-correctness |
   boundary-conformance | evidence-sufficiency
+- Preflight Validation record:
+- Preflight result: pass | fail | N/A
 
 ## Deterministic Verification Output
 

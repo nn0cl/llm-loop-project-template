@@ -41,6 +41,8 @@ Use this checklist before starting a coding task.
 - Delivery handlers, UI components, and adapters remain thin.
 - Source code remains readable, appropriately split, and reviewable — by a
   reviewing persona, a future agent, or the Director inspecting artifacts.
+- Preflight Validation is recorded before independent review when the covering
+  agreement requires it; a Preflight pass is not Reviewer approval.
 
 ## Ready for Phase 3 Refactor
 
