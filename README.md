@@ -2,6 +2,47 @@
 
 [日本語ガイド](README.ja.md) · [Quickstart: adopting / uninstalling this template](QUICKSTART.md)
 
+## Project direction
+
+This project is a **counter-validation project against the human-intervention
+model**.
+
+Under the conventional model, a human sits at two points in the development
+loop: the initial *BigDecide* — the framing decision about what to build and
+under which constraints — and the feedback given on each deliverable the
+agents produce. That model treats standing human judgment as the thing that
+keeps generated work correct.
+
+This project removes human presence from the development loop entirely. No
+Adjudicator inside the loop, no phase-transition approval, no human review gate
+on deliverables. The loop runs on artifacts alone: the specifications,
+contracts, tests, and traces that the agents themselves write, read, and check.
+
+The claim under test is that correctness in AI-assisted development comes from
+the written contract and its verification, not from a human standing in the
+loop. If a closed loop produces work that holds up, the human-intervention
+model is not the necessary condition it is assumed to be. If it does not, the
+failure modes are the finding — and they have to be visible in the artifacts
+rather than absorbed by a human patching them in real time.
+
+### Current state
+
+This repository starts as a full-history fork of `llm-project-template`, whose
+operating contract is Adjudicator-centered by design: it stops agents at phase
+boundaries and requires human approval to continue. Those contracts are still
+in place, and the rest of this README and everything under `docs/` still
+describes them as written.
+
+Reconciling them with the direction above — deciding what stands in for the
+human at each stop point, and what evidence a closed loop must produce in place
+of an approval — is the work this project exists to do. Until that work lands,
+read the inherited documents as the baseline being tested, not as the target
+design.
+
+---
+
+The rest of this README describes the inherited template as it stands today.
+
 This repository is a starter template for a **Clean Architecture + AT-TDD**
 development workflow where a human architect (the "Adjudicator") and one or more
 AI coding agents (Claude, Copilot, Codex, Grok, Cursor, etc.) collaborate under
