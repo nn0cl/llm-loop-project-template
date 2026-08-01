@@ -165,5 +165,5 @@ Constraints on added personas:
 
 - `docs/collaboration/ai-human-scheme.md` — roles, loop, and approval model.
 - `docs/collaboration/design-agreement.md` — the one gate the Director signs.
-- `docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`
+- `docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
   — the decision these personas implement.

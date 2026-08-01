@@ -112,7 +112,7 @@ recorded under this template's own rules.
 The list below follows
 [`scripts/lib/collaboration-template-paths.sh`](scripts/lib/collaboration-template-paths.sh) —
 the same list the copy/update scripts use — split by how safe each item is to
-delete outright. It is a hand-maintained snapshot (as of 2026-08-02), not
+delete outright. It is a hand-maintained snapshot (as of template v1.0.0), not
 generated from those files: if the template has changed since, the paths
 list and `ci.yml`'s `required_files` in the template repository are the
 authority, and this section may lag behind them.
@@ -148,9 +148,9 @@ want — versus, say, relaxing one rule — before removing:
 Do not `rm -rf` these. Remove only the template-authored files inside them
 and keep anything your project added:
 
-- `docs/architecture/adr/0001-*.md` through `0013-*.md` are the process ADRs
-  this template ships with; remove only those thirteen, and keep any ADR your
-  project numbered afterward (0014 and up).
+- `docs/architecture/adr/0001-*.md` through `0011-*.md` are the process ADRs
+  this template ships with; remove only those eleven, and keep any ADR your
+  project numbered afterward (0012 and up).
 - `docs/architecture/` otherwise holds a mix of template-provided files
   (`agent-quickstart.md`, `implementation-readiness.md`,
   `ai-request-routing.md`, `io-reasoning-contracts.md`,
@@ -176,7 +176,7 @@ and keep anything your project added:
   project documents" step asserts the existence of nearly every file this
   template installs — including the scripts, templates, and process docs
   listed as safe to delete above — and "Check architecture decision
-  records" asserts ADRs 0001–0013. Deleting anything before trimming those
+  records" asserts ADRs 0001–0011. Deleting anything before trimming those
   lists makes CI fail on the next push. Rewrite or remove those steps to
   match what you actually keep.
 

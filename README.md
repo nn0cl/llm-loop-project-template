@@ -1,6 +1,11 @@
 # LLM Loop Project Template
 
 [日本語ガイド](README.ja.md) · [Quickstart: adopting / uninstalling this template](QUICKSTART.md)
+ · [Changelog](CHANGELOG.md)
+
+**Contract edition: v1.0.0.** The operating contract in this repository is
+the first edition — a set an adopting project can install and cite by
+version. See [CHANGELOG.md](CHANGELOG.md) for what an edition covers.
 
 ## Project direction
 
@@ -64,7 +69,7 @@ reconstruct missing rationale:
 3. **Every claim states its grounds.**
 
 The governing decision is
-[ADR 0013](docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md).
+[ADR 0001](docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md).
 The operating model is defined in
 [ai-human-scheme.md](docs/collaboration/ai-human-scheme.md),
 [personas.md](docs/collaboration/personas.md), and
@@ -223,9 +228,9 @@ architecture layers. Before using it on a real project:
    stack-specific jobs (lint, test, dependency policy) once those tools
    exist.
 6. Renumber/extend `docs/architecture/adr/` as real architecture decisions are
-   made. The thirteen ADRs included here (0001-0013) describe the collaboration
+   made. The eleven ADRs included here (0001-0011) describe the collaboration
    process itself and normally do not need to change; number your project's own
-   decisions from 0014 up.
+   decisions from 0012 up.
 
 ## Introduce into an existing repository
 
@@ -275,7 +280,7 @@ target project's accepted architecture or feature specifications.
     ├── templates/                  # design agreement, review record, design intake, handoff, trace, issue, ADR, Gherkin
     │   └── examples/               # filled-in stack-specific examples, for reference only
     ├── architecture/               # Clean Architecture rules, quickstart, readiness checklist
-    │   └── adr/                    # architecture decision records (0001-0013 = process ADRs)
+    │   └── adr/                    # architecture decision records (0001-0011 = process ADRs)
     ├── specs/                      # EARS/Gherkin feature specifications
     ├── issues/                     # local issue files (LISS-0000 style)
     ├── work-plans/                 # multi-issue work plans

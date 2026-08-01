@@ -83,10 +83,14 @@ APIs)?>`
 
 ## Accepted Decisions
 
-- `adr/0001-design-first-ai-request-routing.md`
-- `adr/0002-input-output-reasoning-contracts.md`
-- `adr/0003-ai-human-collaboration-governance.md` — governance model
-  superseded by ADR 0013; kept as the model this project tests.
+The first edition ships eleven process ADRs. `0001` governs; the rest operate
+under it. A project adopting this template numbers its own decisions from
+`0012` up.
+
+- `adr/0001-director-centered-planning-and-closed-loop.md` — the governing
+  decision: who plans, who approves, and what closes the loop.
+- `adr/0002-design-first-ai-request-routing.md`
+- `adr/0003-input-output-reasoning-contracts.md`
 - `adr/0004-human-readable-source-code-quality.md`
 - `adr/0005-local-issue-planning.md`
 - `adr/0006-prompt-instruction-change-control.md`
@@ -95,10 +99,6 @@ APIs)?>`
 - `adr/0009-bug-planning-and-ai-usage-records.md`
 - `adr/0010-ai-failure-recovery-and-runner-cli-contract.md`
 - `adr/0011-external-resource-adoption-contract.md`
-- `adr/0012-rename-referee-to-adjudicator.md` — role definition superseded by
-  ADR 0013.
-- `adr/0013-director-centered-planning-and-closed-loop.md` — the governing
-  decision for the current operating model.
 
 ## Remaining Technology Evaluation
 

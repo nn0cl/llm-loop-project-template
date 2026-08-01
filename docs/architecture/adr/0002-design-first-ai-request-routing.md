@@ -1,4 +1,4 @@
-# ADR 0001: Design-First AI Request Routing
+# ADR 0002: Design-First AI Request Routing
 
 ## Status
 

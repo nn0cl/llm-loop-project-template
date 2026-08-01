@@ -1,4 +1,4 @@
-# ADR 0002: Input, Output, and Reasoning Contracts
+# ADR 0003: Input, Output, and Reasoning Contracts
 
 ## Status
 
@@ -7,7 +7,7 @@ Accepted
 ## Context
 
 The application sends selected context to AI providers, local models, or coding
-assistants. ADR 0001 defines design-first payload routing, but the project also
+assistants. ADR 0002 defines design-first payload routing, but the project also
 needs stable contracts for the shape of inputs, outputs, and reasoning evidence.
 
 Without these contracts, agents may return useful-looking prose that cannot be

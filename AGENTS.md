@@ -3,11 +3,17 @@
 This repository is prepared for multiple AI coding agents. All agents must use
 the same workflow and architectural boundaries.
 
+The project is **`<PROJECT_NAME: one-line description of the product and its
+domain>`**.
+
+The selected implementation stack is `<FILL IN: e.g. backend language,
+frontend framework, package manager>`.
+
 The human — the **Director** — is present for direction, planning, and the
 design agreement. After the design agreement, the execution loop is closed:
 review and approval inside it are performed by AI personas, and the loop does
 not stop for human sign-off. The governing decision is
-`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`.
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
 
 ## Prime Directive
 
@@ -112,6 +118,43 @@ Relevant architecture documents:
   `docs/collaboration/session-start-and-resume.md`.
 - `<Add one line per stack-specific architecture document you create, e.g.
   "React UI: docs/architecture/frontend-architecture.md.">`
+
+## Phase Discipline
+
+Execute only the phase named for the task in the plan under the covering
+design agreement. Do not generate production code ahead of the current phase.
+Full detail is in `docs/at-tdd/process.md`.
+
+**Phase 1: Red.** Failing tests only. No production implementation. Every
+external dependency goes through a port or interface and is mocked. Assert
+exactly what the acceptance specification's `Then` clause states. Report
+whether Red is a compile failure or a failing assertion, and record the
+deterministic output showing it. Phase 1 output is reviewed by the Reviewer
+persona, in a separate context, before Phase 2 starts.
+
+**Phase 2: Green.** The smallest implementation that satisfies the reviewed
+tests. Never edit a reviewed test to make it pass. Keep logic out of UI
+components, framework handlers, persistence structs, repository
+implementations, SDK clients, and file adapters. Add no speculative exception
+handling, retry policy, caching, or enrichment. Record the deterministic
+output showing Green.
+
+**Phase 3: Refactor.** Improve design without changing behavior. Record the
+deterministic output showing behavior is preserved, and state the remaining
+verification gap: what was inferred rather than verified, and where a
+Reviewer should try to falsify the result.
+
+## Reopening the Design Agreement
+
+Stop the loop and return a reopening request when a decision the agreement
+does not settle is required; a named boundary would be crossed; an accepted
+specification would have to change; deterministic verification contradicts an
+assumption the agreement rests on; the Arbiter finds neither side grounded; or
+a falsification criterion is met.
+
+A reopening request names what is unsettled and what the loop needs to
+continue. It is not a request to approve work already produced. Do not guess
+past an unsettled question, and do not stop quietly.
 
 ## Clean Architecture Dependency Rule
 
@@ -247,3 +290,20 @@ Before reporting completion, check `docs/collaboration/definition-of-done.md`.
 Create AI work traces under `docs/collaboration/traces/` when the trace policy
 requires it. Use feature-unit branches for feature work. For feature work,
 identify local issue or GitHub issue dependencies before creating the branch.
+
+## Project Boundaries
+
+`<Describe the project's runtime and trust boundaries here: whether it is
+local-first, cloud-native, or hybrid; which external systems are optional and
+replaceable; which datastore is primary; which migration tool is used. Do not
+invent full schemas before accepted behavior, reviewed Red tests, or an ADR
+require them.>`
+
+## Current Non-Decisions
+
+Technology and design choices intentionally deferred to an ADR rather than
+assumed by an agent. Treat these as ADR topics, not assumptions.
+
+- `<Provider/vendor choice>`.
+- `<Data store or schema detail>`.
+- `<Model/embedding choice>`.

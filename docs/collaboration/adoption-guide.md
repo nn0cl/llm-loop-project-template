@@ -154,11 +154,11 @@ Cursor discovers `.cursor/rules/*.mdc` (files must use the `.mdc` extension
 with frontmatter — a plain `.md` file in `.cursor/rules/` is ignored by
 Cursor's rules system) as its primary, most powerful rules mechanism; this
 template sets `alwaysApply: true` on each file so the rules apply to every
-request regardless of which files are open. As of LISS-0015 (2026-07-16,
-Adjudicator-approved after live verification the same day), `.cursor/rules/*.mdc`
-holds Cursor-complementary rules only and does not `@`-reference or
-full-mirror shared sections from `AGENTS.md`. Grounds: Cursor lists
-`AGENTS.md` as its own Rules type and "picks it up automatically"
+request regardless of which files are open. Since 2026-07-16, verified in a
+live session, `.cursor/rules/*.mdc` holds Cursor-complementary rules only and
+does not `@`-reference or full-mirror shared sections from `AGENTS.md`.
+Grounds: Cursor lists `AGENTS.md` as its own Rules type and "picks it up
+automatically"
 ([Rules](https://cursor.com/docs/rules.md);
 [Help: Rules](https://cursor.com/help/customization/rules.md)); live session
 confirmed separate injection of root `AGENTS.md` alongside always-apply
@@ -174,7 +174,7 @@ Claude Code supports `@path/to/file` imports (expanded inline into context at
 launch) and its own `.claude/rules/*.md` directory with `paths:`
 frontmatter, equivalent to Cursor's `globs`. `CLAUDE.md` used that import to
 avoid duplicating `AGENTS.md` until 2026-07-25; it is now a literal full
-mirror instead. An adopter (LISS-0018) showed the import resolving exactly as
+mirror instead. An adopter showed the import resolving exactly as
 documented while the session still skipped the mandatory design check, so
 inlining was kept but the indirection was not — see ADR 0006's 2026-07-25
 revisit.

@@ -19,7 +19,7 @@ adoption safety rules). A pull model, where each adopting repository chooses
 when to sync and runs the sync locally or in its own CI, does not require the
 template to know who adopted it.
 
-The Adjudicator also raised a specific risk: a naive "copy the newest version
+The Director also raised a specific risk: a naive "copy the newest version
 over the old one" update would silently overwrite or resurrect files an
 adopting project intentionally customized or deleted after adoption. Any
 update mechanism must preserve those local decisions by default and never
@@ -79,7 +79,7 @@ service is introduced.
 5. The template repository does not maintain a registry of adopting
    repositories and does not push updates to them.
 
-## Tiered Sync Policy (LISS-0016, 2026-07-16)
+## Tiered Sync Policy (2026-07-16)
 
 The original per-file 3-way merge treated every template file the same way.
 In practice, most template files are pure process/methodology documentation
@@ -91,7 +91,7 @@ a text-level 3-way merge on them only produces the avoidable false conflicts
 this ADR already names as a downside, for files where there is nothing
 adopter-specific to protect.
 
-The Adjudicator proposed splitting template files into two tiers instead:
+The Director proposed splitting template files into two tiers instead:
 
 - **Tier 1** (everything not listed under Tier 2): the template is fully
   authoritative. If the target's copy differs from the template's current
@@ -172,7 +172,7 @@ Code review should reject:
 - a sync PR merged while it still contains unresolved "NEEDS AI-ASSISTED
   MERGE" or "NUMBER COLLISIONS" items in its description.
 - an AI-assisted Tier 2 merge (via `docs/templates/contract-file-sync-prompt.md`)
-  committed without Adjudicator review, per
+  committed without review, per
   `docs/collaboration/prompt-instruction-change-control.md`.
 - removing the `.collaboration-template-ignore` honoring logic, or making the
   update script overwrite ignored paths.

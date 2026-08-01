@@ -6,9 +6,10 @@ Accepted
 
 ## Context
 
-The repository is designed for AI-TDD plus human Adjudicator review. AI agents can
-generate large amounts of code quickly, but large files, mixed responsibilities,
-deep nesting, and clever abstractions increase human cognitive load.
+The repository is designed for AI-TDD work that is read by a reviewing persona
+and by the Director inspecting artifacts. AI agents can generate large amounts
+of code quickly, but large files, mixed responsibilities, deep nesting, and
+clever abstractions increase the cognitive load on whoever reads it next.
 
 Clean Architecture defines dependency direction, but the collaboration scheme
 also needs a quality bar for readability and reviewability of generated source
@@ -96,4 +97,4 @@ Code review should reject:
 - large functions with multiple business decisions.
 - speculative abstractions that are not required by current tests.
 - tests whose setup hides the behavior being asserted.
-- code that increases Adjudicator cognitive load without a documented reason.
+- code that increases the reader's cognitive load without a documented reason.
