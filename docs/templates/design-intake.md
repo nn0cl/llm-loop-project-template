@@ -7,10 +7,11 @@ Use this before tests, implementation, migrations, UI, or provider work.
 - Target behavior or question:
 - Requested phase:
 - Proposed next phase:
-- Adjudicator decision needed:
-- Requested approval type:
-- Approved scope, if already granted:
-- Implementation allowed: yes | no | not yet decided
+- Active persona:
+- Covering design agreement:
+- Reopening request needed:
+- Requested approval type: specification-conformance | phase-correctness |
+  boundary-conformance | evidence-sufficiency
 - Post-review required: yes | no | not applicable
 
 ## Context Ledger
@@ -35,6 +36,6 @@ Use this before tests, implementation, migrations, UI, or provider work.
 
 ## Stop Conditions
 
-- Conditions that require Adjudicator decision:
-- Conditions that require ADR:
-- Conditions that invalidate a bounded execution approval:
+- Conditions that require a reopening request to the Director:
+- Conditions that require an ADR:
+- Falsification criteria from the covering agreement that would be met:

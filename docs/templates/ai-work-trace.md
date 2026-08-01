@@ -4,6 +4,8 @@
 
 - Date:
 - User request:
+- Active persona:
+- Covering design agreement:
 - Current phase:
 - Canonical issue or work plan:
 - AI planning record:
@@ -64,9 +66,11 @@ that the metric, source, and attribution boundary are compatible.
 - Avoided LLM work:
 - Rework caused by AI output:
 
-## Adjudicator Decisions
+## Decisions Carried
 
-- 
+- Director decisions from the covering design agreement:
+- Reviewer decisions, with the failure scenarios searched for:
+- Arbiter decisions, if any:
 
 ## Verification
 

@@ -11,10 +11,20 @@
 一つ一つへのフィードバックです。このモデルは、生成された成果物を正しく保つ
 ものは常駐する人間の判断である、という前提に立っています。
 
-このプロジェクトは、開発ループから人間の存在を完全に取り除きます。ループ内に
-Adjudicator はおらず、phase transition の承認もなく、成果物に対する人間の
-review gate もありません。ループを回すのは artifact だけです——agent 自身が
-書き、読み、検査する仕様、契約、test、trace です。
+このプロジェクトが人間を取り除くのは、開発**ループ**からです。プロジェクト
+全体からではありません。
+
+**人間がいる場所。** Director が方向性を示し、Planner ペルソナとの対話に
+よって詳細な計画を組み立て、設計フェーズを閉じる設計合意（design agreement）
+に至ります。計画は完成した成果物のレビューではなく対話であり、合意は相互的
+です——Director は「この計画が自分の作りたいものを表している」ことに合意し、
+AI は「これ以上の解釈なしに実行可能である」ことに合意します。
+
+**人間がいない場所。** その合意より後のすべてです。phase transition の承認も、
+実装前の test レビューも、成果物への sign-off もありません。ループ内の
+レビューと承認は AI ペルソナ——Implementer、Reviewer、Arbiter——が行い、
+ループは人間のために止まりません。止まるのは、何が未決着かを名指しして
+設計合意を再開するときだけです。
 
 検証したい主張はこうです。AI 支援開発における正しさは、ループに立つ人間では
 なく、書かれた契約とその検証から来る。閉じたループが耐えうる成果物を出すの
@@ -22,22 +32,38 @@ review gate もありません。ループを回すのは artifact だけです�
 のであれば、その失敗の仕方こそが発見であり、それは人間がその場で埋め合わせて
 しまうのではなく、artifact 上に見える形で残らなければならない。
 
-### 現状
+### AI の自己承認を形骸化させない仕組み
 
-このリポジトリは `llm-project-template` を全履歴ごと fork した地点から始まり
-ます。fork 元の運用契約は設計上 Adjudicator 中心です——agent を phase 境界で
-止め、続行に人間の承認を要求します。その契約は今もそのまま入っており、この
-README の以降の部分と `docs/` 配下は、依然としてそれを記述しています。
+AI が自分の成果物を承認することは、制約がなければ無価値です。ループ内で
+発行されるあらゆる承認に次の 3 つの制約がかかり、どれか一つでも満たさない
+承認は承認として数えません。
 
-上の方向性とどう折り合いをつけるか——各停止点で人間の代わりに何が立つのか、
-承認の代わりに閉じたループが何を証拠として出さなければならないのか——を決める
-ことが、このプロジェクトの仕事です。その作業が入るまでは、引き継いだ文書は
-「検証対象のベースライン」であって「目標とする設計」ではないものとして
-読んでください。
+1. **コンテキスト分離。** Reviewer は成果物を作ったコンテキストとは別の
+   コンテキストで動き、artifact・仕様・契約文書・ツール出力だけを受け取り
+   ます。Implementer の推論は正当化根拠として採用されません。
+2. **決定性の前提条件。** 決定性検証の出力が記録されていない承認は出せません。
+   AI の判断は test・linter・境界検査への上乗せであって、代替ではありません。
+3. **反証負荷。** Reviewer は「探した失敗シナリオ」と「それが起きない根拠」を
+   名指しすることで承認します。「問題は見つからなかった」は承認ではありません。
+
+### 変わらないもの
+
+`llm-project-template` から 3 つの不変条件をそのまま引き継ぎます。人間の承認を
+外したことで、これらを破るコストは下がるどころか上がります——欠けた根拠を
+後から補ってくれる人間は下流にいないからです。
+
+1. **あらゆる決定はドキュメントを生む。**
+2. **実行した事実は証拠を残す。**
+3. **あらゆる主張は根拠を述べる。**
+
+決定記録は
+[ADR 0013](docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md)。
+運用モデルの定義は
+[ai-human-scheme.md](docs/collaboration/ai-human-scheme.md)、
+[personas.md](docs/collaboration/personas.md)、
+[design-agreement.md](docs/collaboration/design-agreement.md) にあります。
 
 ---
-
-以下は、fork 元から引き継いだテンプレートの説明です。
 
 これは `README.md` の逐語訳ではありません。日本語話者がこのテンプレートを
 導入・運用するときに、判断を迷いやすい点を短く確認するための入口です。
@@ -50,8 +76,10 @@ Build は `AGENTS.md`（Grok Build は `CLAUDE.md` も）をフォールバッ�
 
 ## これは何か
 
-このリポジトリは、Clean Architecture と AT-TDD を前提に、人間の Adjudicator と
-複数の AI coding agent が協調するためのテンプレートです。
+このリポジトリは、Clean Architecture と AT-TDD を前提に、人間の Director と
+複数の AI coding agent が協調するためのテンプレートです。人間は方向性の提示、
+対話による計画立案、設計合意までを担い、その後の実行ループは AI ペルソナだけで
+閉じます。
 
 このリポジトリでの **AT-TDD** は、独立した標準手法名ではなく、
 **ATDD + TDD のハイブリッド運用**を指す repo 内の呼び名です。受け入れ仕様から
@@ -60,13 +88,16 @@ Refactor します。
 
 このテンプレート配布物は、アプリケーションの仕様、技術スタック、DB、外部 API、
 LLM provider、ドメインモデルを事前には決めません。それらは導入後に、導入先
-リポジトリの仕様・ADR・Adjudicator 判断・アーキテクチャ文書に基づいて決めます。
+リポジトリの仕様・ADR・設計合意・アーキテクチャ文書に基づいて決めます。
 
 ## 大事な考え方
 
 - 仕様なしで実装しない。
 - Phase を飛ばさない。
-- 人間の Adjudicator が phase transition、ADR、曖昧な判断を承認する。
+- 実行なしの前に設計合意を必ず記録する。
+- ループ内の承認は Reviewer ペルソナが別コンテキストで行う。
+- 決定性検証の出力なしに承認しない。成果物を作ったコンテキストは承認しない。
+- 人間 Director が承認するのは設計合意ただ一つ。細かい承認はしない。
 - AI に渡す context は最小限にする。
 - 高度な reasoning が本当に必要だったかを trace に軽く残す。
 - AI output は信頼済みデータとして扱わず、構造・根拠・review status を確認する。
@@ -111,7 +142,7 @@ review 可能な engineering workflow に寄せることです。
 - ファイルコピーの dry-run。
 - formatter、linter、search、test など deterministic tool で確認できる作業。
 
-Fast Path では full `[THOUGHT]` は不要です。compact design note で、scope、
+Fast Path では full `[DESIGN CHECK]` は不要です。compact design note で、scope、
 読んだ context、省いた context、実行する deterministic check を示します。
 
 ### Feature Path
@@ -123,12 +154,13 @@ AT-TDD の Phase 1/2/3 に使います。
 - Phase 3: Refactor。挙動を変えずに読みやすさと境界を整える。
 
 Feature Path では target spec、phase rule、関連 architecture document を読み、
-full `[THOUGHT]` を出します。
+full `[DESIGN CHECK]` を出します。
 
 ### Architecture Path
 
 ADR、prompt/instruction 変更、privacy-sensitive routing、境界判断、process 変更に
-使います。プロジェクト方針を変える場合は Adjudicator approval が必要です。
+使います。プロジェクト方針を変える場合は Director への reopening request が
+必要です。
 
 ## 新規リポジトリへ導入する
 
@@ -182,7 +214,7 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
    copy script は `--project-name`、`--domain-summary`、`--stack` で
    project 名・概要・stack placeholder を埋められますが、runtime boundary、
    datastore、migration tool、external resource、stack-specific
-   architecture document は Adjudicator が承認した導入先の事実に基づいて
+   architecture document は設計合意で確定した導入先の事実に基づいて
    埋めます。
 2. `docs/architecture/README.md` の project-specific な説明。
 3. `docs/specs/` 配下の最初の EARS/Gherkin specification。
@@ -200,7 +232,7 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
 3. 最初の仕様を `docs/specs/` に EARS/Gherkin で書く。
 4. 外部 resource を ports にする候補として列挙する。
 5. Feature Path の Phase 0 design intake で、必要な domain model 候補を整理する。
-6. Adjudicator が Phase 1 Red を承認してから test を書く。
+6. 最初のタスク群を含む設計合意を Director と結んでから test を書く。
 
 開発中の流れ:
 
@@ -211,7 +243,7 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
 5. 承認された phase だけを実行する。
 6. deterministic verification を走らせる。
 7. 必要なら trace と cost/reasoning control を残す。
-8. phase gate で Adjudicator review を受ける。
+8. phase gate で Reviewer ペルソナの承認を別コンテキストで受ける。
 
 ドメインモデルは、この流れの中で決めて構いません。むしろ導入後のプロジェクト
 では、仕様と review 済み test に基づいて domain model を育てることが想定されて
@@ -220,7 +252,7 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
 ## やってはいけないこと
 
 - テンプレート配布物や導入スクリプトに、導入先固有の domain model を含める。
-- 仕様・ADR・Adjudicator 判断なしに、AI が domain model を推測で決める。
+- 仕様・ADR・設計合意なしに、AI が domain model を推測で決める。
 - placeholder 例を、そのまま技術選定として扱う。
 - Feature Path で review 前に Phase 2 へ進む。
 - Fast Path で仕様変更、architecture 変更、agent instruction 変更をする。
@@ -232,4 +264,5 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
 - ただの局所作業なら Fast Path。
 - accepted spec に対する実装作業なら Feature Path。
 - 方針や境界を変えるなら Architecture Path。
-- path が曖昧なら Architecture Path に寄せて、Adjudicator に判断を求めます。
+- path が曖昧なら Architecture Path に寄せて、Director に reopening request を
+  出します。

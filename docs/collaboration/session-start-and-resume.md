@@ -17,7 +17,7 @@ in-flight decisions from a previous session are not.
 
 Continuity must come from repository artifacts:
 
-1. handoff note or trace cited by the Adjudicator.
+1. handoff note or trace cited in the task message.
 2. local issue or work plan.
 3. accepted specification under `docs/specs/`.
 4. feature branch, PR, or changed files on disk.
@@ -31,7 +31,7 @@ authoritative state.
 
 Use once, right after `scripts/copy-ai-collaboration-files.sh` completes.
 
-Adjudicator:
+Director:
 
 1. Run `scripts/init-llm-context.sh <repo>` or use the Initial Assessment
    Prompt in `docs/templates/examples/adoption-prompts.md`.
@@ -52,8 +52,10 @@ not require running it.
 
 Use when continuing work that already has specs, a branch, or a handoff.
 
-Adjudicator first message should include:
+The task message should include:
 
+- covering design agreement path under `docs/collaboration/agreements/`.
+- active persona for this task.
 - operating path: Fast, Feature, or Architecture.
 - phase: Phase 0, 1, 2, or 3 when applicable.
 - authoritative spec or ADR path.
@@ -78,27 +80,31 @@ existing tests. Do not refactor.
 
 Agent:
 
-1. Read the Adjudicator message for path, phase, spec, issue, and branch.
+1. Read the task message for the covering agreement, persona, path, phase,
+   spec, issue, and branch.
 2. If a handoff or trace is cited, read it before other documents.
 3. Recover progress from repository artifacts, not from assumed chat history.
-4. If path, phase, or authoritative spec is missing, stop after design intake
-   and ask the Adjudicator.
+4. If the covering agreement, persona, path, phase, or authoritative spec is
+   missing, stop after design intake and return a reopening request.
 
 ### 3. New Session, New Task
 
 Use for a different feature or process task.
 
-Adjudicator first message should include path, phase, spec or ADR, issue link,
-branch, scope, and out of scope. No handoff is required.
+The task message should include the covering agreement, persona, path, phase,
+spec or ADR, issue link, branch, scope, and out of scope. No handoff is
+required.
 
 Agent follows the selected operating path in
 `docs/architecture/agent-quickstart.md` and reads only the documents that path
 requires.
 
-## Adjudicator Checklist
+## Session Entry Checklist
 
 Before sending the first message in any session, confirm:
 
+- [ ] A recorded design agreement covers the task.
+- [ ] The active persona is named.
 - [ ] Operating path is stated or obvious from the request type.
 - [ ] Phase is stated for Feature Path work.
 - [ ] An authoritative spec, ADR, or explicit Architecture Path scope exists.
@@ -107,7 +113,7 @@ Before sending the first message in any session, confirm:
 
 ## Agent Recovery Order
 
-When the Adjudicator message references ongoing work, read in this order:
+When the task message references ongoing work, read in this order:
 
 1. cited handoff note or trace under `docs/collaboration/traces/`.
 2. cited issue or work plan.
@@ -135,12 +141,12 @@ verification status, blockers, and the next safe action.
 |-----------|-----|
 | First session after adoption | `scripts/init-llm-context.sh` |
 | Deeper first assessment | `docs/templates/examples/adoption-prompts.md` |
-| Daily resume or new task | This guide plus a short Adjudicator message |
+| Daily resume or new task | This guide plus a short task message |
 | Contract reload only | No script required; contract files load per tool |
 
 Generic chat environments that do not auto-load repository contracts still
-need the Adjudicator to paste `init-llm-context.sh` output or an equivalent
-first message.
+need `init-llm-context.sh` output or an equivalent first message pasted in by
+whoever starts the session.
 
 ## Related Documents
 

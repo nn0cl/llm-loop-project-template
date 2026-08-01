@@ -17,14 +17,14 @@ A task is not done unless:
 - changed files are listed in the final response or handoff.
 - assumptions and open decisions are visible.
 - deterministic verification was run or explicitly marked not applicable.
-- the approval type, approved scope, current phase, implementation permission,
-  and post-review requirement are explicit when review or phase work is
-  involved.
-- automated checks are not treated as a substitute for explicit Adjudicator
-  approval.
+- the active persona, covering design agreement, current phase, and approval
+  type are explicit when review or phase work is involved.
+- deterministic verification output is recorded, not merely asserted.
+- approvals were issued by a context separate from the one that produced the
+  work, and name the failure scenarios searched for.
 - issue status, phase, applicable work-plan row, and completion evidence are synchronized in the same reviewable unit when issue work changes status.
 - no unrelated context, secrets, or full private data exports were used
-  without Adjudicator approval.
+  outside what the design agreement and the privacy policy permit.
 - generated code, if any, is readable and appropriately split.
 
 ## Phase 0 Done: Design Intake
@@ -37,7 +37,8 @@ Done when:
 - omitted context is listed.
 - AI payload and model/tool routing are stated.
 - input/output/reasoning contract is stated when AI output is involved.
-- Adjudicator decisions needed are identified.
+- decisions the design agreement does not settle are identified, each as a
+  reopening request or an explicit deferral with its settling condition.
 - next phase is proposed, not silently executed.
 
 ## Phase 1 Done: Red
@@ -48,7 +49,8 @@ Done when:
 - tests map to accepted EARS/Gherkin behavior.
 - external dependencies are mocked through ports or interfaces.
 - expected Red state is reported.
-- Phase 2 is not started before Adjudicator review.
+- Phase 2 is not started before the Reviewer persona, running in a separate
+  context, has approved the tests on the record.
 
 ## Phase 2 Done: Green
 

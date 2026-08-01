@@ -34,7 +34,7 @@ Task:
   exist and must remain authoritative.
 - Do not implement, refactor, delete, or overwrite existing project behavior.
 - Do not infer the target domain model, datastore, provider, external API, or
-  LLM model without an accepted specification, ADR, or Adjudicator decision.
+  LLM model without an accepted specification, ADR, or design agreement.
 
 Output:
 
@@ -43,16 +43,16 @@ Output:
 3. Existing project facts discovered.
 4. Placeholders to fill.
 5. Missing specs or architecture documents to create later.
-6. Adjudicator decisions needed.
+6. Director decisions needed.
 7. Next safe action.
 ```
 
 ## Initial Template-Fill Prompt
 
-Use this after the initial assessment has been reviewed by the Adjudicator.
+Use this after the initial assessment has been discussed with the Director.
 
 ```markdown
-Adjudicator decision:
+Design agreement:
 
 - Operating path: Architecture Path.
 - Scope: initial template adoption cleanup only.
@@ -67,7 +67,7 @@ Adjudicator decision:
 - Add or update collaboration trace if required by
   `docs/collaboration/prompt-instruction-change-control.md`.
 
-Target project facts approved by the Adjudicator:
+Target project facts settled in the design agreement:
 
 - Project name: `<PROJECT_NAME>`
 - Domain summary: `<ONE_LINE_DOMAIN_SUMMARY>`
@@ -136,6 +136,6 @@ Check:
 - whether a small POC is needed before adoption.
 - whether the dependency respects Clean Architecture boundaries.
 
-Do not add the dependency yet. Report findings, risks, and Adjudicator decisions
+Do not add the dependency yet. Report findings, risks, and Director decisions
 needed.
 ```

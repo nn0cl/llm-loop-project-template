@@ -13,9 +13,13 @@
 ## Collaboration Checklist
 
 - [ ] Local issue / GitHub issue / no-issue reason is identified.
-- [ ] Issue dependencies are resolved, waived, or not applicable.
+- [ ] Issue dependencies are resolved or not applicable.
 - [ ] Design intake / context ledger is included or not applicable.
-- [ ] Adjudicator approval points are identified.
+- [ ] Covering design agreement is linked.
+- [ ] Active persona is named for each phase of work in this PR.
+- [ ] Reviewer approval records are linked, each naming the failure scenarios
+      searched for and citing deterministic verification output.
+- [ ] No approval in this PR was issued by the context that produced the work.
 - [ ] Phase transition is explicit.
 - [ ] Handoff notes are included when work is incomplete.
 - [ ] AI payload includes/omits are documented when AI assistance shaped the change.
@@ -45,5 +49,6 @@
 
 - [ ] CI passes
 - [ ] Tests added or intentionally not applicable
-- [ ] Reviewer empathy summary included when this is Phase 3
+- [ ] Deterministic verification output is recorded, not merely asserted
+- [ ] Verification gap summary included when this is Phase 3
 - [ ] Applicable Definition of Done is satisfied

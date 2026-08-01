@@ -26,7 +26,7 @@ Status: resolved.
 Why it matters:
 
 - Agents need a clear stopping point for each phase.
-- Adjudicators need a quick approval checklist.
+- Reviewers need a quick approval checklist.
 
 Resolution:
 

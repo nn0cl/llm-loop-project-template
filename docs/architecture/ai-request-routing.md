@@ -81,7 +81,7 @@ routing, or provider choices.
 
 - inspect relevant ADRs, contract files, and architecture rules.
 - state rejected alternatives only when they materially affect the decision.
-- stop for Adjudicator approval when the decision changes project policy.
+- return a reopening request when the decision changes project policy.
 
 ## Value Object Design
 
@@ -110,8 +110,8 @@ Route tasks by risk and complexity:
 - Architecture boundary choices: stronger reasoning model.
 - Cross-module refactor: stronger reasoning model plus deterministic tests.
 - Formatting/lint/import checks: deterministic tools.
-- Privacy-sensitive provider choice: stronger reasoning model and Adjudicator
-  review.
+- Privacy-sensitive provider choice: stronger reasoning model, and a reopening
+  request when the design agreement does not settle it.
 
 Escalate to a stronger reasoning agent only when ambiguity, cross-boundary
 change, privacy risk, or instruction conflict is present. Downgrade to a
@@ -133,6 +133,6 @@ covered by an accepted spec.
 - Ambiguities:
 ```
 
-If the Adjudicator already provided enough detail, the design note should be short
-and decisive. If the request is ambiguous, list the missing decisions and stop
-before implementation.
+If the design agreement already settles the question, the design note should be
+short and decisive. If the request is ambiguous, list the missing decisions and
+return a reopening request before implementation.

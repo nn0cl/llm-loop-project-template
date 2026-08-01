@@ -15,8 +15,8 @@ For the benefits and tradeoffs of using the template, see
    `.cursor/rules/*.mdc`, and `docs/architecture/README.md`. The copy
    script can fill project name, domain summary, and stack placeholders;
    runtime boundaries, datastore, migration tool, external resources, and
-   stack-specific architecture documents still require Adjudicator-approved
-   target facts.
+   stack-specific architecture documents still require target facts settled in
+   a design agreement with the Director.
 3. Add the first target feature specification under `docs/specs/`.
 4. Add only the stack-specific architecture documents that the project already
    needs.
@@ -213,7 +213,7 @@ any escalation reason.
 - Do not use this template to replace target project architecture.
 - Do not ship target-specific domain models as part of the reusable template.
 - Do design the target domain model after adoption, through target specs,
-  reviewed tests, Adjudicator decisions, and ADRs.
+  reviewed tests, design agreements, and ADRs.
 - Do not use `--force` unless the target owner has reviewed each overwrite.
 - Do not treat placeholder examples as selected technology.
 - Keep target secrets, private data, and full exports out of AI prompts.

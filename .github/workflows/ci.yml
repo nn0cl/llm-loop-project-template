@@ -42,6 +42,8 @@ jobs:
             ".cursor/rules/03-collaboration-and-completion.mdc"
             "docs/at-tdd/process.md"
             "docs/collaboration/ai-human-scheme.md"
+            "docs/collaboration/personas.md"
+            "docs/collaboration/design-agreement.md"
             "docs/collaboration/source-code-quality.md"
             "docs/collaboration/definition-of-done.md"
             "docs/collaboration/adoption-guide.md"
@@ -70,12 +72,13 @@ jobs:
             "docs/templates/ai-work-trace.md"
             "docs/templates/local-issue.md"
             "docs/templates/work-plan.md"
-            "docs/templates/adjudicator-review.md"
+            "docs/templates/review-record.md"
+            "docs/templates/design-agreement.md"
             "docs/templates/gherkin-feature.md"
             "docs/templates/adr.md"
             "docs/templates/contract-file-sync-prompt.md"
-            "docs/templates/execution-batch-review.md"
             "docs/collaboration/traces/.gitkeep"
+            "docs/collaboration/agreements/.gitkeep"
             "docs/issues/.gitkeep"
             "docs/work-plans/.gitkeep"
             "docs/evaluation/golden-examples/.gitkeep"
@@ -83,7 +86,6 @@ jobs:
             "scripts/copy-ai-collaboration-files.sh"
             "scripts/update-ai-collaboration-files.sh"
             "scripts/init-llm-context.sh"
-            "scripts/check-execution-batch-reviews.py"
             "scripts/lib/collaboration-template-paths.sh"
           )
 
@@ -95,7 +97,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for n in 0001 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011; do
+          for n in 0001 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 \
+                   0013; do
             ls "docs/architecture/adr/${n}-"*.md >/dev/null
           done
 
@@ -108,13 +111,6 @@ jobs:
             scripts/update-ai-collaboration-files.sh \
             scripts/init-llm-context.sh \
             scripts/lib/collaboration-template-paths.sh
-
-      - name: Check bounded execution-batch review records
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 scripts/check-execution-batch-reviews.py \
-            --branch "${GITHUB_HEAD_REF:-}"
 
       - name: Check unresolved conflict markers
         shell: bash
@@ -142,6 +138,10 @@ jobs:
           test -f "$tmp/target/.gitignore"
           test -f "$tmp/target/docs/issues/.gitkeep"
           test -f "$tmp/target/docs/collaboration/traces/.gitkeep"
+          test -f "$tmp/target/docs/collaboration/agreements/.gitkeep"
+          test -f "$tmp/target/docs/templates/design-agreement.md"
+          test -f "$tmp/target/docs/templates/review-record.md"
+          ! ls "$tmp/target/docs/collaboration/agreements/"*.md >/dev/null 2>&1
           test -f "$tmp/target/docs/specs/.gitkeep"
           ! ls "$tmp/target/docs/issues/"LISS-*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/collaboration/traces/"*.md >/dev/null 2>&1

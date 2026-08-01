@@ -17,7 +17,7 @@ Use for:
 - YAML parsing.
 - import-boundary checks.
 
-Adjudicator approval:
+Reviewer approval:
 
 - not required unless the tool changes files beyond the task scope.
 
@@ -30,7 +30,7 @@ Use for:
 - mechanical edits with obvious local context.
 - renaming within one module.
 
-Adjudicator approval:
+Reviewer approval:
 
 - required before phase transition, not for every completion.
 
@@ -44,9 +44,10 @@ Use for:
 - summarizing changed files.
 - drafting handoff notes.
 
-Adjudicator approval:
+Reviewer approval:
 
-- required when the output changes process rules or accepted tests.
+- required when the output changes process rules or accepted tests. A change to
+  process rules is also a reopening request to the Director.
 
 ### Strong Reasoning Agent
 
@@ -59,9 +60,10 @@ Use for:
 - privacy-sensitive routing.
 - resolving conflicts between instructions.
 
-Adjudicator approval:
+Reviewer approval:
 
-- required for ADR acceptance and phase transitions.
+- required for phase transitions. ADR acceptance is a design-phase decision the
+  Director takes part in, not a Reviewer approval.
 
 ## Compatibility State
 
@@ -86,7 +88,7 @@ compatibility is safe to act on automatically.
 
 ## Routing Table
 
-| Task | Preferred route | Adjudicator approval |
+| Task | Preferred route | Reviewer approval |
 | --- | --- | --- |
 | Mechanical file or wording edit | Deterministic tool or code assistant | not normally |
 | One-file local code change with clear spec | Code assistant plus deterministic tests | after verification |
@@ -94,11 +96,11 @@ compatibility is safe to act on automatically.
 | Phase 1 Red tests | Code assistant or strong reasoning agent | before Phase 2 |
 | Phase 2 Green implementation | Code assistant with deterministic tests | after verification |
 | Phase 3 refactor | Strong reasoning agent plus deterministic tests | before merge |
-| Instruction changes | Strong reasoning agent | required |
-| Prompt/template changes | Strong reasoning agent | required |
+| Instruction changes | Strong reasoning agent | required, plus a covering design agreement |
+| Prompt/template changes | Strong reasoning agent | required, plus a covering design agreement |
 | YAML validation | Deterministic tool | not normally |
 | Dependency checks | Deterministic tool | not normally |
-| Privacy-sensitive context routing | Strong reasoning agent | required |
+| Privacy-sensitive context routing | Strong reasoning agent | required; reopening request if the agreement does not cover it |
 
 ## Escalation Rules
 
@@ -130,4 +132,5 @@ Use local or deterministic tools when:
 - excerpts contain personal or confidential notes.
 - provider terms are unknown.
 
-Escalate to Adjudicator before using external AI with sensitive context.
+Return a reopening request to the Director before using external AI with
+sensitive context that the design agreement does not cover.

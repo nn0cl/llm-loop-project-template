@@ -29,4 +29,4 @@ Scenario: <observable scenario name>
 
 ## Ambiguities
 
-- <decision that needs Adjudicator review or ADR>
+- <decision that needs a reopening request to the Director, or an ADR>

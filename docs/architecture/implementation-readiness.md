@@ -10,7 +10,10 @@ Use this checklist before starting a coding task.
   task routing, and any applicable VO/DTO candidates or ports/adapters.
 - AI-assisted tasks identify input envelope, output schema, and reasoning
   evidence contract.
-- The Adjudicator explicitly selected the current phase.
+- A recorded design agreement under `docs/collaboration/agreements/` covers
+  this task.
+- The plan under that agreement names the current phase and the active
+  persona.
 - The touched area has a matching architecture rule document.
 - Unknown provider, DB, model, or folder decisions are listed as ambiguities or
   captured in an ADR.
@@ -30,18 +33,21 @@ Use this checklist before starting a coding task.
 
 ## Ready for Phase 2 Green
 
-- Phase 1 tests were reviewed.
+- Phase 1 tests were reviewed and approved by the Reviewer persona running in
+  a context separate from the one that wrote them, with the review record and
+  deterministic verification output on file.
 - The implementation location follows `docs/architecture/project-structure.md`.
 - Business logic belongs in domain or application modules.
 - Delivery handlers, UI components, and adapters remain thin.
-- Source code remains readable, appropriately split, and reviewable by a human
-  Adjudicator.
+- Source code remains readable, appropriately split, and reviewable — by a
+  reviewing persona, a future agent, or the Director inspecting artifacts.
 
 ## Ready for Phase 3 Refactor
 
 - Tests are green.
 - Refactoring does not change assertions or behavior.
-- Remaining risks can be summarized for the Adjudicator.
+- Remaining risks are stated in the verification gap summary, with the
+  scenarios a Reviewer should try to falsify.
 
 ## Not Ready If
 
@@ -52,7 +58,7 @@ Use this checklist before starting a coding task.
 - AI output is accepted as trusted data without structured validation, source
   evidence, confidence or uncertainty, and review status.
 - The task requires choosing a datastore, vector DB, embedding model, external
-  layout, or provider API without an ADR or explicit Adjudicator instruction.
+  layout, or provider API that neither an ADR nor the design agreement settles.
 - A new dependency is adopted without checking known vulnerability reports for
   the intended version, version-matched examples, troubleshooting evidence, a
   minimal real-file test path, and POC feasibility when architecture risk is
@@ -66,4 +72,4 @@ Use this checklist before starting a coding task.
 - Tests require a real external service, network call, or provider for core
   behavior.
 - The proposed code is dense, multi-responsibility, or split into speculative
-  abstractions that increase human cognitive load.
+  abstractions that increase the cognitive load of reviewing it.
