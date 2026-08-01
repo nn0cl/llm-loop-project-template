@@ -1,7 +1,7 @@
 # About docs/research (English entry point)
 
 This folder holds the research and rationale essays behind the
-`llm-project-template` — the design philosophy of AI-human collaborative
+`llm-loop-project-template` — the design philosophy of AI-human collaborative
 software development: why the template puts a human Adjudicator at decision
 points, why work is phase-gated, why plans and decisions live in the
 repository, and why agent context is deliberately minimized.

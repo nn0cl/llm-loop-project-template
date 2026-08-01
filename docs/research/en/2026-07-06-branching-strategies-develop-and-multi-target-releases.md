@@ -59,7 +59,7 @@ When formalizing this into a normative rule, this document proposes the followin
 - Hierarchical design for divergence (flags -> configuration -> port/adapter -> permanent per-target branch as a last resort requiring a separate ADR).
 - EOL (End of Life) and locking policies for each release branch.
 
-This proposal does not alter the operational rules of `llm-project-template` solely via this research document. If they are to be made normative, sorting out which points should be elevated to an ADR or collaboration document—that is where the job of this document ends.
+This proposal does not alter the operational rules of `llm-loop-project-template` solely via this research document. If they are to be made normative, sorting out which points should be elevated to an ADR or collaboration document—that is where the job of this document ends.
 
 ## References
 
