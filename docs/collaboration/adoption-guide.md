@@ -173,9 +173,12 @@ template file.
 
 Claude Code supports `@path/to/file` imports (expanded inline into context at
 launch) and its own `.claude/rules/*.md` directory with `paths:`
-frontmatter, equivalent to Cursor's `globs`. `CLAUDE.md` uses `@AGENTS.md` to
-avoid duplicating `AGENTS.md`'s content, per Anthropic's own documented
-recommendation for this exact purpose — see ADR 0006.
+frontmatter, equivalent to Cursor's `globs`. `CLAUDE.md` used that import to
+avoid duplicating `AGENTS.md` until 2026-07-25; it is now a literal full
+mirror instead. An adopter (LISS-0018) showed the import resolving exactly as
+documented while the session still skipped the mandatory design check, so
+inlining was kept but the indirection was not — see ADR 0006's 2026-07-25
+revisit.
 
 ## Adding Stack-Specific Scoped Rules
 

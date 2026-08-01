@@ -2,7 +2,15 @@
 
 ## Status
 
-Accepted
+Accepted; governance model superseded by ADR 0013
+(Director-Centered Planning and an AI-Closed Execution Loop) on 2026-08-02.
+
+This ADR is no longer normative. It stays in the record because it states the
+human-intervention model this project exists to test — the decision under
+falsification, not a decision an agent should follow. Read the rest of this
+document as the baseline, and
+`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`
+as the rule in force.
 
 ## Context
 

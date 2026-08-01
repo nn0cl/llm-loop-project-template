@@ -1,7 +1,14 @@
 # 12. Referee から Adjudicator への役割名称変更
 
 Date: 2026-07-16
-Status: Accepted
+Status: Accepted; 役割定義は ADR 0013
+(Director-Centered Planning and an AI-Closed Execution Loop) により
+2026-08-02 に superseded
+
+この ADR はもはや規範ではない。人間の役割名は `Director` に変更され、
+名称だけでなく責務そのものが変わった。現行の規則は
+`docs/architecture/adr/0013-director-centered-planning-and-closed-loop.md`
+を参照すること。本文は、その変更前に何が決まっていたかの記録として残す。
 
 ## Context
 
@@ -30,5 +37,11 @@ AIエージェントの自律性が高まるにつれ、人間の役割が「単
 
 ## References
 
-- 関連: ADR 0003: AI-Human Collaboration Governance
-- 関連: `docs/research/2026-07-05-rationale-adjudicator-centered-collaboration.md` (名称変更前: `2026-07-05-rationale-referee-centered-collaboration.md`)
+- 関連: ADR 0003: AI-Human Collaboration Governance（同じく ADR 0013 により
+  supersede 済み）
+- 関連: ADR 0013: Director-Centered Planning and an AI-Closed Execution Loop
+- この ADR はかつて rationale essay 集への参照を持っていたが、当該ディレクトリ
+  は Director の指示により 2026-08-02 に削除された。参照先が存在しないため
+  リンクは復元せず削除した。経緯は
+  `docs/collaboration/traces/2026-08-02-director-model-contract-rewrite.md`
+  に記録されている。

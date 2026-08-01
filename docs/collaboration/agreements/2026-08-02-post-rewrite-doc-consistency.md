@@ -125,4 +125,4 @@ later Director objection would reopen.
 
 | Date | What was unsettled | Resolution |
 |---|---|---|
-|  |  |  |
+| 2026-08-02 | Deferred Question 1: whether ADR 0012 should be superseded rather than left with a link to the deleted rationale essay directory | Settled by Director instruction the same day — remove the reference and tidy dangling references generally. Carried into DA-2026-08-02-02, which executes it. |
