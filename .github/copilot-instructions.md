@@ -217,6 +217,24 @@ Before writing implementation, read the relevant architecture document:
 - Prompt/instruction change control: `docs/collaboration/prompt-instruction-change-control.md`.
 - Session start and resume: `docs/collaboration/session-start-and-resume.md`.
 
+## Reopening Gates
+
+Stop the loop and return a reopening request to the Director when:
+
+- no recorded design agreement covers the task.
+- the phase or persona for the task is not named.
+- requirements imply a new architecture decision not covered by an accepted
+  ADR.
+- a boundary named in the design agreement would have to be crossed.
+- an accepted specification would have to change.
+- deterministic verification contradicts an assumption the agreement rests on.
+- the Arbiter finds neither side grounded.
+- a falsification criterion named in the agreement is met.
+
+A reopening request names what is unsettled and what the loop needs to
+continue. It is not a request to approve work already produced. Do not guess
+past an unsettled question, and do not stop quietly.
+
 ## Anti-Hallucination Rules
 
 - Do not invent APIs, model names, vector dimensions, database schemas,

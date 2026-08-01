@@ -27,6 +27,7 @@ jobs:
           required_files=(
             "AGENTS.md"
             "CLAUDE.md"
+            "CHANGELOG.md"
             ".gitignore"
             ".github/dependabot.yml"
             ".github/copilot-instructions.md"
@@ -148,7 +149,7 @@ jobs:
           ! ls "$tmp/target/docs/issues/"LISS-*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/collaboration/traces/"*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/specs/"*.md >/dev/null 2>&1
-          if grep -R -n -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \
+          if grep -R -n -i -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \
             "$tmp/target/AGENTS.md" \
             "$tmp/target/CLAUDE.md" \
             "$tmp/target/.github/copilot-instructions.md" \
@@ -171,9 +172,15 @@ jobs:
           trace_added=false
           while IFS= read -r f; do
             [ -z "$f" ] && continue
+            # Order matters: `case` globs let `*` match `/`, so the record
+            # directories must be matched before the contract pattern that
+            # would otherwise swallow them. Records are produced by following
+            # the contract; they are not the contract.
             case "$f" in
               docs/collaboration/traces/*.md)
                 trace_added=true
+                ;;
+              docs/collaboration/reviews/*.md|docs/collaboration/agreements/*.md)
                 ;;
               AGENTS.md|CLAUDE.md|.github/copilot-instructions.md|.grok/rules/*.md|.cursor/rules/*.mdc|docs/at-tdd/process.md|docs/collaboration/*.md|docs/templates/*.md)
                 contract_changed=true

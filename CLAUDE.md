@@ -323,8 +323,11 @@ dependencies before creating the branch.
 
 ## Selected Stack
 
-`<Fill in: desktop/web/mobile runtime, backend language, frontend framework,
-package manager, migration tool, etc.>`
+`<FILL IN: e.g. backend language, frontend framework, package manager>`
+
+Record the runtime target (desktop, web, or mobile), the migration tool, and
+any stack-specific architecture documents once the design agreement settles
+them.
 
 ## Current Non-Decisions
 

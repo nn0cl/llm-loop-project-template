@@ -17,11 +17,15 @@ These files are the agent operating contract:
 - `.grok/rules/*.md`
 - `.cursor/rules/*.mdc`
 - `docs/at-tdd/process.md`
-- `docs/collaboration/*.md` (except files under `docs/collaboration/traces/`)
+- `docs/collaboration/*.md` (except the record directories below)
 - `docs/templates/*.md`
 
-Files under `docs/collaboration/traces/` are records produced by following the
-contract, not part of the contract itself.
+Files under `docs/collaboration/traces/`, `docs/collaboration/reviews/`, and
+`docs/collaboration/agreements/` are records produced by following the
+contract, not part of the contract itself. Changing one is not a contract
+change and does not require its own trace — a review record in particular is
+the Reviewer persona's only output, and requiring a trace alongside it would
+make the persona's own deliverable unlandable.
 
 New files that define agent behavior, phase rules, or cross-cutting
 collaboration rules should be added to this list when they are created.
