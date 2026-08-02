@@ -28,12 +28,23 @@ rather than bugs:
 
   * **Meaning.** Parity asks whether a rule is present, never whether it still
     says the same thing. A mirror that keeps the phrase `context separation`
-    while inverting the rule underneath it passes here. Only a reader catches
-    that, which is the Reviewer persona's job, not this script's.
-  * **The adopter's starting ADR number.** The range check is
-    phrasing-independent, but the sentence telling an adopting project where to
-    start their own numbering is matched by phrase, so an unusual wording can
+    while inverting the rule underneath it passes here.
+  * **Whether a reference points at the *intended* document.** The reference
+    check resolves names; it cannot know that a sentence meant
+    `docs/templates/review-record.md` and said
+    `docs/templates/design-agreement.md`, when both exist.
+  * **The adopter's starting ADR number.** The range check no longer reads
+    phrasings, but the sentence telling an adopting project where to start
+    their own numbering is still matched by phrase, so an unusual wording can
     evade it.
+  * **Anything about a document this repository does not have.** In an adopting
+    project the entry documents are the project's own, and checks over them are
+    skipped there.
+
+Each of these is a reading, not a comparison. They belong to the Reviewer
+persona. Two rounds of independent review found holes in earlier versions of
+this script — every one of them a place where it claimed a check it did not
+have, rather than a place where a check was merely weak.
 
 Treat a green run as "no mechanical drift found", never as "the contract is
 consistent". The second claim is a judgment and nothing here makes it.
@@ -125,6 +136,9 @@ EXAMPLE_DOCUMENT_NAMES = {
 # Files this template has but does not distribute: an adopting project owns its
 # own README and receives no CHANGELOG from us. Checks over them are skipped
 # where they are absent, and naming one is never a dangling reference.
+# Their existence inside this repository is asserted by CI's required_files
+# list, not here: a checker that both defines what may be missing and decides
+# whether something is missing has no independent signal.
 TEMPLATE_ONLY_FILES = {
     "README.md",
     "README.ja.md",
@@ -246,12 +260,13 @@ def check_parity_completeness(repo: str, failures: Failures) -> None:
 
 def check_references(repo: str, failures: Failures) -> None:
     """Every relative path or filename a current document names must resolve."""
-    basenames = {
-        name
-        for dirpath, dirnames, filenames in os.walk(repo)
-        if not any(part == ".git" for part in dirpath.split(os.sep))
-        for name in filenames
-    }
+    basemap: dict[str, list[str]] = {}
+    for dirpath, dirnames, filenames in os.walk(repo):
+        dirnames[:] = [d for d in dirnames if d != ".git"]
+        for name in filenames:
+            rel_path = os.path.relpath(os.path.join(dirpath, name), repo)
+            basemap.setdefault(name, []).append(rel_path)
+
     for rel in scanned_files(repo):
         if rel.startswith(RECORD_DIRS) or rel in REFERENCE_ALLOWLIST:
             continue
@@ -275,7 +290,13 @@ def check_references(repo: str, failures: Failures) -> None:
                     target = target.lstrip("@")
                     if target in EXAMPLE_DOCUMENT_NAMES:
                         continue
-                    if target in TEMPLATE_ONLY_FILES:
+                    # Exempt an entry document only where it genuinely does
+                    # not exist — that is, in an adopting project. Inside this
+                    # repository the file is present, so a reference to it
+                    # resolves normally and its deletion is caught.
+                    if target in TEMPLATE_ONLY_FILES and not os.path.exists(
+                        os.path.join(repo, target)
+                    ):
                         continue
                     if os.path.exists(os.path.join(repo, target)):
                         continue
@@ -284,11 +305,25 @@ def check_references(repo: str, failures: Failures) -> None:
                     )
                     if os.path.exists(sibling):
                         continue
-                    # A bare filename names a document, not a path. Accept it if
-                    # any file in the repository has that name; a name nothing
-                    # answers to is a dangling reference wherever it sits.
-                    if "/" not in target and target in basenames:
-                        continue
+                    # A bare filename resolves against the repository root and
+                    # the referencing file's own directory, both tried above,
+                    # and then against a unique file of that name. An earlier
+                    # version accepted any file anywhere with that name; a name
+                    # two files answer to now fails, because the document
+                    # should say which one it means.
+                    if "/" not in target:
+                        matches = basemap.get(target, [])
+                        if len(matches) == 1:
+                            continue
+                        if len(matches) > 1:
+                            failures.add(
+                                "references",
+                                f"{rel}:{lineno} names {target!r}, which "
+                                f"{len(matches)} files answer to "
+                                f"({', '.join(sorted(matches)[:3])}). Write the "
+                                "path.",
+                            )
+                            continue
                     failures.add(
                         "references",
                         f"{rel}:{lineno} names {target!r}, which does not exist",
@@ -325,8 +360,7 @@ def check_adr_range(repo: str, failures: Failures) -> None:
         for lineno, line in enumerate(text.splitlines(), 1):
             if not re.search(r"\bADR|adr/", line, re.IGNORECASE):
                 continue
-            tokens = re.findall(r"\b(0\d{3})\b", line)
-            for token in tokens:
+            for token in re.findall(r"\b(0\d{3})\b", line):
                 if token in valid:
                     continue
                 failures.add(
@@ -335,17 +369,45 @@ def check_adr_range(repo: str, failures: Failures) -> None:
                     f"does not have. It has {numbers[0]}-{last}, and an "
                     f"adopting project starts at {nxt}.",
                 )
-            # Two or more distinct ADR numbers on one line state a range,
-            # whatever separator the sentence uses. Its ends must be the ends
-            # of the set. A line that cites two unrelated ADRs will trip this;
-            # split it, which reads better anyway.
-            distinct = sorted(set(tokens))
-            if len(distinct) >= 2 and (distinct[0], distinct[-1]) != (numbers[0], last):
-                failures.add(
-                    "ADR range",
-                    f"{rel}:{lineno} states the range {distinct[0]}-"
-                    f"{distinct[-1]}; the repository has {numbers[0]}-{last}",
-                )
+
+            # Two ADR numbers joined by nothing but a dash or a bare range
+            # word state a range, and its ends must be the set's ends. The
+            # separator must carry no other words: "0006 and ADR 0013" cites
+            # two ADRs and is left alone, while "0001 to 0011" and "0001-0013"
+            # are ranges. This layer catches an understated range on a line
+            # even when another line names the true last ADR.
+            for a, between, b in re.findall(
+                r"\b(0\d{3})\b([^0-9]{0,12}?)\b(0\d{3})\b", line
+            ):
+                if not re.fullmatch(
+                    r"[\s\-–—〜~]*(?:to|through|まで)?[\s\-–—〜~]*",
+                    between,
+                    re.IGNORECASE,
+                ):
+                    continue
+                if (a, b) != (numbers[0], last):
+                    failures.add(
+                        "ADR range",
+                        f"{rel}:{lineno} states the range {a}-{b}; the "
+                        f"repository has {numbers[0]}-{last}",
+                    )
+
+        # A document that describes the ADR set must name both of its ends.
+        # This replaces an earlier rule that paired two numbers on one line and
+        # called them a range: that produced a false failure when a sentence
+        # cited two unrelated ADRs, and missed an understated range split
+        # across two lines. Naming both ends is a property of the document, so
+        # neither rewording nor line breaks evade it.
+        if re.search(r"\bADR|adr/", text, re.IGNORECASE):
+            doc_tokens = set(re.findall(r"\b(0\d{3})\b", text))
+            for end in (numbers[0], last):
+                if end not in doc_tokens:
+                    failures.add(
+                        "ADR range",
+                        f"{rel} describes the ADR set without naming {end}. "
+                        f"The set runs {numbers[0]}-{last}; a document that "
+                        "states a range must state the current one.",
+                    )
 
         # The number an adopter is told to start at must be last + 1. Unlike
         # the token check above, this one reads a phrasing, so it is evadable
@@ -400,8 +462,10 @@ def check_version_claims(repo: str, failures: Failures) -> None:
         if text is None:
             continue
         for lineno, line in enumerate(text.splitlines(), 1):
-            if re.search(r"unreleased|未リリース|CHANGELOG", line, re.IGNORECASE):
-                continue
+            # No escape hatch. An earlier version skipped any line mentioning
+            # "unreleased" or "CHANGELOG", which let a false release claim ride
+            # on either word. A README that wants to discuss an unreleased
+            # version links to the changelog instead of naming the version.
             for version in re.findall(r"\b(v\d+\.\d+\.\d+)\b", line):
                 if version in tags:
                     continue
