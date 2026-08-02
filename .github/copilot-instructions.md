@@ -17,6 +17,18 @@ review and approval inside it are performed by AI personas, and the loop does
 not stop for human sign-off. The governing decision is
 `docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
 
+## Prime Directive
+
+No execution without a recorded design agreement.
+
+No approval without deterministic verification output.
+
+No approval by the context that produced the work.
+
+No phase skipping.
+
+No hidden business logic in adapters.
+
 ## The Three Invariants
 
 These hold in every phase, for every persona:

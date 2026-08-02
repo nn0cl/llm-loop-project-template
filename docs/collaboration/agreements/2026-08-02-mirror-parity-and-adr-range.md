@@ -66,7 +66,7 @@ Sequencing and dependencies:
 |---|---|---|
 | Is mirroring two rules across seven files a Minor Fix Path change? | No. It touches the contract set, so it is Architecture Path, and it needs an agreement, a trace, and independent review. | Planner, from `prompt-instruction-change-control.md` |
 | Should adopters keep starting at `0012`? | No. The template now occupies `0012` and `0013`, so an adopter following the old instruction would collide on the next template update. Adopters start at `0014`. | Planner |
-| Should `v1.0.1` be tagged retroactively? | No. It was never released and no commit contains only those fixes. One `v1.1.0` covers the shipped state, and the changelog says so. | Planner |
+| Should `v1.0.1` be tagged retroactively? | No. It was never released and no commit contains only those fixes. Those fixes ship inside `v1.1.0`, which the changelog records as unreleased until an approving review lets it be tagged. | Planner |
 
 ## Deferred Questions
 

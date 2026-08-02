@@ -89,6 +89,7 @@ jobs:
             "scripts/update-ai-collaboration-files.sh"
             "scripts/init-llm-context.sh"
             "scripts/lib/collaboration-template-paths.sh"
+            "scripts/check-contract-consistency.py"
           )
 
           for file in "${required_files[@]}"; do
@@ -112,6 +113,12 @@ jobs:
             scripts/update-ai-collaboration-files.sh \
             scripts/init-llm-context.sh \
             scripts/lib/collaboration-template-paths.sh
+
+      - name: Check contract consistency
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check-contract-consistency.py --repo .
 
       - name: Check unresolved conflict markers
         shell: bash
@@ -149,6 +156,8 @@ jobs:
           ! ls "$tmp/target/docs/issues/"LISS-*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/collaboration/traces/"*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/specs/"*.md >/dev/null 2>&1
+          test -f "$tmp/target/scripts/check-contract-consistency.py"
+          (cd "$tmp/target" && python3 scripts/check-contract-consistency.py --repo .)
           if grep -R -n -i -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \
             "$tmp/target/AGENTS.md" \
             "$tmp/target/CLAUDE.md" \

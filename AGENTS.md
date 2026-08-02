@@ -297,8 +297,9 @@ An approval failing any of these does not count, whatever the record says:
 Running the Reviewer on a different model or tool than the Implementer is
 recommended to reduce shared systematic bias, but is not required.
 
-Record reviews with `docs/templates/review-record.md`. When handing off or
-stopping before completion, use `docs/templates/agent-handoff.md`.
+Record reviews with `docs/templates/review-record.md`, stored under
+`docs/collaboration/reviews/`. When handing off or stopping before completion,
+use `docs/templates/agent-handoff.md`.
 
 ## Source Code Quality
 
