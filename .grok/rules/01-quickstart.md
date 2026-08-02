@@ -168,3 +168,20 @@ approval; it is one of the deterministic inputs an approval requires.
   `docs/collaboration/session-start-and-resume.md`.
 - `<Add one line per stack-specific architecture document you create, e.g.
   "React UI: docs/architecture/frontend-architecture.md.">`
+
+## Project Boundaries
+
+`<Describe the project's runtime and trust boundaries here: whether it is
+local-first, cloud-native, or hybrid; which external systems are optional and
+replaceable; which datastore is primary; which migration tool is used. Do not
+invent full schemas before accepted behavior, reviewed Red tests, or an ADR
+require them.>`
+
+## Current Non-Decisions
+
+Technology and design choices intentionally deferred to an ADR rather than
+assumed by an agent. Treat these as ADR topics, not assumptions.
+
+- `<Provider/vendor choice>`.
+- `<Data store or schema detail>`.
+- `<Model/embedding choice>`.

@@ -17,6 +17,27 @@ Checks:
   4. ADR range          Every stated process-ADR range matches the ADR files.
   5. Version claims     No document claims a released version that has no tag.
 
+What this cannot check, and who does
+------------------------------------
+
+Independent review found three holes in an earlier version of this script, each
+a case where it passed a tree containing a defect it claimed to cover. Those are
+fixed, and the checks that used to depend on a fixed set of separator words or a
+literal banner prefix no longer do. Two limits remain, and they are structural
+rather than bugs:
+
+  * **Meaning.** Parity asks whether a rule is present, never whether it still
+    says the same thing. A mirror that keeps the phrase `context separation`
+    while inverting the rule underneath it passes here. Only a reader catches
+    that, which is the Reviewer persona's job, not this script's.
+  * **The adopter's starting ADR number.** The range check is
+    phrasing-independent, but the sentence telling an adopting project where to
+    start their own numbering is matched by phrase, so an unusual wording can
+    evade it.
+
+Treat a green run as "no mechanical drift found", never as "the contract is
+consistent". The second claim is a judgment and nothing here makes it.
+
 Usage:
   scripts/check-contract-consistency.py [--repo PATH]
 
@@ -66,13 +87,16 @@ MIRRORED_SECTIONS = {
     "Approval Model": r"[Cc]ontext separation",
     "Source Code Quality": r"cognitive load|source-code-quality",
     "Completion": r"definition-of-done",
+    "Project Boundaries": r"## Project Boundaries",
+    "Current Non-Decisions": r"Non-Decisions",
 }
 
-# Sections that are intentionally not mirrored, with the reason.
-AGENTS_ONLY_SECTIONS = {
-    "Project Boundaries": "target-fill placeholder; each tool file carries its own",
-    "Current Non-Decisions": "target-fill placeholder; each tool file carries its own",
-}
+# Sections deliberately not mirrored, each with the reason a reader can check.
+# Empty on purpose: an earlier version exempted the two target-fill sections
+# above on the ground that "each tool file carries its own", which review found
+# to be false for three of four mirrors. The sections were added to the mirrors
+# instead of the justification being reworded.
+AGENTS_ONLY_SECTIONS: dict[str, str] = {}
 
 # Rules that live outside AGENTS.md's section headings but still must reach
 # every full mirror. Add a row when a new cross-cutting rule is introduced.
@@ -85,6 +109,28 @@ EXTRA_MIRRORED_RULES = {
         r"external-resource-adoption-contract\.md",
     "AI failure recovery": r"ai-failure-recovery\.md",
     "Runner CLI contract": r"runner-cli-contract\.md",
+}
+
+# Document names that are examples of files a target project creates, not
+# references to files this repository has. Each is named in an "e.g." list.
+# Kept as an explicit list rather than a rule about "e.g." lines, so that a
+# genuine dangling reference on such a line is still caught.
+EXAMPLE_DOCUMENT_NAMES = {
+    "backend-architecture.md",
+    "frontend-architecture.md",
+    "persistence.md",
+    "rust-clean-architecture.md",
+}
+
+# Files this template has but does not distribute: an adopting project owns its
+# own README and receives no CHANGELOG from us. Checks over them are skipped
+# where they are absent, and naming one is never a dangling reference.
+TEMPLATE_ONLY_FILES = {
+    "README.md",
+    "README.ja.md",
+    "QUICKSTART.md",
+    "QUICKSTART.ja.md",
+    "CHANGELOG.md",
 }
 
 # Reference targets that legitimately do not resolve in this repository.
@@ -143,9 +189,8 @@ def read(repo: str, rel: str) -> str:
 def read_optional(repo: str, rel: str) -> str | None:
     """Read a file that exists in the template but not in every adopting project.
 
-    `README.md`, the QUICKSTART pair, and `CHANGELOG.md` are not distributed —
-    a target project owns its own. Checks over them are skipped there rather
-    than failing.
+    See TEMPLATE_ONLY_FILES: a target project owns its own entry documents, so
+    checks over them are skipped there rather than failing.
     """
     if not os.path.exists(os.path.join(repo, rel)):
         return None
@@ -200,7 +245,13 @@ def check_parity_completeness(repo: str, failures: Failures) -> None:
 
 
 def check_references(repo: str, failures: Failures) -> None:
-    """Every relative path a current document names must resolve."""
+    """Every relative path or filename a current document names must resolve."""
+    basenames = {
+        name
+        for dirpath, dirnames, filenames in os.walk(repo)
+        if not any(part == ".git" for part in dirpath.split(os.sep))
+        for name in filenames
+    }
     for rel in scanned_files(repo):
         if rel.startswith(RECORD_DIRS) or rel in REFERENCE_ALLOWLIST:
             continue
@@ -214,11 +265,17 @@ def check_references(repo: str, failures: Failures) -> None:
                     targets.append(target.split("#")[0])
                 for match in CODE_PATH.finditer(line):
                     target = match.group(1)
-                    if "/" not in target or target.startswith(("http", "<", "~")):
+                    if target.startswith(("http", "<", "~")):
                         continue
                     targets.append(target)
                 for target in targets:
                     if not target or "*" in target or "$" in target or "<" in target:
+                        continue
+                    # Claude Code's import syntax names a file with a leading @.
+                    target = target.lstrip("@")
+                    if target in EXAMPLE_DOCUMENT_NAMES:
+                        continue
+                    if target in TEMPLATE_ONLY_FILES:
                         continue
                     if os.path.exists(os.path.join(repo, target)):
                         continue
@@ -226,6 +283,11 @@ def check_references(repo: str, failures: Failures) -> None:
                         os.path.join(os.path.dirname(os.path.join(repo, rel)), target)
                     )
                     if os.path.exists(sibling):
+                        continue
+                    # A bare filename names a document, not a path. Accept it if
+                    # any file in the repository has that name; a name nothing
+                    # answers to is a dangling reference wherever it sits.
+                    if "/" not in target and target in basenames:
                         continue
                     failures.add(
                         "references",
@@ -243,33 +305,60 @@ def adr_numbers(repo: str) -> list[str]:
 
 
 def check_adr_range(repo: str, failures: Failures) -> None:
-    """Stated process-ADR ranges must match the ADR files that exist."""
+    """Every ADR number an entry document names must be one that exists.
+
+    This does not parse phrasings. Any four-digit ADR-shaped token on a line
+    that mentions ADRs must name an ADR the repository has, or the number an
+    adopting project starts at. Rewording the sentence does not evade it.
+    """
     numbers = adr_numbers(repo)
     if not numbers:
         return
-    first, last = numbers[0], numbers[-1]
+    last = numbers[-1]
     nxt = f"{int(last) + 1:04d}"
+    valid = set(numbers) | {nxt}
 
     for rel in ("README.md", "QUICKSTART.md", "QUICKSTART.ja.md"):
         text = read_optional(repo, rel)
         if text is None:
             continue
-        for stated_first, stated_last in re.findall(
-            r"(\d{4})\s*(?:-|–|〜|through|から)\s*\*?\.?m?d?\*?`?\s*(\d{4})", text
-        ):
-            if (stated_first, stated_last) != (first, last):
+        for lineno, line in enumerate(text.splitlines(), 1):
+            if not re.search(r"\bADR|adr/", line, re.IGNORECASE):
+                continue
+            tokens = re.findall(r"\b(0\d{3})\b", line)
+            for token in tokens:
+                if token in valid:
+                    continue
                 failures.add(
                     "ADR range",
-                    f"{rel} states ADRs {stated_first}-{stated_last}; the "
-                    f"repository has {first}-{last}",
+                    f"{rel}:{lineno} names ADR {token}, which the repository "
+                    f"does not have. It has {numbers[0]}-{last}, and an "
+                    f"adopting project starts at {nxt}.",
                 )
-        for stated_next in re.findall(r"(\d{4})\s*(?:and up|以降)", text):
-            if stated_next != nxt:
+            # Two or more distinct ADR numbers on one line state a range,
+            # whatever separator the sentence uses. Its ends must be the ends
+            # of the set. A line that cites two unrelated ADRs will trip this;
+            # split it, which reads better anyway.
+            distinct = sorted(set(tokens))
+            if len(distinct) >= 2 and (distinct[0], distinct[-1]) != (numbers[0], last):
                 failures.add(
                     "ADR range",
-                    f"{rel} tells adopting projects to start at "
-                    f"{stated_next}; the template occupies through {last}, so "
-                    f"they must start at {nxt}",
+                    f"{rel}:{lineno} states the range {distinct[0]}-"
+                    f"{distinct[-1]}; the repository has {numbers[0]}-{last}",
+                )
+
+        # The number an adopter is told to start at must be last + 1. Unlike
+        # the token check above, this one reads a phrasing, so it is evadable
+        # by rewording. See "What this cannot check" in the module docstring.
+        for stated in re.findall(
+            r"(0\d{3})\s*(?:and up|onwards?|以降|から採番)", text
+        ):
+            if stated != nxt:
+                failures.add(
+                    "ADR range",
+                    f"{rel} tells adopting projects to start at {stated}; the "
+                    f"template occupies through {last}, so they must start at "
+                    f"{nxt}",
                 )
 
 
@@ -300,22 +389,34 @@ def check_version_claims(repo: str, failures: Failures) -> None:
                 "Mark the section unreleased, or tag it.",
             )
 
-    released = [v for v, _ in re.findall(r"^## (v[\d.]+)\s*—\s*(.*)$", changelog,
-                                         re.MULTILINE)
-                if v in tags]
-    if released:
-        newest = released[0]
-        for rel in ("README.md", "README.ja.md"):
-            text = read_optional(repo, rel)
-            if text is None:
+    released = {v for v, _ in re.findall(r"^## (v[\d.]+)\s*—\s*(.*)$", changelog,
+                                         re.MULTILINE)} & set(tags)
+
+    # Any version a README names must be a version that exists as a tag. This
+    # does not depend on the banner's wording: an untagged version cited
+    # anywhere in a README is a claim nothing backs.
+    for rel in ("README.md", "README.ja.md"):
+        text = read_optional(repo, rel)
+        if text is None:
+            continue
+        for lineno, line in enumerate(text.splitlines(), 1):
+            if re.search(r"unreleased|未リリース|CHANGELOG", line, re.IGNORECASE):
                 continue
-            banners = [b.rstrip(".") for b in re.findall(
-                r"(?:Contract edition|契約バージョン):\s*(v[\d.]+)", text)]
-            for banner in banners:
-                if banner != newest:
+            for version in re.findall(r"\b(v\d+\.\d+\.\d+)\b", line):
+                if version in tags:
+                    continue
+                failures.add(
+                    "version claims",
+                    f"{rel}:{lineno} names {version}, which has no git tag. "
+                    "Tag it, or say on that line that it is unreleased.",
+                )
+        if released:
+            newest = max(released, key=lambda v: [int(n) for n in v[1:].split(".")])
+            for version in re.findall(r"\b(v\d+\.\d+\.\d+)\b", text):
+                if version in tags and version != newest:
                     failures.add(
                         "version claims",
-                        f"{rel} banners {banner}; the newest tagged changelog "
+                        f"{rel} names {version}; the newest released changelog "
                         f"entry is {newest}",
                     )
 
