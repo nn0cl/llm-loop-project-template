@@ -8,10 +8,16 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
-## v1.1.0 — Independent review, and the rules it produced (2026-08-02)
+## v1.1.0 — Independent review, and the rules it produced (unreleased)
+
+**Unreleased.** No `v1.1.0` tag exists yet; the released edition is still
+`v1.0.0`, which is what both READMEs banner. This section is tagged only after
+an approving independent review, and the README banners move at the same time.
+Until then, treat everything below as landed on `main` but unreleased.
 
 Two rules were added and five defects fixed. `v1.0.1` was drafted for the fixes
-alone but never tagged; everything below shipped together as `v1.1.0`.
+alone but never tagged, and no commit isolates them, so they will ship inside
+`v1.1.0` rather than as a release of their own.
 
 ### New rules
 

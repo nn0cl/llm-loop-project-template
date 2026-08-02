@@ -137,3 +137,32 @@ number their ADRs from `0012`, in the same commit range where the template took
 `0012` and `0013` for itself. Neither defect broke a link or a build. Both were
 visible only by holding two documents side by side and asking whether they
 still agreed.
+
+---
+
+## Round 2: response to the Reviewer's rejection
+
+The independent Reviewer rejected both this branch and the `v1.0.1` fixes
+already on `main`. Both findings were reproduced before being fixed.
+
+- **Mirror obligation half-applied.** The first edition's rejection had named
+  three documents unreachable from the contract files, and required the fix in
+  `AGENTS.md`, `.github/copilot-instructions.md`, and
+  `.grok/rules/01-quickstart.md`. Only `AGENTS.md` was fixed. Copilot and Grok
+  are full mirrors and carried none of the three; the gap survived the merge of
+  pull request #6 and this branch's first round. Now fixed in both.
+  `.cursor/rules/*` is exempt as a complements-only set that receives root
+  `AGENTS.md` natively, per ADR 0006.
+- **A version claimed as released.** `CHANGELOG.md` said `v1.1.0` "shipped"
+  while no such tag existed and both READMEs bannered `v1.0.0` — a direct hit
+  on this agreement's own Falsification Criterion 3. The section is now marked
+  unreleased and names the condition for tagging.
+
+Round-1 Preflight returned `pass` and the Reviewer still rejected. That is the
+concrete case of the risk ADR 0013 states about itself: a checklist that passes
+is not evidence that a change is correct. Both Preflight records are kept so the
+pair is auditable — `2026-08-02-mirror-parity-preflight.md` and
+`2026-08-02-mirror-parity-preflight-2.md`.
+
+Still open after this round: an approving review of this branch, and of the
+`v1.0.1` fixes on `main`.
