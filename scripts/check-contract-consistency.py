@@ -33,10 +33,16 @@ rather than bugs:
     check resolves names; it cannot know that a sentence meant
     `docs/templates/review-record.md` and said
     `docs/templates/design-agreement.md`, when both exist.
-  * **The adopter's starting ADR number.** The range check no longer reads
-    phrasings, but the sentence telling an adopting project where to start
-    their own numbering is still matched by phrase, so an unusual wording can
-    evade it.
+  * **A range spread across a sentence.** Two ADR numbers are compared only
+    when they sit next to each other with nothing but a dash or a range word
+    between them. "from 0001 onward; the last one is 0011", split over two
+    lines, states a wrong range and is not caught. An earlier version tried to
+    cover this by requiring a document to name both ends of the set somewhere,
+    and review found that rule both too loose — any correct mention elsewhere
+    in the file masked the wrong one — and too strict, since an ordinary
+    citation of a single ADR tripped it. It was removed rather than patched.
+  * **The adopter's starting ADR number.** Still matched by phrase, so an
+    unusual wording can evade it.
   * **Anything about a document this repository does not have.** In an adopting
     project the entry documents are the project's own, and checks over them are
     skipped there.
@@ -392,23 +398,6 @@ def check_adr_range(repo: str, failures: Failures) -> None:
                         f"repository has {numbers[0]}-{last}",
                     )
 
-        # A document that describes the ADR set must name both of its ends.
-        # This replaces an earlier rule that paired two numbers on one line and
-        # called them a range: that produced a false failure when a sentence
-        # cited two unrelated ADRs, and missed an understated range split
-        # across two lines. Naming both ends is a property of the document, so
-        # neither rewording nor line breaks evade it.
-        if re.search(r"\bADR|adr/", text, re.IGNORECASE):
-            doc_tokens = set(re.findall(r"\b(0\d{3})\b", text))
-            for end in (numbers[0], last):
-                if end not in doc_tokens:
-                    failures.add(
-                        "ADR range",
-                        f"{rel} describes the ADR set without naming {end}. "
-                        f"The set runs {numbers[0]}-{last}; a document that "
-                        "states a range must state the current one.",
-                    )
-
         # The number an adopter is told to start at must be last + 1. Unlike
         # the token check above, this one reads a phrasing, so it is evadable
         # by rewording. See "What this cannot check" in the module docstring.
@@ -472,7 +461,8 @@ def check_version_claims(repo: str, failures: Failures) -> None:
                 failures.add(
                     "version claims",
                     f"{rel}:{lineno} names {version}, which has no git tag. "
-                    "Tag it, or say on that line that it is unreleased.",
+                    "Tag it, or link to CHANGELOG.md instead of naming a "
+                    "version this repository cannot show.",
                 )
         if released:
             newest = max(released, key=lambda v: [int(n) for n in v[1:].split(".")])
