@@ -41,6 +41,27 @@ A reopening request names what is unsettled and what the loop needs to
 continue. It is not a request to approve work already produced. Do not guess
 past an unsettled question, and do not stop quietly.
 
+## Minor Fix Path and Preflight Validation
+
+**Minor Fix Path.** A review-finding correction may use this path only when it
+is planning size `S`, preserves the accepted specification, changes no
+specification, ADR, port, data model, dependency, or architecture boundary,
+and is expected to finish in one attempt. Record a compact design note, make
+the minimum correction, run deterministic verification, and obtain separate
+Reviewer confirmation. Escalate to Feature Path or Architecture Path when any
+condition stops being true, including a second attempt. Actionable review
+findings are tracked as `Type: review-finding` in `docs/issues/LISS-*.md`;
+their lifecycle is `proposed -> accepted -> in_progress -> resolved ->
+closed`. Use `wont_do` only with a grounded Arbiter decision record.
+
+**Preflight Validation.** Before independent Reviewer review, run deterministic
+checks and record a `pass` or `fail` result with command output, scope result,
+and the next action. A `fail` returns the work to the Implementer. A `pass`
+only permits submission to the independent Reviewer; it is not approval and
+cannot set `wont_do` or `closed`. A lightweight model may assist with checklist
+and document-consistency checks but may not issue final approval. The producer
+of Preflight cannot review the same change.
+
 ## Handoff and Completion
 
 When handing off or stopping before completion, use
