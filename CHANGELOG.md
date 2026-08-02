@@ -8,7 +8,44 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
-## v1.0.1 — Reviewer rejection fixes (2026-08-02)
+## v1.1.0 — Independent review, and the rules it produced (unreleased)
+
+**Unreleased.** No `v1.1.0` tag exists yet; the released edition is still
+`v1.0.0`, which is what both READMEs banner. This section is tagged only after
+an approving independent review, and the README banners move at the same time.
+Until then, treat everything below as landed on `main` but unreleased.
+
+Two rules were added and five defects fixed. `v1.0.1` was drafted for the fixes
+alone but never tagged, and no commit isolates them, so they will ship inside
+`v1.1.0` rather than as a release of their own.
+
+### New rules
+
+- **Preflight Validation** (ADR 0013). A deterministic submission check between
+  Implementer completion and independent review, recording `pass` or `fail`
+  with command output. A `pass` permits submission only — it is not an approval
+  and cannot close anything. The producer of a Preflight cannot review the same
+  change.
+- **Minor Fix Path and the review-finding lifecycle** (ADR 0012). Actionable
+  review findings become `docs/issues/LISS-*.md` entries with
+  `proposed -> accepted -> in_progress -> resolved -> closed`; `wont_do`
+  requires a grounded Arbiter record. Size-`S`, one-attempt corrections that
+  change no specification or boundary get a proportionate path that still
+  requires deterministic verification and separate Reviewer confirmation.
+
+Adopting projects now number their own ADRs from `0014` up.
+
+### Mirror parity
+
+The two rules above landed in `AGENTS.md` and `CLAUDE.md` only. An agent
+running under Copilot, Grok, or Cursor would not have known Preflight was
+mandatory. Both rules are now in all nine contract files, as ADR 0006
+requires. `README.md` and both QUICKSTART files still described an
+eleven-ADR set and told adopting projects to number from `0012` — the range
+the template had just taken for itself.
+
+### Reviewer rejection fixes
+
 
 The first edition was reviewed by a Reviewer persona in a separate context, on
 a different model, and **rejected**. Five defects, all reproduced

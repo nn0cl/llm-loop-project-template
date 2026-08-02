@@ -147,6 +147,11 @@ approval; it is one of the deterministic inputs an approval requires.
 - AI request routing: `docs/architecture/ai-request-routing.md`.
 - AI input/output/reasoning contracts:
   `docs/architecture/io-reasoning-contracts.md`.
+- External resource adoption:
+  `docs/architecture/external-resource-adoption-contract.md`.
+- AI failure and recovery: `docs/collaboration/ai-failure-recovery.md`.
+- Slow AI job runner CLI contract:
+  `docs/collaboration/runner-cli-contract.md`.
 - Collaboration scheme: `docs/collaboration/ai-human-scheme.md`.
 - Personas: `docs/collaboration/personas.md`.
 - Design agreement: `docs/collaboration/design-agreement.md`.
