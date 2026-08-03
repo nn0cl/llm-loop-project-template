@@ -61,6 +61,10 @@ cannot set `wont_do` or `closed`. A lightweight model may assist with checklist
 and document-consistency checks but may not issue final approval. The producer
 of Preflight cannot review the same change.
 
+Contract-file changes are never self-reviewed, regardless of work-plan scope:
+`docs/collaboration/prompt-instruction-change-control.md` (per ADR 0006)
+always requires a separate-context Reviewer.
+
 ## Handoff and Completion
 
 When handing off or stopping before completion, use

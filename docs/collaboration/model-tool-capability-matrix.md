@@ -32,7 +32,9 @@ Use for:
 
 Reviewer approval:
 
-- required before phase transition, not for every completion.
+- self-review required before an issue-level phase transition (not for every
+  completion); work-plan-level Reviewer approval is required once, at the
+  work plan's close.
 
 ### Lightweight Reasoning Model
 
@@ -62,8 +64,9 @@ Use for:
 
 Reviewer approval:
 
-- required for phase transitions. ADR acceptance is a design-phase decision the
-  Director takes part in, not a Reviewer approval.
+- self-review required for issue-level phase transitions; work-plan-level
+  Reviewer approval required once, at the close. ADR acceptance is a
+  design-phase decision the Director takes part in, not a Reviewer approval.
 
 ## Compatibility State
 

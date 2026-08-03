@@ -33,23 +33,34 @@ Use this checklist before starting a coding task.
 
 ## Ready for Phase 2 Green
 
-- Phase 1 tests were reviewed and approved by the Reviewer persona running in
-  a context separate from the one that wrote them, with the review record and
-  deterministic verification output on file.
+- Phase 1 tests were self-reviewed by the Implementer that wrote them — the
+  self-review record and deterministic verification output are on file. Per
+  `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
+  this is not a separate-context Reviewer approval; that happens once, over
+  the whole work plan, at its close.
 - The implementation location follows `docs/architecture/project-structure.md`.
 - Business logic belongs in domain or application modules.
 - Delivery handlers, UI components, and adapters remain thin.
 - Source code remains readable, appropriately split, and reviewable — by a
   reviewing persona, a future agent, or the Director inspecting artifacts.
-- Preflight Validation is recorded before independent review when the covering
-  agreement requires it; a Preflight pass is not Reviewer approval.
 
 ## Ready for Phase 3 Refactor
 
 - Tests are green.
 - Refactoring does not change assertions or behavior.
-- Remaining risks are stated in the verification gap summary, with the
-  scenarios a Reviewer should try to falsify.
+- Remaining risks are stated in the verification gap summary.
+- Self-reviewed, same terms as Phase 1 and Phase 2.
+
+## Ready to Close the Work Plan
+
+- Every issue in the work plan is self-reviewed and complete.
+- Preflight Validation is recorded over the whole work plan and returned
+  `pass`; a Preflight pass is not Reviewer approval.
+- The Reviewer persona, running in a context separate from the one that
+  produced the work, has approved the work plan, naming the failure scenarios
+  it tried to falsify.
+- The Director has read the approved result and recorded the next direction,
+  or the end of the engagement, in the same action.
 
 ## Not Ready If
 

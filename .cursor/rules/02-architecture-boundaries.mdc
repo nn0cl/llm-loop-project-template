@@ -15,6 +15,11 @@ the design phase.
 Do not implement ahead of the current phase. Do not "helpfully" generate
 production code during Phase 1.
 
+Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
+phase transitions within an issue are **self-reviewed**; the separate-context
+Reviewer operates once, over the whole work plan, after every issue in it is
+self-reviewed and complete.
+
 ### Phase 1: Red - Failing Tests Only
 
 Generate tests only.
@@ -27,20 +32,25 @@ Generate tests only.
 - Red is acceptable as compile failure when interfaces or use cases do not
   yet exist, or as test failure when skeletons exist.
 
+Before Phase 2 starts, self-review the Red state: record the deterministic
+output and the failure scenarios looked for.
+
 ### Phase 2: Green - Minimal Implementation
 
-Generate only the minimum production implementation required to pass
-reviewed Phase 1 tests.
+Generate only the minimum production implementation required to pass the
+tests.
 
 - Do not modify tests to make them pass.
 - Keep business logic in Domain or UseCase layers.
 - Keep UI components, framework request/command handlers, database structs,
   provider clients, and file adapters free of business decisions.
 - Do not add behavior not specified by EARS, Gherkin, or reviewed tests.
+- Self-review before Phase 3.
 
 ### Phase 3: Refactor
 
-Refactor only after Green. Behavior and assertions must not change.
+Refactor only after Green. Behavior and assertions must not change. Self-review,
+and state the remaining verification gap.
 
 After refactoring, output:
 
@@ -53,8 +63,22 @@ After refactoring, output:
 
 ### 残存リスク・検証の溝 (Verification Gap)
 - **AIが推測で補った部分、またはハルシネーションが発生しやすい箇所**: ...
-- **Reviewer ペルソナが反証を試みるべきポイント**: ...
+- **work-plan-level Reviewer が反証を試みるべきポイント**: ...
 ```
+
+Self-review at every phase requires the same two constraints as any
+approval — recorded deterministic verification output, and named failure
+scenarios with why each does not occur — but not context separation, which is
+waived only at this layer. A phase transition is not complete without its
+self-review record.
+
+### Work-Plan Review and Close
+
+After every issue in the work plan is self-reviewed and complete, run
+Preflight Validation, then submit the whole work plan to the Reviewer persona
+in a separate context. After the Reviewer approves, the Director reads the
+result and states the next direction, or ends the engagement, in the same
+turn — the second and last human gate per work plan.
 
 ## Shared operating contract
 

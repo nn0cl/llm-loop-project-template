@@ -1,25 +1,35 @@
 # Design Agreement
 
-The design agreement is the single gate a human signs in this repository. It
-marks the end of the design phase and the start of the closed execution loop.
+The design agreement is the first of two gates a human signs per work plan in
+this repository. It marks the end of the design phase and the start of the
+closed execution loop for exactly one work plan; the second gate is the
+work-plan close (see "Closing a work plan" below).
 
 Before it, the Director is present: stating direction, and building the plan
-with the Planner through dialogue. After it, the Director is not in the loop —
-no phase approval, no test review, no sign-off on deliverables.
+with the Planner through dialogue. After it, the Director is not present
+inside the work plan — no phase approval, no test review, no per-issue
+sign-off. Phase transitions within an issue are self-reviewed by the
+Implementer; the Director's next contact with the work is at its close.
 
-Because it is the only gate, it carries the weight the removed gates used to
-carry. A vague agreement produces a loop that runs confidently in the wrong
-direction, and there is no human downstream to notice.
+Because these two gates carry the weight the removed per-phase gates used to
+carry, a vague agreement produces a loop that runs confidently in the wrong
+direction, and there is no per-phase reviewer downstream to notice — only the
+work-plan-level Reviewer, once, at the end.
 
 ## What the design phase produces
 
-1. A direction stated by the Director: what is to be built, under which
-   constraints, and what would count as it being wrong.
+1. A direction stated by the Director for one work plan: what is to be built,
+   under which constraints, and what would count as it being wrong.
 2. A plan built with the Planner through dialogue, covering scope,
-   decomposition, sequencing, and the persona assigned to each task.
+   decomposition, sequencing, and the persona assigned to each task in that
+   work plan.
 3. Acceptance specifications written by the Specifier, at the level of detail a
    test can be written from.
 4. A design agreement document recording all of the above as agreed.
+
+An agreement covers exactly one work plan. A second work plan reaches its own
+agreement, even when it follows directly from the first at the work-plan
+close.
 
 ## Reaching agreement
 
@@ -87,8 +97,33 @@ The loop does not guess past an unsettled question, and it does not stop
 quietly. Either the agreement covers the case, or the agreement is reopened
 with the gap named.
 
+## Closing a work plan
+
+The second gate, per
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
+It happens once, after every issue in the work plan has reached self-reviewed
+completion, passed Preflight Validation, and been approved by the
+work-plan-level Reviewer in a separate context.
+
+Closing is one combined action, not two:
+
+- the Director reads the Reviewer-approved result, and
+- states the next direction — opening a new design agreement for the next
+  work plan — or ends the engagement,
+
+in the same turn. It is not satisfied by reading alone with no stated next
+step, and it is not two separate acts performed at different times by
+default.
+
+The next work plan does not start without this. A work plan that has not
+closed is not superseded by a new direction stated mid-plan — that is a
+reopening request against the current agreement, not the start of a new one.
+
 ## Related documents
 
-- `docs/collaboration/personas.md` — who does what on each side of this gate.
+- `docs/collaboration/personas.md` — who does what on each side of these
+  gates.
 - `docs/collaboration/ai-human-scheme.md` — the full loop and approval model.
 - `docs/templates/design-agreement.md` — the record template.
+- `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+  — the decision that defines these two gates and what runs between them.

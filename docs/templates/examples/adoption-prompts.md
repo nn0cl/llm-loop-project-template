@@ -100,8 +100,10 @@ Current phase:
 
 Active persona:
 
-- Implementer. The Reviewer runs afterward in a separate context and records
-  its decision under `docs/collaboration/reviews/`.
+- Implementer. Self-review this phase transition before Phase 2. The
+  work-plan-level Reviewer runs once, in a separate context, after every
+  issue in the work plan is self-reviewed and complete, and records its
+  decision under `docs/collaboration/reviews/`.
 
 Task:
 

@@ -23,8 +23,11 @@ A task is not done unless:
 - the active persona, covering design agreement, current phase, and approval
   type are explicit when review or phase work is involved.
 - deterministic verification output is recorded, not merely asserted.
-- approvals were issued by a context separate from the one that produced the
-  work, and name the failure scenarios searched for.
+- self-review at the phase level, and Reviewer approval at the work-plan
+  level, both name the failure scenarios searched for. The work-plan-level
+  Reviewer approval was issued by a context separate from the one that
+  produced the work; self-review, by design, was not — see
+  `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
 - issue status, phase, applicable work-plan row, and completion evidence are synchronized in the same reviewable unit when issue work changes status.
 - no unrelated context, secrets, or full private data exports were used
   outside what the design agreement and the privacy policy permit.
@@ -52,22 +55,24 @@ Done when:
 - tests map to accepted EARS/Gherkin behavior.
 - external dependencies are mocked through ports or interfaces.
 - expected Red state is reported.
-- Phase 2 is not started before the Reviewer persona, running in a separate
-  context, has approved the tests on the record. "On the record" means a
-  review record under `docs/collaboration/reviews/`, written with
-  `docs/templates/review-record.md`.
+- Phase 2 is not started before the Implementer has self-reviewed the tests
+  on the record — deterministic output and named failure scenarios. "On the
+  record" means a self-review record, not a separate-context Reviewer
+  approval. See
+  `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
 
 ## Phase 2 Done: Green
 
 Done when:
 
-- reviewed tests were not modified to pass.
+- tests were not modified to pass.
 - implementation is the smallest readable code needed to pass.
 - business logic remains out of adapters, UI, commands, provider clients, and
   persistence structs.
 - deterministic verification is run where available.
 - any unreadable minimal code is either refactored immediately or marked as a
   Phase 3 readability risk.
+- self-reviewed before Phase 3, same terms as Phase 1.
 
 ## Phase 3 Done: Refactor
 
@@ -77,7 +82,24 @@ Done when:
 - separation of concerns is improved or preserved.
 - readability is improved or preserved.
 - deterministic verification is run where available.
-- reviewer empathy summary is included.
+- self-reviewed, same terms as Phase 1, including a verification gap
+  statement.
+
+## Work Plan Done
+
+Done when every issue in the work plan is individually Done (above), and in
+addition:
+
+- Preflight Validation ran over the whole work plan and recorded `pass`.
+- the Reviewer persona, running in a context separate from the one that
+  produced the work, approved the work plan as a whole — the review record
+  names the failure scenarios searched for and is stored under
+  `docs/collaboration/reviews/`.
+- any review findings are resolved (Minor Fix Path or escalation) and closed,
+  not left `proposed` or `accepted`.
+- the Director has read the approved result and recorded the next direction,
+  or the end of the engagement, in the same action. A work plan is not Done
+  on Reviewer approval alone.
 
 ## Documentation-Only Done
 

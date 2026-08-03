@@ -9,11 +9,16 @@ domain>`**.
 The selected implementation stack is `<FILL IN: e.g. backend language,
 frontend framework, package manager>`.
 
-The human — the **Director** — is present for direction, planning, and the
-design agreement. After the design agreement, the execution loop is closed:
-review and approval inside it are performed by AI personas, and the loop does
-not stop for human sign-off. The governing decision is
-`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
+The human — the **Director** — is present for one work plan's direction, and
+again at its close. Inside a work plan, an issue's phase transitions are
+self-reviewed by the Implementer; once every issue is done, one Reviewer pass
+in a separate context covers the whole work plan before the Director closes
+it. The loop does not stop for per-phase or per-issue human sign-off. The
+governing decisions are
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
+(design phase, personas, invariants) and
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+(execution-loop granularity).
 
 ## Prime Directive
 
@@ -21,7 +26,9 @@ No execution without a recorded design agreement.
 
 No approval without deterministic verification output.
 
-No approval by the context that produced the work.
+No Reviewer approval by the context that produced the work. Self-review
+within a work plan is the Implementer reviewing its own phase transition —
+named as self-review, never issued or recorded as a Reviewer approval.
 
 No phase skipping.
 
@@ -128,45 +135,69 @@ Relevant architecture documents:
 
 Execute only the phase named for the task in the plan under the covering
 design agreement. Do not generate production code ahead of the current phase.
-Full detail is in `docs/at-tdd/process.md`.
+Full detail is in `docs/at-tdd/process.md`. Per
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
+phase transitions within an issue are **self-reviewed** by the Implementer;
+the separate-context Reviewer operates once, over the whole work plan, after
+every issue in it is self-reviewed and complete.
 
 **Phase 1: Red.** Failing tests only. No production implementation. Every
 external dependency goes through a port or interface and is mocked. Assert
 exactly what the acceptance specification's `Then` clause states. Report
 whether Red is a compile failure or a failing assertion, and record the
-deterministic output showing it. Phase 1 output is reviewed by the Reviewer
-persona, in a separate context, before Phase 2 starts.
+deterministic output showing it. Before Phase 2 starts, self-review the Red
+state: record the deterministic output and the failure scenarios looked for.
 
-**Phase 2: Green.** The smallest implementation that satisfies the reviewed
-tests. Never edit a reviewed test to make it pass. Keep logic out of UI
-components, framework handlers, persistence structs, repository
-implementations, SDK clients, and file adapters. Add no speculative exception
-handling, retry policy, caching, or enrichment. Record the deterministic
-output showing Green.
+**Phase 2: Green.** The smallest implementation that satisfies the tests.
+Never edit a test to make it pass. Keep logic out of UI components, framework
+handlers, persistence structs, repository implementations, SDK clients, and
+file adapters. Add no speculative exception handling, retry policy, caching,
+or enrichment. Record the deterministic output showing Green, and self-review
+before Phase 3.
 
 **Phase 3: Refactor.** Improve design without changing behavior. Record the
-deterministic output showing behavior is preserved, and state the remaining
-verification gap: what was inferred rather than verified, and where a
-Reviewer should try to falsify the result.
+deterministic output showing behavior is preserved, self-review, and state
+the remaining verification gap: what was inferred rather than verified.
+
+Self-review at every phase requires the same two constraints as any approval —
+recorded deterministic verification output, and named failure scenarios with
+why each does not occur — but not context separation, which is waived only at
+this layer. A phase transition is not complete without its self-review record.
+
+**Work-Plan Review.** After every issue in the work plan is self-reviewed and
+complete, run Preflight Validation (below), then submit the whole work plan to
+the Reviewer persona in a separate context. This is the one point where a
+separate-context approval is required inside a work plan, and it covers the
+work plan as a whole, not one issue.
+
+**Work-Plan Close.** After the Reviewer approves, the Director reads the
+result and states the next direction, or ends the engagement, in the same
+turn — the second and last human gate per work plan. See
+`docs/collaboration/design-agreement.md`.
 
 **Minor Fix Path.** A review-finding correction may use this path only when it
 is planning size `S`, preserves the accepted specification, changes no
 specification, ADR, port, data model, dependency, or architecture boundary,
 and is expected to finish in one attempt. Record a compact design note, make
-the minimum correction, run deterministic verification, and obtain separate
-Reviewer confirmation. Escalate to Feature Path or Architecture Path when any
-condition stops being true, including a second attempt. Actionable
-review findings are tracked as `Type: review-finding` in `docs/issues/LISS-*.md`;
-their lifecycle is `proposed -> accepted -> in_progress -> resolved -> closed`.
-Use `wont_do` only with a grounded Arbiter decision record.
+the minimum correction (self-reviewed, like any issue-level rework), run
+deterministic verification, and obtain separate Reviewer confirmation.
+Escalate to Feature Path or Architecture Path when any condition stops being
+true, including a second attempt. Actionable review findings are tracked as
+`Type: review-finding` in `docs/issues/LISS-*.md`; their lifecycle is
+`proposed -> accepted -> in_progress -> resolved -> closed`. Use `wont_do`
+only with a grounded Arbiter decision record.
 
-**Preflight Validation.** Before independent Reviewer review, run deterministic
-checks and record a `pass` or `fail` result with command output, scope result,
-and the next action. A `fail` returns the work to the Implementer. A `pass`
-only permits submission to the independent Reviewer; it is not approval and
-cannot set `wont_do` or `closed`. A lightweight model may assist with checklist
-and document-consistency checks but may not issue final approval. The producer
-of Preflight cannot review the same change.
+**Preflight Validation.** Before the work-plan-level Reviewer review, run
+deterministic checks and record a `pass` or `fail` result with command output,
+scope result, and the next action. A `fail` returns the work to the
+Implementer. A `pass` only permits submission to the independent Reviewer; it
+is not approval and cannot set `wont_do` or `closed`. A lightweight model may
+assist with checklist and document-consistency checks but may not issue final
+approval. The producer of Preflight cannot review the same change.
+
+Contract-file changes are never self-reviewed, regardless of work-plan scope:
+`docs/collaboration/prompt-instruction-change-control.md` (per ADR 0006)
+always requires a separate-context Reviewer.
 
 ## Reopening the Design Agreement
 
@@ -256,43 +287,61 @@ The common scaffold is:
 
 ## Approval Model
 
-### The one human gate
+### The two human gates, per work plan
 
-The **design agreement**, reached before the loop starts. Mutual and explicit:
-the Director agrees the plan describes what they want built, and the AI agrees
-it is executable without further interpretation. Recorded under
-`docs/collaboration/agreements/` using `docs/templates/design-agreement.md`.
+The **design agreement**, reached before the work plan's loop starts, and the
+**work-plan close**, reached after the Reviewer approves the completed work
+plan. Both are mutual and explicit:
 
-There is no other human gate. Do not create one, and do not use a reopening
-request as a disguised request for deliverable review.
+- At the start: the Director agrees the plan describes what they want built,
+  and the AI agrees it is executable without further interpretation. Recorded
+  under `docs/collaboration/agreements/` using
+  `docs/templates/design-agreement.md`.
+- At the close: the Director reads the Reviewer-approved result and states the
+  next direction — or ends the engagement — in the same action.
 
-### AI approval inside the loop
+There is no per-phase and no per-issue human gate. Do not create one, and do
+not use a reopening request as a disguised request for deliverable review.
 
-Issued by the Reviewer persona. Typed and scoped — treat these as distinct and
-never infer one from another:
+### Self-review, inside a work plan
 
-- `Specification conformance`: the artifact satisfies its acceptance
-  specification.
-- `Phase correctness`: the artifact belongs to the phase that was run, with no
-  later phase's work leaked in.
-- `Boundary conformance`: the change respects the dependency rule, the port
+The Implementer validates its own phase transitions (Red to Green, Green to
+Refactor) in the same context that did the work. Self-review requires a
+deterministic precondition and a falsification burden, same as any approval,
+but not context separation — see "Three constraints" below for which apply.
+
+### AI approval, once per work plan
+
+Issued by the Reviewer persona, in a separate context, over the whole
+completed work plan — not per phase, per issue. Typed and scoped — treat these
+as distinct and never infer one from another:
+
+- `Specification conformance`: the work plan's issues satisfy their acceptance
+  specifications.
+- `Phase correctness`: each issue's artifacts belong to the phase that
+  produced them, with no later phase's work leaked in.
+- `Boundary conformance`: the changes respect the dependency rule, the port
   boundaries, and the boundaries named in the design agreement.
-- `Evidence sufficiency`: deterministic verification was run, its output is
-  recorded, and every claim states its grounds.
+- `Evidence sufficiency`: deterministic verification was run throughout, its
+  output is recorded, and every claim states its grounds.
 
-### Three constraints on every AI approval
+### Three constraints
 
-An approval failing any of these does not count, whatever the record says:
+An approval failing any of these does not count, whatever the record says.
+Self-review satisfies (2) and (3); only the Reviewer's work-plan-level
+approval must satisfy all three, including (1):
 
 1. **Context separation.** The Reviewer runs in a context separate from the one
    that produced the work, and receives only artifacts, specifications,
    contract documents, and deterministic output. The Implementer's reasoning is
-   not admissible as justification.
+   not admissible as justification. Waived only for Implementer self-review
+   within a work plan — never for the Reviewer's own approval, and never for
+   contract-file changes, which ADR 0006 governs independently.
 2. **Deterministic precondition.** No approval without recorded deterministic
    verification output. AI judgment is additive, never a substitute.
-3. **Falsification burden.** The Reviewer names the failure scenarios it
-   searched for and the grounds on which each does not occur. "No problems
-   found" is not an approval.
+3. **Falsification burden.** The failure scenarios searched for and the
+   grounds on which each does not occur. "No problems found" is not an
+   approval, at either layer.
 
 Running the Reviewer on a different model or tool than the Implementer is
 recommended to reduce shared systematic bias, but is not required.

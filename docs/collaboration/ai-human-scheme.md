@@ -1,39 +1,53 @@
-# Collaboration Scheme: Director-Bounded Design, AI-Closed Execution
+# Collaboration Scheme: Work-Plan-Scoped Design, Self-Reviewed Execution
 
 This document defines how the human and the AI personas collaborate in this
 repository. It does not define application internals.
 
-The governing decision is
-`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
+The governing decisions are
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
+(design phase, personas, the invariants) and
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+(execution-loop granularity, which supersedes ADR 0001 on this point).
 
-The shape is: a human is present for direction, planning, and the design
-agreement. After the design agreement, the execution loop is closed — review
-and approval inside it are performed by AI personas, and the loop does not stop
-for human sign-off.
+The shape: a human is present for a work plan's initial direction and for one
+combined checkpoint at its close. Inside a work plan, an issue's phase
+transitions are validated by the Implementer itself — self-review, not a
+separate-context Reviewer. Once every issue in the work plan is
+self-reviewed and complete, exactly one separate-context Reviewer pass runs
+over the whole work plan before it can close.
 
 ## Roles
 
 ### Director
 
-The human. Present before the loop, not inside it.
+The human. Present at the start and the close of each work plan, not inside
+it.
 
 Responsibilities:
 
-- state the direction: what is to be built, under which constraints, and what
-  would count as it being wrong.
+- state the direction for a work plan: what is to be built, under which
+  constraints, and what would count as it being wrong.
 - build the detailed plan with the Planner through dialogue.
-- reach the design agreement, explicitly and on the record.
+- reach the design agreement covering that work plan, explicitly and on the
+  record.
 - decide on a reopening request when the loop returns one.
+- **close the work plan**: after the work-plan-level Reviewer approves, read
+  the result and state the next direction — or end the engagement — in the
+  same action. This is the combined checkpoint per ADR 0014, not two separate
+  acts.
 
 Explicitly **not** Director responsibilities:
 
-- approving phase transitions.
+- approving an issue's individual phase transitions (Red, Green, Refactor) —
+  those are self-reviewed by the Implementer.
 - reviewing tests before implementation.
-- signing off on deliverables.
+- signing off on deliverables inside a work plan, before it closes.
 - any other per-artifact approval inside the loop.
 
-If the Director wants to inspect the loop's output, they read the artifacts.
-Reading is not a gate, and the loop does not wait on it.
+Between a work plan's start and its close, the Director is not a gate. If they
+want to inspect in-progress output, they read the artifacts; reading is not a
+gate and the loop does not wait on it. The close is the one point where
+reading is mandatory, not optional.
 
 ### Personas
 
@@ -62,64 +76,98 @@ passing.
 ## The Loop
 
 ```text
-Director states direction
+Director states direction for one work plan
   -> Planner <-> Director dialogue          [human present]
   -> Specifier writes acceptance specs      [human present]
   -> DESIGN AGREEMENT (Director + AI)       [human present, gate, documented]
   ============================================================
-  -> Phase 0 Design Intake      (Implementer, per task)
-  -> Phase 1 Red                (Implementer)
-  -> Deterministic verification
-  -> Preflight Validation        (Implementer / deterministic tool)
+  for each issue in the work plan:
+    -> Phase 0 Design Intake    (Implementer)
+    -> Phase 1 Red              (Implementer)
+    -> Deterministic verification
+    -> Self-review              (Implementer, same context)
+    -> Phase 2 Green            (Implementer)
+    -> Deterministic verification
+    -> Self-review              (Implementer, same context)
+    -> Phase 3 Refactor         (Implementer)
+    -> Deterministic verification
+    -> Self-review              (Implementer, same context)
+  ============================================================
+  -> Preflight Validation        (Implementer / deterministic tool, work-plan level)
   -> fail -> Implementer correction and repeat Preflight
   -> pass
-  -> Review                     (Reviewer, separate context)
-  -> Phase 2 Green              (Implementer)
-  -> Deterministic verification
-  -> Review                     (Reviewer, separate context)
-  -> Phase 3 Refactor           (Implementer)
-  -> Deterministic verification
-  -> Review                     (Reviewer, separate context)
-  -> Done
+  -> Review                     (Reviewer, separate context, whole work plan)
+       |
+       +-- findings -> review-finding local issues -> Minor Fix Path / re-open issue
+       +-- approved
+  -> WORK PLAN CLOSE (Director: read result + state next direction) [human present, gate]
+       |
+       +-- next direction -> new design agreement for the next work plan
+       +-- no further work -> engagement ends
        |
        +-- deadlock -> Arbiter
        +-- unsettled question / boundary crossing -> reopen design agreement
 ```
 
-Everything below the double line runs without human presence. The loop stops
-only for a reopening request, never for approval of work already done.
+Between the two double lines, the loop runs without human presence. It stops
+only for a reopening request, never for approval of work already done. The
+work-plan close is not "inside" that stretch — it is the second of the two
+human gates this model has, matched to the design agreement at the start.
 
-Preflight Validation is a submission check, not an approval. It may reject a
+Preflight Validation is a submission check, not an approval, run at the
+work-plan level before the Reviewer sees the plan's result. It may reject a
 change for missing evidence or mechanical inconsistency, but it cannot approve
 specification conformance, set `wont_do`, or close an ISSUE.
 
 ## Approval Model
 
-### Human agreement (Director, before the loop)
+### Human agreement (Director)
 
-One gate: the **design agreement**. Mutual and explicit — the Director agrees
-the plan describes what they want built, and the AI agrees it is executable
-without further interpretation. Recorded under
-`docs/collaboration/agreements/`. See `docs/collaboration/design-agreement.md`.
+Two gates per work plan: the **design agreement**, at the start, and the
+**work-plan close**, at the end — one combined action, not two. Both are
+mutual and explicit:
 
-There is no other human gate. Do not create one.
+- At the start, the Director agrees the plan describes what they want built,
+  and the AI agrees it is executable without further interpretation. Recorded
+  under `docs/collaboration/agreements/`. See
+  `docs/collaboration/design-agreement.md`.
+- At the close, the Director reads the Reviewer-approved result and states
+  the next direction (or ends the engagement) in the same turn.
 
-### AI approval (Reviewer, inside the loop)
+There is no per-phase and no per-issue human gate. Do not create one.
 
-Typed and scoped, as before:
+### Self-review (Implementer, inside a work plan)
 
-- `Specification conformance`: the artifact satisfies its acceptance
-  specification.
-- `Phase correctness`: the artifact belongs to the phase that was run, and no
-  later phase's work leaked into it.
-- `Boundary conformance`: the change respects the dependency rule, the port
+Every phase transition inside an issue — Red to Green, Green to Refactor — is
+validated by the Implementer that did the work, in its own context. Self-review
+requires:
+
+- **Deterministic precondition.** Recorded deterministic verification output,
+  same as any approval.
+- **Falsification burden.** The failure scenarios looked for and why each does
+  not occur, same as any approval.
+
+It does **not** require context separation — the Implementer reviews its own
+work at this layer. This is the one constraint ADR 0014 waives here, and only
+here.
+
+### AI approval (Reviewer, once per work plan)
+
+Issued once, over the whole work plan, after Preflight Validation passes.
+Typed and scoped:
+
+- `Specification conformance`: the work plan's issues satisfy their acceptance
+  specifications.
+- `Phase correctness`: each issue's artifacts belong to the phase that
+  produced them, with no later phase's work leaked in.
+- `Boundary conformance`: the changes respect the dependency rule, the port
   boundaries, and the boundaries named in the design agreement.
-- `Evidence sufficiency`: deterministic verification was run, its output is
-  recorded, and every claim states its grounds.
+- `Evidence sufficiency`: deterministic verification was run throughout, its
+  output is recorded, and every claim states its grounds.
 
 Each is a separate decision. Granting one does not grant another.
 
-### Three constraints on every AI approval
+### Three constraints on the Reviewer's approval
 
 An approval that fails any of these does not count, regardless of what the
 record says:
@@ -127,7 +175,9 @@ record says:
 1. **Context separation.** The Reviewer runs in a context separate from the one
    that produced the work, and receives only artifacts, specifications,
    contract documents, and deterministic output. The Implementer's reasoning is
-   not admissible as justification.
+   not admissible as justification. This constraint is not waived at the
+   work-plan level — only the Implementer's own self-review, inside a work
+   plan, is exempt from it.
 2. **Deterministic precondition.** No approval without recorded deterministic
    verification output. AI judgment is additive, never a substitute.
 3. **Falsification burden.** The Reviewer names the failure scenarios it
@@ -136,6 +186,11 @@ record says:
 
 Running the Reviewer on a different model or tool than the Implementer is
 recommended to reduce shared systematic bias, but is not required.
+
+Changes to the agent operating contract files themselves are never
+self-reviewed, at any granularity. ADR 0006 requires a separate-context
+Reviewer for those regardless of work-plan scope, because self-review would
+validate the rule using the context that is changing it.
 
 ## The Three Invariants
 
@@ -175,23 +230,29 @@ Phase 1 Red:
 - statement of whether Red is a compile failure or a failing assertion.
 - mocked ports or interfaces for every external dependency.
 - deterministic verification output.
+- self-review record: failure scenarios looked for, and why each does not
+  occur.
 
 Phase 2 Green:
 
 - minimal implementation.
 - unchanged specifications and tests.
 - deterministic verification output.
+- self-review record.
 
 Phase 3 Refactor:
 
 - refactor summary with behavior-preservation grounds.
 - deterministic verification output.
 - verification gap statement.
+- self-review record.
 
-Every review:
+Work-plan close:
 
-- review record naming searched failure scenarios, grounds, and decision,
-  stored under `docs/collaboration/reviews/`.
+- Preflight Validation record, work-plan scoped.
+- Reviewer's review record naming searched failure scenarios, grounds, and
+  decision, stored under `docs/collaboration/reviews/`.
+- the Director's next-direction statement, or a stated end of the engagement.
 
 ## Decision Gates
 
@@ -263,14 +324,22 @@ Unacceptable work is:
 
 - execution with no covering design agreement.
 - implementation before design intake.
-- Phase 2 work built on tests that were never reviewed by a separate context.
-- an approval issued by the context that produced the work.
-- an approval with no deterministic verification output.
-- an approval stating "no problems found" with no searched scenarios.
+- Phase 2 work built on Phase 1 output with no self-review record — no
+  deterministic output, or no named failure scenarios.
+- a work plan reported closed with no work-plan-level Reviewer approval from a
+  separate context.
+- a contract-file change approved by self-review instead of under ADR 0006's
+  separate-context requirement.
+- an approval with no deterministic verification output, at either layer.
+- an approval stating "no problems found" with no searched scenarios, at
+  either layer.
 - broad context dumping.
 - hidden assumptions.
 - modifying specifications or tests to make implementation pass.
 - turning AI prose into accepted design without an ADR or a design agreement.
 - dense or multi-responsibility source code that is hard to review.
-- reintroducing a human approval gate inside the loop without an ADR
-  superseding ADR 0001.
+- a design agreement spanning more than one work plan.
+- treating the work-plan close as satisfied by reading alone, with no
+  recorded next-direction statement.
+- introducing a human approval gate inside a work plan (per-phase or
+  per-issue) without an ADR superseding ADR 0014.

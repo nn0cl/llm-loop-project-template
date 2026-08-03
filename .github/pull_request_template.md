@@ -17,9 +17,14 @@
 - [ ] Design intake / context ledger is included or not applicable.
 - [ ] Covering design agreement is linked.
 - [ ] Active persona is named for each phase of work in this PR.
-- [ ] Reviewer approval records are linked, each naming the failure scenarios
-      searched for and citing deterministic verification output.
-- [ ] No approval in this PR was issued by the context that produced the work.
+- [ ] Self-review records are included for each issue-level phase transition
+      in this PR (deterministic output, named failure scenarios). If this PR
+      closes the work plan, the work-plan-level Reviewer approval record is
+      linked, naming the failure scenarios searched for and citing
+      deterministic verification output.
+- [ ] No Reviewer approval in this PR was issued by the context that produced
+      the work. (Self-review is exempt from this by design — see ADR 0014 —
+      but must be labeled as self-review, not as a Reviewer approval.)
 - [ ] Phase transition is explicit.
 - [ ] Handoff notes are included when work is incomplete.
 - [ ] AI payload includes/omits are documented when AI assistance shaped the change.

@@ -145,6 +145,12 @@ EXTRA_MIRRORED_RULES = {
         r"external-resource-adoption-contract\.md",
     "AI failure recovery": r"ai-failure-recovery\.md",
     "Runner CLI contract": r"runner-cli-contract\.md",
+    # ADR 0014: self-review replaces per-phase separate-context review inside
+    # a work plan; the Reviewer operates once, at the work plan's close.
+    "Self-review (ADR 0014)": r"[Ss]elf-review",
+    "Work-plan-level Reviewer (ADR 0014)": r"work.plan.level Reviewer|"
+        r"whole (?:completed )?work plan",
+    "Work-plan close (ADR 0014)": r"[Ww]ork.[Pp]lan [Cc]lose",
 }
 
 # Document names that are examples of files a target project creates, not
