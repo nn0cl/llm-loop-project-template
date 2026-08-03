@@ -130,6 +130,7 @@ scaffolding として導入されたファイルの中には、その後プロ�
 - `scripts/copy-ai-collaboration-files.sh`
 - `scripts/update-ai-collaboration-files.sh`
 - `scripts/init-llm-context.sh`
+- `scripts/check-contract-consistency.py`
 - `scripts/lib/collaboration-template-paths.sh`
 - `.collaboration-template-version`（導入先リポジトリ直下の同期マーカー）
 - `.collaboration-template-ignore`（作成していれば）

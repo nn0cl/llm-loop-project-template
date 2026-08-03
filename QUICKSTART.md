@@ -127,6 +127,7 @@ section.
 - `scripts/copy-ai-collaboration-files.sh`
 - `scripts/update-ai-collaboration-files.sh`
 - `scripts/init-llm-context.sh`
+- `scripts/check-contract-consistency.py`
 - `scripts/lib/collaboration-template-paths.sh`
 - `.collaboration-template-version` (the sync marker at your repo root)
 - `.collaboration-template-ignore`, if you created one

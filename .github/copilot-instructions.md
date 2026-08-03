@@ -17,6 +17,18 @@ review and approval inside it are performed by AI personas, and the loop does
 not stop for human sign-off. The governing decision is
 `docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
 
+## Prime Directive
+
+No execution without a recorded design agreement.
+
+No approval without deterministic verification output.
+
+No approval by the context that produced the work.
+
+No phase skipping.
+
+No hidden business logic in adapters.
+
 ## The Three Invariants
 
 These hold in every phase, for every persona:
@@ -282,3 +294,20 @@ past an unsettled question, and do not stop quietly.
 - Create AI work traces under `docs/collaboration/traces/` when required.
 - Use feature-unit branches for feature work.
 - Identify issue dependencies before starting feature work.
+
+## Project Boundaries
+
+`<Describe the project's runtime and trust boundaries here: whether it is
+local-first, cloud-native, or hybrid; which external systems are optional and
+replaceable; which datastore is primary; which migration tool is used. Do not
+invent full schemas before accepted behavior, reviewed Red tests, or an ADR
+require them.>`
+
+## Current Non-Decisions
+
+Technology and design choices intentionally deferred to an ADR rather than
+assumed by an agent. Treat these as ADR topics, not assumptions.
+
+- `<Provider/vendor choice>`.
+- `<Data store or schema detail>`.
+- `<Model/embedding choice>`.

@@ -68,7 +68,8 @@ When handing off or stopping before completion, use
 `docs/templates/agent-handoff.md`, stating active persona, covering design
 agreement, current phase, completed artifacts, next safe action, blockers,
 files changed, and verification status with output. When issuing a review
-decision, use `docs/templates/review-record.md`.
+decision, use `docs/templates/review-record.md` and store the record under
+`docs/collaboration/reviews/`.
 
 Generated source code must minimize cognitive load for whoever reads it next —
 a reviewing persona, a future agent, or the Director inspecting artifacts.

@@ -35,6 +35,23 @@ alone but never tagged, and no commit isolates them, so they will ship inside
 
 Adopting projects now number their own ADRs from `0014` up.
 
+### Contract consistency is now checked, not audited
+
+Three review rounds found the same defect class: a rule reaching some contract
+files and not others, with every link intact and CI green. Each was caught by a
+hand-built comparison that had to be rebuilt from scratch every round.
+
+`scripts/check-contract-consistency.py` makes that comparison a command, and CI
+runs it. It checks mirror parity against `AGENTS.md`, that no `AGENTS.md`
+section is left unclassified as mirrored or deliberately not, that every
+relative path a current document names resolves, that stated process-ADR ranges
+match the ADR files, and that no document claims a released version with no tag
+behind it.
+
+On its first run it found three further defects: the review-record directory
+was named in one of nine contract files, and `copilot-instructions.md` had no
+Prime Directive at all. Both are fixed.
+
 ### Mirror parity
 
 The two rules above landed in `AGENTS.md` and `CLAUDE.md` only. An agent

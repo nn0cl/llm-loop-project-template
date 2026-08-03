@@ -126,6 +126,10 @@ installed.
 - A **CI skeleton** that checks the contract files exist, checks that
   ADRs are numbered, and enforces that contract-file changes come with a
   trace.
+- A **contract consistency checker** (`scripts/check-contract-consistency.py`,
+  run by CI) for the drift a link check cannot see: a rule that reaches
+  some tool files and not others, a stated ADR range that no longer matches
+  the ADRs, a version claimed as released with no tag behind it.
 - A **copy script** for rolling the collaboration files into a new or existing
   repository without overwriting existing target files by default.
 - An **LLM setup prompt script** that prepares a compact first message for a

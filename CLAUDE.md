@@ -142,7 +142,8 @@ to the touched area:
 
 Use `docs/templates/design-intake.md` for design-only work,
 `docs/templates/design-agreement.md` when closing the design phase with the
-Director, `docs/templates/review-record.md` when issuing a review decision,
+Director, `docs/templates/review-record.md` when issuing a review decision
+(stored under `docs/collaboration/reviews/`),
 and `docs/templates/agent-handoff.md` when stopping before completion.
 
 ## Session Entry
