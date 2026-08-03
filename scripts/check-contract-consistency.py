@@ -20,11 +20,18 @@ Checks:
 What this cannot check, and who does
 ------------------------------------
 
-Independent review found three holes in an earlier version of this script, each
-a case where it passed a tree containing a defect it claimed to cover. Those are
-fixed, and the checks that used to depend on a fixed set of separator words or a
-literal banner prefix no longer do. Two limits remain, and they are structural
-rather than bugs:
+Four rounds of independent review found holes in earlier versions of this
+script, every one of them a case where it claimed a check it did not actually
+have. Three of those holes were in code trying to infer what a sentence meant
+from a fixed list of connective words or a literal prefix — "to", "through",
+"-", "Contract edition:". Each list was evaded by an ordinary phrasing not on
+it ("up to", "up through", a comma, a false banner with different words). That
+pattern repeated three times before the connective-parsing approach was
+abandoned rather than patched again: ADR-range detection is now exact-anchored
+(see ENTRY_DOCUMENT_ADR_STATEMENTS) instead of parsed, which is sound but tied
+to today's wording — see below.
+
+What remains is structural, not a bug waiting for the next round:
 
   * **Meaning.** Parity asks whether a rule is present, never whether it still
     says the same thing. A mirror that keeps the phrase `context separation`
@@ -33,27 +40,32 @@ rather than bugs:
     check resolves names; it cannot know that a sentence meant
     `docs/templates/review-record.md` and said
     `docs/templates/design-agreement.md`, when both exist.
-  * **A range spread across a sentence.** Two ADR numbers are compared only
-    when they sit next to each other with nothing but a dash or a range word
-    between them. "from 0001 onward; the last one is 0011", split over two
-    lines, states a wrong range and is not caught. An earlier version tried to
-    cover this by requiring a document to name both ends of the set somewhere,
-    and review found that rule both too loose — any correct mention elsewhere
-    in the file masked the wrong one — and too strict, since an ordinary
-    citation of a single ADR tripped it. It was removed rather than patched.
-  * **The adopter's starting ADR number.** Still matched by phrase, so an
-    unusual wording can evade it.
+  * **An ADR-range statement not yet registered in
+    ENTRY_DOCUMENT_ADR_STATEMENTS.** The check no longer parses prose for a
+    range at all; it requires each *known* range-stating sentence, anchored by
+    its surrounding text, to show the current bounds. A new range statement
+    added to an entry document is invisible to this check until it is
+    registered — which is the same fail-open gap as an unclassified
+    `AGENTS.md` section would be if `check_parity_completeness` did not exist,
+    except no equivalent completeness check exists for this one. A reworded
+    *registered* sentence fails closed instead: the anchor stops matching and
+    the check says so, rather than silently passing a wrong number.
+  * **The adopter's starting ADR number** is covered by the same registered,
+    anchored patterns as the range statements above — it has no separate
+    mechanism and no separate gap. A statement of it that is not registered
+    is invisible in the same way an unregistered range statement is.
   * **Anything about a document this repository does not have.** In an adopting
     project the entry documents are the project's own, and checks over them are
     skipped there.
 
-Each of these is a reading, not a comparison. They belong to the Reviewer
-persona. Two rounds of independent review found holes in earlier versions of
-this script — every one of them a place where it claimed a check it did not
-have, rather than a place where a check was merely weak.
+Each of these is a reading, or a registration gap, not a comparison the script
+makes. The first two belong to the Reviewer persona. The third is why this
+list exists at all: read it before trusting a green run on a document that
+states an ADR range this script does not already know about.
 
-Treat a green run as "no mechanical drift found", never as "the contract is
-consistent". The second claim is a judgment and nothing here makes it.
+Treat a green run as "no mechanical drift found in what this script knows to
+compare", never as "the contract is consistent". The second claim is a
+judgment and nothing here makes it.
 
 Usage:
   scripts/check-contract-consistency.py [--repo PATH]
@@ -283,7 +295,15 @@ def check_references(repo: str, failures: Failures) -> None:
                     target = match.group(1)
                     if target.startswith(("http://", "https://", "#", "mailto:")):
                         continue
-                    targets.append(target.split("#")[0])
+                    target = target.split("#")[0]
+                    # `[...](...)` markdown-link syntax is not unique to
+                    # markdown: a regex character class followed by a capture
+                    # group, e.g. `[–-](\d{4})`, parses the same way. Require
+                    # the target to look like an actual path — a slash or a
+                    # recognized file extension — before treating it as one.
+                    if "/" not in target and not target.endswith(SCANNED_SUFFIXES):
+                        continue
+                    targets.append(target)
                 for match in CODE_PATH.finditer(line):
                     target = match.group(1)
                     if target.startswith(("http", "<", "~")):
@@ -345,12 +365,58 @@ def adr_numbers(repo: str) -> list[str]:
     )
 
 
-def check_adr_range(repo: str, failures: Failures) -> None:
-    """Every ADR number an entry document names must be one that exists.
+# Exact-anchored ADR-range statements, one entry per sentence that currently
+# states the process-ADR range or the number an adopting project starts at.
+#
+# Three rounds of independent review demonstrated that detecting "this prose
+# states a range" from connective words is unbounded: every whitelist of
+# separators ("-", "to", "through", "まで") was evaded by an ordinary English
+# phrasing not on it ("up to", "up through", ", ", " / "). That is the same
+# meaning-inference problem as mirror-parity content drift and reference
+# intent, both already disclosed as outside what this script can do. Rather
+# than add a fourth heuristic and wait for the fifth phrasing that breaks it,
+# this check does not parse prose for a range at all.
+#
+# Instead, each pattern below is anchored to CURRENT, VERIFIED wording in the
+# named file, with one digit group standing in for the bound that must equal
+# `last` (the newest ADR) or `next` (where an adopting project starts). If a
+# pattern stops matching — because the sentence was reworded, moved, or
+# removed — the check fails closed and says so, rather than silently passing.
+# Update the pattern here in the same change that reword the sentence; that
+# coupling is deliberate, the same way parity completeness forces a new
+# AGENTS.md section to be classified before it is silently ignored.
+ENTRY_DOCUMENT_ADR_STATEMENTS: dict[str, list[tuple[str, str]]] = {
+    "README.md": [
+        (r"ADRs included here \(0001-(\d{4})\)", "last"),
+        (r"own decisions from (\d{4}) up", "next"),
+    ],
+    "QUICKSTART.md": [
+        (r"`docs/architecture/adr/0001-\*\.md` through `(\d{4})-\*\.md`", "last"),
+        (r"keep any ADR your\s+project numbered afterward \((\d{4}) and up\)", "next"),
+        (r'records" asserts ADRs 0001[–-](\d{4})', "last"),
+    ],
+    "QUICKSTART.ja.md": [
+        (r"`docs/architecture/adr/0001-\*\.md` から `(\d{4})-\*\.md` までは", "last"),
+        (r"ADR（(\d{4}) 以降）", "next"),
+        (r"ADR 0001〜(\d{4}) を検査", "last"),
+    ],
+}
 
-    This does not parse phrasings. Any four-digit ADR-shaped token on a line
-    that mentions ADRs must name an ADR the repository has, or the number an
-    adopting project starts at. Rewording the sentence does not evade it.
+
+def check_adr_range(repo: str, failures: Failures) -> None:
+    """Every ADR number an entry document names must be one that exists, and
+    every registered range statement must show the current bounds.
+
+    The per-token pass below is sound and general: any four-digit ADR-shaped
+    token on a line that mentions ADRs must name an ADR the repository has, or
+    the number an adopting project starts at. It catches a reference to an ADR
+    that does not exist (`ADR 0099`) however the sentence is worded.
+
+    It does not, by itself, catch a wrong *bound* stated for the current
+    range, because the upper bound of an understated range ("...through
+    0011") is itself a real ADR number and so passes the token test. That is
+    covered by ENTRY_DOCUMENT_ADR_STATEMENTS instead — see its docstring for
+    why that problem is solved by exact anchoring rather than parsing.
     """
     numbers = adr_numbers(repo)
     if not numbers:
@@ -376,40 +442,26 @@ def check_adr_range(repo: str, failures: Failures) -> None:
                     f"adopting project starts at {nxt}.",
                 )
 
-            # Two ADR numbers joined by nothing but a dash or a bare range
-            # word state a range, and its ends must be the set's ends. The
-            # separator must carry no other words: "0006 and ADR 0013" cites
-            # two ADRs and is left alone, while "0001 to 0011" and "0001-0013"
-            # are ranges. This layer catches an understated range on a line
-            # even when another line names the true last ADR.
-            for a, between, b in re.findall(
-                r"\b(0\d{3})\b([^0-9]{0,12}?)\b(0\d{3})\b", line
-            ):
-                if not re.fullmatch(
-                    r"[\s\-–—〜~]*(?:to|through|まで)?[\s\-–—〜~]*",
-                    between,
-                    re.IGNORECASE,
-                ):
-                    continue
-                if (a, b) != (numbers[0], last):
-                    failures.add(
-                        "ADR range",
-                        f"{rel}:{lineno} states the range {a}-{b}; the "
-                        f"repository has {numbers[0]}-{last}",
-                    )
-
-        # The number an adopter is told to start at must be last + 1. Unlike
-        # the token check above, this one reads a phrasing, so it is evadable
-        # by rewording. See "What this cannot check" in the module docstring.
-        for stated in re.findall(
-            r"(0\d{3})\s*(?:and up|onwards?|以降|から採番)", text
-        ):
-            if stated != nxt:
+        for pattern, which in ENTRY_DOCUMENT_ADR_STATEMENTS.get(rel, []):
+            match = re.search(pattern, text)
+            if match is None:
                 failures.add(
                     "ADR range",
-                    f"{rel} tells adopting projects to start at {stated}; the "
-                    f"template occupies through {last}, so they must start at "
-                    f"{nxt}",
+                    f"{rel}: expected range statement not found "
+                    f"(pattern: {pattern!r}). If the sentence was reworded or "
+                    "moved, update ENTRY_DOCUMENT_ADR_STATEMENTS in "
+                    "scripts/check-contract-consistency.py to match; if it was "
+                    "removed, the current range is no longer stated anywhere "
+                    "in this file.",
+                )
+                continue
+            found = match.group(1)
+            expected = last if which == "last" else nxt
+            if found != expected:
+                failures.add(
+                    "ADR range",
+                    f"{rel} states {found} where {expected} is expected "
+                    f"(pattern: {pattern!r})",
                 )
 
 
