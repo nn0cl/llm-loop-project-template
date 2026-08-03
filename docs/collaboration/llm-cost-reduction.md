@@ -111,3 +111,16 @@ Investigate when:
 - verification is described in prose but no deterministic check was run.
 - AI output causes repeated rework or test changes.
 - Reviewer approval repeatedly rejects work for phase or scope drift.
+- a self-review or Preflight record for a small change carries the full
+  Scope Result / Routing and Compatibility shape instead of
+  `docs/templates/self-review.md`'s short form.
+- a response to a Reviewer finding restates verification the finding or an
+  earlier round already covered, instead of pointing to it.
+- a second or later independent-review round resumes the prior round's full
+  session instead of a fresh, scoped invocation, with no stated reason.
+
+These three were measured directly in this repository: self-authored process
+records once totaled roughly as many lines as the contract content they
+recorded, and independent-review rounds compounded further by carrying
+forward each prior round's full context by default. See
+`docs/architecture/adr/0015-review-cost-discipline.md`.

@@ -65,6 +65,9 @@ approval — recorded deterministic verification output, and named failure
 scenarios with why each does not occur — but not context separation, which is
 waived only at this layer. A phase transition is not complete without its
 self-review record.
+Use `docs/templates/self-review.md`'s short form by default (size `S`);
+escalate to the full form only at size `M` or larger, per
+`docs/architecture/adr/0015-review-cost-discipline.md`.
 
 ### Work-Plan Review and Close
 

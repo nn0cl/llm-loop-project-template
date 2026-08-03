@@ -83,7 +83,7 @@ APIs)?>`
 
 ## Accepted Decisions
 
-The first edition ships fourteen process ADRs. `0001` governs the design
+The first edition ships fifteen process ADRs. `0001` governs the design
 phase and invariants; `0014` governs execution-loop granularity and
 supersedes `0001` on that point; the rest operate under both.
 
@@ -104,6 +104,9 @@ supersedes `0001` on that point; the rest operate under both.
 - `adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md` — the
   execution-loop granularity: self-review inside a work plan, one Reviewer
   pass at its close.
+- `adr/0015-review-cost-discipline.md` — proportional self-review, delta-only
+  responses to a named Reviewer finding, and fresh-context independent-review
+  rounds.
 
 ## Remaining Technology Evaluation
 

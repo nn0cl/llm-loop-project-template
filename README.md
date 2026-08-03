@@ -108,10 +108,12 @@ installed.
 ## What this template gives you
 
 - A **phase-gated workflow** (Design Intake -> Red -> Green -> Refactor) that
-  every agent must follow, with a Reviewer approval between phases.
+  every agent must follow, self-reviewed at each phase and reviewed once by
+  the Reviewer, in a separate context, at the work plan's close.
 - A **Director-bounded collaboration scheme**: the human sets direction, plans
-  through dialogue, and signs one design agreement; the closed loop runs on
-  named personas that produce reviewable, minimal, phase-correct artifacts.
+  through dialogue, and reaches one design agreement per work plan, closed by
+  one combined checkpoint; the loop between those two points runs on named
+  personas that produce reviewable, minimal, phase-correct artifacts.
 - **Persona definitions** (Planner, Specifier, Implementer, Reviewer, Arbiter)
   with responsibilities, admissible inputs, required outputs, and rules for
   adding task-specific personas.
@@ -132,8 +134,9 @@ installed.
   under `docs/collaboration/agreements/`, Reviewer decisions under
   `docs/collaboration/reviews/`, and AI work traces under
   `docs/collaboration/traces/`.
-- **Reusable templates** for design agreements, review records, design intake,
-  agent handoff, work traces, local issues, work plans, Gherkin features, and
+- **Reusable templates** for design agreements, review records, self-review,
+  design intake, agent handoff, work traces, local issues, work plans,
+  Gherkin features, and
   ADRs.
 - A **CI skeleton** that checks the contract files exist, checks that
   ADRs are numbered, and enforces that contract-file changes come with a
@@ -244,9 +247,9 @@ architecture layers. Before using it on a real project:
    stack-specific jobs (lint, test, dependency policy) once those tools
    exist.
 6. Renumber/extend `docs/architecture/adr/` as real architecture decisions are
-   made. The fourteen ADRs included here (0001-0014) describe the
+   made. The fifteen ADRs included here (0001-0015) describe the
    collaboration process itself and normally do not need to change; number
-   your project's own decisions from 0015 up, so a later template update does
+   your project's own decisions from 0016 up, so a later template update does
    not collide with them.
 
 ## Introduce into an existing repository
@@ -297,7 +300,7 @@ target project's accepted architecture or feature specifications.
     ├── templates/                  # design agreement, review record, design intake, handoff, trace, issue, ADR, Gherkin
     │   └── examples/               # filled-in stack-specific examples, for reference only
     ├── architecture/               # Clean Architecture rules, quickstart, readiness checklist
-    │   └── adr/                    # architecture decision records (0001-0014 = process ADRs)
+    │   └── adr/                    # architecture decision records (0001-0015 = process ADRs)
     ├── specs/                      # EARS/Gherkin feature specifications
     ├── issues/                     # local issue files (LISS-0000 style)
     ├── work-plans/                 # multi-issue work plans
