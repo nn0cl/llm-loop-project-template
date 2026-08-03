@@ -8,6 +8,56 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
+## v2.0.0 — Work-plan-scoped self-review and a combined human checkpoint (2026-08-03)
+
+Reviewed and approved by a Reviewer persona in a separate context, on a
+different model, across two rounds. Review records under
+`docs/collaboration/reviews/`:
+`2026-08-03-work-plan-scoped-governance-review.md` and
+`2026-08-03-work-plan-scoped-governance-review-2.md`.
+
+**Major**, because this changes the meaning of a rule adopting projects rely
+on: `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+supersedes ADR 0001's execution-loop provisions.
+
+- **Self-review replaces per-phase, separate-context Reviewer approval
+  inside a work plan.** Red-to-Green and Green-to-Refactor transitions are
+  now validated by the Implementer, in the same context that did the work.
+  Self-review still requires recorded deterministic verification output and
+  named failure scenarios — only context separation is waived, and only at
+  this layer.
+- **The Reviewer now runs once per work plan**, in a separate context, over
+  every issue's result together, after Preflight Validation passes — not
+  once per phase per issue.
+- **Closing a work plan is one combined Director action**, not two: read the
+  Reviewer-approved result and state the next direction (or end the
+  engagement) in the same turn. This is a new, mandatory human checkpoint;
+  previously the Director had no required touchpoint after the initial
+  design agreement.
+- **Contract-file changes are unaffected.** ADR 0006 still requires a
+  separate-context Reviewer for those, at any work-plan scope — this release
+  was itself reviewed under that rule, not under the model it introduces.
+- The process-ADR count moves from thirteen to fourteen; adopting projects
+  now number their own decisions from `0015` up.
+- `scripts/check-contract-consistency.py` gained three mirror rules for the
+  new vocabulary (self-review, work-plan-level Reviewer, work-plan close).
+  Its first full run on this change reported clean; several genuine gaps
+  across seven documents were found only by a manual sweep the checker does
+  not run — consistent with its own disclosure that a green run means "no
+  mechanical drift found," not "the contract is consistent."
+
+### The tradeoff, on the record
+
+ADR 0014 and its covering design agreement name the risk this trades away
+explicitly: this repository's own history is six review rounds against the
+consistency checker, four of which found it claiming coverage it did not
+have — findings the context that wrote it could not have made about itself.
+Self-review does not remove that risk; it relocates it from "next phase
+boundary" to "work-plan close," and the severity scales with how large a
+work plan is allowed to get. Accepted in exchange for fewer separate-context
+invocations and human involvement scoped to work-plan boundaries, not
+overlooked.
+
 ## v1.1.0 — Independent review, and the rules it produced (2026-08-02)
 
 Reviewed and approved by a Reviewer persona in a separate context, on a
