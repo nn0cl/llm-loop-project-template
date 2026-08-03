@@ -8,11 +8,54 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
+## v2.2.0 — Review cost discipline, corrected (2026-08-03)
+
+Reviewed and approved by a Reviewer persona in a separate context. Review
+record: `docs/collaboration/reviews/2026-08-03-review-cost-discipline-correction-review.md`.
+Covering design agreement: `docs/collaboration/agreements/2026-08-03-review-cost-discipline-correction.md`
+(DA-2026-08-03-03).
+
+**Corrects v2.2.0's own predecessor.** v2.1.0 merged on a Director
+instruction to skip independent review. A retroactive fresh-context review
+found that instruction had no contractual basis — no provision anywhere in
+this contract lets the Director waive ADR 0006's separate-context Reviewer
+requirement, and disclosing a skip openly is not the same thing as having
+authority to make it. This release fixes all 7 findings from that
+rejection:
+
+**Minor**, because it adds a rule without invalidating existing ones, on top
+of correctness fixes to what v2.1.0 shipped:
+
+- `docs/collaboration/prompt-instruction-change-control.md` and
+  `docs/architecture/adr/0015-review-cost-discipline.md` now state
+  explicitly: **no Director instruction waives the separate-context Reviewer
+  requirement**, and this incident is not precedent for a future skip.
+- `docs/templates/self-review.md`'s short form no longer permits a one-line
+  summary in place of pasted output — closes an evidentiary loophole that
+  affected every future self-review and finding-response record, not only
+  this one instance.
+- `scripts/check-contract-consistency.py` gained two mirror rules anchored on
+  ADR 0015's actual new text, replacing a rule that could not detect deletion
+  of that text (the old `"Self-review (ADR 0014)"` rule was already satisfied
+  by unrelated pre-existing content in every mirror).
+- The five Preflight-carrying contract files now separate the contract-file
+  rule from finding-response guidance with an explicit scope marker.
+- The design agreement and trace for v2.1.0's change
+  (`docs/collaboration/agreements/2026-08-03-review-cost-discipline.md`,
+  `docs/collaboration/traces/2026-08-03-review-cost-discipline.md`) are
+  rewritten in place to include every field their templates require.
+- `docs/templates/self-review.md` and ADR 0015 now state that a self-review's
+  *search* must be as broad as an independent Reviewer's, even though the
+  written record stays proportionally short.
+
 ## v2.1.0 — Review cost discipline (2026-08-03)
 
-**Unreviewed.** Per explicit Director instruction, independent review was
-skipped for this release. `docs/architecture/adr/0015-review-cost-discipline.md`
-records the exception; ADR 0006's requirement is unchanged going forward.
+**Unreviewed at the time of this release.** Per explicit Director
+instruction, independent review was skipped. A later retroactive review
+(see v2.2.0, above) found that instruction had no contractual basis and
+corrected the defects it let through; this entry is left as originally
+written, for the historical record, rather than edited to read as if it had
+always been reviewed.
 
 Minor: adds a proportional self-review path without invalidating the full
 one. `docs/templates/self-review.md` gives size-`S` self-review and
