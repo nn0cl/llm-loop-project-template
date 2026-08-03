@@ -163,6 +163,9 @@ Self-review at every phase requires the same two constraints as any approval —
 recorded deterministic verification output, and named failure scenarios with
 why each does not occur — but not context separation, which is waived only at
 this layer. A phase transition is not complete without its self-review record.
+Use `docs/templates/self-review.md`'s short form by default (size `S`); escalate
+to the full form only at size `M` or larger, per
+`docs/architecture/adr/0015-review-cost-discipline.md`.
 
 **Work-Plan Review.** After every issue in the work plan is self-reviewed and
 complete, run Preflight Validation (below), then submit the whole work plan to
@@ -198,6 +201,11 @@ approval. The producer of Preflight cannot review the same change.
 Contract-file changes are never self-reviewed, regardless of work-plan scope:
 `docs/collaboration/prompt-instruction-change-control.md` (per ADR 0006)
 always requires a separate-context Reviewer.
+When the change is answering a specific, already-named Reviewer finding, do
+not restate the whole change's verification history. Use
+`docs/templates/self-review.md`'s short form: which finding this answers, the
+command that reproduces the original defect, the command that shows the fix.
+See `docs/architecture/adr/0015-review-cost-discipline.md`.
 
 ## Reopening the Design Agreement
 
