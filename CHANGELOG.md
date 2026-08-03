@@ -8,6 +8,21 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
+## v2.1.0 — Review cost discipline (2026-08-03)
+
+**Unreviewed.** Per explicit Director instruction, independent review was
+skipped for this release. `docs/architecture/adr/0015-review-cost-discipline.md`
+records the exception; ADR 0006's requirement is unchanged going forward.
+
+Minor: adds a proportional self-review path without invalidating the full
+one. `docs/templates/self-review.md` gives size-`S` self-review and
+single-finding fix responses a short form (one command, one result, the one
+risk that matters); size `M`+ still uses the full form. Multi-round
+independent review now defaults to a fresh, scoped invocation per round
+instead of resuming the prior round's full session — diagnosed directly from
+this repository's own history, where self-authored process records had grown
+to roughly the size of the contract content they recorded.
+
 ## v2.0.0 — Work-plan-scoped self-review and a combined human checkpoint (2026-08-03)
 
 Reviewed and approved by a Reviewer persona in a separate context, on a
