@@ -17,15 +17,37 @@ Use this size by default. Escalate to the Full form when the change is
 planning size `M` or larger, touches more than one area, or the risk is not
 obvious from the diff alone.
 
+**Short form bounds the record, not the search.** Look for what an
+independent, separate-context Reviewer would look for — the work-plan-level
+Reviewer sees this issue only once, at the work plan's close, not at this
+phase transition, so the search has to be as if it were the only check this
+work will ever get. "Short" means the write-up states the result of that
+search concisely; it does not mean the search itself stopped at the first
+plausible answer.
+
 ```markdown
 Phase / finding: <Red|Green|Refactor, or the Reviewer finding # this answers>
 Command run: <the one command that produced the deterministic result>
-Result: <its output, or a one-line summary if long>
-Main risk considered: <the one failure mode most likely to be wrong here>
-Why it doesn't occur: <one sentence>
+Result: <the actual output, pasted>
+Risks considered: <every failure mode actually looked for, not just the
+  first one — one line each>
+Why each does not occur: <one line per risk above>
 ```
 
-That is the whole record. Do not add Scope Result, Routing and
+If the search turned up only one real candidate, the two fields above are
+one line each and the record stays short by itself — the form does not force
+padding. If it turned up several, list all of them; do not pick one
+arbitrarily to keep the record shorter than the search actually was.
+
+**`Result` is the actual output, always.** Not a summary — the Prime
+Directive states unconditionally that "'Tests pass' without output is a
+claim, not evidence," and this template does not get an exception. If the
+output is too long to paste whole, paste the last 20–30 lines and the exact
+command a reader can re-run to see the rest; do not replace the output with
+a hand-written description of what it said. "Short form" bounds how much
+*narrative* surrounds the evidence — it never bounds the evidence itself.
+
+That is the whole record otherwise. Do not add Scope Result, Routing and
 Compatibility, or other sections from the Preflight or review-record
 templates — those are sized for independent review, not for this.
 

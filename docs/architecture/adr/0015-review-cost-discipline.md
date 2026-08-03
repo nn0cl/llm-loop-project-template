@@ -2,12 +2,19 @@
 
 ## Status
 
-Accepted. No independent Reviewer approval — the Director explicitly
-instructed this change to skip that step for this one instance ("今回は
-レビューをスキップして即反映"), after the diagnosis below was presented and
-agreed to in dialogue. This is recorded here rather than hidden: this ADR is
-unreviewed by a separate context, which is itself the kind of fact this
-template's invariants require to survive.
+Accepted, following correction. This ADR originally merged (as part of pull
+request #11, tag `v2.1.0`) on a Director instruction to skip independent
+Reviewer approval for that one change. A retroactive fresh-context review
+rejected that as invalid: no provision in this contract grants the Director
+authority to waive ADR 0006's separate-context Reviewer requirement, and
+disclosing the skip openly — which the original version of this section did
+— is not the same thing as having authority to make it. That gap is now
+closed directly in
+`docs/collaboration/prompt-instruction-change-control.md`: no Director
+instruction waives the separate-context requirement, and this incident is
+not precedent for a future one. This ADR's content (rules 1-4 below) was
+resubmitted for genuine independent review under DA-2026-08-03-03 before
+being treated as Accepted.
 
 ## Context
 
@@ -41,10 +48,15 @@ Two distinct, compounding causes were found:
 ## Decision
 
 1. **Self-review and a fix answering one named Reviewer finding use
-   `docs/templates/self-review.md`'s short form by default** — one command,
-   one result, the single most relevant failure mode, and why it does not
-   occur. Escalate to the full form (multiple named failure scenarios) only
-   at planning size `M` or larger, or when risk is not obvious from the diff.
+   `docs/templates/self-review.md`'s short form by default.** The short form
+   bounds the *record*, not the *search*: the Implementer looks for what a
+   separate-context Reviewer would look for, because the work-plan-level
+   Reviewer sees this issue once, at the work plan's close, not at this
+   phase transition. What is recorded is every failure mode the search
+   actually found, each with why it does not occur — one line each when the
+   search found one, more lines when it found more. Escalate to the full
+   form (`review-record.md`'s shape, filled out as the Implementer) at
+   planning size `M` or larger, or when risk is not obvious from the diff.
 2. **A response to a specific Reviewer finding does not restate the whole
    change.** It names the finding it answers, reproduces the original defect,
    shows the fix, and stops there. It does not re-derive Scope, Routing, or a
@@ -91,10 +103,12 @@ Negative:
   the same shape of risk this repository's own consistency checker
   eventually gave up trying to resolve by regex for ADR ranges, and disclosed
   instead of chasing.
-- Skipping this ADR's own independent review, even by explicit Director
-  instruction, means it has not been falsified by a separate context. It is
-  recorded honestly as such rather than backfilled with a review that did
-  not happen.
+- This ADR's first merge shipped without independent review, on a Director
+  instruction the contract grants no authority to give. That is not a
+  disclosed trade-off this ADR chose; it was a boundary violation, found by a
+  retroactive review and corrected afterward (see Status). It is named here
+  as a negative consequence of the original decision, not as an accepted
+  cost of the design.
 
 ## Enforcement
 
@@ -108,3 +122,7 @@ Code review (a future Reviewer persona, or the Director) should reject:
 - a second or later review round that resumes a prior reviewing session's
   full transcript without stating why a fresh, scoped context would not have
   worked.
+- a contract-file change merged on a Director instruction to skip the
+  separate-context Reviewer requirement. No such instruction is a valid
+  substitute for that approval; see
+  `docs/collaboration/prompt-instruction-change-control.md`.

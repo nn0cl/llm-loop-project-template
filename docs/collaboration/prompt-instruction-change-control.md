@@ -56,6 +56,19 @@ A pull request that changes an agent operating contract file requires:
 Do not merge an agent operating contract change based only on an AI agent's
 self-review.
 
+**No Director instruction waives this rule.** A Director can decide what to
+build and can accept a design agreement's scope and boundaries; a Director
+cannot grant an exception to the separate-context Reviewer requirement itself,
+because nothing in this contract names that as an authority the design
+agreement carries. A Director instruction to skip review is not evidence the
+change was safe — it is an unreviewed change, full stop, and must be treated
+as such until a separate-context Reviewer actually examines it. This is not a
+hypothetical: `docs/architecture/adr/0015-review-cost-discipline.md` was
+merged on exactly this instruction, and a later retroactive review rejected
+it for that reason among others (see that ADR's own Status section). That
+incident is not precedent for a future skip; it is the reason this paragraph
+exists.
+
 ## Traceability Rule
 
 A pull request that changes an agent operating contract file must include an
@@ -84,3 +97,6 @@ Code review should reject:
   `.cursor/rules/*.mdc` inconsistent with each other in effective content.
 - agent operating contract changes merged without a covering design agreement
   or without a Reviewer approval record.
+- agent operating contract changes merged on a Director instruction to skip
+  review, treated as if that instruction were itself a substitute for
+  Reviewer approval. No such substitution exists in this contract.
