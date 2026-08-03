@@ -166,6 +166,12 @@ EXTRA_MIRRORED_RULES = {
         r"Reviewer.{0,80}whole (?:completed )?work plan|"
         r"whole (?:completed )?work plan.{0,80}Reviewer",
     "Work-plan close (ADR 0014)": r"[Ww]ork.[Pp]lan [Cc]lose",
+    # ADR 0015. "Self-review (ADR 0014)" above is satisfied by ADR 0014's own
+    # pre-existing content in every file, so it cannot detect these two
+    # sentences being deleted — that gap is exactly what review found.
+    # Anchor on text unique to ADR 0015's additions instead.
+    "Self-review short-form default (ADR 0015)": r"self-review\.md.{0,20}short form",
+    "Finding-response delta guidance (ADR 0015)": r"review finding on a\b",
 }
 
 # Document names that are examples of files a target project creates, not

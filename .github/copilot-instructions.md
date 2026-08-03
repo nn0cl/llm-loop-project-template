@@ -299,12 +299,15 @@ of Preflight cannot review the same change.
 
 Contract-file changes are never self-reviewed, regardless of work-plan scope:
 `docs/collaboration/prompt-instruction-change-control.md` (per ADR 0006)
-always requires a separate-context Reviewer.
-When the change is answering a specific, already-named Reviewer finding, do
-not restate the whole change's verification history. Use
-`docs/templates/self-review.md`'s short form: which finding this answers, the
-command that reproduces the original defect, the command that shows the fix.
-See `docs/architecture/adr/0015-review-cost-discipline.md`.
+always requires a separate-context Reviewer — including a fix that answers a
+Reviewer finding on a contract-file change; the short form below documents
+that fix, it does not exempt it from separate-context approval.
+
+For a review finding on a **non-contract-file** change: do not restate the
+whole change's verification history. Use `docs/templates/self-review.md`'s
+short form: which finding this answers, the command that reproduces the
+original defect, the command that shows the fix. See
+`docs/architecture/adr/0015-review-cost-discipline.md`.
 
 ## Reopening Gates
 
