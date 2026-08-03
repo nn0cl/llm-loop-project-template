@@ -65,10 +65,9 @@ change was safe — it is an unreviewed change, full stop, and must be treated
 as such until a separate-context Reviewer actually examines it. This is not a
 hypothetical: `docs/architecture/adr/0015-review-cost-discipline.md` was
 merged on exactly this instruction, and a later retroactive review rejected
-it for that reason among others (see
-`docs/collaboration/reviews/2026-08-03-review-cost-discipline-review.md`,
-Finding 1). That incident is not precedent for a future skip; it is the
-reason this paragraph exists.
+it for that reason among others (see that ADR's own Status section). That
+incident is not precedent for a future skip; it is the reason this paragraph
+exists.
 
 ## Traceability Rule
 

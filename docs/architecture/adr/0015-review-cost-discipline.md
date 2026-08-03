@@ -5,7 +5,6 @@
 Accepted, following correction. This ADR originally merged (as part of pull
 request #11, tag `v2.1.0`) on a Director instruction to skip independent
 Reviewer approval for that one change. A retroactive fresh-context review
-(`docs/collaboration/reviews/2026-08-03-review-cost-discipline-review.md`)
 rejected that as invalid: no provision in this contract grants the Director
 authority to waive ADR 0006's separate-context Reviewer requirement, and
 disclosing the skip openly — which the original version of this section did
@@ -14,9 +13,8 @@ closed directly in
 `docs/collaboration/prompt-instruction-change-control.md`: no Director
 instruction waives the separate-context requirement, and this incident is
 not precedent for a future one. This ADR's content (rules 1-4 below) was
-resubmitted for genuine independent review under
-`docs/collaboration/agreements/2026-08-03-review-cost-discipline-correction.md`
-(DA-2026-08-03-03) before being treated as Accepted.
+resubmitted for genuine independent review under DA-2026-08-03-03 before
+being treated as Accepted.
 
 ## Context
 
