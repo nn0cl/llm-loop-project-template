@@ -11,10 +11,11 @@ tooling that leave every rule intact.
 ## v1.1.0 — Independent review, and the rules it produced (2026-08-02)
 
 Reviewed and approved by a Reviewer persona in a separate context, on a
-different model, after six rounds. Review records:
-`docs/collaboration/reviews/2026-08-02-mirror-parity-and-v101-review.md`,
-`2026-08-02-mirror-parity-review-2.md`,
-`2026-08-02-contract-consistency-review.md` through `-review-6.md`.
+different model, after six rounds. Review records under
+`docs/collaboration/reviews/`: `2026-08-02-mirror-parity-and-v101-review.md`,
+`2026-08-02-mirror-parity-review-2.md`, and
+`2026-08-02-contract-consistency-review.md` through
+`2026-08-02-contract-consistency-review-6.md`.
 
 Two rules were added and five defects fixed. `v1.0.1` was drafted for the fixes
 alone but never tagged, and no commit isolates them, so they shipped inside
