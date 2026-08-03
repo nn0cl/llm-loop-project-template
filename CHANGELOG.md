@@ -8,16 +8,24 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
-## v1.1.0 — Independent review, and the rules it produced (unreleased)
+## v1.1.0 — Independent review, and the rules it produced (2026-08-02)
 
-**Unreleased.** No `v1.1.0` tag exists yet; the released edition is still
-`v1.0.0`, which is what both READMEs banner. This section is tagged only after
-an approving independent review, and the README banners move at the same time.
-Until then, treat everything below as landed on `main` but unreleased.
+Reviewed and approved by a Reviewer persona in a separate context, on a
+different model, after six rounds. Review records:
+`docs/collaboration/reviews/2026-08-02-mirror-parity-and-v101-review.md`,
+`2026-08-02-mirror-parity-review-2.md`,
+`2026-08-02-contract-consistency-review.md` through `-review-6.md`.
 
 Two rules were added and five defects fixed. `v1.0.1` was drafted for the fixes
-alone but never tagged, and no commit isolates them, so they will ship inside
+alone but never tagged, and no commit isolates them, so they shipped inside
 `v1.1.0` rather than as a release of their own.
+
+The consistency checker below went through six review rounds before approval —
+four of its own rejections were the checker claiming a check it did not
+actually have, the shape ADR 0013 warns a passing Preflight can hide. Its
+`ENTRY_DOCUMENT_ADR_STATEMENTS` design and its documented "What this cannot
+check, and who does" section are the direct result of that process, not
+initial design choices.
 
 ### New rules
 

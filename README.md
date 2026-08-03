@@ -3,7 +3,7 @@
 [日本語ガイド](README.ja.md) · [Quickstart: adopting / uninstalling this template](QUICKSTART.md)
  · [Changelog](CHANGELOG.md)
 
-**Contract edition: v1.0.0.** The operating contract in this repository is
+**Contract edition: v1.1.0.** The operating contract in this repository is
 the first edition — a set an adopting project can install and cite by
 version. See [CHANGELOG.md](CHANGELOG.md) for what an edition covers.
 
