@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0003
 - GitHub issue: N/A
-- Status: in_progress
+- Status: resolved
 - Phase: Minor Fix Path
 - Type: review-finding
 - Priority: low
@@ -55,7 +55,8 @@
 - Changed files: `scripts/check-contract-consistency.py`.
 - Deterministic verification output: recorded in
   `docs/collaboration/reviews/2026-08-02-liss-0003-preflight.md`.
-- Separate Reviewer closure record: pending.
+- Separate Reviewer closure record:
+  `docs/collaboration/reviews/2026-08-02-liss-0003-review.md`.
 
 ## Dependencies
 
@@ -98,4 +99,5 @@ N/A — planning size S, single attempt.
 
 ## Verification
 
-- See the covering trace and Preflight record.
+- See the covering trace, the Preflight record, and the Reviewer's
+  approval at `docs/collaboration/reviews/2026-08-02-liss-0003-review.md`.
