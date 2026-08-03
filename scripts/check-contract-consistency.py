@@ -296,12 +296,25 @@ def check_references(repo: str, failures: Failures) -> None:
                     if target.startswith(("http://", "https://", "#", "mailto:")):
                         continue
                     target = target.split("#")[0]
-                    # `[...](...)` markdown-link syntax is not unique to
-                    # markdown: a regex character class followed by a capture
-                    # group, e.g. `[–-](\d{4})`, parses the same way. Require
-                    # the target to look like an actual path — a slash or a
-                    # recognized file extension — before treating it as one.
-                    if "/" not in target and not target.endswith(SCANNED_SUFFIXES):
+                    # Square-bracket-then-paren syntax is not unique to
+                    # markdown links: a regex character class followed by a
+                    # capture group parses the same way, and so does an
+                    # ellipsis illustrating that fact in a comment — both of
+                    # which this exact paragraph has, at different times,
+                    # produced as a false positive against its own source.
+                    # Accept only what a path or filename is actually made
+                    # of — word characters, dot, slash, hyphen, tilde — and
+                    # require at least one alphanumeric character, so a
+                    # target of dots or slashes alone (an ellipsis, a bare
+                    # separator) is not mistaken for one either. An earlier,
+                    # narrower version required a slash or a recognized
+                    # extension, which also rejected `LICENSE` — a real,
+                    # extensionless, currently correct reference in this
+                    # repository's own README — and left it silently
+                    # unchecked.
+                    if not re.fullmatch(r"[\w./~-]+", target) or not re.search(
+                        r"[A-Za-z0-9]", target
+                    ):
                         continue
                     targets.append(target)
                 for match in CODE_PATH.finditer(line):
