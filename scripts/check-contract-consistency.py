@@ -64,11 +64,21 @@ What remains is structural, not a bug waiting for the next round:
   * **Anything about a document this repository does not have.** In an adopting
     project the entry documents are the project's own, and checks over them are
     skipped there.
+  * **Proximity is not the same sentence.** `EXTRA_MIRRORED_RULES` entries that
+    use a `.{0,N}` proximity window between two terms (for example, "Reviewer"
+    near "whole work plan") can be satisfied by two unrelated mentions that
+    happen to sit within the window rather than a genuine connection between
+    them. Review found a working construction of this on the first entry that
+    used the pattern. Tightening the window only narrows the gap, the same way
+    narrowing the ADR-range connective list did before that check was replaced
+    outright — proximity matching is meaning-inference with extra steps, and
+    belongs on this list rather than being chased through another round.
 
 Each of these is a reading, or a registration gap, not a comparison the script
-makes. The first two belong to the Reviewer persona. The third is why this
-list exists at all: read it before trusting a green run on a document that
-states an ADR range this script does not already know about.
+makes. The first two, and the proximity limit, belong to the Reviewer persona.
+The ADR-range registration gap is why this list exists at all: read it before
+trusting a green run on a document that states an ADR range this script does
+not already know about.
 
 Treat a green run as "no mechanical drift found in what this script knows to
 compare", never as "the contract is consistent". The second claim is a

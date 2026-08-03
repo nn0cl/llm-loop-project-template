@@ -10,8 +10,7 @@ Reviewer's finding that this submission skipped it — see
 - Covering design agreement:
   `docs/collaboration/agreements/2026-08-03-work-plan-scoped-governance.md`
 - Branch: `process/work-plan-scoped-governance`, commit `2c6f219` at the time
-  of the review this record answers; `1152e73` and later carry the fixes
-  below.
+  of the review this record answers; `9a87e44` carries the fixes below.
 - Producer of this Preflight: Implementer, Claude Opus 5 via Claude Code.
   Per ADR 0013 this producer cannot review the same change.
 
