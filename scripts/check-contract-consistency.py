@@ -148,8 +148,13 @@ EXTRA_MIRRORED_RULES = {
     # ADR 0014: self-review replaces per-phase separate-context review inside
     # a work plan; the Reviewer operates once, at the work plan's close.
     "Self-review (ADR 0014)": r"[Ss]elf-review",
+    # Not just "whole work plan" alone: that phrase can appear with no
+    # connection to review at all. Require "Reviewer" within the same
+    # neighborhood as "whole ... work plan", or the compound phrase
+    # "work-plan-level Reviewer" directly.
     "Work-plan-level Reviewer (ADR 0014)": r"work.plan.level Reviewer|"
-        r"whole (?:completed )?work plan",
+        r"Reviewer.{0,80}whole (?:completed )?work plan|"
+        r"whole (?:completed )?work plan.{0,80}Reviewer",
     "Work-plan close (ADR 0014)": r"[Ww]ork.[Pp]lan [Cc]lose",
 }
 
