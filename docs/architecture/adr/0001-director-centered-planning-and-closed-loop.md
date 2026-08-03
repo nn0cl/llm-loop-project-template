@@ -2,8 +2,14 @@
 
 ## Status
 
-Accepted. This is the governing decision of the first edition; every other ADR
-in this set operates under it.
+Accepted. This is the governing decision of the first edition for the design
+phase, the persona set, and the invariants; every other ADR in this set
+operates under it. Its execution-loop provisions — a Reviewer approval at
+every phase transition, in a separate context — are superseded by
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+on 2026-08-03. Read this ADR's Decision and Consequences as the record of
+what was first accepted; for the execution loop as it currently runs, ADR
+0014 is the rule in force.
 
 ## Context
 

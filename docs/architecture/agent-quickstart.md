@@ -105,15 +105,21 @@ agreement.
 - Phase 2: minimum implementation only.
 - Phase 3: refactor and verification gap summary.
 
-Phase transitions require Reviewer approval. Do not start Phase 2 from Phase 1
-tests that no separate context has reviewed.
+Phase transitions within an issue require self-review — the Implementer
+reviewing its own phase transition, not a separate context. Do not start
+Phase 2 from Phase 1 tests that have not been self-reviewed on the record.
+Once every issue in the work plan is self-reviewed and complete, the whole
+work plan requires exactly one Reviewer approval from a separate context
+before it closes.
 
 Approval is typed and scoped: `Specification conformance`, `Phase
 correctness`, `Boundary conformance`, `Evidence sufficiency`. Never infer one
-from another. Every approval must satisfy context separation, the
-deterministic precondition, and the falsification burden — see
-`docs/collaboration/ai-human-scheme.md`. A proposed ADR is not implementation
-authorization.
+from another. Every approval must satisfy the deterministic precondition and
+the falsification burden; the Reviewer's work-plan-level approval must also
+satisfy context separation, which self-review is exempt from — see
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+and `docs/collaboration/ai-human-scheme.md`. A proposed ADR is not
+implementation authorization.
 
 Return to Architecture Path when a change introduces a subsystem, language,
 framework, datastore, concurrency or transaction boundary, authentication or
@@ -128,7 +134,8 @@ approved scope, clear from existing behavior or specification, low risk, and
 verified in the same attempt.
 
 Omitting a separate planning artifact does not permit skipping Phase 1, Phase
-2, Phase 3, deterministic verification, or Reviewer approval gates.
+2, Phase 3, deterministic verification, self-review, or the work-plan-level
+Reviewer approval gate.
 
 When a bug is size `M` or larger, needs a second execution attempt, changes
 boundaries, or remains ambiguous, record it in a local issue or active work

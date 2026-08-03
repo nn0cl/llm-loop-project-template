@@ -16,18 +16,32 @@ approval authority, requires an ADR.
 
 ```text
 Direction  ->  Planner (with Director)  ->  Specifier  ->  DESIGN AGREEMENT
+                                                          (one work plan)
                                                                  |
-                                            (human involvement ends here)
+                                            (human involvement pauses here)
                                                                  |
                                             +--------------------+
                                             v
-                                   Implementer  <-->  Reviewer
+                                   Implementer (self-reviews each
+                                   issue's Red/Green/Refactor)
+                                            |
+                                   all issues self-reviewed
+                                            |
+                                            v
+                                       Preflight
+                                            |
+                                            v
+                                       Reviewer (separate context,
+                                       whole work plan)
                                             |            |
                                             +---> Arbiter (on deadlock)
-                                                         |
-                                                         v
-                                                  Deterministic Tool
-                                                  (gates every approval)
+                                            |
+                                            v
+                                   WORK PLAN CLOSE (Director)
+                                            |
+                                            v
+                                  Deterministic Tool
+                                  (gates every approval, both layers)
 ```
 
 ## Core personas
@@ -68,32 +82,51 @@ against.
 
 ### Implementer
 
-Operates inside the closed execution loop.
+Operates inside the closed execution loop, on one issue at a time within the
+current work plan.
 
 - **Responsibilities**: execute the phase named for the task — Red, Green, or
-  Refactor — and record what was run and what it produced.
+  Refactor — record what was run and what it produced, and **self-review**
+  the phase transition before moving to the next phase. Self-review is
+  performed by the Implementer, in the same context that did the work; it is
+  not the Reviewer's separate-context approval.
 - **Inputs**: the design agreement; the specification for the task; the
   contract documents; the code in scope.
 - **Outputs**: the phase artifact (failing tests, minimal implementation, or
   behavior-preserving refactor); the recorded output of deterministic
-  verification; a statement of grounds for any judgment call made.
-- **Done when**: the phase artifact exists, deterministic verification has been
-  run and its output recorded, and every judgment call states its grounds.
-- **Must not**: issue its own approval, edit a specification to make its work
-  pass, or carry a judgment call forward without recording it.
+  verification; a self-review record naming the failure scenarios looked for
+  and why each does not occur; a statement of grounds for any judgment call
+  made.
+- **Done when**: the phase artifact exists, deterministic verification has
+  been run and its output recorded, the self-review record is complete, and
+  every judgment call states its grounds.
+- **Must not**: skip the self-review record and call a phase transition done;
+  edit a specification to make its work pass; carry a judgment call forward
+  without recording it; treat its own self-review as a substitute for the
+  work-plan-level Reviewer's approval, which it is not.
+
+Self-review satisfies two of the Reviewer's three constraints — the
+deterministic precondition and the falsification burden — but not context
+separation, which this layer does not require. See
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
 
 ### Reviewer
 
-Operates inside the closed execution loop, in a context separate from the one
-that produced the work under review. This separation is a hard requirement, not
-a preference.
+Operates once per work plan, after every issue in it has reached self-reviewed
+completion and passed Preflight Validation — in a context separate from the
+one that produced the work under review. This separation is a hard
+requirement, not a preference, and is not waived at this layer under any
+circumstance, including for changes to the agent operating contract files
+themselves (governed independently by ADR 0006).
 
-- **Responsibilities**: attempt to falsify the claim that the work satisfies
-  its specification and the contract, then approve or reject on the result.
-- **Inputs**: the artifacts under review; the specification; the contract
-  documents; the recorded deterministic verification output. **Not** the
-  reasoning the Implementer used to produce the work — that reasoning is not
-  admissible as justification.
+- **Responsibilities**: attempt to falsify the claim that the work plan's
+  issues satisfy their specifications and the contract, then approve or
+  reject on the result.
+- **Inputs**: the artifacts under review, across the whole work plan; the
+  specifications; the contract documents; the recorded deterministic
+  verification output, including each issue's self-review records. **Not**
+  the reasoning the Implementer used to produce the work — that reasoning is
+  not admissible as justification, self-review record or otherwise.
 - **Outputs**: a review record naming the failure scenarios searched for, the
   grounds on which each does not occur, and the resulting decision. Written
   with `docs/templates/review-record.md` and stored under
@@ -101,7 +134,8 @@ a preference.
 - **Done when**: the record would let a third party re-run the same search.
 - **Must not**: approve without recorded deterministic verification output;
   approve with "no problems found" and no named scenarios; review work it
-  produced itself.
+  produced itself; treat an issue's self-review record as a substitute for
+  its own independent falsification attempt.
 
 Running the Reviewer on a different model or tool than the Implementer is
 recommended, to reduce shared systematic bias. It is not required.
@@ -143,9 +177,12 @@ outputs, done-when, and must-not.
 
 Constraints on added personas:
 
-- An added persona may not be given approval authority inside the loop unless
-  it satisfies every Reviewer constraint: context separation, deterministic
-  precondition, and falsification burden.
+- An added persona may not be given work-plan-level approval authority (the
+  Reviewer's role) unless it satisfies every Reviewer constraint: context
+  separation, deterministic precondition, and falsification burden. An added
+  persona may participate in issue-level self-review under the same terms as
+  the Implementer — deterministic precondition and falsification burden, not
+  context separation.
 - An added persona may not weaken the three invariants — documented decisions,
   evidenced execution, grounded claims.
 - An added persona is scoped to the plan that defines it. Reuse across plans
@@ -153,17 +190,29 @@ Constraints on added personas:
 
 ## Persona hygiene
 
-- One persona at a time. An agent that is implementing is not also reviewing;
-  switching posture mid-artifact defeats the separation the review depends on.
+- One persona at a time. An agent that is implementing is not also acting as
+  the work-plan-level Reviewer; switching posture mid-artifact defeats the
+  separation that approval depends on. Self-review is not an exception to
+  this — it is the Implementer persona reviewing its own phase transition,
+  named as self-review, not as a Reviewer approval.
 - State the active persona in the design note and in the work trace. A record
   that does not name its persona cannot be audited against these rules.
-- A persona boundary is not a formality. If the same context produced and
-  approved the work, the approval does not count, regardless of what the record
-  says.
+- A persona boundary is not a formality **for the Reviewer's approval**. If
+  the same context that produced the work also issues the Reviewer's
+  work-plan-level approval, the approval does not count, regardless of what
+  the record says. This does not apply to Implementer self-review, which is
+  same-context by design under
+  `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+  — but a self-review record still must not be relabeled as a Reviewer
+  approval.
 
 ## Related documents
 
 - `docs/collaboration/ai-human-scheme.md` — roles, loop, and approval model.
-- `docs/collaboration/design-agreement.md` — the one gate the Director signs.
+- `docs/collaboration/design-agreement.md` — the two gates the Director
+  signs, one per work plan.
 - `docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
-  — the decision these personas implement.
+  — the design phase and the invariants these personas implement.
+- `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+  — the execution-loop granularity: self-review inside a work plan, one
+  Reviewer pass at its close.

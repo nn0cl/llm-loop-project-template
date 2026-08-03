@@ -83,11 +83,12 @@ APIs)?>`
 
 ## Accepted Decisions
 
-The first edition ships thirteen process ADRs. `0001` governs; the rest operate
-under it.
+The first edition ships fourteen process ADRs. `0001` governs the design
+phase and invariants; `0014` governs execution-loop granularity and
+supersedes `0001` on that point; the rest operate under both.
 
-- `adr/0001-director-centered-planning-and-closed-loop.md` — the governing
-  decision: who plans, who approves, and what closes the loop.
+- `adr/0001-director-centered-planning-and-closed-loop.md` — design phase,
+  personas, and the invariants.
 - `adr/0002-design-first-ai-request-routing.md`
 - `adr/0003-input-output-reasoning-contracts.md`
 - `adr/0004-human-readable-source-code-quality.md`
@@ -100,6 +101,9 @@ under it.
 - `adr/0011-external-resource-adoption-contract.md`
 - `adr/0012-review-issues-minor-fix-and-model-routing.md`
 - `adr/0013-preflight-validation-before-independent-review.md`
+- `adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md` — the
+  execution-loop granularity: self-review inside a work plan, one Reviewer
+  pass at its close.
 
 ## Remaining Technology Evaluation
 

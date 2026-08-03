@@ -81,9 +81,30 @@ true, including when a second attempt is needed.
 
 ## Preflight Validation
 
-Run deterministic checks before independent review. Record `pass` or `fail`,
-the exact checks and outputs, scope result, and next action. `pass` permits
-submission only; it never replaces the separate Reviewer.
+Run deterministic checks before independent review, over the whole work plan
+once every issue is self-reviewed and complete. Record `pass` or `fail`, the
+exact checks and outputs, scope result, and next action. `pass` permits
+submission only; it never replaces the separate-context Reviewer.
+
+## Work-Plan Review
+
+Reviewer's approval record: <link>
+
+Findings, if any, tracked as `Type: review-finding` local issues:
+
+| Issue | Status | Resolution |
+| --- | --- | --- |
+|  |  |  |
+
+## Work-Plan Close
+
+Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
+one combined Director action, after the Reviewer approves:
+
+- Date:
+- Result read: <what the Director found on reading the approved work>
+- Next direction: <the next work plan's direction, or "engagement ends">
+- New design agreement (if any): <link>
 
 ## Risks
 

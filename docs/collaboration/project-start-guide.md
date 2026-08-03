@@ -18,8 +18,8 @@ inside this process, based on:
 - accepted EARS/Gherkin specifications.
 - decisions recorded in a design agreement with the Director.
 - ADRs when the decision affects architecture or long-term policy.
-- Phase 1 tests reviewed and approved by a separate context before Phase 2
-  implementation.
+- Phase 1 tests self-reviewed before Phase 2 implementation, with the whole
+  work plan approved once by a separate-context Reviewer at its close.
 
 In other words, the template must not ship a domain model. The adopted project
 uses the template workflow to discover and implement its own domain model.
@@ -88,7 +88,8 @@ For each feature:
    agreement.
 8. Run deterministic verification when available.
 9. Record trace and cost/reasoning control signals when required.
-10. Stop at phase gates for Reviewer approval from a separate context.
+10. Self-review each phase transition; stop at the work plan's completion for
+    Reviewer approval from a separate context, once.
 
 ## Stop and Reopen
 

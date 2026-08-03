@@ -19,17 +19,21 @@
 このプロジェクトが人間を取り除くのは、開発**ループ**からです。プロジェクト
 全体からではありません。
 
-**人間がいる場所。** Director が方向性を示し、Planner ペルソナとの対話に
-よって詳細な計画を組み立て、設計フェーズを閉じる設計合意（design agreement）
-に至ります。計画は完成した成果物のレビューではなく対話であり、合意は相互的
-です——Director は「この計画が自分の作りたいものを表している」ことに合意し、
-AI は「これ以上の解釈なしに実行可能である」ことに合意します。
+**人間がいる場所。** Director が1つのワークプランの方向性を示し、Planner
+ペルソナとの対話によって詳細な計画を組み立て、設計フェーズを閉じる設計合意
+（design agreement）に至ります。計画は完成した成果物のレビューではなく対話
+であり、合意は相互的です——Director は「この計画が自分の作りたいものを表し
+ている」ことに合意し、AI は「これ以上の解釈なしに実行可能である」ことに合意
+します。Director はもう一度、ワークプラン完了時に登場します——AI が承認した
+成果物を読み、同じ行為の中で次の方向性を述べます。
 
-**人間がいない場所。** その合意より後のすべてです。phase transition の承認も、
-実装前の test レビューも、成果物への sign-off もありません。ループ内の
-レビューと承認は AI ペルソナ——Implementer、Reviewer、Arbiter——が行い、
-ループは人間のために止まりません。止まるのは、何が未決着かを名指しして
-設計合意を再開するときだけです。
+**人間がいない場所。** その2点の間のすべてです。phase transition の承認も、
+issue 単位の test レビューも、成果物単位の sign-off もありません。issue 内の
+phase transition は Implementer が自己コンテキストでレビューし、ワークプラン
+内のすべての issue が完了したら、別コンテキストの Reviewer が1回だけワーク
+プラン全体を審査します。ループは、この完了時点まで人間のために止まりません。
+それより前に止まるのは、何が未決着かを名指しして設計合意を再開するときだけ
+です。
 
 検証したい主張はこうです。AI 支援開発における正しさは、ループに立つ人間では
 なく、書かれた契約とその検証から来る。閉じたループが耐えうる成果物を出すの
@@ -39,17 +43,28 @@ AI は「これ以上の解釈なしに実行可能である」ことに合意�
 
 ### AI の自己承認を形骸化させない仕組み
 
-AI が自分の成果物を承認することは、制約がなければ無価値です。ループ内で
-発行されるあらゆる承認に次の 3 つの制約がかかり、どれか一つでも満たさない
-承認は承認として数えません。
+AI が自分の成果物を承認することは、制約がなければ無価値です。self-review
+（issue 内の phase transition）と Reviewer の承認（ワークプラン単位、1回）の
+どちらにも次の3つの制約がかかりますが、コンテキスト分離だけは self-review
+では意図的に免除されます。
 
 1. **コンテキスト分離。** Reviewer は成果物を作ったコンテキストとは別の
    コンテキストで動き、artifact・仕様・契約文書・ツール出力だけを受け取り
-   ます。Implementer の推論は正当化根拠として採用されません。
+   ます。Implementer の推論は正当化根拠として採用されません。ワークプラン
+   内の self-review だけがこの制約を免除されます——Reviewer 自身の承認と、
+   契約ファイルの変更には適用されません。
 2. **決定性の前提条件。** 決定性検証の出力が記録されていない承認は出せません。
    AI の判断は test・linter・境界検査への上乗せであって、代替ではありません。
-3. **反証負荷。** Reviewer は「探した失敗シナリオ」と「それが起きない根拠」を
-   名指しすることで承認します。「問題は見つからなかった」は承認ではありません。
+3. **反証負荷。** 「探した失敗シナリオ」と「それが起きない根拠」を名指しする
+   ことで承認します。「問題は見つからなかった」は、どちらの層でも承認では
+   ありません。
+
+self-review はコンテキスト分離をレビュー頻度と引き換えにしています——
+Implementer が毎回の phase transition で自分の作業を見直す代わりに、別
+コンテキストがワークプラン完了時にまとめて1回見直します。このトレードオフ
+の根拠は
+[ADR 0014](docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md)
+を参照してください。
 
 ### 変わらないもの
 
@@ -62,8 +77,10 @@ AI が自分の成果物を承認することは、制約がなければ無価�
 3. **あらゆる主張は根拠を述べる。**
 
 決定記録は
-[ADR 0001](docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md)。
-運用モデルの定義は
+[ADR 0001](docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md)
+（設計フェーズとペルソナ）と
+[ADR 0014](docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md)
+（実行ループの粒度）にあります。運用モデルの定義は
 [ai-human-scheme.md](docs/collaboration/ai-human-scheme.md)、
 [personas.md](docs/collaboration/personas.md)、
 [design-agreement.md](docs/collaboration/design-agreement.md) にあります。
@@ -100,9 +117,13 @@ LLM provider、ドメインモデルを事前には決めません。それら�
 - 仕様なしで実装しない。
 - Phase を飛ばさない。
 - 実行なしの前に設計合意を必ず記録する。
-- ループ内の承認は Reviewer ペルソナが別コンテキストで行う。
-- 決定性検証の出力なしに承認しない。成果物を作ったコンテキストは承認しない。
-- 人間 Director が承認するのは設計合意ただ一つ。細かい承認はしない。
+- issue 内の phase transition は Implementer が自己コンテキストで
+  self-review する。ワークプラン単位の承認は Reviewer ペルソナが別
+  コンテキストで1回だけ行う。
+- 決定性検証の出力なしに承認しない。self-review でも決定性検証と反証負荷は
+  免除されない。
+- 人間 Director が関わるのはワークプランごとに2回——最初の方向性と、完了
+  後のレビュー＋次の方向性（1つの行為に統合）。それ以外の細かい承認はしない。
 - 記録は 3 か所に残す。設計合意は `docs/collaboration/agreements/`、
   Reviewer の判断は `docs/collaboration/reviews/`、作業の trace は
   `docs/collaboration/traces/`。
@@ -257,11 +278,16 @@ scripts/copy-ai-collaboration-files.sh --target /path/to/existing-repo --dry-run
 2. `docs/architecture/agent-quickstart.md` を読んで path を選ぶ。
 3. Feature Path では target spec と関連 architecture document を読む。
 4. path に合った design note を出す。
-5. 承認された phase だけを実行する。
+5. 計画された phase だけを実行する。
 6. deterministic verification を走らせる。
-7. 必要なら trace と cost/reasoning control を残す。
-8. phase gate で Reviewer ペルソナの承認を別コンテキストで受け、その判断を
+7. phase transition ごとに self-review を記録する（決定性検証の出力と
+   反証シナリオ、コンテキスト分離は不要）。
+8. 必要なら trace と cost/reasoning control を残す。
+9. ワークプラン内のすべての issue が self-review 完了したら Preflight を
+   走らせ、Reviewer ペルソナの承認を別コンテキストで1回受け、その判断を
    `docs/collaboration/reviews/` に review record として残す。
+10. Reviewer 承認後、Director が結果を読み、次の方向性を同じ行為の中で
+    述べる（ワークプラン close）。
 
 ドメインモデルは、この流れの中で決めて構いません。むしろ導入後のプロジェクト
 では、仕様と review 済み test に基づいて domain model を育てることが想定されて

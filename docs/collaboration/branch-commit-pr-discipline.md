@@ -122,8 +122,11 @@ When starting a new feature:
 3. create or update the design intake.
 4. create a feature branch.
 5. add Phase 1 tests only.
-6. obtain Reviewer approval from a separate context.
-7. continue with Phase 2 on the same feature branch or a clearly linked branch.
+6. self-review the Red state — deterministic output, named failure scenarios.
+7. continue with Phase 2 on the same feature branch or a clearly linked
+   branch. The separate-context Reviewer sees the whole work plan once, at
+   its close — see
+   `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
 
 Recommended command shape:
 

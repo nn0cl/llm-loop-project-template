@@ -95,9 +95,10 @@ Expected result:
 
 ### Director
 
-The Director gets one substantive gate — the design agreement — instead of a
-queue of per-artifact approvals, plus ADR hooks, handoff records, and
-artifacts that can be inspected at any time without blocking the loop.
+The Director gets two substantive gates per work plan — the design agreement
+and the work-plan close — instead of a queue of per-artifact approvals, plus
+ADR hooks, handoff records, and artifacts that can be inspected at any time
+without blocking the loop.
 
 ### AI Coding Agents
 

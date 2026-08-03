@@ -21,18 +21,21 @@ keeps generated work correct.
 This project removes human presence from the development *loop*. Not from the
 project — from the loop.
 
-**Where the human is.** The Director states the direction, builds the detailed
-plan with the Planner persona through dialogue, and reaches an explicit design
-agreement that closes the design phase. Planning is a conversation, not a
-review of a finished artifact, and the agreement is mutual: the Director agrees
-the plan describes what they want built, and the AI agrees it is executable
-without further interpretation.
+**Where the human is.** The Director states the direction for a work plan,
+builds the detailed plan with the Planner persona through dialogue, and
+reaches an explicit design agreement that closes the design phase. Planning is
+a conversation, not a review of a finished artifact, and the agreement is
+mutual: the Director agrees the plan describes what they want built, and the
+AI agrees it is executable without further interpretation. The Director is
+present again once, at the work plan's close: reading the AI-approved result
+and stating the next direction, in the same action.
 
-**Where the human is not.** Everything after that agreement. No
-phase-transition approval, no test review before implementation, no sign-off on
-deliverables. Review and approval inside the loop are performed by AI personas —
-Implementer, Reviewer, Arbiter — and the loop does not stop for a human. It
-stops only to reopen the design agreement, naming what is unsettled.
+**Where the human is not.** Between those two points. No phase-transition
+approval, no per-issue test review, no per-deliverable sign-off. An issue's
+phase transitions are self-reviewed by the Implementer; once every issue in
+the work plan is done, one Reviewer pass in a separate context covers the
+whole plan. The loop does not stop for a human until that close. It stops
+early only to reopen the design agreement, naming what is unsettled.
 
 The claim under test is that correctness in AI-assisted development comes from
 the written contract and its verification, not from a human standing in the
@@ -43,20 +46,29 @@ rather than absorbed by a human patching them in real time.
 
 ### What keeps AI self-approval honest
 
-An AI approving its own work is worthless unless it is constrained. Three
-constraints apply to every approval issued inside the loop, and an approval
-failing any of them does not count:
+An AI approving its own work is worthless unless it is constrained. Every
+approval — self-review within an issue, or the Reviewer's approval of a whole
+work plan — must satisfy two constraints, and the Reviewer's approval must
+satisfy a third that self-review is deliberately exempt from:
 
 1. **Context separation.** The Reviewer runs in a context separate from the one
    that produced the work, and receives only artifacts, specifications,
    contracts, and tool output. The Implementer's reasoning is not admissible as
-   justification.
+   justification. Waived only for an Implementer's self-review of its own
+   phase transitions inside a work plan — never for the Reviewer's
+   work-plan-level approval, and never for changes to the contract itself.
 2. **Deterministic precondition.** No approval without recorded deterministic
    verification output. AI judgment is additive to tests, linters, and boundary
    checks — never a substitute for them.
-3. **Falsification burden.** The Reviewer approves by naming the failure
-   scenarios it searched for and the grounds on which each does not occur. "No
-   problems found" is not an approval.
+3. **Falsification burden.** Approval requires naming the failure scenarios
+   searched for and the grounds on which each does not occur, at either layer.
+   "No problems found" is not an approval.
+
+Self-review trades context separation for review frequency — the Implementer
+reviews its own work at every phase transition instead of a separate context
+reviewing it once, less often, at the work-plan's close. See
+[ADR 0014](docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md)
+for the tradeoff this accepts and why.
 
 ### What did not change
 
@@ -232,9 +244,9 @@ architecture layers. Before using it on a real project:
    stack-specific jobs (lint, test, dependency policy) once those tools
    exist.
 6. Renumber/extend `docs/architecture/adr/` as real architecture decisions are
-   made. The thirteen ADRs included here (0001-0013) describe the
+   made. The fourteen ADRs included here (0001-0014) describe the
    collaboration process itself and normally do not need to change; number
-   your project's own decisions from 0014 up, so a later template update does
+   your project's own decisions from 0015 up, so a later template update does
    not collide with them.
 
 ## Introduce into an existing repository
@@ -279,13 +291,13 @@ target project's accepted architecture or feature specifications.
 └── docs/
     ├── at-tdd/process.md           # phase discipline
     ├── collaboration/              # process rules (scheme, personas, DoD, privacy, branching, ...)
-    │   ├── agreements/             # design agreement records (the one human gate)
-    │   ├── reviews/                # Reviewer persona decisions (approve/reject records)
+    │   ├── agreements/             # design agreement records (human gate 1, per work plan)
+    │   ├── reviews/                # Reviewer persona decisions (once per work plan)
     │   └── traces/                 # AI work trace log (per-task audit trail)
     ├── templates/                  # design agreement, review record, design intake, handoff, trace, issue, ADR, Gherkin
     │   └── examples/               # filled-in stack-specific examples, for reference only
     ├── architecture/               # Clean Architecture rules, quickstart, readiness checklist
-    │   └── adr/                    # architecture decision records (0001-0013 = process ADRs)
+    │   └── adr/                    # architecture decision records (0001-0014 = process ADRs)
     ├── specs/                      # EARS/Gherkin feature specifications
     ├── issues/                     # local issue files (LISS-0000 style)
     ├── work-plans/                 # multi-issue work plans

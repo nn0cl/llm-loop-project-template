@@ -7,10 +7,12 @@ AT-TDD is not treated here as a separate industry-standard method name. In this
 template, it means:
 
 - acceptance specifications drive the first tests.
-- reviewed failing tests drive the minimum implementation.
+- self-reviewed failing tests drive the minimum implementation.
 - refactoring happens only after verified Green.
-- phase transitions require Reviewer approval in a separate context, not human
-  approval.
+- phase transitions within an issue are self-reviewed by the Implementer, not
+  approved by a separate-context Reviewer or by a human; the Reviewer
+  operates once, over the whole work plan, at its close. See
+  `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
 
 The workflow combines:
 
@@ -75,9 +77,11 @@ Rules:
   and reasoning evidence contracts.
 - Deterministic tools should be used instead of AI for formatting, linting,
   dependency checks, migration ordering checks, and test execution.
-- Phase transitions require Reviewer approval, issued under the three
-  constraints: context separation, deterministic precondition, and
-  falsification burden.
+- Phase transitions within an issue require self-review, issued under two of
+  the three constraints: deterministic precondition and falsification burden
+  (context separation is waived at this layer). The work plan as a whole
+  requires Reviewer approval, once, under all three constraints, before it
+  closes.
 
 ## Mandatory `[DESIGN CHECK]`
 
@@ -124,32 +128,34 @@ Red may mean:
 
 Phase 1 exit gate:
 
-- The Reviewer persona, running in a context separate from the one that wrote
-  the tests, reviews and accepts the failing tests before Phase 2 starts. The
-  review record names the failure scenarios searched for and cites the
-  deterministic verification output showing the Red state.
+- The Implementer self-reviews the failing tests before Phase 2 starts,
+  naming the failure scenarios looked for and citing the deterministic
+  verification output showing the Red state. Not a separate-context review —
+  see
+  `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
 
 ## Phase 2: Green
 
-Purpose: pass reviewed tests with the minimum production code.
+Purpose: pass the tests with the minimum production code.
 
 Allowed:
 
 - Domain objects required by tests.
 - Use cases required by tests.
 - Ports required by tests.
-- Minimal adapters only when the reviewed test requires an integration boundary.
+- Minimal adapters only when a test requires an integration boundary.
 
 Forbidden:
 
-- Changing the reviewed tests to pass.
+- Changing the tests to pass.
 - Adding speculative behavior.
 - Adding persistence, UI, or provider details not required by tests.
 
 Phase 2 exit gate:
 
 - Deterministic verification is run when available.
-- The agent reports whether reviewed tests were changed. They should not be.
+- The agent reports whether tests were changed. They should not be.
+- Self-review, same terms as Phase 1.
 
 ## Phase 3: Refactor
 
@@ -171,5 +177,22 @@ Required final output:
 
 ### 残存リスク・検証の溝 (Verification Gap)
 - **AIが推測で補った部分、またはハルシネーションが発生しやすい箇所**: ...
-- **人間がコードレビューで重点的に見るべきポイント**: ...
+- **work-plan-level Reviewer が反証を試みるべきポイント**: ...
 ```
+
+Phase 3 exit: self-review, same terms as Phase 1 and 2.
+
+## Work-Plan Review and Close
+
+Once every issue in the work plan has reached self-reviewed completion:
+
+1. Run Preflight Validation over the whole work plan (per
+   `docs/architecture/adr/0013-preflight-validation-before-independent-review.md`).
+2. On `pass`, submit the work plan to the Reviewer persona, in a separate
+   context, for one review covering the whole plan. This is the only
+   separate-context review inside a work plan.
+3. Findings become `Type: review-finding` local issues, resolved through
+   Minor Fix Path or an escalation, as sized.
+4. Once the Reviewer approves, the Director reads the result and states the
+   next direction — or ends the engagement — in the same action. The next
+   work plan does not start without this.

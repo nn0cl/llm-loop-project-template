@@ -94,10 +94,12 @@ Minor bug; fixed within approved scope; separate plan not required
 
 Use the existing approved plan when the bug is already within its scope. If an
 accepted test already reproduces the bug, record the Red result with its
-deterministic output and obtain Reviewer approval before Phase 2. If no
-accepted test reproduces it, add a regression test in Phase 1 and obtain
-Reviewer approval before Phase 2. Create a new
-issue or work-plan entry when scope, expected behavior, dependencies, or
+deterministic output and self-review before Phase 2. If no accepted test
+reproduces it, add a regression test in Phase 1 and self-review before Phase
+2 — same as any issue-level phase transition, per
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`.
+Create a new issue or work-plan entry when scope, expected behavior,
+dependencies, or
 boundaries are uncertain. Record but do not mix a bug that is outside the
 current scope.
 

@@ -7,11 +7,15 @@ code and documents with minimal hallucination, strict phase control, and clear
 dependency boundaries for
 **<PROJECT_NAME: one-line description of the product and its domain>**.
 
-The human — the **Director** — is present for direction, planning, and the
-design agreement. After the design agreement, the execution loop is closed:
-you review and approve through AI personas, and the loop does not stop for
-human sign-off. The governing decision is
-`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
+The human — the **Director** — is present for one work plan's direction, and
+again at its close. Inside a work plan, you self-review your own phase
+transitions; once every issue is done, one Reviewer pass in a separate context
+covers the whole work plan before the Director closes it. The loop does not
+stop for per-phase or per-issue human sign-off. The governing decisions are
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
+(design phase, personas, invariants) and
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+(execution-loop granularity).
 
 ## Prime Directive
 
@@ -19,7 +23,9 @@ No execution without a recorded design agreement.
 
 No approval without deterministic verification output.
 
-No approval by the context that produced the work.
+No Reviewer approval by the context that produced the work. Self-review
+within a work plan is you reviewing your own phase transition — named as
+self-review, never issued or recorded as a Reviewer approval.
 
 No phase skipping.
 
@@ -164,7 +170,11 @@ and `docs/templates/agent-handoff.md` when stopping before completion.
 
 Execute only the phase named for the task in the plan under the covering
 design agreement. Do not "helpfully" generate production code ahead of the
-current phase.
+current phase. Per
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
+phase transitions within an issue are **self-reviewed**; the separate-context
+Reviewer operates once, over the whole work plan, after every issue in it is
+self-reviewed and complete.
 
 ### Phase 1: Red
 
@@ -177,12 +187,12 @@ Write failing tests only.
 - Report whether Red is expected as compile failure or failing assertion.
 - Record the deterministic verification output that shows the Red state.
 
-Phase 1 output is reviewed by the Reviewer persona in a separate context
-before Phase 2 starts.
+Before Phase 2 starts, self-review the Red state: record the deterministic
+output and the failure scenarios looked for.
 
 ### Phase 2: Green
 
-Write the smallest implementation that satisfies the reviewed tests.
+Write the smallest implementation that satisfies the tests.
 
 - Never edit the test to pass.
 - Keep logic out of UI components, framework request/command handlers,
@@ -190,12 +200,14 @@ Write the smallest implementation that satisfies the reviewed tests.
   adapters.
 - Do not add speculative exception handling, retry policies, caching, or
   enrichment logic.
-- Record the deterministic verification output that shows Green.
+- Record the deterministic verification output that shows Green, and
+  self-review before Phase 3.
 
 ### Phase 3: Refactor
 
 Improve design after Green without changing behavior. Record the deterministic
-verification output that shows behavior is preserved. Then output:
+verification output that shows behavior is preserved, self-review, and state
+the remaining verification gap. Then output:
 
 ```markdown
 ### 変更の要約 (PR Summary)
@@ -206,8 +218,28 @@ verification output that shows behavior is preserved. Then output:
 
 ### 残存リスク・検証の溝 (Verification Gap)
 - **AIが推測で補った部分、またはハルシネーションが発生しやすい箇所**: ...
-- **Reviewer ペルソナが反証を試みるべきポイント**: ...
+- **work-plan-level Reviewer が反証を試みるべきポイント**: ...
 ```
+
+Self-review at every phase requires the same two constraints as any
+approval — recorded deterministic verification output, and named failure
+scenarios with why each does not occur — but not context separation, which is
+waived only at this layer. A phase transition is not complete without its
+self-review record.
+
+### Work-Plan Review
+
+After every issue in the work plan is self-reviewed and complete, run
+Preflight Validation (below), then submit the whole work plan to the Reviewer
+persona in a separate context. This is the one point where a separate-context
+approval is required inside a work plan, and it covers the work plan as a
+whole, not one issue.
+
+### Work-Plan Close
+
+After the Reviewer approves, the Director reads the result and states the
+next direction, or ends the engagement, in the same turn — the second and
+last human gate per work plan. See `docs/collaboration/design-agreement.md`.
 
 ### Minor Fix Path
 
@@ -215,20 +247,22 @@ A review-finding correction may use this path only when it is planning size
 `S`, preserves the accepted specification, changes no specification, ADR,
 port, data model, dependency, or architecture boundary, and is expected to
 finish in one attempt. Record a compact design note, make the minimum
-correction, run deterministic verification, and obtain separate Reviewer
-confirmation. Escalate to Feature Path or Architecture Path when any
-condition stops being true, including a second attempt. Actionable review findings are tracked as
+correction (self-reviewed, like any issue-level rework), run deterministic
+verification, and obtain separate Reviewer confirmation. Escalate to Feature
+Path or Architecture Path when any condition stops being true, including a
+second attempt. Actionable review findings are tracked as
 `Type: review-finding` in `docs/issues/LISS-*.md`; their lifecycle is
 `proposed -> accepted -> in_progress -> resolved -> closed`. Use `wont_do` only
 with a grounded Arbiter decision record.
 
 ### Preflight Validation
 
-Before independent Reviewer review, run deterministic checks and record a
-`pass` or `fail` result with command output, scope result, and the next action.
-A `fail` returns the work to the Implementer. A `pass` only permits submission
-to the independent Reviewer; it is not approval and cannot set `wont_do` or
-`closed`. A lightweight model may assist with checklist and document-
+Before the work-plan-level Reviewer review, run deterministic checks and
+record a `pass` or `fail` result with command output, scope result, and the
+next action. A `fail` returns the work to the Implementer. A `pass` only
+permits submission to the independent Reviewer; it is not approval and cannot
+set `wont_do` or `closed`. A lightweight model may assist with checklist and
+document-
 consistency checks but may not issue final approval. The producer of Preflight
 cannot review the same change.
 
@@ -261,38 +295,56 @@ list with the project's actual external dependencies:
 
 ## Approval Model
 
-### The one human gate
+### The two human gates, per work plan
 
-The **design agreement**, reached before the loop starts. Mutual and explicit:
-the Director agrees the plan describes what they want built, and the AI agrees
-it is executable without further interpretation. Recorded under
-`docs/collaboration/agreements/`. See
-`docs/collaboration/design-agreement.md`.
+The **design agreement**, reached before the work plan's loop starts, and the
+**work-plan close**, reached after the Reviewer approves. Both are mutual and
+explicit:
 
-There is no other human gate. Do not create one, and do not use a reopening
-request as a disguised request for deliverable review.
+- At the start: the Director agrees the plan describes what they want built,
+  and the AI agrees it is executable without further interpretation. Recorded
+  under `docs/collaboration/agreements/`. See
+  `docs/collaboration/design-agreement.md`.
+- At the close: the Director reads the Reviewer-approved result and states the
+  next direction, or ends the engagement, in the same action.
 
-### AI approval inside the loop
+There is no per-phase and no per-issue human gate. Do not create one, and do
+not use a reopening request as a disguised request for deliverable review.
 
-Issued by the Reviewer persona. Treat these as distinct and never infer one
-from another: `Specification conformance`, `Phase correctness`,
+### Self-review, inside a work plan
+
+You validate your own phase transitions (Red to Green, Green to Refactor) in
+the same context that did the work. Self-review requires a deterministic
+precondition and a falsification burden, same as any approval, but not
+context separation — see "Constraints" below for which apply.
+
+### AI approval, once per work plan
+
+Issued by the Reviewer persona, in a separate context, over the whole
+completed work plan. Treat these as distinct and never infer one from
+another: `Specification conformance`, `Phase correctness`,
 `Boundary conformance`, `Evidence sufficiency`.
 
-Every approval must satisfy all three constraints:
+### Constraints
+
+Self-review satisfies (2) and (3) below; the Reviewer's work-plan-level
+approval must satisfy all three:
 
 1. **Context separation.** The Reviewer runs in a context separate from the one
    that produced the work, and receives only artifacts, specifications,
    contract documents, and deterministic output. The Implementer's reasoning is
-   not admissible as justification.
+   not admissible as justification. Waived only for self-review within a work
+   plan — never for the Reviewer's own approval, and never for contract-file
+   changes, which ADR 0006 governs independently.
 2. **Deterministic precondition.** No approval without recorded deterministic
    verification output. AI judgment is additive, never a substitute.
 3. **Falsification burden.** Name the failure scenarios searched for and the
    grounds on which each does not occur. "No problems found" is not an
-   approval.
+   approval, at either layer.
 
-An approval failing any constraint does not count, whatever the record says.
-Running the Reviewer on a different model or tool than the Implementer is
-recommended, not required.
+An approval failing any required constraint does not count, whatever the
+record says. Running the Reviewer on a different model or tool than the
+Implementer is recommended, not required.
 
 CI success is not an approval; it is one of the deterministic inputs an
 approval requires.

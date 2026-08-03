@@ -25,11 +25,16 @@ contract as `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and
 `.grok/rules/*.md`. If any of these disagree, treat it as a defect and return a
 reopening request rather than silently picking one.
 
-The human — the **Director** — is present for direction, planning, and the
-design agreement. After the design agreement, the execution loop is closed:
-review and approval inside it are performed by AI personas, and the loop does
-not stop for human sign-off. The governing decision is
-`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`.
+The human — the **Director** — is present for one work plan's direction, and
+again at its close. Inside a work plan, phase transitions are self-reviewed by
+the Implementer; once every issue is done, one Reviewer pass in a separate
+context covers the whole work plan before the Director closes it. The loop
+does not stop for per-phase or per-issue human sign-off. The governing
+decisions are
+`docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
+(design phase, personas, invariants) and
+`docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+(execution-loop granularity).
 
 ## Prime Directive
 
@@ -37,7 +42,9 @@ No execution without a recorded design agreement.
 
 No approval without deterministic verification output.
 
-No approval by the context that produced the work.
+No Reviewer approval by the context that produced the work. Self-review
+within a work plan is the Implementer reviewing its own phase transition —
+named as self-review, never issued or recorded as a Reviewer approval.
 
 No phase skipping.
 
@@ -59,11 +66,14 @@ trace. Core set — full definitions in `docs/collaboration/personas.md`:
 
 - **Planner** — builds the plan with the Director through dialogue.
 - **Specifier** — writes acceptance specifications.
-- **Implementer** — executes Red, Green, or Refactor.
-- **Reviewer** — falsifies, then approves or rejects, in a separate context.
+- **Implementer** — executes Red, Green, or Refactor, and self-reviews each
+  phase transition in the same context.
+- **Reviewer** — falsifies, then approves or rejects, once per work plan, in a
+  separate context.
 - **Arbiter** — settles deadlock between Implementer and Reviewer.
 
-One persona at a time. If you are implementing, you are not also reviewing.
+One persona at a time. If you are implementing, you are not also acting as
+the work-plan-level Reviewer.
 
 ## Mandatory Design Check
 
@@ -94,24 +104,34 @@ chain-of-thought. The common `[DESIGN CHECK]` shape is defined in `AGENTS.md`.
 
 ## Approval Model
 
-The one human gate is the **design agreement**, reached before the loop starts
-and recorded under `docs/collaboration/agreements/`. There is no other human
+The two human gates, per work plan: the **design agreement**, reached before
+the work plan's loop starts, and the **work-plan close**, reached after the
+Reviewer approves the completed work plan. Both recorded under
+`docs/collaboration/agreements/`. There is no per-phase and no per-issue human
 gate. Do not create one.
 
-Approvals inside the loop are issued by the Reviewer persona and are typed:
+**Self-review**, inside a work plan: the Implementer validates its own phase
+transitions in the same context that did the work. Requires a deterministic
+precondition and a falsification burden, not context separation.
+
+**Reviewer approval**, once per work plan: issued by the Reviewer persona, in
+a separate context, over the whole completed work plan. Typed:
 `Specification conformance`, `Phase correctness`, `Boundary conformance`,
 `Evidence sufficiency`. Never infer one from another.
 
-Every approval must satisfy all three constraints, or it does not count:
+Every Reviewer approval must satisfy all three constraints, or it does not
+count; self-review satisfies only (2) and (3):
 
 1. **Context separation** — the Reviewer runs in a context separate from the
    one that produced the work, and does not receive the Implementer's reasoning
-   as justification.
+   as justification. Waived only for self-review within a work plan — never
+   for the Reviewer's own approval, and never for contract-file changes,
+   which ADR 0006 governs independently.
 2. **Deterministic precondition** — no approval without recorded deterministic
    verification output.
 3. **Falsification burden** — name the failure scenarios searched for and the
    grounds on which each does not occur. "No problems found" is not an
-   approval.
+   approval, at either layer.
 
 A proposed ADR is not implementation authorization. CI success is not an
 approval; it is one of the deterministic inputs an approval requires.
