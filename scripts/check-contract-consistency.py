@@ -31,6 +31,13 @@ abandoned rather than patched again: ADR-range detection is now exact-anchored
 (see ENTRY_DOCUMENT_ADR_STATEMENTS) instead of parsed, which is sound but tied
 to today's wording — see below.
 
+Separately, the reference checker has been through three rounds of
+self-referential false positives: its own regex literals and, once, a comment
+illustrating one of them, parsed as targets and were reported as dangling
+references to files that do not exist. `MD_LINK` and `CODE_PATH` now share one
+filter, `_looks_like_a_path`, for exactly this reason — see its call sites for
+the specific strings that triggered each round.
+
 What remains is structural, not a bug waiting for the next round:
 
   * **Meaning.** Parity asks whether a rule is present, never whether it still
@@ -188,6 +195,17 @@ SCANNED_SUFFIXES = (".md", ".mdc", ".sh", ".yml", ".py")
 MD_LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 CODE_PATH = re.compile(r"`([^`\s]+\.(?:md|mdc|sh|py|yml|yaml|toml|json))`")
 
+# What a path or filename is actually made of — word characters, dot, slash,
+# hyphen, tilde — with at least one alphanumeric character required, so a
+# target of dots or slashes alone (an ellipsis, a bare separator) is not
+# mistaken for one either. Shared by both matchers below rather than
+# reimplemented per matcher, so neither can silently lose the property the
+# other has.
+def _looks_like_a_path(target: str) -> bool:
+    return bool(re.fullmatch(r"[\w./~-]+", target)) and bool(
+        re.search(r"[A-Za-z0-9]", target)
+    )
+
 
 class Failures:
     def __init__(self) -> None:
@@ -301,25 +319,32 @@ def check_references(repo: str, failures: Failures) -> None:
                     # capture group parses the same way, and so does an
                     # ellipsis illustrating that fact in a comment — both of
                     # which this exact paragraph has, at different times,
-                    # produced as a false positive against its own source.
-                    # Accept only what a path or filename is actually made
-                    # of — word characters, dot, slash, hyphen, tilde — and
-                    # require at least one alphanumeric character, so a
-                    # target of dots or slashes alone (an ellipsis, a bare
-                    # separator) is not mistaken for one either. An earlier,
-                    # narrower version required a slash or a recognized
-                    # extension, which also rejected `LICENSE` — a real,
-                    # extensionless, currently correct reference in this
-                    # repository's own README — and left it silently
-                    # unchecked.
-                    if not re.fullmatch(r"[\w./~-]+", target) or not re.search(
-                        r"[A-Za-z0-9]", target
-                    ):
+                    # produced as a false positive against its own source. An
+                    # earlier, narrower version of this filter required a
+                    # slash or a recognized extension, which also rejected
+                    # `LICENSE` — a real, extensionless, currently correct
+                    # reference in this repository's own README — and left
+                    # it silently unchecked. See `_looks_like_a_path`.
+                    if not _looks_like_a_path(target):
                         continue
                     targets.append(target)
                 for match in CODE_PATH.finditer(line):
                     target = match.group(1)
                     if target.startswith(("http", "<", "~")):
+                        continue
+                    # CODE_PATH's own regex already requires a recognized
+                    # extension, which is why every current match happens to
+                    # be a real path — but that has never been an explicit
+                    # property of this branch, only an accident of what this
+                    # script's source currently contains. Every self-inflicted
+                    # false positive so far (regex literals matching as their
+                    # own targets) was in a `\d{4}`-shaped backslash-and-brace
+                    # fragment that happened to end in `.md`; a real path
+                    # never contains those characters. Apply the same filter
+                    # MD_LINK uses, so a future regex literal ending in a
+                    # recognized extension does not reopen this path the way
+                    # it repeatedly has for MD_LINK.
+                    if not _looks_like_a_path(target):
                         continue
                     targets.append(target)
                 for target in targets:
