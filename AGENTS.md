@@ -85,14 +85,60 @@ One persona at a time. An agent that is implementing is not also reviewing.
 - Treat each new session as having no prior chat context.
 - Before acting, recover state from repository artifacts: the covering design
   agreement, cited handoff or trace, issue or work plan, spec or ADR, branch,
-  and changed files — not chat memory.
+  changed files, `docs/collaboration/loop-settings.toml`, and prior
+  `Type: review-finding` issues that affect the area — not chat memory.
+- Read `docs/collaboration/loop-settings.toml` when present. Write new
+  collaboration record bodies in `[docs].language`. If the file is missing,
+  stop and ask the Director to run `scripts/init-loop-settings.sh` (optionally
+  `--language ja|en`) before design or implementation work.
 - If the task message lacks a covering design agreement, an operating path, a
   phase, or a persona, stop after design intake and return a reopening request
   naming what is missing.
 - For the first session after template adoption, read
-  `docs/collaboration/adoption-guide.md` before changing target-owned files.
+  `docs/collaboration/adoption-guide.md` before changing target-owned files;
+  run `scripts/init-loop-settings.sh` and, when stack tools are not set up,
+  paste its tooling-setup prompt (or `--prompt-only`) into an agent session.
 - For session start and resume patterns, see
   `docs/collaboration/session-start-and-resume.md`.
+
+## Loop Settings, Spikes, Backlog, and Findings
+
+Human presence inside a work plan is minimal. Later readers reconstruct work
+only from repository artifacts (`docs/collaboration/post-hoc-audit.md`).
+
+- **Loop settings**: `docs/collaboration/loop-settings.toml` (template:
+  `docs/templates/loop-settings.toml`; policy:
+  `docs/collaboration/loop-settings.md`). Created by
+  `scripts/init-loop-settings.sh`. That script also prints a paste-ready
+  prompt to set up project-appropriate linters, static analysis, CI hooks, and
+  loop-engineering tools (`--prompt-only` to reprint; `--no-prompt` to skip).
+- **Language**: narrative bodies of traces, design notes, self-reviews,
+  handoffs, review records, spike cases, backlog items, and issue summaries
+  follow `[docs].language`. Field labels may stay English for grep stability.
+- **Spec vs ADR**: acceptance specifications under `docs/specs/` describe
+  behavior AI may implement under a covering design agreement. ADRs under
+  `docs/architecture/adr/` record durable architecture or process decisions;
+  `Proposed` does not authorize implementation. Do not treat a new Spec need as
+  an automatic new ADR.
+- **Spikes**: investigation under `docs/spike/case-NNNN-short-slug/` (template:
+  `docs/templates/spike-case/`; rules: `docs/spike/README.md`). Internet
+  research is expected. Prefer zero mandatory paid spend when quality allows.
+  Spike done means a recorded selection and exactly one next action (Spec
+  issue, ADR Proposed, human decision issue, or backlog/drop). Do not start
+  Green implementation that depends on an open spike.
+- **Backlog**: unpromised candidates under `docs/backlog/item-NNNN-*.md`
+  (template: `docs/templates/backlog-item.md`; rules:
+  `docs/backlog/README.md`). Not executable until promoted into a design
+  agreement and work plan.
+- **Findings must be applied**: actionable review findings become
+  `Type: review-finding` issues and are fixed or `wont_do` only with Arbiter
+  grounds (`docs/collaboration/findings-reuse.md`). Design intake lists prior
+  findings that affect the area and how this work honors them. Work-plan Done
+  blocks on open findings from that plan when settings default apply.
+- **Deterministic tooling**: prefer formatters, linters, type checkers, tests,
+  and boundary checkers over model judgment; record command output for audit.
+  See `docs/architecture/dependency-policy.md` and, when present,
+  `docs/architecture/tooling.md`.
 
 Relevant architecture documents:
 
@@ -101,6 +147,7 @@ Relevant architecture documents:
 - Readiness checklist: `docs/architecture/implementation-readiness.md`.
 - Test placement: `docs/architecture/testing-strategy.md`.
 - Dependency policy: `docs/architecture/dependency-policy.md`.
+- Tooling commands: `docs/architecture/tooling.md`.
 - AI request routing: `docs/architecture/ai-request-routing.md`.
 - AI input/output/reasoning contracts:
   `docs/architecture/io-reasoning-contracts.md`.
@@ -124,6 +171,11 @@ Relevant architecture documents:
   `docs/collaboration/branch-commit-pr-discipline.md`.
 - Local issue planning:
   `docs/collaboration/local-issue-planning.md`.
+- Loop settings: `docs/collaboration/loop-settings.md`.
+- Post-hoc audit: `docs/collaboration/post-hoc-audit.md`.
+- Findings reuse: `docs/collaboration/findings-reuse.md`.
+- Spike cases: `docs/spike/README.md`.
+- Backlog: `docs/backlog/README.md`.
 - Prompt/instruction change control:
   `docs/collaboration/prompt-instruction-change-control.md`.
 - Session start and resume:
@@ -188,15 +240,18 @@ Escalate to Feature Path or Architecture Path when any condition stops being
 true, including a second attempt. Actionable review findings are tracked as
 `Type: review-finding` in `docs/issues/LISS-*.md`; their lifecycle is
 `proposed -> accepted -> in_progress -> resolved -> closed`. Use `wont_do`
-only with a grounded Arbiter decision record.
+only with a grounded Arbiter decision record. Findings must be applied, not
+merely noted — see `docs/collaboration/findings-reuse.md`.
 
 **Preflight Validation.** Before the work-plan-level Reviewer review, run
 deterministic checks and record a `pass` or `fail` result with command output,
-scope result, and the next action. A `fail` returns the work to the
-Implementer. A `pass` only permits submission to the independent Reviewer; it
-is not approval and cannot set `wont_do` or `closed`. A lightweight model may
-assist with checklist and document-consistency checks but may not issue final
-approval. The producer of Preflight cannot review the same change.
+scope result, and the next action. Include open `review-finding` issues and
+implementation issues still blocked on open spike cases when those affect the
+plan. A `fail` returns the work to the Implementer. A `pass` only permits
+submission to the independent Reviewer; it is not approval and cannot set
+`wont_do` or `closed`. A lightweight model may assist with checklist and
+document-consistency checks but may not issue final approval. The producer of
+Preflight cannot review the same change.
 
 Contract-file changes are never self-reviewed, regardless of work-plan scope:
 `docs/collaboration/prompt-instruction-change-control.md` (per ADR 0006)
@@ -371,10 +426,13 @@ minimal.
 
 ## Completion
 
-Before reporting completion, check `docs/collaboration/definition-of-done.md`.
-Create AI work traces under `docs/collaboration/traces/` when the trace policy
-requires it. Use feature-unit branches for feature work. For feature work,
-identify local issue or GitHub issue dependencies before creating the branch.
+Before reporting completion, check `docs/collaboration/definition-of-done.md`
+and `docs/collaboration/post-hoc-audit.md` (a later reader must not need the
+chat session). Create AI work traces under `docs/collaboration/traces/` when
+the trace policy requires it. Confirm review findings that affect the work are
+applied or formally declined. Use feature-unit branches for feature work. For
+feature work, identify local issue or GitHub issue dependencies (including
+spike `depends_on`) before creating the branch.
 
 ## Project Boundaries
 

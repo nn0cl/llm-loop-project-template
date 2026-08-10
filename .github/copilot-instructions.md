@@ -133,14 +133,46 @@ Record reviews with `docs/templates/review-record.md`, stored under
 - Treat each new session as having no prior chat context.
 - Before acting, recover state from repository artifacts: the covering design
   agreement, cited handoff or trace, issue or work plan, spec or ADR, branch,
-  and changed files — not chat memory.
+  changed files, `docs/collaboration/loop-settings.toml`, and prior
+  `Type: review-finding` issues that affect the area — not chat memory.
+- Read `docs/collaboration/loop-settings.toml` when present. Write new
+  collaboration record bodies in `[docs].language`. If missing, stop and ask
+  the Director to run `scripts/init-loop-settings.sh` before design work.
 - If the task message lacks a covering design agreement, operating path,
   phase, persona, or an authoritative spec (or explicit Architecture Path
   scope), stop after design intake and return a reopening request.
 - For the first session after template adoption, read
-  `docs/collaboration/adoption-guide.md` before changing target-owned files.
+  `docs/collaboration/adoption-guide.md` before changing target-owned files;
+  run `scripts/init-loop-settings.sh` and paste its tooling-setup prompt when
+  stack tools are not configured (`--prompt-only` to reprint).
 - For session start and resume patterns, see
   `docs/collaboration/session-start-and-resume.md`.
+
+## Loop Settings, Spikes, Backlog, and Findings
+
+Human presence inside a work plan is minimal. Later readers reconstruct work
+only from repository artifacts (`docs/collaboration/post-hoc-audit.md`).
+
+- **Loop settings**: `docs/collaboration/loop-settings.toml` (policy:
+  `docs/collaboration/loop-settings.md`). Created by
+  `scripts/init-loop-settings.sh`, which also prints a paste-ready prompt to
+  set up linters, static analysis, CI, and loop-engineering tools
+  (`--prompt-only` / `--no-prompt`).
+- **Language**: new collaboration record bodies follow `[docs].language`.
+- **Spec vs ADR**: Specs under `docs/specs/` are behavior; ADRs under
+  `docs/architecture/adr/` are durable architecture/process decisions.
+  `Proposed` ADRs do not authorize implementation.
+- **Spikes**: `docs/spike/case-NNNN-short-slug/` (`docs/spike/README.md`).
+  Internet research expected; prefer zero mandatory paid spend when quality
+  allows. Do not Green-implement against an open spike dependency.
+- **Backlog**: `docs/backlog/item-NNNN-*.md` — not executable until promoted
+  into a design agreement and work plan (`docs/backlog/README.md`).
+- **Findings must be applied**: `Type: review-finding` issues;
+  `docs/collaboration/findings-reuse.md`. Design intake lists prior findings
+  that affect the area. Work-plan Done blocks on open findings when settings
+  default apply.
+- **Deterministic tooling**: formatters, linters, type checkers, tests, and
+  boundary checkers over model judgment; paste command output for audit.
 
 ## Phase Gate
 
@@ -259,6 +291,7 @@ Before writing implementation, read the relevant architecture document:
 - Test placement: `docs/architecture/testing-strategy.md`.
 - File placement: `docs/architecture/project-structure.md`.
 - Dependency policy: `docs/architecture/dependency-policy.md`.
+- Tooling commands: `docs/architecture/tooling.md`.
 - AI request routing: `docs/architecture/ai-request-routing.md`.
 - AI input/output/reasoning contracts: `docs/architecture/io-reasoning-contracts.md`.
 - External resource adoption: `docs/architecture/external-resource-adoption-contract.md`.
@@ -273,6 +306,11 @@ Before writing implementation, read the relevant architecture document:
 - Privacy/context budget: `docs/collaboration/privacy-context-budget-policy.md`.
 - Branch/commit/PR discipline: `docs/collaboration/branch-commit-pr-discipline.md`.
 - Local issue planning: `docs/collaboration/local-issue-planning.md`.
+- Loop settings: `docs/collaboration/loop-settings.md`.
+- Post-hoc audit: `docs/collaboration/post-hoc-audit.md`.
+- Findings reuse: `docs/collaboration/findings-reuse.md`.
+- Spike cases: `docs/spike/README.md`.
+- Backlog: `docs/backlog/README.md`.
 - Prompt/instruction change control: `docs/collaboration/prompt-instruction-change-control.md`.
 - Session start and resume: `docs/collaboration/session-start-and-resume.md`.
 
@@ -287,14 +325,18 @@ Reviewer confirmation. Escalate to Feature Path or Architecture Path when any
 condition stops being true, including a second attempt. Actionable review
 findings are tracked as `Type: review-finding` in `docs/issues/LISS-*.md`;
 their lifecycle is `proposed -> accepted -> in_progress -> resolved ->
-closed`. Use `wont_do` only with a grounded Arbiter decision record.
+closed`. Use `wont_do` only with a grounded Arbiter decision record. Findings
+must be applied, not merely noted — see
+`docs/collaboration/findings-reuse.md`.
 
 **Preflight Validation.** Before independent Reviewer review, run deterministic
 checks and record a `pass` or `fail` result with command output, scope result,
-and the next action. A `fail` returns the work to the Implementer. A `pass`
-only permits submission to the independent Reviewer; it is not approval and
-cannot set `wont_do` or `closed`. A lightweight model may assist with checklist
-and document-consistency checks but may not issue final approval. The producer
+and the next action. Include open `review-finding` issues and implementation
+issues still blocked on open spike cases when those affect the plan. A `fail`
+returns the work to the Implementer. A `pass` only permits submission to the
+independent Reviewer; it is not approval and cannot set `wont_do` or
+`closed`. A lightweight model may assist with checklist and
+document-consistency checks but may not issue final approval. The producer
 of Preflight cannot review the same change.
 
 Contract-file changes are never self-reviewed, regardless of work-plan scope:

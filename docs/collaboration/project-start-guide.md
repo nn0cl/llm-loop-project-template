@@ -27,16 +27,23 @@ uses the template workflow to discover and implement its own domain model.
 ## Starting a New Project
 
 1. Copy the template into the target repository.
-2. Fill project identity placeholders in agent instruction files.
-3. Write a short project boundary note in `docs/architecture/README.md`.
-4. List current non-decisions in `CLAUDE.md` or the relevant architecture
+2. Run `scripts/init-loop-settings.sh --language <en|ja|…>` to create
+   `docs/collaboration/loop-settings.toml` (record language, audit, findings
+   reuse). See `docs/collaboration/loop-settings.md`.
+3. Fill project identity placeholders in agent instruction files.
+4. Write a short project boundary note in `docs/architecture/README.md`.
+5. List current non-decisions in `CLAUDE.md` or the relevant architecture
    document.
-5. Create the first target specification under `docs/specs/`.
-6. Identify external resources that must become ports.
-7. List early dependency candidates and apply the adoption checklist in
+6. Create the first target specification under `docs/specs/`.
+7. Capture unpromised ideas under `docs/backlog/` when useful; open a spike
+   under `docs/spike/case-NNNN-…` when options or feasibility are still open
+   (see `docs/spike/README.md` and `docs/backlog/README.md`). Prefer free or
+   zero-mandatory-spend options when quality allows.
+8. Identify external resources that must become ports.
+9. List early dependency candidates and apply the adoption checklist in
    `docs/architecture/dependency-policy.md`.
-8. Start with Feature Path Phase 0 design intake.
-9. Reach a design agreement with the Director covering the first tasks before
+10. Start with Feature Path Phase 0 design intake.
+11. Reach a design agreement with the Director covering the first tasks before
    writing tests.
 
 Do not create a full domain layer, persistence schema, provider adapter, or UI

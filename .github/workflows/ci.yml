@@ -68,6 +68,7 @@ jobs:
             "docs/architecture/project-structure.md"
             "docs/architecture/testing-strategy.md"
             "docs/architecture/dependency-policy.md"
+            "docs/architecture/tooling.md"
             "docs/architecture/ai-request-routing.md"
             "docs/architecture/io-reasoning-contracts.md"
             "docs/architecture/agent-quickstart.md"
@@ -88,11 +89,22 @@ jobs:
             "docs/collaboration/reviews/.gitkeep"
             "docs/issues/.gitkeep"
             "docs/work-plans/.gitkeep"
+            "docs/spike/.gitkeep"
+            "docs/spike/README.md"
+            "docs/backlog/.gitkeep"
+            "docs/backlog/README.md"
+            "docs/templates/spike-case/case.md"
+            "docs/templates/backlog-item.md"
+            "docs/templates/loop-settings.toml"
+            "docs/collaboration/loop-settings.md"
+            "docs/collaboration/post-hoc-audit.md"
+            "docs/collaboration/findings-reuse.md"
             "docs/evaluation/golden-examples/.gitkeep"
             "docs/evaluation/criteria/.gitkeep"
             "scripts/copy-ai-collaboration-files.sh"
             "scripts/update-ai-collaboration-files.sh"
             "scripts/init-llm-context.sh"
+            "scripts/init-loop-settings.sh"
             "scripts/lib/collaboration-template-paths.sh"
             "scripts/check-contract-consistency.py"
           )
@@ -117,7 +129,9 @@ jobs:
             scripts/copy-ai-collaboration-files.sh \
             scripts/update-ai-collaboration-files.sh \
             scripts/init-llm-context.sh \
-            scripts/lib/collaboration-template-paths.sh
+            scripts/init-loop-settings.sh \
+            scripts/lib/collaboration-template-paths.sh \
+            scripts/lib/emit-tooling-setup-prompt.sh
 
       - name: Check contract consistency
         shell: bash
@@ -150,6 +164,24 @@ jobs:
           scripts/init-llm-context.sh "$tmp/target" >/tmp/init-llm-context-smoke.txt
           test -f "$tmp/target/.gitignore"
           test -f "$tmp/target/docs/issues/.gitkeep"
+          test -f "$tmp/target/docs/spike/.gitkeep"
+          test -f "$tmp/target/docs/spike/README.md"
+          test -f "$tmp/target/docs/backlog/.gitkeep"
+          test -f "$tmp/target/docs/backlog/README.md"
+          test -f "$tmp/target/docs/templates/spike-case/case.md"
+          test -f "$tmp/target/docs/templates/backlog-item.md"
+          test -f "$tmp/target/docs/templates/loop-settings.toml"
+          test -f "$tmp/target/scripts/init-loop-settings.sh"
+          test -f "$tmp/target/docs/collaboration/loop-settings.md"
+          test -f "$tmp/target/docs/collaboration/post-hoc-audit.md"
+          test -f "$tmp/target/docs/collaboration/findings-reuse.md"
+          ! test -f "$tmp/target/docs/collaboration/loop-settings.toml"
+          "$tmp/target/scripts/init-loop-settings.sh" --target "$tmp/target" --language ja --no-prompt
+          test -f "$tmp/target/docs/collaboration/loop-settings.toml"
+          grep -q 'language = "ja"' "$tmp/target/docs/collaboration/loop-settings.toml"
+          "$tmp/target/scripts/init-loop-settings.sh" --target "$tmp/target" --prompt-only \
+            | grep -q 'PASTE THE FOLLOWING INTO AN AI CODING AGENT'
+          test -f "$tmp/target/scripts/lib/emit-tooling-setup-prompt.sh"
           test -f "$tmp/target/docs/collaboration/traces/.gitkeep"
           test -f "$tmp/target/docs/collaboration/agreements/.gitkeep"
           test -f "$tmp/target/docs/collaboration/reviews/.gitkeep"
@@ -161,6 +193,8 @@ jobs:
           ! ls "$tmp/target/docs/issues/"LISS-*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/collaboration/traces/"*.md >/dev/null 2>&1
           ! ls "$tmp/target/docs/specs/"*.md >/dev/null 2>&1
+          ! ls -d "$tmp/target/docs/spike/"case-* >/dev/null 2>&1
+          ! ls "$tmp/target/docs/backlog/"item-*.md >/dev/null 2>&1
           test -f "$tmp/target/scripts/check-contract-consistency.py"
           (cd "$tmp/target" && python3 scripts/check-contract-consistency.py --repo .)
           if grep -R -n -i -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \

@@ -17,14 +17,20 @@ For the benefits and tradeoffs of using the template, see
    runtime boundaries, datastore, migration tool, external resources, and
    stack-specific architecture documents still require target facts settled in
    a design agreement with the Director.
-3. Add the first target feature specification under `docs/specs/`.
-4. Add only the stack-specific architecture documents that the project already
+3. Run `scripts/init-loop-settings.sh --target <repo> --language <en|ja|…>` to
+   create `docs/collaboration/loop-settings.toml` (documentation language,
+   post-hoc audit flags, findings must-apply). The same command prints a
+   paste-ready AI prompt to set up linters, static analysis, CI, and
+   loop-engineering tools for the detected stack (`--prompt-only` to reprint;
+   `--no-prompt` to skip). See `docs/collaboration/loop-settings.md`.
+4. Add the first target feature specification under `docs/specs/`.
+5. Add only the stack-specific architecture documents that the project already
    needs.
-5. Read `docs/collaboration/project-start-guide.md` for the first development
+6. Read `docs/collaboration/project-start-guide.md` for the first development
    loop.
-6. Run `scripts/init-llm-context.sh <repo>` and paste the generated prompt into
+7. Run `scripts/init-llm-context.sh <repo>` and paste the generated prompt into
    the first agent session.
-7. Read `docs/collaboration/session-start-and-resume.md` for ongoing session
+8. Read `docs/collaboration/session-start-and-resume.md` for ongoing session
    start and resume patterns after adoption.
 
 ## Midway Adoption

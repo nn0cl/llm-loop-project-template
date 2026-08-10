@@ -9,10 +9,21 @@ Use this before tests, implementation, migrations, UI, or provider work.
 - Proposed next phase:
 - Active persona:
 - Covering design agreement:
+- Loop settings language (`docs/collaboration/loop-settings.toml`):
 - Reopening request needed:
 - Requested approval type: specification-conformance | phase-correctness |
   boundary-conformance | evidence-sufficiency
 - Post-review required: yes | no | not applicable
+
+## Prior findings reuse
+
+List `Type: review-finding` issues and review records that affect this area.
+Required when `[findings].reuse_at_design_intake` is true (default). See
+`docs/collaboration/findings-reuse.md`.
+
+| Finding ID | Status | How this work honors it |
+| --- | --- | --- |
+|  |  | applied / included in plan / out of scope (reason) / none relevant |
 
 ## Context Ledger
 

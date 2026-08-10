@@ -90,10 +90,19 @@ Then, from the target repository:
 
 ```bash
 cd ~/dev/my-target-project
-scripts/init-llm-context.sh .
+scripts/init-loop-settings.sh --language en   # or: --language ja
+# → also prints a paste-ready prompt to set up linters / static analysis /
+#   loop tools for this stack. Re-print anytime:
+# scripts/init-loop-settings.sh --prompt-only
+scripts/init-llm-context.sh .                 # general first session
+# or: scripts/init-llm-context.sh --tooling .  # first session + tooling prompt
 ```
 
-Paste the generated prompt into the first AI session for that repository.
+`init-loop-settings.sh` writes `docs/collaboration/loop-settings.toml`
+(documentation language for agent-written records, post-hoc audit flags, and
+the rule that review findings must be applied) and prints an AI prompt to
+install deterministic quality tools for the detected stack. Paste that
+tooling prompt (and/or the `init-llm-context.sh` prompt) into an AI session.
 
 Full install steps, including which placeholders to fill and in what order,
 are in
@@ -127,8 +136,10 @@ section.
 - `scripts/copy-ai-collaboration-files.sh`
 - `scripts/update-ai-collaboration-files.sh`
 - `scripts/init-llm-context.sh`
+- `scripts/init-loop-settings.sh`
 - `scripts/check-contract-consistency.py`
 - `scripts/lib/collaboration-template-paths.sh`
+- `docs/collaboration/loop-settings.toml` (created by init; target-owned)
 - `.collaboration-template-version` (the sync marker at your repo root)
 - `.collaboration-template-ignore`, if you created one
 - `docs/templates/` (design-agreement, review-record, design-intake, handoff,

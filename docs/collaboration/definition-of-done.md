@@ -96,7 +96,14 @@ addition:
   names the failure scenarios searched for and is stored under
   `docs/collaboration/reviews/`.
 - any review findings are resolved (Minor Fix Path or escalation) and closed,
-  not left `proposed` or `accepted`.
+  not left `proposed` or `accepted` (or `wont_do` only with an Arbiter
+  record). When `docs/collaboration/loop-settings.toml` has
+  `[findings].must_apply` / `block_work_plan_done_on_open_findings` true
+  (defaults), open findings block Work Plan Done. See
+  `docs/collaboration/findings-reuse.md`.
+- post-hoc audit artifacts exist for the plan: agreement, review record,
+  verification output, and traces required by size — a later reader must not
+  need the chat session (`docs/collaboration/post-hoc-audit.md`).
 - the Director has read the approved result and recorded the next direction,
   or the end of the engagement, in the same action. A work plan is not Done
   on Reviewer approval alone.

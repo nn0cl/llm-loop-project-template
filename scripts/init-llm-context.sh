@@ -5,21 +5,37 @@ usage() {
   cat <<'USAGE'
 Usage:
   scripts/init-llm-context.sh [TARGET_REPOSITORY]
+  scripts/init-llm-context.sh [--tooling] [TARGET_REPOSITORY]
 
 Prints a compact initial prompt for an LLM agent after this collaboration
 template has been copied into a repository. The script does not call an LLM,
 read secrets, or make project architecture decisions.
+
+With --tooling, also print the paste-ready prompt that asks the agent to set
+up linters, static analysis, and other loop-engineering tools for this stack
+(same text as: scripts/init-loop-settings.sh --prompt-only).
 USAGE
 }
 
-target="${1:-.}"
+target="."
+with_tooling=false
 
-case "$target" in
-  -h|--help)
-    usage
-    exit 0
-    ;;
-esac
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --tooling)
+      with_tooling=true
+      shift
+      ;;
+    *)
+      target="$1"
+      shift
+      ;;
+  esac
+done
 
 if [ ! -d "$target" ]; then
   echo "Target directory does not exist: $target" >&2
@@ -27,6 +43,7 @@ if [ ! -d "$target" ]; then
 fi
 
 target="$(cd "$target" && pwd)"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 required_files=(
   "AGENTS.md"
@@ -57,20 +74,43 @@ if [ "$missing" = true ]; then
   exit 1
 fi
 
+settings_line="missing — run scripts/init-loop-settings.sh before design work"
+if [ -f "$target/docs/collaboration/loop-settings.toml" ]; then
+  lang="$(
+    awk -F'"' '/^language[[:space:]]*=/ { print $2; exit }' \
+      "$target/docs/collaboration/loop-settings.toml" 2>/dev/null || true
+  )"
+  if [ -n "${lang:-}" ]; then
+    settings_line="present (docs.language=$lang)"
+  else
+    settings_line="present (read docs/collaboration/loop-settings.toml)"
+  fi
+fi
+
 cat <<PROMPT
 You are working in this repository:
 $target
 
+Loop settings: $settings_line
+(see docs/collaboration/loop-settings.md, post-hoc-audit.md, findings-reuse.md)
+
 Before implementing anything:
 1. Read AGENTS.md.
 2. Read docs/architecture/agent-quickstart.md.
-3. Select the smallest safe operating path:
+3. Read docs/collaboration/loop-settings.toml if present; if missing, stop and
+   ask the Director to run scripts/init-loop-settings.sh (choose docs language).
+4. Write new collaboration record bodies in [docs].language from that file.
+5. Select the smallest safe operating path:
    - Fast Path for mechanical, local, deterministic work.
    - Feature Path for AT-TDD Phase 1, 2, or 3 feature work.
    - Architecture Path for ADRs, process changes, prompt changes, privacy-sensitive routing, or boundary decisions.
-4. Read only the documents required by that path.
-5. Read docs/architecture/io-reasoning-contracts.md when AI or model output is involved.
-6. Check docs/architecture/implementation-readiness.md before Phase 1, 2, or 3.
+6. Read only the documents required by that path.
+7. Read docs/architecture/io-reasoning-contracts.md when AI or model output is involved.
+8. Check docs/architecture/implementation-readiness.md before Phase 1, 2, or 3.
+9. At design intake, list prior Type: review-finding issues that affect the area
+   and how this work applies or honors them (findings must be applied, not noted).
+10. Prefer post-hoc auditability: paste deterministic verification output; do not
+    rely on chat memory for continuity.
 
 Use a compact design note for Fast Path work. Use the full [DESIGN CHECK] scaffold
 for Feature Path and Architecture Path work.
@@ -90,4 +130,25 @@ naming what is missing.
 
 For later sessions and resume patterns, see
 docs/collaboration/session-start-and-resume.md.
+
+If deterministic tooling (linter, formatter, typechecker, import-boundary
+checker, package audit, preflight command list) is not yet set up for this
+project's stack, run or paste:
+  scripts/init-loop-settings.sh --prompt-only
+or re-run this script with --tooling.
 PROMPT
+
+if [ "$with_tooling" = true ]; then
+  # shellcheck source=lib/emit-tooling-setup-prompt.sh
+  source "$script_dir/lib/emit-tooling-setup-prompt.sh"
+  lang="en"
+  if [ -f "$target/docs/collaboration/loop-settings.toml" ]; then
+    lang="$(
+      awk -F'"' '/^language[[:space:]]*=/ { print $2; exit }' \
+        "$target/docs/collaboration/loop-settings.toml" 2>/dev/null || true
+    )"
+    lang="${lang:-en}"
+  fi
+  echo ""
+  emit_tooling_setup_prompt "$target" "$lang"
+fi

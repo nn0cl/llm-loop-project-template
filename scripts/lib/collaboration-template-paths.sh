@@ -20,14 +20,18 @@ collaboration_template_paths=(
   "docs/collaboration"
   "docs/evaluation"
   "docs/issues"
+  "docs/spike"
+  "docs/backlog"
   "docs/specs"
   "docs/templates"
   "docs/work-plans"
   "scripts/copy-ai-collaboration-files.sh"
   "scripts/update-ai-collaboration-files.sh"
   "scripts/init-llm-context.sh"
+  "scripts/init-loop-settings.sh"
   "scripts/check-contract-consistency.py"
   "scripts/lib/collaboration-template-paths.sh"
+  "scripts/lib/emit-tooling-setup-prompt.sh"
 )
 
 # Files that are useful inside this template repository but should not be
@@ -38,6 +42,9 @@ collaboration_template_exclude_paths=(
   "docs/collaboration/reviews/*.md"
   "docs/issues/LISS-*.md"
   "docs/specs/*.md"
+  "docs/spike/case-*"
+  "docs/backlog/item-*.md"
+  "docs/collaboration/loop-settings.toml"
 )
 
 is_collaboration_template_excluded() {
