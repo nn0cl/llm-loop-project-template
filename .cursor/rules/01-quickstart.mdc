@@ -140,9 +140,21 @@ approval; it is one of the deterministic inputs an approval requires.
 
 Root `AGENTS.md` is auto-applied by Cursor independently of this file
 ([Rules](https://cursor.com/docs/rules.md); Help: "Cursor picks it up
-automatically"). It holds Expected Workflow, Session Entry, and the Relevant
-Architecture Documents list. Do not duplicate those sections here, and do not
-`@`-reference `AGENTS.md` from `.cursor/rules` — that would redundantly
-re-attach what Cursor already loads as its own Rules type (see ADR 0006
-Cursor evidence). Stack-specific architecture documents (added once a stack
-ADR is accepted) apply here too.
+automatically"). It holds Expected Workflow, Session Entry, the Relevant
+Architecture Documents list, and **Loop Settings, Spikes, Backlog, and
+Findings**. Do not duplicate those sections here, and do not `@`-reference
+`AGENTS.md` from `.cursor/rules` — that would redundantly re-attach what
+Cursor already loads as its own Rules type (see ADR 0006 Cursor evidence).
+Stack-specific architecture documents (added once a stack ADR is accepted)
+apply here too.
+
+Cursor-side reminders that must stay visible with this rule set:
+
+- Read `docs/collaboration/loop-settings.toml`; write record bodies in
+  `[docs].language`; create via `scripts/init-loop-settings.sh`.
+- Paste the tooling-setup prompt from that script when linters/static analysis
+  are not yet configured (`--prompt-only` to reprint).
+- Findings must be applied (`docs/collaboration/findings-reuse.md`);
+  reconstructability without chat (`docs/collaboration/post-hoc-audit.md`).
+- Spikes: `docs/spike/`; backlog: `docs/backlog/` — not executable until
+  promoted.

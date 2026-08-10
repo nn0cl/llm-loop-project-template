@@ -1,0 +1,62 @@
+# Loop engineering collaboration settings
+#
+# Created or refreshed by: scripts/init-loop-settings.sh
+# Live path (do not commit secrets here): docs/collaboration/loop-settings.toml
+#
+# Agents must read this file at session start. Humans may be absent inside the
+# loop; later readers reconstruct work only from repository artifacts.
+
+# ---------------------------------------------------------------------------
+# Documentation language
+# ---------------------------------------------------------------------------
+# Language for agent-produced collaboration records written in this repository
+# (design notes, traces, self-reviews, handoffs, review records, spike cases,
+# backlog items, local issues, work-plan updates).
+#
+# Built-in template prose may remain bilingual (README.md / README.ja.md).
+# New records follow [docs].language unless a record's template is fixed-form
+# English metadata keys (field labels may stay English; narrative body uses
+# this language).
+#
+# Use ISO 639-1 codes. Supported out of the box: "en", "ja".
+# Other codes are allowed when the active agents can write them reliably.
+[docs]
+language = "en"
+
+# ---------------------------------------------------------------------------
+# Post-hoc audit (human often absent inside the loop)
+# ---------------------------------------------------------------------------
+# Every claim must remain reconstructible from git history and docs/ without
+# replaying a chat session.
+[audit]
+# Require AI work traces for planning size M+ and second attempts (contract default).
+require_traces_for_m_plus = true
+# Require pasted deterministic command output in self-review / preflight / review.
+require_verification_output = true
+# At session start and design intake, recover state from artifacts only.
+artifact_only_continuity = true
+
+# ---------------------------------------------------------------------------
+# Review findings must be applied
+# ---------------------------------------------------------------------------
+# Actionable findings are never "noted" and forgotten. They are tracked as
+# Type: review-finding issues and either fixed, escalated, or wont_do with an
+# Arbiter record. Future design intake must scan open and recently closed
+# findings that affect the same area.
+[findings]
+must_apply = true
+# Design intake / Planner must list relevant prior findings and how each is
+# honored (applied, already closed with evidence, or out of scope with reason).
+reuse_at_design_intake = true
+# Work-plan Done requires every finding from that plan's Reviewer pass to be
+# closed (or wont_do with Arbiter), not left proposed/accepted/in_progress.
+block_work_plan_done_on_open_findings = true
+
+# ---------------------------------------------------------------------------
+# Spike / backlog cost posture (see docs/spike/README.md)
+# ---------------------------------------------------------------------------
+[selection]
+# Prefer options with no mandatory paid spend when quality and fit allow.
+prefer_zero_mandatory_spend = true
+# Internet research is allowed and expected for spikes.
+allow_internet_research = true

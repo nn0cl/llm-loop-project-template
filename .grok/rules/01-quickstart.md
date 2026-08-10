@@ -148,14 +148,46 @@ approval; it is one of the deterministic inputs an approval requires.
 - Treat each new session as having no prior chat context.
 - Before acting, recover state from repository artifacts: the covering design
   agreement, cited handoff or trace, issue or work plan, spec or ADR, branch,
-  and changed files — not chat memory.
+  changed files, `docs/collaboration/loop-settings.toml`, and prior
+  `Type: review-finding` issues that affect the area — not chat memory.
+- Read `docs/collaboration/loop-settings.toml` when present. Write new
+  collaboration record bodies in `[docs].language`. If missing, stop and ask
+  the Director to run `scripts/init-loop-settings.sh` before design work.
 - If the task message lacks a covering design agreement, operating path,
   phase, persona, or an authoritative spec (or explicit Architecture Path
   scope), stop after design intake and return a reopening request.
 - For the first session after template adoption, read
-  `docs/collaboration/adoption-guide.md` before changing target-owned files.
+  `docs/collaboration/adoption-guide.md` before changing target-owned files;
+  run `scripts/init-loop-settings.sh` and paste its tooling-setup prompt when
+  stack tools are not configured (`--prompt-only` to reprint).
 - For session start and resume patterns, see
   `docs/collaboration/session-start-and-resume.md`.
+
+## Loop Settings, Spikes, Backlog, and Findings
+
+Human presence inside a work plan is minimal. Later readers reconstruct work
+only from repository artifacts (`docs/collaboration/post-hoc-audit.md`).
+
+- **Loop settings**: `docs/collaboration/loop-settings.toml` (policy:
+  `docs/collaboration/loop-settings.md`). Created by
+  `scripts/init-loop-settings.sh`, which also prints a paste-ready prompt to
+  set up linters, static analysis, CI, and loop-engineering tools
+  (`--prompt-only` / `--no-prompt`).
+- **Language**: new collaboration record bodies follow `[docs].language`.
+- **Spec vs ADR**: Specs under `docs/specs/` are behavior; ADRs under
+  `docs/architecture/adr/` are durable architecture/process decisions.
+  `Proposed` ADRs do not authorize implementation.
+- **Spikes**: `docs/spike/case-NNNN-short-slug/` (`docs/spike/README.md`).
+  Internet research expected; prefer zero mandatory paid spend when quality
+  allows. Do not Green-implement against an open spike dependency.
+- **Backlog**: `docs/backlog/item-NNNN-*.md` — not executable until promoted
+  into a design agreement and work plan (`docs/backlog/README.md`).
+- **Findings must be applied**: `Type: review-finding` issues;
+  `docs/collaboration/findings-reuse.md`. Design intake lists prior findings
+  that affect the area. Work-plan Done blocks on open findings when settings
+  default apply.
+- **Deterministic tooling**: formatters, linters, type checkers, tests, and
+  boundary checkers over model judgment; paste command output for audit.
 
 ## Required Area Documents
 
@@ -164,6 +196,7 @@ approval; it is one of the deterministic inputs an approval requires.
 - Test placement: `docs/architecture/testing-strategy.md`.
 - File placement: `docs/architecture/project-structure.md`.
 - Dependency policy: `docs/architecture/dependency-policy.md`.
+- Tooling commands: `docs/architecture/tooling.md`.
 - AI request routing: `docs/architecture/ai-request-routing.md`.
 - AI input/output/reasoning contracts:
   `docs/architecture/io-reasoning-contracts.md`.
@@ -182,6 +215,11 @@ approval; it is one of the deterministic inputs an approval requires.
 - Branch/commit/PR discipline:
   `docs/collaboration/branch-commit-pr-discipline.md`.
 - Local issue planning: `docs/collaboration/local-issue-planning.md`.
+- Loop settings: `docs/collaboration/loop-settings.md`.
+- Post-hoc audit: `docs/collaboration/post-hoc-audit.md`.
+- Findings reuse: `docs/collaboration/findings-reuse.md`.
+- Spike cases: `docs/spike/README.md`.
+- Backlog: `docs/backlog/README.md`.
 - Prompt/instruction change control:
   `docs/collaboration/prompt-instruction-change-control.md`.
 - Session start and resume:

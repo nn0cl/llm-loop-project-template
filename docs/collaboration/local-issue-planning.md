@@ -26,8 +26,28 @@ Store multi-issue work plans under:
 docs/work-plans/
 ```
 
-Keep `.gitkeep` files in both folders so they exist before the first issue or
-plan is created.
+Store investigation spikes under:
+
+```text
+docs/spike/case-NNNN-short-slug/
+```
+
+Store unpromised candidates under:
+
+```text
+docs/backlog/item-NNNN-short-slug.md
+```
+
+Keep `.gitkeep` files in the issues, work-plans, spike, and backlog folders so
+they exist before the first record is created. Spike and backlog rules live in
+`docs/spike/README.md` and `docs/backlog/README.md`. Templates:
+`docs/templates/spike-case/` and `docs/templates/backlog-item.md`.
+
+Spikes close uncertainty (including internet research) before implementation.
+Backlog items are not executable until promoted into a design agreement and
+work plan. Prefer free or zero-mandatory-spend options when quality and
+architectural fit allow; record cost explicitly when a paid option is still
+recommended.
 
 ## Issue File Naming
 

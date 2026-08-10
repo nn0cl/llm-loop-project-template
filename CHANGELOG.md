@@ -8,6 +8,49 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
+## v2.3.0 — Loop ledgers, settings, and multi-agent mirror (unreleased)
+
+**Minor.** Adds ledgers and bootstrap tooling without invalidating existing
+rules. Agent operating contract files and collaboration docs were updated and
+mirrored; see `docs/collaboration/traces/2026-08-10-loop-ledgers-and-settings.md`.
+Tag as `v2.3.0` after separate-context Reviewer approval (backlog
+`item-0001`).
+
+**Landed in this edition**
+
+- Spike cases: `docs/spike/case-NNNN-…` (template `docs/templates/spike-case/`).
+- Backlog items: `docs/backlog/item-NNNN-…` (template
+  `docs/templates/backlog-item.md`).
+- Loop settings: template at `docs/templates/loop-settings.toml`; live file
+  via `scripts/init-loop-settings.sh` at
+  `docs/collaboration/loop-settings.toml` (language, audit, findings
+  must-apply, selection cost posture).
+- Post-hoc audit and findings reuse policies:
+  `docs/collaboration/post-hoc-audit.md`,
+  `docs/collaboration/findings-reuse.md`.
+- Tooling command ledger scaffold: `docs/architecture/tooling.md`.
+- Tooling-setup AI prompt from init (`--prompt-only` /
+  `scripts/init-llm-context.sh --tooling`).
+- Full multi-agent mirror of the new section **Loop Settings, Spikes,
+  Backlog, and Findings** in `AGENTS.md`, `CLAUDE.md`,
+  `.github/copilot-instructions.md`, `.grok/rules/*`, and Cursor complements.
+- Consistency checker rules for the new vocabulary; optional init-created
+  `docs/collaboration/loop-settings.toml` for reference resolution before
+  init.
+
+**Subordinate follow-ups (not blocking this land; tracked under backlog)**
+
+These remain open on purpose and are subordinate to this edition — do not
+treat them as delivered by v2.3.0:
+
+| ID | Follow-up |
+| --- | --- |
+| `item-0001` | Separate-context Reviewer approval for this contract change (ADR 0006). This edition is **landed, not Reviewer-closed**. |
+| `item-0002` | Process ADR codifying spike / backlog / loop settings / findings-reuse (docs-first today). |
+| `item-0003` | Deterministic CI/preflight gate that fails on open `review-finding` issues when settings require it. |
+
+Backlog files: `docs/backlog/item-0001-…` through `item-0003-…`.
+
 ## v2.2.0 — Review cost discipline, corrected (2026-08-03)
 
 Reviewed and approved by a Reviewer persona in a separate context. Review

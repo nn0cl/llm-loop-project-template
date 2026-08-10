@@ -125,6 +125,8 @@ MIRRORED_SECTIONS = {
     "Personas": r"personas\.md",
     "Expected Workflow": r"agent-quickstart\.md",
     "Session Entry": r"no prior chat context|session-start-and-resume",
+    "Loop Settings, Spikes, Backlog, and Findings":
+        r"Loop Settings, Spikes, Backlog|loop-settings\.toml",
     "Phase Discipline": r"Phase 1|Phase Gate|Phase Discipline",
     "Reopening the Design Agreement": r"[Rr]eopening",
     "Clean Architecture Dependency Rule": r"Domain|dependency rule|Dependency Rule",
@@ -172,6 +174,13 @@ EXTRA_MIRRORED_RULES = {
     # Anchor on text unique to ADR 0015's additions instead.
     "Self-review short-form default (ADR 0015)": r"self-review\.md.{0,20}short form",
     "Finding-response delta guidance (ADR 0015)": r"review finding on a\b",
+    # Loop engineering ledger and audit extensions.
+    "Loop settings file": r"loop-settings\.toml",
+    "Init loop settings script": r"init-loop-settings\.sh",
+    "Findings must be applied": r"Findings must be applied|findings-reuse\.md",
+    "Post-hoc audit": r"post-hoc-audit\.md",
+    "Spike ledger": r"docs/spike/",
+    "Backlog ledger": r"docs/backlog/",
 }
 
 # Document names that are examples of files a target project creates, not
@@ -199,6 +208,14 @@ TEMPLATE_ONLY_FILES = {
     "CHANGELOG.md",
 }
 
+# Target-owned files created by bootstrap scripts (e.g. init-loop-settings.sh).
+# Named throughout the contract so agents know the path; they may be absent
+# until init runs. When present they resolve normally; when absent, naming
+# them is not a dangling reference.
+OPTIONAL_INIT_CREATED_FILES = {
+    "docs/collaboration/loop-settings.toml",
+}
+
 # Reference targets that legitimately do not resolve in this repository.
 REFERENCE_ALLOWLIST = {
     # Example contract files meant to be placed inside a target project, where
@@ -215,6 +232,8 @@ RECORD_DIRS = (
     "docs/collaboration/agreements/",
     "docs/issues/",
     "docs/work-plans/",
+    "docs/spike/",
+    "docs/backlog/",
 )
 
 SCANNED_SUFFIXES = (".md", ".mdc", ".sh", ".yml", ".py")
@@ -386,6 +405,10 @@ def check_references(repo: str, failures: Failures) -> None:
                     # repository the file is present, so a reference to it
                     # resolves normally and its deletion is caught.
                     if target in TEMPLATE_ONLY_FILES and not os.path.exists(
+                        os.path.join(repo, target)
+                    ):
+                        continue
+                    if target in OPTIONAL_INIT_CREATED_FILES and not os.path.exists(
                         os.path.join(repo, target)
                     ):
                         continue

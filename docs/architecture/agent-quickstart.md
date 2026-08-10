@@ -9,12 +9,23 @@ Each new LLM session starts without prior chat context.
 1. Read the task message for the covering design agreement, operating path,
    phase, persona, spec or ADR, issue, and branch.
 2. If resuming, read the cited handoff or trace before other documents.
-3. Recover progress from repository artifacts, not from assumed chat history.
-4. If the covering agreement, path, phase, persona, or authoritative scope is
+3. Recover progress from repository artifacts, not from assumed chat history:
+   agreements, issues, work plans, specs, ADRs, branches, changed files,
+   `docs/collaboration/loop-settings.toml`, and prior `Type: review-finding`
+   issues that affect the area.
+4. Read loop settings when present; write new collaboration record bodies in
+   `[docs].language`. If `docs/collaboration/loop-settings.toml` is missing,
+   ask the Director to run `scripts/init-loop-settings.sh` before design work.
+5. If the covering agreement, path, phase, persona, or authoritative scope is
    missing, stop after design intake and return a reopening request.
 
 For session-entry checklists and resume examples, see
 `docs/collaboration/session-start-and-resume.md`.
+
+Also see: `docs/collaboration/loop-settings.md`,
+`docs/collaboration/post-hoc-audit.md`,
+`docs/collaboration/findings-reuse.md`, `docs/spike/README.md`,
+`docs/backlog/README.md`.
 
 ## Operating Paths
 

@@ -75,6 +75,14 @@ passing.
 
 ## The Loop
 
+Before or during planning, unpromised candidates may live under
+`docs/backlog/`, and uncertainty may be closed via spikes under
+`docs/spike/case-NNNN-…` (internet research allowed; prefer zero mandatory
+paid spend when quality allows). Spikes and backlog items are not substitute
+design agreements. Session language and audit/findings flags live in
+`docs/collaboration/loop-settings.toml` (see `loop-settings.md`,
+`post-hoc-audit.md`, `findings-reuse.md`).
+
 ```text
 Director states direction for one work plan
   -> Planner <-> Director dialogue          [human present]

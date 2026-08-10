@@ -75,6 +75,8 @@ APIs)?>`
 - `testing-strategy.md`: AT-TDD test placement.
 - `implementation-readiness.md`: checklist before coding.
 - `dependency-policy.md`: package dependency checking policy.
+- `tooling.md`: deterministic commands for lint, test, preflight, and
+  template scripts (filled per stack after `init-loop-settings.sh`).
 - `ai-request-routing.md`: AI payload selection and task routing.
 - `io-reasoning-contracts.md`: AI input/output/reasoning contracts.
 - `external-resource-adoption-contract.md`: optional contract for adopting

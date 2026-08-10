@@ -21,9 +21,15 @@ Continuity must come from repository artifacts:
 2. local issue or work plan.
 3. accepted specification under `docs/specs/`.
 4. feature branch, PR, or changed files on disk.
+5. `docs/collaboration/loop-settings.toml` (language, audit, findings flags).
+   Create with `scripts/init-loop-settings.sh` if missing.
+6. prior `Type: review-finding` issues that affect the area
+   (`docs/collaboration/findings-reuse.md`).
 
 Do not treat chat memory, an old session summary, or README prose as
-authoritative state.
+authoritative state. Write new collaboration record bodies in
+`[docs].language` from loop-settings. Prefer post-hoc reconstructability
+(`docs/collaboration/post-hoc-audit.md`).
 
 ## Three Session Types
 
@@ -33,20 +39,29 @@ Use once, right after `scripts/copy-ai-collaboration-files.sh` completes.
 
 Director:
 
-1. Run `scripts/init-llm-context.sh <repo>` or use the Initial Assessment
-   Prompt in `docs/templates/examples/adoption-prompts.md`.
-2. Paste the output into the first agent session.
-3. Expect assessment and placeholder identification, not implementation.
+1. Run `scripts/init-loop-settings.sh --language <en|ja|…>` so
+   `docs/collaboration/loop-settings.toml` exists. Paste the printed
+   **tooling-setup** prompt into an agent when linters / static analysis /
+   loop tools are not yet configured for the stack (`--prompt-only` to
+   reprint).
+2. Run `scripts/init-llm-context.sh <repo>` (add `--tooling` to append the
+   same tooling prompt) or use the Initial Assessment Prompt in
+   `docs/templates/examples/adoption-prompts.md`.
+3. Paste the output into the first agent session.
+4. Expect assessment, placeholder identification, and optional tooling
+   setup — not product feature implementation.
 
 Agent:
 
 1. Read `AGENTS.md` and `docs/architecture/agent-quickstart.md`.
-2. Read `docs/collaboration/adoption-guide.md` before changing target-owned
+2. Read `docs/collaboration/loop-settings.toml` and
+   `docs/collaboration/adoption-guide.md` before changing target-owned
    files.
 3. Stop when target specification, phase, or project boundaries are missing.
 
-`init-llm-context.sh` is a bootstrap aid for this session type only. CI does
-not require running it.
+`init-loop-settings.sh` and `init-llm-context.sh` are bootstrap aids for this
+session type. CI does not require running the LLM prompt script; it does
+require the settings *template* and init script to ship with the template.
 
 ### 2. New Session, Same Task (Resume)
 

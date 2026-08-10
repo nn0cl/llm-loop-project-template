@@ -52,14 +52,18 @@ Reviewer confirmation. Escalate to Feature Path or Architecture Path when any
 condition stops being true, including a second attempt. Actionable review
 findings are tracked as `Type: review-finding` in `docs/issues/LISS-*.md`;
 their lifecycle is `proposed -> accepted -> in_progress -> resolved ->
-closed`. Use `wont_do` only with a grounded Arbiter decision record.
+closed`. Use `wont_do` only with a grounded Arbiter decision record. Findings
+must be applied, not merely noted — see
+`docs/collaboration/findings-reuse.md`.
 
 **Preflight Validation.** Before independent Reviewer review, run deterministic
 checks and record a `pass` or `fail` result with command output, scope result,
-and the next action. A `fail` returns the work to the Implementer. A `pass`
-only permits submission to the independent Reviewer; it is not approval and
-cannot set `wont_do` or `closed`. A lightweight model may assist with checklist
-and document-consistency checks but may not issue final approval. The producer
+and the next action. Include open `review-finding` issues and implementation
+issues still blocked on open spike cases when those affect the plan. A `fail`
+returns the work to the Implementer. A `pass` only permits submission to the
+independent Reviewer; it is not approval and cannot set `wont_do` or
+`closed`. A lightweight model may assist with checklist and
+document-consistency checks but may not issue final approval. The producer
 of Preflight cannot review the same change.
 
 Contract-file changes are never self-reviewed, regardless of work-plan scope:
@@ -89,12 +93,16 @@ Prefer clear responsibility boundaries, small functions, straightforward
 names, and reviewable tests. Do not compress implementation into dense code
 just to be minimal.
 
-Before reporting completion, check `docs/collaboration/definition-of-done.md`.
-Create AI work traces under `docs/collaboration/traces/` when the trace
-policy requires it. Use feature-unit branches for feature work; do not
-implement issue work directly on `main` or the trunk branch, per
+Before reporting completion, check `docs/collaboration/definition-of-done.md`
+and `docs/collaboration/post-hoc-audit.md` (a later reader must not need the
+chat session). Create AI work traces under `docs/collaboration/traces/` when
+the trace policy requires it. Confirm review findings that affect the work are
+applied or formally declined. Use feature-unit branches for feature work; do
+not implement issue work directly on `main` or the trunk branch, per
 `docs/collaboration/branch-commit-pr-discipline.md`.
 
 For feature work, identify local issue (`docs/issues/LISS-*`) or GitHub
-issue dependencies before creating the branch, per
-`docs/collaboration/local-issue-planning.md`.
+issue dependencies (including spike `depends_on`) before creating the branch,
+per `docs/collaboration/local-issue-planning.md`. See also
+`docs/collaboration/loop-settings.md`, `docs/spike/README.md`, and
+`docs/backlog/README.md`.

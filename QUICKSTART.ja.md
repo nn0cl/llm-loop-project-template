@@ -92,10 +92,18 @@ README、仕様、architecture document を上書きする目的では絶対に�
 
 ```bash
 cd ~/dev/my-target-project
-scripts/init-llm-context.sh .
+scripts/init-loop-settings.sh --language ja   # または: --language en
+# → 続けて、このスタック向け Linter / 静的解析 / ループ用ツールを
+#   AI にセットアップさせる貼り付け用プロンプトも出力します。再出力:
+# scripts/init-loop-settings.sh --prompt-only
+scripts/init-llm-context.sh .                 # 通常の初回セッション
+# または: scripts/init-llm-context.sh --tooling .
 ```
 
-出力された prompt を、そのリポジトリの最初の AI session に貼り付けます。
+`init-loop-settings.sh` は `docs/collaboration/loop-settings.toml` を作り
+（記録言語・後追い監査・指摘の必活用）、検出したスタック向けの決定性
+ツール導入用 AI プロンプトも標準出力します。そのプロンプト（と必要なら
+`init-llm-context.sh` の出力）を AI session に貼り付けます。
 
 どの placeholder をどの順番で埋めるかを含む詳しい導入手順は、
 [README.md § Install into another repository](README.md#install-into-another-repository)
@@ -130,8 +138,10 @@ scaffolding として導入されたファイルの中には、その後プロ�
 - `scripts/copy-ai-collaboration-files.sh`
 - `scripts/update-ai-collaboration-files.sh`
 - `scripts/init-llm-context.sh`
+- `scripts/init-loop-settings.sh`
 - `scripts/check-contract-consistency.py`
 - `scripts/lib/collaboration-template-paths.sh`
+- `docs/collaboration/loop-settings.toml`（init が作る。導入先の設定）
 - `.collaboration-template-version`（導入先リポジトリ直下の同期マーカー）
 - `.collaboration-template-ignore`（作成していれば）
 - `docs/templates/`（design-agreement、review-record、design-intake、handoff、
