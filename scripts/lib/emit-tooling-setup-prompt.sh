@@ -60,9 +60,7 @@ emit_tooling_setup_prompt() {
   fi
 
   cat <<PROMPT
-================================================================================
-PASTE THE FOLLOWING INTO AN AI CODING AGENT (tooling setup)
-================================================================================
+# --- PASTE THE FOLLOWING INTO AN AI CODING AGENT (tooling setup) ---
 
 You are setting up **deterministic quality and loop-engineering tools** for this
 repository (not product features):
@@ -177,8 +175,6 @@ Extend .github/workflows/ci.yml (or stack CI) so:
 When finished, summarize: tools added, commands for agents to run every phase,
 and any follow-up spikes (docs/spike/case-NNNN-…) for undecided options.
 
-================================================================================
-END PROMPT
-================================================================================
+# --- END PROMPT ---
 PROMPT
 }
