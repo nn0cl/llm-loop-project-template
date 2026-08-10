@@ -8,13 +8,15 @@ changes meaning. The minor number changes when rules are added without
 invalidating existing ones. The patch number covers wording, examples, and
 tooling that leave every rule intact.
 
-## v2.3.0 — Loop ledgers, settings, and multi-agent mirror (unreleased)
+## v2.3.0 — Loop ledgers, settings, and multi-agent mirror (2026-08-10)
 
 **Minor.** Adds ledgers and bootstrap tooling without invalidating existing
 rules. Agent operating contract files and collaboration docs were updated and
 mirrored; see `docs/collaboration/traces/2026-08-10-loop-ledgers-and-settings.md`.
-Tag as `v2.3.0` after separate-context Reviewer approval (backlog
-`item-0001`).
+
+Merged via PR #13. Tagged `v2.3.0` on Director instruction. Separate-context
+Reviewer for the contract change remains open as backlog `item-0001` (ADR
+0006) — this tag records the landed edition; it does not close that review.
 
 **Landed in this edition**
 

@@ -3,7 +3,7 @@
 [日本語ガイド](README.ja.md) · [Quickstart: adopting / uninstalling this template](QUICKSTART.md)
  · [Changelog](CHANGELOG.md)
 
-**Contract edition: v2.2.0.** The operating contract in this repository is
+**Contract edition: v2.3.0.** The operating contract in this repository is
 versioned — an adopting project can install and cite a specific edition. See
 [CHANGELOG.md](CHANGELOG.md) for what an edition covers.
 

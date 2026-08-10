@@ -3,7 +3,7 @@
 [English README](README.md) · [Quickstart: 導入とアンインストール](QUICKSTART.ja.md)
  · [Changelog](CHANGELOG.md)
 
-**契約バージョン: v2.2.0。** このリポジトリの運用契約はバージョン管理されて
+**契約バージョン: v2.3.0。** このリポジトリの運用契約はバージョン管理されて
 おり、導入先プロジェクトはバージョンを指定して導入・参照できます。各版が
 何を含むかは [CHANGELOG.md](CHANGELOG.md) を参照してください。
 
