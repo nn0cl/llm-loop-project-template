@@ -22,6 +22,16 @@ jobs:
           # Version-claim checks need tags (CHANGELOG / README edition).
           fetch-tags: true
 
+      # checkout's fetch-tags can still omit older tags on some runs; the
+      # contract checker requires every released CHANGELOG heading to exist
+      # as a tag (v2.0.0 … v2.3.0). Force a full tag fetch.
+      - name: Fetch all git tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force origin
+          git tag -l 'v*' | sort -V | tail -20
+
       - name: Check required project documents
         shell: bash
         run: |
@@ -145,7 +155,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git grep -n -E '^(<<<<<<<|=======|>>>>>>>)' -- . ':!.git' >/tmp/conflict-markers.txt; then
+          # Match real conflict markers only: <<<<<<< / >>>>>>> prefixes, or a
+          # line that is exactly seven '=' (git's separator). Do not match
+          # longer banner lines of '=' used in prompts or docs.
+          if git grep -n -E '^(<<<<<<<|=======$|>>>>>>>)' -- . ':!.git' >/tmp/conflict-markers.txt; then
             cat /tmp/conflict-markers.txt >&2
             exit 1
           fi
