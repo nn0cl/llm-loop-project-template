@@ -19,6 +19,8 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          # Version-claim checks need tags (CHANGELOG / README edition).
+          fetch-tags: true
 
       - name: Check required project documents
         shell: bash

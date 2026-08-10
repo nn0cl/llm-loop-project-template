@@ -7,6 +7,9 @@
 - Status: ready-for-planning
 - Created: 2026-08-10
 - Updated: 2026-08-10
+- Note: `v2.3.0` was tagged on Director instruction while this Reviewer
+  pass remains open. Completing this item closes the ADR 0006 gap for the
+  edition; it does not re-tag unless findings require a patch release.
 - Priority hint: high
 - Suggested planning size: M
 - Owner/agent (optional):
