@@ -8,9 +8,14 @@
 - Planner / Specifier personas (model or tool used): Claude Sonnet 5 via
   Claude Code
 - Supersedes agreement (if any): none directly. Supersedes, in effect, ADR
-  0001's per-work-plan Planner-Director dialogue requirement and ADR 0014
-  clause 6's "the next work plan does not start without close", via the new
-  ADR (0016) this agreement covers.
+  0001's per-work-plan Planner-Director dialogue requirement (Decision, point
+  2) and ADR 0014's restatement of it (Decision, clause 1), and ADR 0014
+  clause 5's "the next work plan does not start without [close]" as applied
+  across concurrently in-flight work plans, via the new ADR (0016) this
+  agreement covers. (Corrected from an earlier draft's "clause 6" — the
+  blocking phrase is in clause 5; clause 6 states the two-touchpoint count,
+  which ADR 0016 does not change. See ADR 0016's own "Supersession,
+  precisely" table.)
 
 ## Direction
 

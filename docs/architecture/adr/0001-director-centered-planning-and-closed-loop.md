@@ -11,6 +11,14 @@ on 2026-08-03. Read this ADR's Decision and Consequences as the record of
 what was first accepted; for the execution loop as it currently runs, ADR
 0014 is the rule in force.
 
+Its Decision, point 2 ("Detailed planning" as a live, per-work-plan
+Planner-Director dialogue turn) is further superseded by
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+on 2026-08-18, which relocates that dialogue to backlog-item approval and
+delegates downstream planning to a standing Design & Review session. ADR
+0016 does not otherwise change this ADR's design phase, persona set, or
+invariants.
+
 ## Context
 
 This repository is a counter-validation project against the human-intervention
