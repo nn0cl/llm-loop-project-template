@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0022
 - GitHub issue: none
-- Status: proposed
+- Status: review
 - Phase: process-only
 - Type: architecture
 - Priority: high
@@ -119,10 +119,92 @@
 
 ## Work Notes
 
-- 
+- 2026-08-18 (Implementer, Implementation group, first standing session):
+  created `docs/collaboration/cross-session-messaging.md` defining the
+  governing "message is a trigger, not a record" rule, `ListAgents` usage
+  and not-found handling (reopening-request-worthy blocker), and the five
+  handoff directions (backlog approval; design agreement recorded; issue
+  self-review complete / work-plan Preflight passes; Reviewer approval or
+  rejection; Director intervention), each stating trigger, message content,
+  and the record file(s). Also added a "Handling a missing or malformed
+  handoff" section extending the same treatment to a message naming a file
+  that does not exist or does not match its claimed content. This landing
+  is itself a live worked example of direction 2 (design agreement recorded
+  -> Implementation group): this session received exactly such a
+  `SendMessage` handoff naming WP-0002 and `DA-2026-08-18-01`.
+- Trace: `docs/collaboration/traces/2026-08-18-liss-0022-cross-session-messaging-protocol.md`.
+- 2026-08-18, real-failure follow-up (Implementer, same session): this
+  session's own attempt to reply to the peer that sent its WP-0002 handoff
+  hit exactly the failure this document warns about. Firsthand, confirmed
+  facts: `SendMessage` with `to: "general-purpose"` (the label shown in the
+  incoming message's own `from` attribute) failed twice, verbatim retry
+  included — `"No agent named 'general-purpose' is reachable."`;
+  `ListAgents` was searched for directly and was not present as a callable
+  tool in this session at all, despite `SendMessage`'s own description
+  naming it as the discovery mechanism; `SendMessage` with `to: "main"`
+  succeeded on the first attempt (`"Message queued for the main
+  conversation's next turn."`), confirming this session is itself a
+  background subagent of its sender, and that address was the fix. Added
+  "Confirmed failure mode: `ListAgents` absent, and a guessed reply
+  address" to `docs/collaboration/cross-session-messaging.md`, stating this
+  precisely and the resulting rule: a `from=` display label is not proof of
+  a resolvable `SendMessage` address; try `to: "main"` first for a direct
+  spawn parent/child reply; a handoff sender should give its own
+  `ListAgents`-verified name or agent ID in the message body rather than
+  relying on the receiver to infer one.
 
-## Verification
+### Self-Review (Implementer, design note -> drafted change)
 
-- `scripts/check-contract-consistency.py`
-- Read-through: every handoff direction traces to a file path, not only a
-  chat message.
+Per `docs/templates/self-review.md`, short form (per this session's explicit
+instruction, notwithstanding this issue's `M` planning size).
+
+```text
+Phase / finding: Architecture Path design note -> new file
+  docs/collaboration/cross-session-messaging.md
+
+Command run: python3 scripts/check-contract-consistency.py
+Result: contract consistency: all checks passed
+
+Risks considered:
+  1. One of the five handoff directions is missing trigger, message
+     content, or record file.
+  2. The "message is a trigger, not a record" rule is stated only
+     implicitly (e.g. buried in one direction's bullet) rather than as a
+     named, cross-referenced constraint.
+  3. `ListAgents` failure handling is left as an implicit judgment call
+     rather than stated as a reopening-worthy blocker.
+  4. The document leaves the checker's reference check newly broken (a
+     dangling link to a file that still does not exist).
+  5. The document duplicates content that already lives in
+     `docs/collaboration/ai-human-scheme.md` or ADR 0016 instead of
+     cross-referencing it.
+
+Why each does not occur:
+  1. Read-through of "The five handoff directions": each of the five
+     numbered subsections (1. Backlog approval, 2. Design agreement
+     recorded, 3. Issue self-review / Preflight, 4. Reviewer approval or
+     rejection, 5. Director intervention) has its own "Trigger"/"Message
+     content"/"Record" (or equivalently labeled) bullets naming a concrete
+     file path or explicit "none needed" with reasoning.
+  2. The rule has its own top-level section, "The governing rule: a message
+     is a trigger, not a record," stated before any handoff direction, and
+     explicitly cites Invariant 1 by name ("This follows directly from
+     Invariant 1: a decision that exists only in a session transcript did
+     not happen").
+  3. The "`ListAgents` — locating the other group's session" section states
+     plainly: "this is a blocker, not a judgment call," lists four things
+     not to do (guess, retry indefinitely, assume pickup, treat absence as
+     'no work in flight'), and directs the reader to
+     `docs/collaboration/design-agreement.md`'s "Reopening the agreement"
+     rules by name.
+  4. Ran the checker after creating the file (output above): zero
+     failures, meaning every reference this new file makes (to ADR 0016,
+     `ai-human-scheme.md`, `session-start-and-resume.md`,
+     `design-agreement.md`, `docs/backlog/README.md`) resolves, and the two
+     previously-pending references from ADR 0016 itself now resolve too.
+  5. The document states protocol-specific content only (the five handoff
+     directions, the trigger rule, `ListAgents` handling) and points to
+     ADR 0016 for the topology/rules it implements and to
+     `ai-human-scheme.md` for the loop and Invariant 1, via a "Related
+     documents" section, rather than restating either.
+```
