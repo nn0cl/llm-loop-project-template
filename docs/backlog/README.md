@@ -56,6 +56,22 @@ Numbering:
 5. **Cost posture.** Prefer options that need no mandatory paid spend when
    quality and fit allow — same judgment bar as spikes
    (`docs/spike/README.md`).
+6. **Bulk design-phase gate.** Once the Director approves a backlog item for
+   promotion (status `promoted`), that approval is the design-phase human
+   gate for the work it authorizes — see
+   `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+   Rule 2 and `docs/collaboration/design-agreement.md`'s "Backlog-item-level
+   agreement". The Design & Review group may then proceed autonomously,
+   within the approved item's stated scope, without a further live
+   per-work-plan Planner-Director dialogue turn.
+7. **Compliance boundary.** Autonomous progress after backlog approval
+   remains bounded by the project's operational rules (this repository's own
+   contract documents) and applicable law — a standing constraint, not
+   satisfied implicitly or checked once and forgotten. A backlog item that
+   would require exceeding either boundary is a reopening request, per
+   `docs/collaboration/design-agreement.md`'s "Reopening the agreement", not
+   a judgment call the Design & Review or Implementation group resolves on
+   its own. See ADR 0016 Rule 5.
 
 ## Relationship to issues and spikes
 
