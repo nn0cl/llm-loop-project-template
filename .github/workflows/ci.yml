@@ -129,7 +129,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for n in 0001 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016; do
+          # NOTE: 0017 is intentionally absent from this list. It is claimed
+          # by a separate, not-yet-merged change (WP-0004); see ADR 0018's
+          # own "Numbering note" for why this branch has a temporary gap.
+          for n in 0001 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0018; do
             ls "docs/architecture/adr/${n}-"*.md >/dev/null
           done
 

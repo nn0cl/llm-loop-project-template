@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0032
 - GitHub issue: none
-- Status: ready
+- Status: review
 - Phase: phase-0-design (produces an ADR and non-application-code contract
   updates)
 - Type: architecture-decision
@@ -132,7 +132,130 @@ N/A.
   "[x] Human decision required" item to its narrow genuinely-open
   sub-question (see `DA-2026-08-18-05`'s Settled Ambiguities). Dispatched
   to the Implementation group together with LISS-0033.
+- 2026-08-18 (Implementer, Implementation group): executed on branch
+  `process/quality-gate-hooks-and-coverage-policy` (created from `57af72e`).
+  **ADR numbering**: ran `ls docs/architecture/adr/` at execution time —
+  highest present was `0016`; `0017` was not present in this branch's tree
+  (it exists only on a separate, unmerged branch,
+  `process/adr-0017-portable-loop`, belonging to WP-0004's own
+  Implementation session — confirmed via
+  `git log --all --oneline --grep="0017"` and
+  `git merge-base --is-ancestor <that-commit> 57af72e` returning false).
+  Confirmed via `git log --all --oneline --grep="0018"` that no ADR `0018`
+  exists anywhere in this repository's history. Per `DA-2026-08-18-05`'s
+  Settled Ambiguities, this is the anticipated common case (`0017` free,
+  `0018` collides with nothing) and not a reopening-worthy conflict, so
+  wrote the ADR as `0018` as tentatively named. **Downstream consequence,
+  flagged explicitly**: adding `0018` without `0017` present creates a
+  temporary numbering gap on this branch alone. `scripts/check-contract-consistency.py`'s
+  `ADR range` check is anchored to the actual highest ADR file present, so
+  keeping it passing required updating `README.md`, `QUICKSTART.md`, and
+  `QUICKSTART.ja.md`'s registered ADR-range statements (last = `0018`,
+  next-adopter-number = `0019`) and `.github/workflows/ci.yml`'s hardcoded
+  ADR-existence loop (added `0018`, left `0017` out with a comment
+  explaining why) — none of these four files were in LISS-0032's originally
+  enumerated file list, but all four are a mechanical, unavoidable
+  consequence of adding a new ADR file while `check-contract-consistency.py`
+  is required to pass; each edit states the gap explicitly in its own prose
+  rather than silently implying a contiguous `0001`-`0018` sequence exists.
+  **The Design & Review group must reconcile this gap when merging this
+  branch with WP-0004's `0017` branch** — expect (and do not silently
+  resolve) merge conflicts on these same four files' ADR-range statements,
+  since WP-0004's own branch independently edits the same lines to state
+  its own range ending at `0017`.
+
+### Self-review (full form, planning size M)
+
+**Command run:**
+
+```text
+$ python3 scripts/check-contract-consistency.py --repo .
+references:
+  docs/architecture/adr/0018-mandatory-quality-gate-hooks-and-coverage-policy.md:50 names 'docs/collaboration/design-review-perspectives.md', which does not exist
+contract consistency: 1 failure(s)
+```
+
+**Result:** the only failure is the forward reference to LISS-0033's own
+not-yet-created deliverable (`docs/collaboration/design-review-perspectives.md`),
+which this issue's own Context section names as intentionally omitted at
+this stage (LISS-0032 precedes LISS-0033 in the Recommended Order). This
+reference resolves once LISS-0033 lands, in the same work plan. Before ADR
+0018 was added, the same command reported `contract consistency: all checks
+passed` (baseline, recorded before any edit in this issue).
+
+```text
+$ bash scripts/init-loop-settings.sh --prompt-only | grep -c "ADR 0018"
+4
+```
+(The strengthened prompt names ADR 0018 four times: the hook-wiring
+mandate, the coverage-approach mandate, and the CI-is-additive note — see
+the excerpt in this issue's own References/Verification and in the work
+plan's Preflight section for the full text.)
+
+**Risks considered, and why each does not occur:**
+
+1. *Does the ADR's numeric-floor non-decision read as permissive rather
+   than as a deliberate, grounded choice?* Re-read ADR 0018's Rule 3 and
+   `testing-strategy.md`'s "No universal numeric floor" subsection side by
+   side with `DA-2026-08-18-05`'s Settled Ambiguities: both state the same
+   two-part reasoning (a floor is a useful backstop, but is also exactly
+   the number-optimization target Rule 2 warns against) and both make Rule
+   2's anti-gaming requirement explicitly independent of whether a floor is
+   adopted — "The anti-gaming rule above applies regardless of whether a
+   project adopts a local floor." This is not silence about coverage; it is
+   an explicit, mandatory qualitative rule paired with an explicit,
+   reasoned non-decision about one specific number. Does not occur.
+2. *Does the hook-wiring requirement stay stack-agnostic and not
+   accidentally assume a specific tool?* Re-read Rule 1 of ADR 0018: it
+   states "an enforcement mechanism... appropriate to their own stack," not
+   any named tool, and explicitly separates the *requirement* (Rule 1) from
+   the *Dependency Adoption Evidence* section, which states plainly that no
+   library/tool is selected by this ADR. The per-stack examples in
+   `tooling.md` and `emit-tooling-setup-prompt.sh` are introduced with
+   "examples — pick what fits, do not install all," matching the existing
+   convention already used for the formatter/linter table in Section A. Does
+   not occur.
+3. *Does `definition-of-done.md`'s edit weaken any existing criterion?*
+   Diffed the file: every change is either a new bullet or an appended
+   clause to an existing bullet's own sentence; no existing bullet's
+   original text was deleted or narrowed. Checked specifically that
+   "deterministic verification was run or explicitly marked not applicable"
+   still stands as the base requirement, with the ADR-0018 hook clause
+   added as a qualification of what "run" means once a project has ADR
+   0018's hook wired — a project without a wired hook yet is not
+   retroactively marked non-compliant by this wording; it still satisfies
+   the base criterion by running the check manually until it wires a hook.
+   Does not occur.
+4. *Does the ADR-numbering gap (0017 missing, 0018 present) silently
+   mislead a reader into believing the ADR sequence is contiguous?*
+   Checked every place the range is stated (README.md, QUICKSTART.md,
+   QUICKSTART.ja.md, ci.yml, ADR 0018's own "Numbering note"): each one
+   explicitly names the gap and points to ADR 0018's "Numbering note" for
+   the explanation, rather than silently stating "0001-0018" with no
+   caveat. Reproduced as a real, disclosed condition — not hidden — and
+   explicitly flagged above and in this report for the Design & Review
+   group's merge-time reconciliation. This is a real, temporary
+   inconsistency (an implied-contiguous range that is not actually
+   contiguous on this branch), disclosed rather than concealed, and
+   resolved at the point where it can actually be resolved (branch merge).
+5. *Did the heredoc-backtick defect (self-inflicted, described in the
+   `definition-of-done.md` trace's "Rework caused by AI output" field)
+   silently corrupt any other part of the emitted prompt beyond Section A's
+   new table?* Re-ran `scripts/init-loop-settings.sh --prompt-only` after
+   the fix and read the full output (not just Section A) end to end;
+   confirmed no other section shows truncated text, injected command
+   output, or missing lines. Does not occur, after the fix.
 
 ## Verification
 
-- Pending Implementation-group execution.
+```text
+$ python3 scripts/check-contract-consistency.py --repo .
+references:
+  docs/architecture/adr/0018-mandatory-quality-gate-hooks-and-coverage-policy.md:50 names 'docs/collaboration/design-review-perspectives.md', which does not exist
+contract consistency: 1 failure(s)
+```
+
+Only remaining failure is the forward reference to LISS-0033's deliverable,
+expected to resolve once that issue lands in this same work plan (see this
+issue's Work Notes self-review for the full explanation and the baseline
+passing run recorded before ADR 0018 was added).
