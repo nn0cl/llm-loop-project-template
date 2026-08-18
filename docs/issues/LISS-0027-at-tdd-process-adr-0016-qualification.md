@@ -88,6 +88,14 @@
   citation and "unrelated, concurrently in-flight" qualifier) — no new
   wording invented, per this issue's own instruction.
 - Trace: `docs/collaboration/traces/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification.md`.
+- 2026-08-18 (Reviewer, Design & Review group, separate context): confirmed.
+  Record: `docs/collaboration/reviews/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification-review.md`
+  (Approved). Re-ran `scripts/check-contract-consistency.py` and a targeted
+  grep independently rather than trusting the Implementer's recorded output;
+  both confirmed. This closes Falsification Search scenario #11 from the
+  original WP-0002 Reviewer pass. Work-plan close remains the Director's own
+  pending action; this issue's Status stays `review`, not `closed`, pending
+  that.
 
 ### Self-Review (Implementer, design note -> drafted change)
 

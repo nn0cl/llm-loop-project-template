@@ -39,6 +39,7 @@
 | LISS-0024 | review | S | S | - | LISS-0019 | - | process/implementation-group-worktree-rule |
 | LISS-0025 | review | M | M | AIP-0025-001 | LISS-0019 | - | process/design-agreement-backlog-gate |
 | LISS-0026 | review | S | S | - | LISS-0019 | - | process/backlog-readme-bulk-gate |
+| LISS-0027 | review | S | S | - | Minor Fix Path addendum, post-Reviewer (2026-08-18) | - | process/at-tdd-process-adr-0016-qualification |
 
 ## Plan-Owned Bug Records
 
@@ -173,6 +174,17 @@ accepted result.
   as a finding for the Design & Review group / Director to decide how to
   address (a follow-up backlog item, or a scope amendment to this work
   plan via reopening), not guessed past silently.
+- **Minor Fix Path addendum (2026-08-18)**: after Reviewer approval (below),
+  the Director extended this work plan's scope, via a Reopening Log entry in
+  `DA-2026-08-18-01` (commit `e258d6b`), to include the out-of-scope finding
+  above. Tracked as `docs/issues/LISS-0027-at-tdd-process-adr-0016-qualification.md`,
+  fixed in commit `8798934` (mirrors the exact pattern already used in
+  `design-agreement.md`, no new wording), and separately confirmed by the
+  work-plan-level Reviewer in
+  `docs/collaboration/reviews/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification-review.md`
+  (Approved). `docs/at-tdd/process.md` now carries the same qualification as
+  the other six affected contract files; no out-of-scope finding remains
+  open for this work plan.
 - Next action: submit to the work-plan-level Reviewer (Task 10), per
   `docs/collaboration/cross-session-messaging.md` direction 3 (Trigger B) —
   this Implementation-group session sends the handoff message naming this
@@ -205,11 +217,13 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 No `Type: review-finding` issues were opened — the review found no defect
 requiring correction. Two out-of-scope observations (not review findings
-against this work plan) are carried to the Director in this session's
-report rather than resolved here: `docs/at-tdd/process.md`'s unqualified
-pre-ADR-0016 phrasing (already noted in this work plan's own Preflight
-section above), and a nested-`isolation: worktree`-spawn environment
-interaction noted in the review record's "Scenarios Not Searched" section.
+against this work plan) were carried to the Director in this session's
+report rather than resolved in the original review: `docs/at-tdd/process.md`'s
+unqualified pre-ADR-0016 phrasing, and a nested-`isolation: worktree`-spawn
+environment interaction noted in the review record's "Scenarios Not
+Searched" section (the latter remains an environment observation, not
+something this work plan resolves). The former was resolved via the Minor
+Fix Path addendum above (LISS-0027), separately reviewed and approved.
 
 ## Work-Plan Close
 
