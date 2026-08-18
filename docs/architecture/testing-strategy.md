@@ -91,6 +91,49 @@ Rules:
 - do not depend on real external providers unless the test is explicitly
   marked as manual or integration.
 
+## Coverage Policy
+
+Per `docs/architecture/adr/0018-mandatory-quality-gate-hooks-and-coverage-policy.md`.
+
+### Branch/route anti-gaming rule (mandatory, qualitative)
+
+A coverage percentage measures what ran, not what was decided correctly.
+This rule is mandatory for every adopting project, independent of whatever
+numeric floor (if any) the project chooses under the next section:
+
+- A test that exercises only one side of a conditional branch does not
+  count as covering that branch. Every distinct route — both sides of an
+  `if`, every case of a multi-way branch — needs its own asserting test.
+- A representative subset of routes, chosen only to make a coverage tool
+  report a particular percentage, does not satisfy this rule, even when the
+  reported number looks acceptable.
+- Implementation must not be shaped merely to make a coverage number pass —
+  for example, collapsing a real decision into a form a line-coverage tool
+  cannot see, or removing a genuine conditional in favor of logic that
+  behaves the same way but reads as "covered" by a test that never actually
+  exercised the removed decision.
+
+Self-review and Reviewer records should check this rule directly against
+the diff — which routes gained their own asserting test — not infer
+compliance from a coverage tool's summary percentage alone.
+
+### No universal numeric floor
+
+This template does not mandate one specific numeric coverage floor (for
+example, "80% line coverage") for every adopting project's stack. A floor is
+a useful backstop against a project that adds no coverage discipline at
+all, but it is also exactly the kind of number the anti-gaming rule above
+warns against optimizing toward — a fixed target invites shaping tests and
+implementation to clear that number rather than to be correct. See ADR
+0018's Decision, Rule 3, for the full reasoning.
+
+Each adopting project may choose its own local floor (or decline to set
+one) during its own tooling-setup session (see
+`scripts/lib/emit-tooling-setup-prompt.sh`), recorded there as a project
+decision with its own stated grounds — not fixed by this file or by ADR
+0018. The anti-gaming rule above applies regardless of whether a project
+adopts a local floor.
+
 ## Phase Mapping
 
 Phase 1 Red:

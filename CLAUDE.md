@@ -132,6 +132,7 @@ to the touched area:
 - Personas: `docs/collaboration/personas.md`.
 - Design agreement: `docs/collaboration/design-agreement.md`.
 - Source code quality: `docs/collaboration/source-code-quality.md`.
+- Design & review perspectives: `docs/collaboration/design-review-perspectives.md`.
 - Definition of Done: `docs/collaboration/definition-of-done.md`.
 - Model/tool routing: `docs/collaboration/model-tool-capability-matrix.md`.
 - Privacy/context budget:

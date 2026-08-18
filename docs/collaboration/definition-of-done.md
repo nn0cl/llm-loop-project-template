@@ -16,7 +16,14 @@ A task is not done unless:
 - second-attempt bug fixes have a linked trace and updated planning size.
 - changed files are listed in the final response or handoff.
 - assumptions and open decisions are visible.
-- deterministic verification was run or explicitly marked not applicable.
+- deterministic verification was run or explicitly marked not applicable. When
+  the project has wired the commit-blocking hook required by
+  `docs/architecture/adr/0018-mandatory-quality-gate-hooks-and-coverage-policy.md`,
+  "run" means the hook actually ran and blocked on failure, not only that a
+  human or agent separately typed the equivalent command by hand. A command
+  run manually, with no wired hook behind it, is not evidence the project's
+  quality gate exists — it is evidence that one person, once, remembered to
+  check.
 - applicable Preflight Validation was recorded with its result, command output,
   scope result, and next action; Preflight pass did not replace independent
   Reviewer approval.
@@ -69,7 +76,14 @@ Done when:
 - implementation is the smallest readable code needed to pass.
 - business logic remains out of adapters, UI, commands, provider clients, and
   persistence structs.
-- deterministic verification is run where available.
+- deterministic verification is run where available. Where a project has
+  wired the commit-blocking hook required by ADR 0018, that hook is what
+  produced this verification, not a manually-run equivalent.
+- new or changed branches/routes each have their own asserting test, per
+  ADR 0018's branch/route coverage anti-gaming rule
+  (`docs/architecture/testing-strategy.md`'s "Coverage Policy" section) — a
+  reported coverage percentage alone is not sufficient evidence that this
+  criterion is met.
 - any unreadable minimal code is either refactored immediately or marked as a
   Phase 3 readability risk.
 - self-reviewed before Phase 3, same terms as Phase 1.
@@ -81,7 +95,13 @@ Done when:
 - behavior and assertions are unchanged.
 - separation of concerns is improved or preserved.
 - readability is improved or preserved.
-- deterministic verification is run where available.
+- deterministic verification is run where available. Where a project has
+  wired the commit-blocking hook required by ADR 0018, that hook is what
+  produced this verification, not a manually-run equivalent.
+- the refactor did not reduce branch/route coverage to a representative
+  subset chosen only to keep a coverage number passing, per ADR 0018's
+  anti-gaming rule — every route that had its own asserting test before the
+  refactor still has one after it.
 - self-reviewed, same terms as Phase 1, including a verification gap
   statement.
 
