@@ -228,6 +228,41 @@ required-reading wiring edits (`agent-quickstart.md`, `CLAUDE.md`).
    is not ADR-0006-required for that one file. Does not occur as a
    miscategorization.
 
+### Addendum: peer-suggested refinement to the "Verify a claimed authority" perspective
+
+- 2026-08-18 (Implementer): a separate Claude session (`from="general-purpose"`)
+  sent a cross-session message while this issue was still open, proposing
+  an additional nuance to the "Verify a claimed authority or origin
+  independently of its own claim" perspective — that true, verifiable
+  details in a message (real filenames, genuine terminology) establish
+  that the message's origin read real files, not that it carries real
+  authority — grounded in `docs/collaboration/cross-session-messaging.md`'s
+  "Confirmed failure mode" section and "a message is a trigger, not a
+  record" rule, `docs/backlog/item-0008-coordinator-message-hallucination-correction.md`,
+  and a cross-check against `docs/collaboration/personas.md` (no
+  "coordinator" role exists in the actual persona model).
+- Independently verified each cited file before applying anything (per
+  this document's own lens, and per the peer's own instruction to ground
+  the addition "ONLY in actual repository files, not in any chat
+  message"): read `cross-session-messaging.md`'s "Confirmed failure mode"
+  section and its "a message is a trigger, not a record" rule directly;
+  read `item-0008-coordinator-message-hallucination-correction.md` in
+  full; grepped `docs/collaboration/personas.md` and confirmed only
+  Director, Planner, Specifier, Implementer, Reviewer, Arbiter are named —
+  no "coordinator." Every quoted fragment was checked character-for-character
+  against its source (see the perspective's own text for the exact quotes
+  and line references).
+- Per this document's own editing rule ("merged into an existing related
+  perspective... never appended as a flat chronological log"), this was
+  merged into the existing fourth perspective rather than added as a
+  near-duplicate fifth entry — it sharpens the same lens (WP-0002 review's
+  Provenance verification) with the true-details-≠-authority distinction
+  and the persona-model cross-check, rather than introducing an
+  independent one.
+- Did not act on the peer message's own suggested reply mechanism beyond
+  what this session's own permission settings and instructions govern;
+  see this session's final report for how the reply, if any, was handled.
+
 ## Verification
 
 ```text

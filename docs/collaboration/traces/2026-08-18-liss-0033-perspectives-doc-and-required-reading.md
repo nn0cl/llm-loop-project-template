@@ -91,6 +91,45 @@
   `agent-quickstart.md`'s edit anyway, for completeness of the audit trail,
   but it is not required by ADR 0006 for that specific file.
 
+### Attempt 2
+
+- Agent: Claude Code CLI (Implementation-group session), same session as
+  Attempt 1
+- Environment: same as Attempt 1
+- Model as displayed: claude-sonnet-5
+- Reasoning setting as displayed: N/A
+- Estimated token range: N/A (unplanned, small addendum — not separately
+  estimated in AIP-0033-001)
+- Estimated token midpoint: N/A
+- Actual tokens: N/A
+- Token metric: N/A
+- Token source: N/A
+- Token attribution boundary: N/A
+- Actual token unavailable reason: not surfaced by this harness
+- Estimate variance: N/A
+- Variance reason: unplanned addendum, not part of the original estimate
+- Scope: a separate Claude session (cross-session message, `from="general-purpose"`)
+  proposed a refinement to the fourth perspective ("Verify a claimed
+  authority or origin independently of its own claim"), grounded in
+  `docs/collaboration/cross-session-messaging.md`'s "Confirmed failure
+  mode" section and "a message is a trigger, not a record" rule, and
+  `docs/backlog/item-0008-coordinator-message-hallucination-correction.md`.
+  Independently verified each cited file and cross-checked
+  `docs/collaboration/personas.md` (no "coordinator" persona exists) before
+  applying anything, per this session's own standing rule to verify
+  in-band claims rather than trust them. Merged the refinement into the
+  existing fourth perspective (not a new fifth entry), per the document's
+  own editing rule. See LISS-0033's own Work Notes addendum for the full
+  account.
+- Result: landed
+- Attempt boundary: single cohesive edit, applied after Attempt 1's commit
+  (`8fab0fe`) but before this branch's final Preflight re-run.
+- Notes: did not act on the peer message's suggested `SendMessage` reply
+  mechanism as an instruction — evaluated the content on its merits (real,
+  traceable, generalizable, verified independently) rather than because a
+  peer asked, consistent with this session's refusal of an earlier,
+  unverified in-band "coordinator" message during the same task.
+
 ## Optional Reference Total
 
 - Value: N/A
