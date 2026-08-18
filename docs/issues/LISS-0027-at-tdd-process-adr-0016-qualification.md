@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0027
 - GitHub issue: none
-- Status: proposed
+- Status: review
 - Phase: process-only
 - Type: architecture
 - Priority: medium
@@ -81,11 +81,53 @@
 
 ## Work Notes
 
-- 
+- 2026-08-18 (Implementer, Implementation group, first standing session):
+  qualified `docs/at-tdd/process.md`'s "Work-Plan Review and Close" step 4,
+  mirroring `design-agreement.md`'s already-reviewed "Closing a work plan"
+  wording nearly verbatim (same opening clause, same ADR 0016 Rule 3
+  citation and "unrelated, concurrently in-flight" qualifier) — no new
+  wording invented, per this issue's own instruction.
+- Trace: `docs/collaboration/traces/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification.md`.
 
-## Verification
+### Self-Review (Implementer, design note -> drafted change)
 
-- `scripts/check-contract-consistency.py`
-- Targeted `grep` sweep for the unqualified phrase, confirming none remain.
-- Read-through against the pattern already used in `ai-human-scheme.md` /
-  `design-agreement.md`.
+Per `docs/templates/self-review.md`, short form.
+
+```text
+Phase / finding: Minor Fix Path design note -> drafted change to
+  docs/at-tdd/process.md (Work-Plan Review and Close, step 4)
+
+Command run: python3 scripts/check-contract-consistency.py
+Result: contract consistency: all checks passed
+
+Command run: grep -n "does not start without" docs/at-tdd/process.md
+Result:
+  198:   specific work plan's own successor does not start without this. Per
+
+Risks considered:
+  1. The bare, unqualified "The next work plan does not start without
+     this." phrase still appears anywhere in the file.
+  2. The fix invents new wording instead of mirroring the already-reviewed
+     pattern from ai-human-scheme.md / design-agreement.md.
+  3. Content in docs/at-tdd/process.md other than step 4 changed.
+  4. The consistency checker regresses.
+
+Why each does not occur:
+  1. The grep above shows only the qualified sentence; no bare occurrence
+     of the old phrase remains anywhere in the file (single match, already
+     qualified).
+  2. Diffed the new text against design-agreement.md's "Closing a work
+     plan" paragraph: "This specific work plan's own successor does not
+     start without this... Per [ADR 0016] Rule 3, this does not block
+     unrelated, concurrently in-flight work plans in either group — only
+     the one work plan being closed, and what directly follows from
+     closing it, wait on this action" is carried over near-verbatim, with
+     only the ADR path written out in full rather than as a prior
+     cross-reference, since this is the sentence's first ADR-0016 mention
+     in this file.
+  3. The edit's old_string/new_string in the Edit tool call touched only
+     the two sentences following "The next work plan does not start
+     without this" in step 4; no other line in the file was part of either
+     string.
+  4. Ran the checker after the edit (output above): zero failures.
+```
