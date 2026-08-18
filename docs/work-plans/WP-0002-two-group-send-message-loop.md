@@ -227,10 +227,36 @@ Fix Path addendum above (LISS-0027), separately reviewed and approved.
 
 ## Work-Plan Close
 
-- Date: pending
-- Result read: pending
-- Next direction: pending
-- New design agreement (if any): pending
+- Date: 2026-08-18
+- Result read: the Director read both Reviewer approvals — the original
+  WP-0002 pass (`docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`)
+  covering ADR 0016 and the six ADR-0006 contract-file changes
+  (LISS-0020–0025) plus `docs/backlog/README.md` (LISS-0026), and the
+  Minor Fix Path confirmation for LISS-0027
+  (`docs/collaboration/reviews/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification-review.md`,
+  `docs/at-tdd/process.md`) — both Approved, zero open findings. Confirmed
+  independently, via direct `git` inspection of the Design & Review
+  session's own worktree branch (not by trusting either agent's self-report
+  alone), that all 13 commits, both review records, and both AI work traces
+  for the new issue are real and match what was reported.
+- Next direction: merge the completed work
+  (`worktree-agent-a2450968f458bbc6f`) into
+  `process/two-group-send-message-loop-design` — done, commit `3e94f1e`,
+  local merge only. Proceed toward opening a pull request into `main`;
+  pushing the branch and opening the PR each require their own explicit
+  Director confirmation before execution (not granted by this close alone).
+  `docs/backlog/item-0005` (template-propagation script),
+  `item-0006` (quality-gate hooks and review-perspectives document), and
+  `item-0007` (multi-agent-tool loop portability) remain captured,
+  unpromoted candidates for a future work plan.
+- New design agreement (if any): none opened at this close. A recurring,
+  unexplained pattern of four unverified "coordinator"-labeled messages
+  encountered during this work plan's execution (see the review record's
+  "Provenance verification" section and `cross-session-messaging.md`'s
+  "Confirmed failure mode" section) was not acted on by any session and
+  caused no harm, but its source is still unknown — worth a dedicated
+  backlog item if the Director wants it investigated, not opened here since
+  it does not block this close.
 
 ## Risks
 
