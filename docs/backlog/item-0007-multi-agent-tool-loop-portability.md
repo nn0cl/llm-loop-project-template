@@ -5,7 +5,7 @@
 - Item ID: item-0007
 - Title: Make the standing multi-layer loop (ADR 0016) adoptable by AI coding
   tools other than Claude Code
-- Status: captured
+- Status: promoted
 - Created: 2026-08-18
 - Updated: 2026-08-18
 - Priority hint: medium
@@ -142,7 +142,13 @@ contract/tool mismatch ADR 0006 exists to prevent.
 
 ## Promotion notes
 
-Not yet promoted. Raised in the Backlog-layer thread while WP-0002 /
-item-0004 is still in flight (Design & Review is currently handing off to
-Implementation). Deliberately sequenced after item-0004 settles, since this
-item needs ADR 0016's final wording as its baseline.
+- Date: 2026-08-18
+- Decision: Promoted, in the Backlog-layer thread, after WP-0002/item-0004
+  closed (ADR 0016's final wording, its baseline, now exists). Per ADR 0016
+  Rule 2, this approval is the single design-phase gate — the Design &
+  Review group proceeds autonomously from here: run the Uncertainty spike
+  (primary-vendor-doc verification of whether Cursor/Codex/Copilot/Grok
+  Build support peer cross-session messaging or only single-orchestrator
+  fan-out) itself, then build the work plan, spec, and design agreement,
+  without a further live dialogue turn with the Director for this item.
+- Reason: Sequencing condition (ADR 0016 landed) is satisfied.

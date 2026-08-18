@@ -5,7 +5,7 @@
 - Item ID: item-0005
 - Title: Extend template propagation tooling to cover the two-group loop
   documents
-- Status: captured
+- Status: promoted
 - Created: 2026-08-18
 - Updated: 2026-08-18
 - Priority hint: medium
@@ -61,6 +61,13 @@ the new/changed files.
 
 ## Promotion notes
 
-Not yet promoted. Explicitly out of scope for WP-0002 / item-0004 — raised
-by the Director as a separate concern while that work plan was already in
-flight, and parked here per this thread's role as the Backlog layer.
+- Date: 2026-08-18
+- Decision: Promoted, in the Backlog-layer thread, after WP-0002/item-0004
+  closed. Per ADR 0016 Rule 2, this approval is the single design-phase
+  gate — the Design & Review group proceeds autonomously from here
+  (spike/read `scripts/copy-ai-collaboration-files.sh` and ADR 0008 first,
+  since Uncertainty above marks a spike as required), building its own work
+  plan, spec, and design agreement, without a further live dialogue turn
+  with the Director for this item.
+- Reason: Explicitly out of WP-0002's scope, raised as a distinct concern;
+  now approved on its own terms.

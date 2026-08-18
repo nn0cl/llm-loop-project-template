@@ -5,7 +5,7 @@
 - Item ID: item-0006
 - Title: Mandatory pre-commit quality-gate hooks, branch/route coverage
   policy, and a living design/review-perspectives document
-- Status: captured
+- Status: promoted
 - Created: 2026-08-18
 - Updated: 2026-08-18
 - Priority hint: high
@@ -110,8 +110,14 @@ distilled or fed back into future design intake.
 
 ## Promotion notes
 
-Not yet promoted. Raised in the Backlog-layer thread while WP-0002 (the
-two/three-layer `send_message` loop) is already in flight in a separate
-Design & Review sub-agent session; parked here per this thread's role as
-the Backlog layer, to be promoted into its own design agreement and work
-plan later.
+- Date: 2026-08-18
+- Decision: Promoted, in the Backlog-layer thread, after WP-0002 closed.
+  Per ADR 0016 Rule 2, this approval is the single design-phase gate — the
+  Design & Review group proceeds autonomously from here: resolve the
+  Uncertainty spike (hook mechanism per stack, where the perspectives
+  document lives) and the Known-constraints boundary questions (this
+  template has no fixed language of its own; interaction with
+  `findings-reuse.md`) through its own judgment, then build the work plan,
+  spec, and design agreement, without a further live dialogue turn with the
+  Director for this item.
+- Reason: Well-specified direction already captured; ready to run.

@@ -5,7 +5,7 @@
 - Item ID: item-0008
 - Title: Correct cross-session-messaging.md's "coordinator" failure-mode
   section — likely model-side hallucination, not external injection
-- Status: ready-for-planning
+- Status: promoted
 - Created: 2026-08-18
 - Updated: 2026-08-18
 - Priority hint: medium
@@ -109,9 +109,16 @@ Implementation sessions.
 
 ## Promotion notes
 
-Not yet promoted. Raised in the Backlog-layer thread immediately after
-WP-0002's Director close, from a follow-up investigation the Director
-explicitly requested. Recorded as a backlog item rather than edited
-directly, since `cross-session-messaging.md` is an ADR-0006 contract file
-and a post-close, unreviewed edit to it would itself violate the process
-this whole work plan just built.
+- Date: 2026-08-18
+- Decision: Promoted, in the Backlog-layer thread. Per ADR 0016 Rule 2,
+  this approval is the single design-phase gate — the Design & Review group
+  proceeds autonomously from here: confirm the correction's evidence itself
+  (reproducible — repo-wide `coordinator` grep, `.claude/settings*.json`
+  inspection), then correct `cross-session-messaging.md`'s "Confirmed
+  failure mode" section and the WP-0002 review record's "Provenance
+  verification" section accordingly, as a Minor Fix Path (single
+  well-evidenced contract-file correction, mirrors no prior pattern but is
+  narrow and low-risk) — still requires its own trace and separate-context
+  Reviewer confirmation per ADR 0006, without a further live dialogue turn
+  with the Director for this item.
+- Reason: Well-evidenced, narrow correction; ready to run.
