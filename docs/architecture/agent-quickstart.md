@@ -171,6 +171,7 @@ plan before continuing.
 - Dependency policy: `docs/architecture/dependency-policy.md`
 - AI input/output/reasoning: `docs/architecture/io-reasoning-contracts.md`
 - AI-human collaboration: `docs/collaboration/ai-human-scheme.md`
+- Design & review perspectives: `docs/collaboration/design-review-perspectives.md`
 - `<Add one line per stack-specific architecture document you create, e.g.
   "Backend core: docs/architecture/backend-architecture.md.">`
 
