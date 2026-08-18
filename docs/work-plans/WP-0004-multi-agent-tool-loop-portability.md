@@ -23,8 +23,8 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0029 | ready | M | M | AIP-0029-001 | - | LISS-0030 | process/adr-0017-portable-loop |
-| LISS-0030 | ready | M | M | AIP-0030-001 | LISS-0029 | - | process/mirror-portable-loop-wording |
+| LISS-0029 | review | M | M | AIP-0029-001 | - | LISS-0030 | process/adr-0017-portable-loop |
+| LISS-0030 | ready | M | M | AIP-0030-001 | LISS-0029 | - | process/adr-0017-portable-loop |
 
 ## Plan-Owned Bug Records
 
