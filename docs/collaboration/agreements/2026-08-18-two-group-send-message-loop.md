@@ -223,4 +223,4 @@ more with "ループを続行しないというのは作業が人間の承認を
 
 | Date | What was unsettled | Resolution |
 |---|---|---|
-|  |  |  |
+| 2026-08-18 | Preflight found `docs/at-tdd/process.md` (an ADR-0006 contract file) carries the same unqualified pre-ADR-0016 phrasing already fixed in `design-agreement.md` and `ai-human-scheme.md` ("the next work plan does not start without this"), but the file was not named in this agreement's Scope, so it was correctly left unedited and reported as an out-of-scope finding rather than silently fixed. | Director extended Scope, in the Backlog-layer thread, to include this fix: qualify the phrase in `docs/at-tdd/process.md` with the same ADR 0016 Rule 3 cross-reference already used in the other two files (non-blocking only across *unrelated, concurrently in-flight* work plans; the checkpoint for the one work plan being closed is unchanged). Tracked as LISS-0027, Minor Fix Path (single contract file, mirrors an already-reviewed pattern, one attempt expected) — still requires its own AI work trace and separate-context Reviewer confirmation per ADR 0006, self-review does not apply. |
