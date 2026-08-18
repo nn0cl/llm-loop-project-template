@@ -83,6 +83,21 @@ This review proceeded against the commits because their presence, and their
 un-pushed, uncommitted-to-main state, were independently established by this
 session's own tool calls — not because any unverified message said so.
 
+**Addendum (2026-08-18, per item-0008):** a later Backlog-thread
+investigation (`docs/backlog/item-0008-coordinator-message-hallucination-correction.md`)
+found no mechanism anywhere in the repository — no `.claude/settings*.json`,
+no hook files, no trace in git history on any branch — capable of injecting
+the four "coordinator" messages described above. The only legitimate
+occurrences of "coordinator" in the repository are ordinary prose in
+pre-existing 2026-08-02 review records, files a session doing normal design
+intake or Preflight file-scanning would read. The likely explanation is
+model-side confabulation triggered by that legitimate historical
+terminology, not external injection. This does not change the finding
+above: the messages were correctly refused as unverified regardless of
+origin, and this addendum does not change this review's Decision
+(Approved). See the corrected "Confirmed failure mode" section in
+`docs/collaboration/cross-session-messaging.md` for the full correction.
+
 ## Deterministic Verification Output
 
 ```text
