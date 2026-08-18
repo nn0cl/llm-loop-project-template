@@ -26,10 +26,18 @@ it.
 Responsibilities:
 
 - state the direction for a work plan: what is to be built, under which
-  constraints, and what would count as it being wrong.
-- build the detailed plan with the Planner through dialogue.
+  constraints, and what would count as it being wrong. Per ADR 0016 (Rule
+  2), this direction is ordinarily stated once, at
+  `docs/backlog/item-NNNN-*.md` approval — the dialogue below happens then,
+  not necessarily again for each work plan the approved item produces.
+- build the detailed plan with the Planner through dialogue, at backlog-item
+  approval; downstream, within that item's stated scope, the Design &
+  Review group may build the plan autonomously without a further live
+  dialogue turn.
 - reach the design agreement covering that work plan, explicitly and on the
-  record.
+  record — via a live dialogue turn, or via the backlog-item approval basis
+  described in `docs/collaboration/design-agreement.md`'s "Backlog-item-
+  level agreement".
 - decide on a reopening request when the loop returns one.
 - **close the work plan**: after the work-plan-level Reviewer approves, read
   the result and state the next direction — or end the engagement — in the
@@ -83,12 +91,28 @@ design agreements. Session language and audit/findings flags live in
 `docs/collaboration/loop-settings.toml` (see `loop-settings.md`,
 `post-hoc-audit.md`, `findings-reuse.md`).
 
+Per `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`,
+the loop below runs inside two standing AI session groups — the **Design &
+Review group** (Planner, Specifier, Reviewer, Arbiter) and the
+**Implementation group** (Implementer) — connected by the `SendMessage` /
+`ListAgents` cross-session tools. Handoff content between the two groups is
+defined in `docs/collaboration/cross-session-messaging.md`. The Director's
+design-phase presence moves to the Backlog layer, at
+`docs/backlog/item-NNNN-*.md` approval: the `[human present]` marker below
+is backlog-item approval, not a further live, per-work-plan dialogue turn.
+
 ```text
-Director states direction for one work plan
-  -> Planner <-> Director dialogue          [human present]
-  -> Specifier writes acceptance specs      [human present]
-  -> DESIGN AGREEMENT (Director + AI)       [human present, gate, documented]
-  ============================================================
+Backlog item approved (Director, Backlog layer)      [human present, gate]
+  ================== Design & Review group ======================
+  -> Planner builds the plan, within the approved backlog item's
+     stated scope (no further live Director turn required per work plan)
+  -> Specifier writes acceptance specs
+  -> DESIGN AGREEMENT (backlog approval + AI executability statement,
+     recorded per docs/collaboration/design-agreement.md)   [documented]
+  ================================================================
+             handoff: design agreement recorded -> SendMessage
+                                  v
+  ==================== Implementation group ======================
   for each issue in the work plan:
     -> Phase 0 Design Intake    (Implementer)
     -> Phase 1 Red              (Implementer)
@@ -100,15 +124,22 @@ Director states direction for one work plan
     -> Phase 3 Refactor         (Implementer)
     -> Deterministic verification
     -> Self-review              (Implementer, same context)
-  ============================================================
   -> Preflight Validation        (Implementer / deterministic tool, work-plan level)
   -> fail -> Implementer correction and repeat Preflight
   -> pass
+  ================================================================
+             handoff: Preflight pass -> SendMessage
+                                  v
+  ================== Design & Review group =======================
   -> Review                     (Reviewer, separate context, whole work plan)
        |
        +-- findings -> review-finding local issues -> Minor Fix Path / re-open issue
        +-- approved
-  -> WORK PLAN CLOSE (Director: read result + state next direction) [human present, gate]
+  ================================================================
+             handoff: Reviewer approval (or rejection) -> SendMessage
+                                  v
+  -> WORK PLAN CLOSE (Director, Backlog layer: read result + state
+     next direction)                                  [human present, gate]
        |
        +-- next direction -> new design agreement for the next work plan
        +-- no further work -> engagement ends
@@ -117,15 +148,51 @@ Director states direction for one work plan
        +-- unsettled question / boundary crossing -> reopen design agreement
 ```
 
-Between the two double lines, the loop runs without human presence. It stops
-only for a reopening request, never for approval of work already done. The
-work-plan close is not "inside" that stretch — it is the second of the two
-human gates this model has, matched to the design agreement at the start.
+Between the backlog-item gate and the work-plan close, the loop runs without
+human presence, unless the Director's intervention channel (below) has
+gated a specific item. It stops only for a reopening request, never for
+approval of work already done. The work-plan close is not "inside" that
+stretch — it is the second of the two human gates this model has, matched to
+the backlog-item approval at the start.
 
 Preflight Validation is a submission check, not an approval, run at the
 work-plan level before the Reviewer sees the plan's result. It may reject a
 change for missing evidence or mechanical inconsistency, but it cannot approve
 specification conformance, set `wont_do`, or close an ISSUE.
+
+### Non-blocking concurrency across work plans
+
+Per ADR 0016 Rule 3: multiple work plans may be in flight concurrently,
+across both groups. A work plan awaiting the Director's closing checkpoint
+does not block the Design & Review group from continuing design work on the
+next approved backlog item, nor the Implementation group from continuing
+execution on another already-agreed work plan — the diagram above may be
+running more than once at a time, once per in-flight work plan. This changes
+only the blocking behavior across *unrelated* work plans: the checkpoint
+still requires the same combined Director action, for the one work plan it
+closes, before that work plan's own next direction begins.
+
+### Intervention channel
+
+Per ADR 0016 Rule 4: at any time, the Director may send a chat message
+directly into either group's standing session. Receipt of such a message
+gates the specific in-flight item being worked at that moment — not the
+group's other concurrent work — to per-step Director approval:
+
+- the group continues its development-loop and review work on that item;
+- each subsequent step on that item requires the Director's explicit
+  approval before proceeding;
+- the gated mode persists until the Director gives a resolving instruction,
+  which either restores autonomous progress on that item or redirects it;
+- other concurrently in-flight work plans or backlog items, in either
+  group, are unaffected and continue under the standing backlog-level
+  authorization.
+
+Intervention is a per-item mode change, not a session halt and not a third
+standing human gate. The gate and its resolution are recorded in the
+affected issue's Work Notes or the work plan's own record, per
+`docs/collaboration/cross-session-messaging.md` — not only in chat history,
+per Invariant 1.
 
 ## Approval Model
 
@@ -133,16 +200,30 @@ specification conformance, set `wont_do`, or close an ISSUE.
 
 Two gates per work plan: the **design agreement**, at the start, and the
 **work-plan close**, at the end — one combined action, not two. Both are
-mutual and explicit:
+mutual and explicit. Per
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+(Rule 2), the start gate is reached once, at `docs/backlog/item-NNNN-*.md`
+approval, in the Backlog layer — not through a further live, per-work-plan
+Planner-Director dialogue turn:
 
-- At the start, the Director agrees the plan describes what they want built,
-  and the AI agrees it is executable without further interpretation. Recorded
-  under `docs/collaboration/agreements/`. See
-  `docs/collaboration/design-agreement.md`.
+- At the start, the Director's backlog-item approval, plus the Design &
+  Review group's own executability statement recorded in the resulting
+  design-agreement document, together satisfy both halves of "Reaching
+  agreement" in `docs/collaboration/design-agreement.md`, for the work plan
+  that backlog item authorizes. A work plan that goes beyond what the
+  backlog item states is not covered by this rule and requires a reopening
+  request.
 - At the close, the Director reads the Reviewer-approved result and states
-  the next direction (or ends the engagement) in the same turn.
+  the next direction (or ends the engagement) in the same turn. Per ADR 0016
+  (Rule 3), this checkpoint, for one work plan, does not block the Design &
+  Review group's or the Implementation group's other concurrently in-flight
+  work — only the start of *that* work plan's own next direction waits on
+  it.
 
-There is no per-phase and no per-issue human gate. Do not create one.
+There is no per-phase and no per-issue human gate. Do not create one. The
+Director's intervention channel (ADR 0016 Rule 4, "Intervention channel"
+above) is not a third standing gate — it is an optional, Director-initiated
+exception that gates one specific in-flight item, not a routine checkpoint.
 
 ### Self-review (Implementer, inside a work plan)
 
@@ -285,6 +366,15 @@ continue. It is not a request to approve work already produced.
 
 The loop does not guess past an unsettled question, and it does not stop
 quietly.
+
+A reopening request concerns one work plan. Per ADR 0016 (Rule 3), it does
+not block the Design & Review group's or the Implementation group's other
+concurrently in-flight work plans or backlog items. A reopening request is
+distinct from the Director's intervention channel (ADR 0016 Rule 4): a
+reopening request is the loop stopping itself and asking the Director a
+question; intervention is the Director proactively sending a message into a
+group's session, which gates that specific item to per-step approval rather
+than stopping it outright.
 
 ## Context Ledger
 

@@ -68,6 +68,40 @@ time:
   persona can actually review before they go stale; more parallel branches than
   the review capacity defeats the point of short-lived branches.
 
+### Implementation-group worktree, per work plan
+
+Per `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`,
+the Implementation group (Implementer) works each work plan in its own
+dedicated `git worktree`, on top of the existing feature-unit branch
+convention above — this is a mechanic added for the standing two-group
+topology, not a replacement for the branch-naming or PR rules already
+stated in this document.
+
+- **Why**: the Design & Review group (Planner, Specifier, Reviewer, Arbiter)
+  works against `main` — producing docs, specs, ADRs, and review records —
+  while the Implementation group executes an agreed work plan concurrently.
+  A dedicated worktree keeps the Implementation group's in-progress,
+  uncommitted or unmerged edits isolated from the Design & Review group's
+  own concurrent reads and writes against `main`.
+- **When created**: at the "Design agreement recorded -> Implementation
+  group" handoff (per
+  `docs/collaboration/cross-session-messaging.md`), before Phase 0 Design
+  Intake starts for the work plan's first issue.
+- **Naming convention**: the worktree directory is named after the work
+  plan's feature branch (e.g. a work plan branching as
+  `process/<short-process-topic>` uses a worktree directory named for that
+  same branch), consistent with the branch-naming convention above — a
+  worktree name should let a reader tell which branch, and therefore which
+  work plan, it holds without opening it.
+- **When removed**: after the work plan's branch merges, or the work plan
+  closes (per `docs/collaboration/design-agreement.md`'s "Closing a work
+  plan"), whichever happens first under this repository's existing merge
+  timing. A worktree for a work plan that has not yet closed is not removed
+  while issues in that plan are still in progress.
+- This does not change branch-naming, the CI gate, the feature-unit branch
+  creation steps, or any other rule in this document — it only states where
+  the Implementation group's checkout lives while it works.
+
 ## Stacked Branches for Phase Splitting
 
 A single issue's Red, Green, and Refactor phases may be submitted as stacked
