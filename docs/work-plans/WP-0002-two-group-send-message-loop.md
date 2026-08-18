@@ -181,8 +181,11 @@ accepted result.
 
 ## Work-Plan Review
 
-Reviewer's approval record: pending — link once recorded under
-`docs/collaboration/reviews/`.
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`
+— **Approved** (2026-08-18, Reviewer persona, Design & Review group standing
+session, separate context from the Implementation group session that
+produced LISS-0020–0026).
 
 Six of the eight issues (LISS-0020, 0021, 0022, 0023, 0024, 0025) change
 agent operating contract files under ADR 0006 and therefore require the
@@ -191,13 +194,22 @@ trace presence, cross-file consistency), not only the work plan's
 specification conformance in general — mirroring
 `docs/collaboration/agreements/2026-08-03-work-plan-scoped-governance.md`'s
 Task 4 precedent, where one work-plan-level Reviewer pass covered
-propagation across nine contract files.
+propagation across nine contract files. The review record's Falsification
+Search table addresses each of the six individually.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
 |  |  |  |
+
+No `Type: review-finding` issues were opened — the review found no defect
+requiring correction. Two out-of-scope observations (not review findings
+against this work plan) are carried to the Director in this session's
+report rather than resolved here: `docs/at-tdd/process.md`'s unqualified
+pre-ADR-0016 phrasing (already noted in this work plan's own Preflight
+section above), and a nested-`isolation: worktree`-spawn environment
+interaction noted in the review record's "Scenarios Not Searched" section.
 
 ## Work-Plan Close
 
