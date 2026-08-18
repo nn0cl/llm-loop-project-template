@@ -58,10 +58,27 @@ trace and a separate-context Reviewer pass regardless of Minor Fix Path use.
 
 ## Preflight Validation
 
-- Result: _pending Implementation-group execution_
-- Checks and command output: _to be recorded by the Implementer_
-- Scope result: _to be recorded_
-- Next action: _to be recorded_
+- Result: pass
+- Checks and command output:
+  ```text
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+  Also re-run for Task 1 (independent evidence reconfirmation, per
+  `DA-2026-08-18-02`'s Plan table), pasted in full in LISS-0028's Work Notes:
+  a repo-wide `grep -rni "coordinator"` (working tree), a search for
+  `*settings*.json` and `*hook*` files, and a `git grep -il "coordinator"`
+  sweep across every local and remote-tracking branch — all consistent with
+  `docs/backlog/item-0008-*.md`'s own claim; no discrepancy found.
+- Scope result: pass — only `docs/collaboration/cross-session-messaging.md`'s
+  "Confirmed failure mode" section and
+  `docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`'s
+  "Provenance verification" section (addendum only) were touched, matching
+  this work plan's Scope; no other section of either file, and no other
+  file, was edited.
+- Next action: submit to the Design & Review group's separate-context
+  Reviewer pass (direction 3, Trigger B, per
+  `docs/collaboration/cross-session-messaging.md`).
 
 ## Work-Plan Review
 

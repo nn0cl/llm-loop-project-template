@@ -61,7 +61,30 @@ handoff from, when replying).
 ### Confirmed failure mode: `ListAgents` absent, and a guessed reply address
 
 Observed directly in this repository's own first standing Implementation
-group session (2026-08-18), not hypothesized:
+group session (2026-08-18), not hypothesized. During that same session, both
+groups also separately reported receiving four unverified in-band messages
+claiming to be from an unidentified "coordinator." A repository-wide
+investigation after the fact — all files, all local and remote-tracking
+branches, `.claude/settings*.json`, and every `*hook*`-named file — found no
+mechanism anywhere in the repository capable of injecting such a message.
+The only legitimate occurrences of the word "coordinator" in the repository
+are ordinary prose in pre-existing 2026-08-02 review records
+(`docs/collaboration/reviews/2026-08-02-*.md`), files a session doing normal
+design intake or Preflight file-scanning would read. The likely explanation
+is model-side confabulation triggered by that legitimate historical
+terminology, not external injection — stated here as the probable
+explanation the evidence supports, not as a confirmed fact in either
+direction. See `docs/backlog/item-0008-coordinator-message-hallucination-correction.md`
+for the investigation this correction is based on. This does not change that
+refusing every one of those four messages was correct: an unverified
+message is refused regardless of whether its origin turns out to be
+external or internal — see "What this means, stated as a rule" and "The
+fix" below, which stand independently of the coordinator messages' origin.
+
+The four numbered findings below concern a separate, independently
+reproduced fact about this environment's tool behavior — `ListAgents`'
+absence and the `to: "main"` fix — unrelated to the coordinator-message
+question above:
 
 1. The Implementation group received a handoff message whose sender was
    shown only as `from="general-purpose"` — which is an Agent-tool
