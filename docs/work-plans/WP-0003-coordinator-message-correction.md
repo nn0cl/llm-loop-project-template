@@ -23,7 +23,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0028 | ready | S | S | - | - | - | process/coordinator-message-correction |
+| LISS-0028 | done | S | S | - | - | - | process/coordinator-message-correction |
 
 ## Plan-Owned Bug Records
 
@@ -103,10 +103,21 @@ requiring correction.
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-18
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-18-wp-0003-coordinator-message-correction-review.md`,
+  Approved, independently re-verified from a detached-worktree checkout of
+  the actual committed diff rather than the Implementer's report) via the
+  Backlog thread, which independently confirmed the review record, trace,
+  and issue files exist and match what was reported before presenting this
+  close to the Director.
+- Next direction: closed with "クローズ。" Merged into
+  `process/two-group-send-message-loop-design` (commit `da43601`, local
+  merge). Push and PR remain separate explicit actions, not yet requested.
+  WP-0004, WP-0005, and WP-0006 continue under the Design & Review group's
+  own autonomous mandate (ADR 0016 Rule 2) — this close does not gate them
+  (ADR 0016 Rule 3), and they are not part of this action.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
