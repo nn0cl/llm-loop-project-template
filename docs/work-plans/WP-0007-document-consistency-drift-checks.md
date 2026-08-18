@@ -22,7 +22,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0035 | ready | M | M | AIP-0035-001 | - | - | process/document-consistency-drift-checks |
+| LISS-0035 | review | M | M | AIP-0035-001 | - | - | process/document-consistency-drift-checks |
 
 ## Plan-Owned Bug Records
 
@@ -51,10 +51,33 @@ correction against an already-approved result).
 
 ## Preflight Validation
 
-- Result: _pending Implementation-group execution_
-- Checks and command output: _to be recorded by the Implementer_
-- Scope result: _to be recorded_
-- Next action: _to be recorded_
+- Result: `pass`
+- Checks and command output:
+  - CI's "Check architecture decision records" step logic, reproduced
+    locally against the real `docs/architecture/adr/` directory:
+    ```text
+    PASS: contiguous ADR sequence 0001-0016, 16 files
+    ```
+  - `python3 scripts/check-contract-consistency.py` (full run, all eight
+    checks, against `HEAD`):
+    ```text
+    contract consistency: all checks passed
+    ```
+    Exit code: 0.
+  - Each of the three new check functions (`check_id_range_collisions`,
+    `check_issue_status_sync`, `check_superseding_phrases`) additionally
+    verified in isolation: clean pass on `HEAD`, and a demonstrated failure
+    against a constructed synthetic case per check. Full pasted output for
+    all of the above is in LISS-0035's Work Notes (self-review, full form).
+- Scope result: all four in-scope tasks (CI dynamic ADR check; three new
+  script-level checks; docstring update) complete and verified per
+  DA-2026-08-18-06's Plan and Verification sections. No open
+  `review-finding` issues affect this work plan. No implementation issue is
+  blocked on an open spike case.
+- Next action: submit to the Design & Review group's separate-context
+  Reviewer pass (per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`
+  and this work plan's own Plan, Task 8). Preflight is not itself an
+  approval and does not set `wont_do` or `closed`.
 
 ## Work-Plan Review
 
