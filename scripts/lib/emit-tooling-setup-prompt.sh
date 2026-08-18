@@ -107,6 +107,43 @@ Match the real stack (examples — pick what fits, do not install all):
 Wire scripts or Makefile/just targets so one command runs the suite and prints
 output suitable to paste into self-review / preflight records.
 
+**Mandatory: wire an actual, commit-blocking pre-commit hook (ADR 0018).**
+Documenting the commands above is not sufficient by itself — per
+docs/architecture/adr/0018-mandatory-quality-gate-hooks-and-coverage-policy.md,
+each implementation language present in this project must have an
+enforcement mechanism that runs automatically before a commit is created and
+blocks the commit when lint, build/compile, unit tests, or coverage fail. A
+command a human or agent is expected to remember to run manually does not
+satisfy this. Extending CI (Section D) to run these same checks after a push
+does not satisfy this either — CI is a second, later line of defense, not a
+substitute for a local, commit-blocking hook.
+
+Name and wire the concrete mechanism for the detected stack (examples — pick
+what fits, do not install all; commands below are illustrative, not
+literal instructions to this script):
+
+| Ecosystem | Typical enforcing pre-commit mechanism |
+| --- | --- |
+| Any stack, minimal | native git hooks via a versioned core.hooksPath script (plain .git/hooks/pre-commit is not tracked by git) |
+| Node/TypeScript | husky or lefthook, wired to run lint/typecheck/tests/coverage on the pre-commit stage |
+| Python | the pre-commit framework (pre-commit.com), with hooks for ruff/mypy/pytest/coverage |
+| Rust | a cargo-husky-style crate, or a versioned core.hooksPath script running fmt/clippy/test/coverage |
+| Go | a versioned core.hooksPath script running gofmt/golangci-lint/go test -cover |
+| Other | an equivalent maintained hook framework for the ecosystem, or a versioned core.hooksPath script — the mechanism matters less than that it actually blocks the commit |
+
+Record, in docs/architecture/tooling.md's stack-specific table, which
+mechanism is wired for each row — not only the command.
+
+**Mandatory: state the branch/route coverage approach (ADR 0018).** In the
+design note, state how this project satisfies the branch/route
+anti-gaming rule (docs/architecture/testing-strategy.md's "Coverage
+Policy" section) — that every branch/route needs its own asserting test,
+not a subset chosen to hit a number. Consistent with ADR 0018's no-
+universal-floor stance, this template does not tell you what numeric
+coverage floor (if any) to pick: decide, and record with grounds, whether
+this project adopts a local numeric floor, and if so what it is and why —
+this is a project-local decision, not something to infer from this prompt.
+
 ### B. Static analysis and architecture boundaries
 
 - Import/boundary checker when multiple layers exist (e.g. dependency-cruiser,
@@ -138,6 +175,13 @@ Extend .github/workflows/ci.yml (or stack CI) so:
 - contract/template sanity checks from this collaboration template remain
 - jobs that need a manifest are **conditional** until the project has that
   manifest (do not fail empty template-only repos without code)
+
+**CI is additive, not a substitute (ADR 0018).** These CI jobs are required
+in addition to, never instead of, the commit-blocking pre-commit hook from
+Section A. CI catches what a bypassed or misconfigured local hook missed —
+it runs after the commit already exists, sometimes after it has already been
+shared with collaborators, which is exactly the gap the local hook exists to
+close. Do not report Section A done on the strength of a CI job alone.
 
 ### E. Cost and quality bar
 
