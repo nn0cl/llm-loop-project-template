@@ -20,7 +20,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0036 | ready | S | S | - | - | - | process/coordinator-role-inoculation-rule |
+| LISS-0036 | review | S | S | - | - | - | process/coordinator-role-inoculation-rule |
 
 ## Plan-Owned Bug Records
 
@@ -52,10 +52,24 @@ still applies.
 
 ## Preflight Validation
 
-- Result: _pending Implementation-group execution_
-- Checks and command output: _to be recorded by the Implementer_
-- Scope result: _to be recorded_
-- Next action: _to be recorded_
+- Result: `pass`
+- Checks and command output:
+
+  ```console
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  Exit code: 0. Confirms `agent-quickstart.md`'s addition did not disturb
+  mirror-parity machinery, as expected since it is not an ADR-0006 contract
+  file (per `DA-2026-08-18-07`'s Spike Result).
+- Scope result: only `docs/architecture/agent-quickstart.md` was touched, in
+  its "Session Entry" section, as a new numbered item (item 6) after the
+  existing list — matching the design agreement's Plan and Scope. No edit to
+  `CLAUDE.md`, the four mirrors, or `docs/collaboration/personas.md`. No
+  `Type: review-finding` issues open against this area.
+- Next action: submit to the Design & Review group's work-plan-level
+  Reviewer pass.
 
 ## Work-Plan Review
 
