@@ -1,5 +1,38 @@
 # Grok Agent Instructions: Collaboration and Completion
 
+## Session Topology Across AI Coding Tools
+
+This repository's contract is written for multiple AI coding tools,
+including Grok Build. The three-layer session topology the loop runs on —
+Backlog, Design & Review, Implementation — is itself tool-agnostic; see
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+(ADR 0016) for the full model, personas, and rules.
+
+The portable baseline handoff between the Design & Review and Implementation
+layers, across any AI coding tool, is: a parent session spawns a child
+subagent, the child works in its own dedicated `git worktree` and branch,
+and the parent waits on that tool's own native parent-child completion
+signal — in Grok Build's own terms, the parent receiving the child's output
+when the child finishes. This baseline needs nothing beyond ordinary
+parent-child subagent spawning with per-child worktree isolation.
+
+`SendMessage`/`ListAgents`, and the Director's live intervention channel
+built on them, are specific to Claude Code; they are described in full only
+in `docs/collaboration/cross-session-messaging.md`. A Grok Build session
+should not attempt to reproduce that peer-to-peer mechanism — Grok Build's
+own subagent model is parent-child fan-out only (no peer discovery), per its
+own documentation.
+
+Where `SendMessage`/`ListAgents` are unavailable, the default
+intervention-channel fallback is a status file, one per in-flight work plan,
+at `docs/collaboration/handoffs/WP-<NNNN>-status.md`. Read its `Director
+intervention gate` field as part of ordinary session-start artifact recovery
+(see `01-quickstart.md`'s "Session Entry" section for that recovery model) —
+this is not a new automation surface. See
+`docs/architecture/adr/0017-portable-three-layer-loop-and-file-based-intervention-fallback.md`
+(ADR 0017) for the full statement, including the file's exact required
+fields.
+
 ## Design Intake
 
 When a decision affects architecture, capture it as an ADR. When a decision
