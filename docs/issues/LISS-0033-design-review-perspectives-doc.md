@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0033
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design (new contract document, no application code)
 - Type: process-document
 - Priority: high

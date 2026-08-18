@@ -26,8 +26,8 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0032 | review | M | M | AIP-0032-001 | - | LISS-0033 | process/quality-gate-hooks-and-coverage-policy |
-| LISS-0033 | review | M | M | AIP-0033-001 | LISS-0032 | - | process/quality-gate-hooks-and-coverage-policy (executed on LISS-0032's branch; see LISS-0033 Work Notes) |
+| LISS-0032 | done | M | M | AIP-0032-001 | - | LISS-0033 | process/quality-gate-hooks-and-coverage-policy |
+| LISS-0033 | done | M | M | AIP-0033-001 | LISS-0032 | - | process/quality-gate-hooks-and-coverage-policy (executed on LISS-0032's branch; see LISS-0033 Work Notes) |
 
 ## Plan-Owned Bug Records
 
@@ -125,10 +125,24 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-18
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-18-wp-0006-quality-gate-hooks-and-perspectives-doc-review.md`,
+  Approved, independently re-verified from a detached-worktree checkout of
+  the actual committed diff plus a re-grep of `design-review-perspectives.md`'s
+  cited review-history sources) via the Backlog thread, which independently
+  confirmed the review record, ADR 0018, and both issue files exist and
+  match what was reported before presenting this close to the Director.
+- Next direction: closed with "承認". Merged into
+  `process/two-group-send-message-loop-design` (commit `846db39`, local
+  merge, alongside WP-0004/0005/0007's still-in-progress design work — not
+  itself an approval of those). Push and PR remain separate explicit
+  actions. Noted for the eventual merge with WP-0004's branch: ADR 0018
+  landed while ADR 0017 (WP-0004) was still pending, so the ADR-range
+  statements in `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md`/CI will need
+  reconciling to the combined `0001-0018` range once both branches meet —
+  already flagged in the Reviewer's own record so it isn't missed.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

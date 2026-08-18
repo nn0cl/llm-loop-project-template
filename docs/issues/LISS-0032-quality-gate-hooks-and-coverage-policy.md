@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0032
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design (produces an ADR and non-application-code contract
   updates)
 - Type: architecture-decision
