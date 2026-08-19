@@ -108,7 +108,7 @@ Not required — planning size `S`, first attempt.
 - 2026-08-19 — Design & Review group (Planner/Specifier): local issue,
   work plan (`WP-0013`), and design agreement
   (`docs/collaboration/agreements/2026-08-19-prevent-direct-to-main-commits.md`,
-  `DA-2026-08-19-01`) drafted on the shared branch
+  `DA-2026-08-19-05`) drafted on the shared branch
   `process/backlog-item-0012-and-0013`. Dispatched to the Implementation
   group on branch `process/prevent-direct-to-main-commits`.
 - 2026-08-19 — Implementer, self-review (short form, planning size `S`, per
@@ -123,10 +123,10 @@ Not required — planning size `S`, first attempt.
   Risks considered:
     1. Does the new "Pre-Commit Branch Confirmation" rule state the
        confirm-before-commit requirement for every record kind, not only
-       AT-TDD issue work, per DA-2026-08-19-01's Falsification Criteria?
+       AT-TDD issue work, per DA-2026-08-19-05's Falsification Criteria?
     2. Does the new wording accidentally imply Backlog-layer records now
        need separate-context Reviewer approval (out of scope per
-       DA-2026-08-19-01 and item-0013's own "Boundaries or non-goals")?
+       DA-2026-08-19-05 and item-0013's own "Boundaries or non-goals")?
     3. Does the broadened local-issue-planning.md sentence duplicate or
        contradict the general rule in branch-commit-pr-discipline.md
        instead of cross-referencing it?

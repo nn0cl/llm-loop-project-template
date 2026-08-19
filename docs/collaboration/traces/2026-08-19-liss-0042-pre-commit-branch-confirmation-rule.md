@@ -9,7 +9,7 @@
 - Active persona: Implementer
 - Covering design agreement:
   `docs/collaboration/agreements/2026-08-19-prevent-direct-to-main-commits.md`
-  (`DA-2026-08-19-01`)
+  (`DA-2026-08-19-05`)
 - Current phase: Fast Path (mechanical, narrow, no behavior/architecture
   change — a process-discipline documentation addition)
 - Canonical issue or work plan: LISS-0042;
@@ -20,23 +20,23 @@
 ## Context Ledger
 
 - Included: `docs/backlog/item-0013-prevent-direct-to-main-commits.md`,
-  `DA-2026-08-19-01` in full, `docs/work-plans/WP-0013-prevent-direct-to-main-commits.md`
+  `DA-2026-08-19-05` in full, `docs/work-plans/WP-0013-prevent-direct-to-main-commits.md`
   in full, `docs/issues/LISS-0042-pre-commit-branch-confirmation-rule.md` in
   full, `docs/collaboration/branch-commit-pr-discipline.md`'s "Branches"
   section (the file changed), `docs/collaboration/local-issue-planning.md`'s
   "Dependency Rules" section (the file changed), `docs/templates/ai-work-trace.md`,
   `docs/templates/self-review.md`.
 - Omitted: item-0012 (document/log lifecycle management) — a separate,
-  unrelated backlog item, explicitly out of scope per `DA-2026-08-19-01`'s
+  unrelated backlog item, explicitly out of scope per `DA-2026-08-19-05`'s
   own Scope section; the rest of both edited files beyond the "Branches" and
   "Dependency Rules" sections, since the task's exact insertion points and
   replacement text were fully specified by the covering design agreement and
   the parent task message.
-- Assumptions: none beyond what `DA-2026-08-19-01` and LISS-0042 state
+- Assumptions: none beyond what `DA-2026-08-19-05` and LISS-0042 state
   directly.
 - Open decisions: none — exact heading, body text, and insertion points were
   fully specified by the parent task message, which itself matches
-  `DA-2026-08-19-01`'s Scope and Settled Ambiguities sections.
+  `DA-2026-08-19-05`'s Scope and Settled Ambiguities sections.
 
 ## Routing
 
@@ -79,11 +79,11 @@
   section, immediately after the existing "automated maintenance branches"
   bullet and before "## Continuous Integration Gate" — exact heading and
   body text as specified by the parent task message, matching
-  `DA-2026-08-19-01`'s Scope bullet for this file. Replaced
+  `DA-2026-08-19-05`'s Scope bullet for this file. Replaced
   `docs/collaboration/local-issue-planning.md`'s "Dependency Rules"
   paragraph beginning "Agents must not implement issue work directly on
   `main`..." with the broadened, cross-referencing paragraph specified by
-  the parent task message, matching `DA-2026-08-19-01`'s Scope bullet for
+  the parent task message, matching `DA-2026-08-19-05`'s Scope bullet for
   this file. No other part of either file was touched.
 - Result: landed
 - Attempt boundary: single cohesive edit to both files (plus this trace and
@@ -126,19 +126,19 @@
 - Director decisions from the covering design agreement: exact placement
   (`branch-commit-pr-discipline.md`'s "Branches" section for the general
   rule; `local-issue-planning.md`'s "Dependency Rules" broadened to
-  cross-reference rather than duplicate it) settled by `DA-2026-08-19-01`'s
+  cross-reference rather than duplicate it) settled by `DA-2026-08-19-05`'s
   Settled Ambiguities row and restated verbatim by the parent task message
   — applied exactly as specified, no interpretation required.
 - Reviewer decisions, with the failure scenarios searched for: none yet —
   pending the work-plan-level Reviewer pass, which per LISS-0042's own
-  Acceptance Notes and `DA-2026-08-19-01`'s Falsification Criteria must
+  Acceptance Notes and `DA-2026-08-19-05`'s Falsification Criteria must
   independently confirm the new wording does not newly require
   separate-context Reviewer approval for Backlog-layer records themselves.
 - Arbiter decisions, if any: none.
 
 ## Verification
 
-- Read-through against `DA-2026-08-19-01`'s Falsification Criteria: the new
+- Read-through against `DA-2026-08-19-05`'s Falsification Criteria: the new
   rule explicitly names Backlog-layer records (not only "issue work"), does
   not state or imply that Backlog-layer records now require
   separate-context Reviewer approval, and neither `CLAUDE.md` nor any
@@ -150,7 +150,7 @@
   ```
 - Result: passes cleanly. Neither edited file is part of the
   `AGENTS.md`/`CLAUDE.md`/mirror text-identity set (both are referenced by,
-  not literally mirrored into, those files), matching `DA-2026-08-19-01`'s
+  not literally mirrored into, those files), matching `DA-2026-08-19-05`'s
   own Verification section's stated expectation, confirmed by running the
   check rather than assuming it.
 

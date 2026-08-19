@@ -8,7 +8,7 @@
   produces — not only "issue work" — per
   `docs/backlog/item-0013-prevent-direct-to-main-commits.md` and
   `docs/collaboration/agreements/2026-08-19-prevent-direct-to-main-commits.md`
-  (`DA-2026-08-19-01`).
+  (`DA-2026-08-19-05`).
 
 ## Scope
 
@@ -47,7 +47,7 @@ None required — planning size `S`, first attempt.
 ## Current Next Issue
 
 - Issue: LISS-0042
-- Reason it is unblocked: no dependencies; `DA-2026-08-19-01` covers it
+- Reason it is unblocked: no dependencies; `DA-2026-08-19-05` covers it
   fully, including exact placement.
 - Reopening request needed: no.
 
