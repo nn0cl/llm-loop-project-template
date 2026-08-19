@@ -93,21 +93,30 @@ Path applying in substance to everything else.
 
 ## Work-Plan Review
 
-Reviewer's approval record: _pending_
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-19-wp-0013-prevent-direct-to-main-commits-review.md`
+— **Approved**, separate-context Reviewer session, all three constraints
+(context separation, deterministic precondition, falsification burden)
+satisfied; nine failure scenarios searched, none reproduced as a blocking
+problem. One non-blocking observation recorded (a minor, non-contradictory
+substance overlap between the two edited files' wording) — does not affect
+this work plan's Done.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-|  |  |  |
+| none | N/A | Reviewer issued Approved with a non-blocking observation only; no `Type: review-finding` issue opened. |
 
 ## Work-Plan Close
 
-- Date: _pending_
-- Result read: _pending — Director close is a separate, later action; this
-  work plan stops at Reviewer approval and reports readiness._
-- Next direction: _pending_
-- New design agreement (if any): _pending_
+- Date: _pending — Director close is a separate, later action._
+- Result read: _pending._ This work plan stops here, Reviewer-approved and
+  merged into the shared branch `process/backlog-item-0012-and-0013`
+  (commit range `632a8e4..d9b9926` plus this closing commit), and reports
+  readiness to the Director for the work-plan-close action.
+- Next direction: _pending._
+- New design agreement (if any): _pending._
 
 ## Risks
 
