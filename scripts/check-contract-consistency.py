@@ -35,7 +35,9 @@ Checks:
                         docs/collaboration/terminology-migration.md does
                         not still appear in a current document.
   11. Entry archive refs No Entry-layer document (ADR 0020 Rule 1)
-                        references a docs/archive/ path directly.
+                        references a specific docs/archive/ file
+                        directly (a bare mention of the directory, with
+                        no file-shaped path after it, is not flagged).
 
 What this cannot check, and who does
 ------------------------------------
@@ -1073,16 +1075,23 @@ ENTRY_DOCUMENT_GLOBS = (
 )
 
 
+ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")
+
+
 def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None:
-    """No Entry-layer document (ADR 0020 Rule 1) may reference a
-    `docs/archive/` path directly.
+    """No Entry-layer document (ADR 0020 Rule 1) may reference a specific
+    file under `docs/archive/` directly.
 
     Entry documents are the fixed, small set every session reads first;
-    they describe current process, not history. If an Entry document ever
-    needs to mention archived material, it should point at the restoration
-    ledger (`docs/collaboration/restoration-ledger.md`) or a current
-    Canonical document instead of the archived file directly -- ADR 0020's
-    own Rule 1 states Archive content is "off the normal reading path."
+    they may describe the archive *mechanism* in the abstract (this
+    document itself does, in "Document Currency and Canonical Reading"),
+    but must not link to a specific archived file -- ADR 0020's own Rule 1
+    states Archive content is "off the normal reading path." A bare
+    mention of the `docs/archive/` directory with no file-shaped path
+    after it (no `.` plus extension) is not flagged; only a path that
+    continues into an actual filename is -- this distinguishes "explains
+    what the mechanism is" from "points a reader at one specific archived
+    file," which is the actual thing this check exists to catch.
     """
     entry_paths = list(ENTRY_DOCUMENTS)
     for pattern in ENTRY_DOCUMENT_GLOBS:
@@ -1096,13 +1105,14 @@ def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None
         if text is None:
             continue
         for lineno, line in enumerate(text.splitlines(), 1):
-            if "docs/archive/" in line:
+            match = ENTRY_ARCHIVE_REFERENCE.search(line)
+            if match:
                 failures.add(
                     "entry archive reference",
-                    f"{rel}:{lineno} references a docs/archive/ path -- "
-                    "Entry documents should point at the restoration ledger "
-                    "or a current Canonical document instead, per ADR 0020 "
-                    "Rule 1.",
+                    f"{rel}:{lineno} references a specific docs/archive/ "
+                    f"file ({match.group(0)!r}) -- Entry documents should "
+                    "point at the restoration ledger or a current "
+                    "Canonical document instead, per ADR 0020 Rule 1.",
                 )
 
 

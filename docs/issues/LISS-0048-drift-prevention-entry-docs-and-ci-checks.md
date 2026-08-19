@@ -280,6 +280,40 @@ Required — planning size `M`. See below.
     explicit documented exemption) before this branch can pass Preflight
     Validation on a genuinely clean real-tree run.
 
+- 2026-08-20 — Implementer (follow-up to the self-review above, same
+  branch, post-commit): the Design & Review group, in a separate context,
+  resolved risk (e) above by correcting `check_no_archive_reference_from_entry`
+  itself at commit `b8cc099` on `origin/process/item-0012-remaining-facets`
+  (`ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")`,
+  only flagging a file-shaped path — a bare mention of the directory with
+  nothing file-shaped after it is no longer flagged), rather than
+  rewording File 3. Verified the actual diff at `b8cc099` directly before
+  applying anything (not merely trusting the description of it), then
+  applied the corrected function verbatim to this branch's already-committed
+  `scripts/check-contract-consistency.py`.
+
+  Command run: `python3 scripts/check-contract-consistency.py` (real tree,
+  after the fix)
+  Result: `contract consistency: all checks passed`, exit 0 — now passes
+  cleanly, resolving risk (e) and satisfying DA-2026-08-19-08's original
+  Task 4 acceptance criterion.
+
+  Risk re-checked: does the corrected, narrowed regex still catch a
+  genuine file-shaped `docs/archive/` reference (i.e., did the fix
+  over-correct into a check that no longer catches anything)? Command run:
+  appended `docs/archive/some-test-path.md` to `agent-quickstart.md`, ran
+  the checker again. Result: `entry archive reference:
+  docs/architecture/agent-quickstart.md:228 references a specific
+  docs/archive/ file ('docs/archive/some-test-path.md') -- ...`, exit 1 —
+  does not occur; the check still correctly fires on a genuine file-shaped
+  link. Test line removed; final re-run again passed cleanly, exit 0;
+  `git status --porcelain` showed only `scripts/check-contract-consistency.py`
+  changed, no leftover scratch content.
+
+  Full command transcripts: see the "Correction" subsection in
+  `docs/collaboration/traces/2026-08-19-liss-0048-drift-prevention-entry-docs-and-ci-checks.md`'s
+  Verification section.
+
 ## Verification
 
 - `scripts/check-contract-consistency.py` — recorded in WP-0016's

@@ -371,6 +371,87 @@ confirming Task 5's synthetic cases introduced no permanent regression and
 were fully and correctly cleaned up. This run does not "pass cleanly" for
 the same pre-existing, already-flagged reason as Task 4.
 
+### Correction (post-commit, same branch): `check_no_archive_reference_from_entry` false positive fixed
+
+The Design & Review group, working in a separate context, confirmed the
+defect flagged above (Task 4 and the Notes section) as a genuine
+self-contradiction within DA-2026-08-19-08 itself — not a transcription
+error by this Implementer — and corrected the design agreement at commit
+`b8cc099` ("fix: correct check_no_archive_reference_from_entry false
+positive (DA-2026-08-19-08)"). The corrected `check_no_archive_reference_from_entry`
+replaces the original bare `"docs/archive/" in line` substring match with
+`ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")`,
+which only flags a path that continues into an actual filename
+(file-shaped, with an extension) — a bare mention of the directory, with
+nothing file-shaped after it, is no longer flagged. File 3's own text in
+`agent-quickstart.md` is unchanged; only File 2's check logic changed.
+
+This Implementer applied the corrected function verbatim (confirmed against
+the actual diff at commit `b8cc099`, not merely the peer's description of
+it) to the already-committed `scripts/check-contract-consistency.py` on
+this same branch, then re-ran verification:
+
+**Python parse check:**
+
+```text
+$ python3 -c "import ast; ast.parse(open('scripts/check-contract-consistency.py').read())"
+(no output; exit 0)
+```
+
+**Task 4 re-run (real tree, after the fix):**
+
+```text
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+$ echo $?
+0
+```
+
+Now passes cleanly, satisfying DA-2026-08-19-08's original Task 4
+acceptance criterion.
+
+**Task 5 step 4 re-run (entry-archive-reference negative case, to confirm
+the corrected regex still catches a genuine file-shaped reference):**
+
+```text
+$ echo 'TEMP TEST LINE: docs/archive/some-test-path.md' >> docs/architecture/agent-quickstart.md
+
+$ python3 scripts/check-contract-consistency.py
+
+entry archive reference:
+  docs/architecture/agent-quickstart.md:228 references a specific docs/archive/ file ('docs/archive/some-test-path.md') -- Entry documents should point at the restoration ledger or a current Canonical document instead, per ADR 0020 Rule 1.
+
+contract consistency: 1 failure(s)
+$ echo $?
+1
+
+$ # removed the "TEMP TEST LINE" line from docs/architecture/agent-quickstart.md
+```
+
+Result: the corrected check still correctly flags a genuine file-shaped
+`docs/archive/` reference, citing "entry archive reference" and the
+matched path, exit code 1 — confirms the fix narrowed the check without
+disabling it.
+
+**Final re-run after removing the test line:**
+
+```text
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+$ echo $?
+0
+
+$ git status --porcelain
+ M scripts/check-contract-consistency.py
+```
+
+Clean pass; only `scripts/check-contract-consistency.py` shows as changed
+relative to the prior commit (the corrected function plus the matching
+docstring item-11 wording update, both transcribed verbatim from
+DA-2026-08-19-08 as corrected at `b8cc099`); `agent-quickstart.md` returned
+to its exact prior committed state (no diff) since the temporary test line
+was added and removed within this same session.
+
 ## Changed Files
 
 - `docs/collaboration/terminology-migration.md` (new — matches File 1
@@ -395,16 +476,34 @@ the same pre-existing, already-flagged reason as Task 4.
   (edited — a self-review record appended to Work Notes; existing entries
   preserved unchanged)
 
+**Post-commit correction (same branch, see "Correction" subsection above):**
+
+- `scripts/check-contract-consistency.py` (edited again — the corrected
+  `check_no_archive_reference_from_entry` and new
+  `ENTRY_ARCHIVE_REFERENCE` regex constant, and the matching docstring
+  item-11 wording, both transcribed verbatim from DA-2026-08-19-08 as
+  corrected at commit `b8cc099`; no other line changed; `agent-quickstart.md`
+  itself was not re-edited, since File 3's own text needed no change)
+- This trace file (this "Correction" subsection and these two bullets)
+- LISS-0048's self-review Work Notes (a follow-up entry — see that file)
+
 ## Next Safe Action
 
-- Design & Review group runs Preflight Validation on WP-0016 against this
+- ~~Design & Review group runs Preflight Validation on WP-0016 against this
   branch. Preflight will very likely need to surface the flagged
   `agent-quickstart.md:57` / `check_no_archive_reference_from_entry`
   conflict for a Director/Planner decision (a DA amendment rewording File
   3's "Never enter from an old ADR directly" bullet to avoid the literal
   string `docs/archive/`, or an explicit, documented exemption) before this
   work plan can reach a genuinely clean real-tree run and proceed to the
-  work-plan-level Reviewer pass.
+  work-plan-level Reviewer pass.~~ **Superseded by the correction above:**
+  the Design & Review group corrected the check itself at `b8cc099`
+  (narrowed to a file-shaped-path regex) rather than rewording File 3;
+  this branch now reaches a genuinely clean real-tree run without any
+  change to File 3. Next: Design & Review group runs Preflight Validation
+  on WP-0016 against this branch (citing the clean run in this trace's
+  "Correction" subsection), then dispatches to the work-plan-level
+  Reviewer in a separate context.
 
 ## Notes
 
@@ -426,3 +525,20 @@ the same pre-existing, already-flagged reason as Task 4.
   archived, deleted, or edited beyond the three named insertion points.
   `CLAUDE.md` and its mirrors were not touched at any point, per the design
   agreement's Boundaries section.
+- **Follow-up (post-commit, same branch):** the Design & Review group,
+  working in a separate context, confirmed the above as a genuine
+  self-contradiction within the design agreement itself and corrected
+  `check_no_archive_reference_from_entry` at commit `b8cc099` (narrowed
+  from a bare substring match to `ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")`,
+  which only flags a file-shaped path, not abstract prose mentioning the
+  directory). This Implementer verified the actual diff at `b8cc099`
+  independently (not merely trusting the peer session's description),
+  applied the corrected function verbatim to this branch's already-committed
+  `scripts/check-contract-consistency.py`, and re-ran both the real-tree
+  check (now passes cleanly, exit 0) and the Task 5 step 4 negative case
+  (still correctly fails on a genuine file-shaped `docs/archive/` link,
+  exit 1) — see the "Correction" subsection under Verification above for
+  full command output. File 3's own text was not changed; only the check's
+  logic was narrowed. This resolves the flag above: the real-tree run now
+  passes cleanly, satisfying DA-2026-08-19-08's original Task 4 acceptance
+  criterion without any deviation from File 3's mandated content.
