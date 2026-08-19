@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0051
 - GitHub issue: none
-- Status: in_progress
+- Status: closed
 - Phase: docs-only
 - Type: review-finding
 - Priority: low
@@ -70,7 +70,13 @@
 - Changed files: `docs/collaboration/terminology-migration.md`.
 - Deterministic verification output: see this issue's own Verification
   section.
-- Separate Reviewer closure record: pending — dispatched as a fresh agent.
+- Separate Reviewer closure record:
+  `docs/collaboration/reviews/2026-08-19-liss-0050-attempt2-liss-0051-review.md`
+  — Approved. The Reviewer independently re-verified both the guidance's
+  negative claim (punctuation-edged terms misbehave, in the two documented
+  shapes) and its positive claim (internal-hyphen/space, alnum-edged terms
+  do not) directly against `re.search` behavior, not merely read for
+  plausibility.
 
 ## Dependencies
 
@@ -114,6 +120,8 @@ Not required — planning size `S`.
   regex rewrite, per the Reviewer's own proportionality assessment).
   `Status: in_progress`, pending separate-context Reviewer confirmation
   under Minor Fix Path.
+- 2026-08-19 — Design & Review group (Planner): separate-context Reviewer
+  confirmed the guidance text (see References). `Status: closed`.
 
 ## Verification
 
@@ -123,5 +131,4 @@ Not required — planning size `S`.
   reproduced.
 - `python3 scripts/check-contract-consistency.py` — clean on the real
   tree (documentation-only change, no check logic touched).
-- Separate-context Reviewer confirmation: pending — dispatched as a fresh
-  agent, per Minor Fix Path.
+- Separate-context Reviewer confirmation: Approved (see References).

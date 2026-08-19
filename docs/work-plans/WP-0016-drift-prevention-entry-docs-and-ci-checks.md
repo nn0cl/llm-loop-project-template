@@ -127,17 +127,34 @@ bare abstract mention of `docs/archive/` when followed by unrelated
 next-line prose) and a silent under-suppression bug in its own
 de-duplication logic. A corrected second attempt — backtick-delimited
 cross-line matching, using this repository's own convention that every
-specific-file reference is backtick-bounded — was applied and verified
-against all three of the Reviewer's own adversarial cases, reconstructed
-identically; pending a fresh separate-context Reviewer confirmation.
+specific-file reference is backtick-bounded — was applied and confirmed
+Approved by a fresh separate-context Reviewer
+(`docs/collaboration/reviews/2026-08-19-liss-0050-attempt2-liss-0051-review.md`),
+which independently re-tested both of Attempt 1's defects with its own
+wording plus additional adversarial probes (chained cross-line matches,
+double-backtick escapes, a fenced code block) — closed, with one new,
+narrower gap found (a reference split inside a fenced code block, not
+inline backticks) opened as `LISS-0052` and deliberately left tracked
+rather than actioned in this same correction cycle, per that issue's own
+Disposition section (narrow practical exposure; a third immediate
+correction round on the same function risks the kind of rushed fix
+Attempt 1 turned out to be).
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
 | LISS-0049 | closed | `check_retired_terminology` now matches with a word-boundary-anchored regex instead of a bare substring test; `terminology-migration.md` gained a caution against choosing an overly short/common retired term. Confirmed by a separate-context Reviewer with independently constructed evidence. |
-| LISS-0050 | in_progress | Attempt 1 (no-separator line concatenation) Rejected by Reviewer — new false positive, under-suppression bug. Attempt 2 (backtick-delimited cross-line matching) applied, verified against all three of the Reviewer's own adversarial cases; pending a fresh separate-context Reviewer confirmation. |
-| LISS-0051 | in_progress | `terminology-migration.md`'s guidance now warns against a retired term starting/ending in punctuation (word-boundary semantics can silently fail to match, or invert). Pending separate-context Reviewer confirmation. |
+| LISS-0050 | closed | Attempt 1 (no-separator line concatenation) Rejected by Reviewer — new false positive, under-suppression bug. Attempt 2 (backtick-delimited cross-line matching) applied and confirmed Approved by a fresh separate-context Reviewer, with independently worded reconfirmation of both Attempt-1 defects and further adversarial probing. |
+| LISS-0051 | closed | `terminology-migration.md`'s guidance now warns against a retired term starting/ending in punctuation (word-boundary semantics can silently fail to match, or invert). Confirmed by a separate-context Reviewer against real `re.search` behavior. |
+
+`LISS-0052` (the fenced-code-block gap the LISS-0050 Attempt-2 Reviewer
+found) is intentionally **not** listed in the table above — it is a real,
+tracked finding, but deliberately deferred rather than immediately
+actioned (see its own Disposition section), the same disposition
+`LISS-0044` originally received from WP-0014's Reviewer. All three
+findings actually required to close this work plan are `closed`, so no
+open finding blocks Director close.
 
 ## Work-Plan Close
 

@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0050
 - GitHub issue: none
-- Status: in_progress
+- Status: closed
 - Phase: docs-only
 - Type: review-finding
 - Priority: medium
@@ -108,8 +108,12 @@ full falsification detail.
   issue's own Verification section.
 - Separate Reviewer closure record: Attempt 1 —
   `docs/collaboration/reviews/2026-08-19-liss-0049-liss-0050-word-boundary-and-line-wrap-fix-review.md`
-  (Rejected, two reproduced defects). Attempt 2 (this corrected fix):
-  pending — dispatched as a fresh agent.
+  (Rejected, two reproduced defects). Attempt 2 —
+  `docs/collaboration/reviews/2026-08-19-liss-0050-attempt2-liss-0051-review.md`
+  (Approved, both Attempt-1 defects reconfirmed fixed with independently
+  worded constructions; one new, narrower gap found — fenced code blocks —
+  opened as `docs/issues/LISS-0052-entry-archive-reference-fenced-code-block-gap.md`,
+  tracked, not immediately actioned).
 
 ## Dependencies
 
@@ -153,6 +157,7 @@ Not required — planning size `S`.
 | Question | Condition that will settle it |
 |---|---|
 | Should the check also handle a reference split across three or more lines? | Not built now — no realistic case observed in this repository's actual prose (paths are short enough that a two-line split already covers the practical wrapping width); revisit only if a real three-line split is ever found. |
+| Should the check also catch a reference split inside a fenced code block (```` ``` ````, not inline backticks)? | Tracked as `docs/issues/LISS-0052-entry-archive-reference-fenced-code-block-gap.md` — a real, reproduced gap found by the Attempt-2 Reviewer, deliberately not fixed in this same correction cycle (see LISS-0052's own Disposition section). |
 
 ## Work Notes
 
@@ -177,6 +182,13 @@ Not required — planning size `S`.
   under-suppression probe now correctly reports both violations.
   `Status: in_progress`, pending a fresh separate-context Reviewer
   confirmation of Attempt 2.
+- 2026-08-19 — Design & Review group (Planner): separate-context Reviewer
+  confirmed Attempt 2 (see References), with independently worded
+  reconfirmation of both Attempt-1 defects plus additional adversarial
+  probes (chained cross-line matches, double-backtick escapes, a fenced
+  code block). One new, narrower gap found (fenced code blocks) — opened
+  as `LISS-0052`, tracked and deliberately not actioned in this same
+  cycle, per its own Disposition section. `Status: closed`.
 
 ## Verification
 
