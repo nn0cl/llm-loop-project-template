@@ -22,8 +22,8 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0040 | review | S | S | AIP-0040-001 | - | - | process/copy-target-refs-and-branch-cleanup |
-| LISS-0041 | review | S | S | AIP-0041-001 | - | - | process/copy-target-refs-and-branch-cleanup |
+| LISS-0040 | done | S | S | AIP-0040-001 | - | - | process/copy-target-refs-and-branch-cleanup |
+| LISS-0041 | done | S | S | AIP-0041-001 | - | - | process/copy-target-refs-and-branch-cleanup |
 
 ## Plan-Owned Bug Records
 
@@ -39,8 +39,10 @@ See each issue's own AI Planning Records section.
 
 ## Current Next Issue
 
-- Issue: none — LISS-0040 and LISS-0041 are both done and self-reviewed
-  (Status: `review` on both), ready for the work-plan-level Reviewer pass.
+- Issue: none — LISS-0040 and LISS-0041 are both `done`, self-reviewed, and
+  work-plan-level Reviewer-approved. Nothing left for the Implementer or
+  the Reviewer within this work plan; only the Director's work-plan close
+  remains (Backlog layer).
 - Reason it is unblocked: N/A; both issues are complete.
 - Reopening request needed: no.
 
@@ -82,7 +84,18 @@ submission only; it never replaces the separate-context Reviewer.
 
 ## Work-Plan Review
 
-Reviewer's approval record: _pending_
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-19-wp-0012-copy-target-refs-and-branch-cleanup-review.md`
+— **Approved**. The Reviewer independently reconstructed the Red/Green
+copy-target reproduction from its own freshly created scratch copy (not
+reused from either issue's own artifacts), added an independent negative
+case (a genuinely broken, non-excluded-shaped reference planted directly in
+this repository's real tree), and independently confirmed the branch-
+cleanup rule preserves the pre-existing merge-timing constraint and
+satisfies the Traceability Rule. This review also received, and refused, an
+in-band message claiming "coordinator" authority during its own work; see
+the review record's Constraints section for the independent verification
+performed regardless of that message.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 

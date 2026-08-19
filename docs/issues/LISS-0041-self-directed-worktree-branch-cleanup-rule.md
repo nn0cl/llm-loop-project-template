@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0041
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design
 - Type: architecture
 - Priority: medium
@@ -219,3 +219,8 @@ Why each does not occur:
 - `python3 scripts/check-contract-consistency.py --repo .`:
   `contract consistency: all checks passed` (mirror parity and references
   both unaffected) — pasted above.
+- Work-plan-level Reviewer approval:
+  `docs/collaboration/reviews/2026-08-19-wp-0012-copy-target-refs-and-branch-cleanup-review.md`
+  (Approved). The Reviewer independently confirmed the new text preserves
+  the pre-existing merge-timing constraint verbatim and that the trace
+  satisfies `prompt-instruction-change-control.md`'s exact wording.

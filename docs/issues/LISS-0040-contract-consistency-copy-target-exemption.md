@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0040
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design
 - Type: bug-fix
 - Priority: high
@@ -269,3 +269,9 @@ Why each does not occur:
   self-caused status-sync mismatch noted and resolved above).
 - Negative case: a genuinely broken, non-excluded-shaped reference is still
   caught — pasted above.
+- Work-plan-level Reviewer approval:
+  `docs/collaboration/reviews/2026-08-19-wp-0012-copy-target-refs-and-branch-cleanup-review.md`
+  (Approved). The Reviewer independently reconstructed the Red/Green
+  reproduction from its own freshly created scratch copy (not reused from
+  this issue's own artifacts) and added its own negative case planted
+  directly in this repository's real tree.
