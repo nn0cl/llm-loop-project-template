@@ -124,11 +124,25 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending_
-- Result read: _pending — Director close is a separate, later action._
-- Next direction: _pending_
-- New design agreement (if any): _pending — facets 5 and 6 each get their
-  own design agreement when reached._
+- Date: 2026-08-20
+- Result read: the Director read both Reviewer approvals
+  (`docs/collaboration/reviews/2026-08-19-wp-0015-contract-sync-diff-records-review.md`
+  and `docs/collaboration/reviews/2026-08-19-liss-0047-facet-4-split-wording-fix-review.md`,
+  both Approved) via the Backlog thread, which independently confirmed the
+  Sync Diff Record template, the Per-Agent-Tool Rule Applicability
+  Registry, LISS-0047's `closed` status, and a clean
+  `scripts/check-contract-consistency.py` run from a detached checkout.
+  The Director was explicitly shown the disclosed ambiguity — a second
+  Reviewer called the adopted facet-4 reading "defensible... not the only
+  reading, and not the stronger of the two on the text alone" — and chose
+  to proceed with it rather than redirect.
+- Next direction: closed with "はい。クローズ". Merged content sits on
+  `origin/process/item-0012-remaining-facets` (together with facets 5/6,
+  still in progress — not themselves approved by this close). Push/PR/
+  merge-to-main remain separate explicit actions, deferred to a suitable
+  batch point.
+- New design agreement (if any): none opened by this close — facets 5 and
+  6 each get their own when reached.
 
 ## Risks
 
