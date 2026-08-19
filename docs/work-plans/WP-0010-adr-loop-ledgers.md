@@ -17,7 +17,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0038 | ready | S | S | - | - | - | process/adr-0019-loop-ledgers |
+| LISS-0038 | review | S | S | - | - | - | process/adr-0019-loop-ledgers |
 
 ## Plan-Owned Bug Records
 
@@ -44,10 +44,33 @@ Not applicable — new ADR, not a correction.
 
 ## Preflight Validation
 
-- Result: _pending Implementation-group execution_
-- Checks and command output: _to be recorded by the Implementer_
-- Scope result: _to be recorded_
-- Next action: _to be recorded_
+- Result: `pass`
+- Checks and command output:
+
+  ```
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  First run (before the entry-document sync below) failed with two findings,
+  both resolved in the same commit: (1) an illustrative
+  `docs/backlog/item-NNNN-short-slug.md` string in ADR 0019's prose resolved
+  as a dangling file reference — fixed by switching to this repository's own
+  established `item-NNNN-*.md` wildcard convention (already used in ADR
+  0016, `ai-human-scheme.md`, `design-agreement.md`); (2) the expected
+  ADR-range drift in `README.md`, `QUICKSTART.md`, `QUICKSTART.ja.md` caused
+  by adding a 19th ADR file — fixed by syncing those files' registered
+  range statements (0018 -> 0019 / next-adopter 0019 -> 0020), the same
+  mechanical step commit `b1a49c1` (ADR 0018) made for the same reason.
+  `.github/workflows/ci.yml`'s ADR-existence check is dynamic/contiguous-
+  sequence based (LISS-0035) and needed no edit.
+- Scope result: LISS-0038 self-reviewed and complete (Status: `review`); it
+  is the work plan's only issue. `ls docs/architecture/adr/` reconfirmed
+  `0019` was free before creation and the sequence is contiguous 0001-0019
+  after. No open `Type: review-finding` issues and no spike-blocked
+  implementation issues affect this plan.
+- Next action: submit to the work-plan-level Reviewer, separate context
+  (Design & Review group), per the design agreement's Plan task 4.
 
 ## Work-Plan Review
 
