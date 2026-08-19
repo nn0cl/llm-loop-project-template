@@ -213,6 +213,7 @@ jobs:
           ! ls "$tmp/target/docs/specs/"*.md >/dev/null 2>&1
           ! ls -d "$tmp/target/docs/spike/"case-* >/dev/null 2>&1
           ! ls "$tmp/target/docs/backlog/"item-*.md >/dev/null 2>&1
+          ! ls "$tmp/target/docs/work-plans/"WP-*.md >/dev/null 2>&1
           test -f "$tmp/target/scripts/check-contract-consistency.py"
           (cd "$tmp/target" && python3 scripts/check-contract-consistency.py --repo .)
           if grep -R -n -i -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \
