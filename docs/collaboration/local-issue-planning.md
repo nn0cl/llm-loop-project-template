@@ -216,6 +216,12 @@ Use:
 - `done`
 - `wont_do`
 
+This is the issue's own lifecycle status, not the same field as the
+document-lifecycle role (Entry/Canonical/Evidence/Archive) and status
+vocabulary `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`
+defines. The two are independent: an issue can be `done` long before it is
+eligible for archival under ADR 0020's Rule 2.
+
 ## Phase Values
 
 Use:
