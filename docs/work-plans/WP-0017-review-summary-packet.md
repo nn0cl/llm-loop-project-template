@@ -113,7 +113,23 @@ waiting for a future work plan to be the first user of it.
 
 ## Work-Plan Review
 
-Reviewer's approval record: _pending_
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-19-wp-0017-review-summary-packet-review.md`
+— **Approved**, separate-context Reviewer session, all three constraints
+satisfied. This is the first work plan reviewed under its own new
+convention: the Reviewer read WP-0017's own Review Summary Packet section
+first, confirmed it meaningfully sped up orientation without substituting
+for independent verification (every mechanical claim was still
+re-derived from source artifacts and a fresh `check-contract-consistency.py`
+run), and recorded an explicit meta-finding that facet 6's own premise
+holds. Seven failure scenarios searched, none reproduced as blocking. One
+non-blocking wording observation: the new `design-agreement.md` section's
+non-weakening disclaimer is phrased reactively rather than as an
+affirmative, unconditional instruction — the Reviewer judged this real but
+not currently actionable (no future Reviewer pass has yet been found to
+have stopped at the packet without independent verification), so no
+`Type: review-finding` issue was opened; the observation itself, recorded
+in the review record, is the durable artifact per Invariant 1.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
