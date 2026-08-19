@@ -117,7 +117,9 @@ line preceding "What this cannot check, and who does":
                         docs/collaboration/terminology-migration.md does
                         not still appear in a current document.
   11. Entry archive refs No Entry-layer document (ADR 0020 Rule 1)
-                        references a docs/archive/ path directly.
+                        references a specific docs/archive/ file
+                        directly (a bare mention of the directory, with
+                        no file-shaped path after it, is not flagged).
 ```
 
 **Edit 2b — `RECORD_DIRS`.** Add one new entry, as the last line before
@@ -165,16 +167,23 @@ ENTRY_DOCUMENT_GLOBS = (
 )
 
 
+ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")
+
+
 def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None:
-    """No Entry-layer document (ADR 0020 Rule 1) may reference a
-    `docs/archive/` path directly.
+    """No Entry-layer document (ADR 0020 Rule 1) may reference a specific
+    file under `docs/archive/` directly.
 
     Entry documents are the fixed, small set every session reads first;
-    they describe current process, not history. If an Entry document ever
-    needs to mention archived material, it should point at the restoration
-    ledger (`docs/collaboration/restoration-ledger.md`) or a current
-    Canonical document instead of the archived file directly -- ADR 0020's
-    own Rule 1 states Archive content is "off the normal reading path."
+    they may describe the archive *mechanism* in the abstract (this
+    document itself does, in "Document Currency and Canonical Reading"),
+    but must not link to a specific archived file -- ADR 0020's own Rule 1
+    states Archive content is "off the normal reading path." A bare
+    mention of the `docs/archive/` directory with no file-shaped path
+    after it (no `.` plus extension) is not flagged; only a path that
+    continues into an actual filename is -- this distinguishes "explains
+    what the mechanism is" from "points a reader at one specific archived
+    file," which is the actual thing this check exists to catch.
     """
     entry_paths = list(ENTRY_DOCUMENTS)
     for pattern in ENTRY_DOCUMENT_GLOBS:
@@ -188,13 +197,14 @@ def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None
         if text is None:
             continue
         for lineno, line in enumerate(text.splitlines(), 1):
-            if "docs/archive/" in line:
+            match = ENTRY_ARCHIVE_REFERENCE.search(line)
+            if match:
                 failures.add(
                     "entry archive reference",
-                    f"{rel}:{lineno} references a docs/archive/ path -- "
-                    "Entry documents should point at the restoration ledger "
-                    "or a current Canonical document instead, per ADR 0020 "
-                    "Rule 1.",
+                    f"{rel}:{lineno} references a specific docs/archive/ "
+                    f"file ({match.group(0)!r}) -- Entry documents should "
+                    "point at the restoration ledger or a current "
+                    "Canonical document instead, per ADR 0020 Rule 1.",
                 )
 
 
@@ -321,6 +331,7 @@ Before treating any document as authoritative:
 | Should this work plan attempt all five of facet 5's proposed checks? | No — only the two that can be built and verified now without a prerequisite design decision (retired terminology, Entry-archive-reference). `check_issue_status_sync` already exists (item-0009/WP-0007), confirmed by direct reading, not rebuilt. The remaining two (single-canonical-per-theme, canonical-source-link) need a "theme" registry concept this repository does not have — see Deferred Questions. | Design & Review group (Planner) |
 | Should LISS-0044 be folded into this work plan? | Yes — both concern `docs/archive/` handling in the same script; fixing them together avoids two separate branches touching the same `RECORD_DIRS` constant, and LISS-0044's own Acceptance Notes ask for exactly the kind of synthetic-case verification this work plan already needs to build for its own new checks. | Design & Review group (Planner) |
 | How is the synthetic verification case kept from becoming real `docs/archive/` content this work plan wasn't authorized to create? | Created, exercised, and removed within Plan Task 5, before the final commit — verified by the Preflight scope check (no `docs/archive/` path present in the final tree) and independently re-confirmed by the Reviewer. | Design & Review group (Planner) |
+| **Correction, found by the Implementation group's own Task 4 real-tree run:** File 3's own text ("Once ADR 0020's archive mechanism has moved a document under `docs/archive/`...") references `docs/archive/` in the abstract, inside an Entry document — the original `check_no_archive_reference_from_entry` (a bare `"docs/archive/" in line` substring match) flagged this as a false positive, contradicting the same design agreement's own File 3. | The check was too broad. Corrected to `ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")`, which only flags a path that continues into an actual filename (file-shaped, with an extension) — a bare mention of the directory, with nothing after it, is legitimate prose about the mechanism, not a forbidden direct link to one specific archived file. Re-verified: File 3's own sentence no longer matches; the Task 5 negative-case (a genuine file-shaped `docs/archive/some-test-path.md` reference) still does. | Design & Review group (Planner), after the Implementer correctly reported rather than silently working around the contradiction |
 
 ## Deferred Questions
 
@@ -368,4 +379,4 @@ Before treating any document as authoritative:
 
 | Date | What was unsettled | Resolution |
 |---|---|---|
-|  |  |  |
+| 2026-08-19 | The Implementation group's Task 4 real-tree run found this agreement's own File 2 (`check_no_archive_reference_from_entry`) and File 3 contradicted each other — the original check's bare substring match flagged File 3's own legitimate abstract mention of `docs/archive/`. | Corrected the check to a file-shaped-path regex (see Settled Ambiguities above); does not change File 3's text, Scope, or any other Plan task. |
