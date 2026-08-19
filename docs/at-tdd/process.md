@@ -194,5 +194,9 @@ Once every issue in the work plan has reached self-reviewed completion:
 3. Findings become `Type: review-finding` local issues, resolved through
    Minor Fix Path or an escalation, as sized.
 4. Once the Reviewer approves, the Director reads the result and states the
-   next direction — or ends the engagement — in the same action. The next
-   work plan does not start without this.
+   next direction — or ends the engagement — in the same action. This
+   specific work plan's own successor does not start without this. Per
+   `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+   Rule 3, this does not block unrelated, concurrently in-flight work plans
+   in either group — only the one work plan being closed, and what directly
+   follows from closing it, wait on this action.

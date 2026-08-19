@@ -44,6 +44,7 @@ collaboration_template_exclude_paths=(
   "docs/specs/*.md"
   "docs/spike/case-*"
   "docs/backlog/item-*.md"
+  "docs/work-plans/WP-*.md"
   "docs/collaboration/loop-settings.toml"
 )
 

@@ -12,36 +12,67 @@ under the rules in "Extending the set" below.
 The core set is defined by contract. Removing a core persona, or changing its
 approval authority, requires an ADR.
 
+## Session Groups
+
+Per `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`,
+personas operate inside one of two standing AI session groups, connected by
+the `SendMessage` / `ListAgents` cross-session tools. Each group is started
+once and kept alive, not reconstituted per work plan.
+
+- **Design & Review group**: Planner, Specifier, Reviewer, Arbiter.
+- **Implementation group**: Implementer, working in a dedicated `git
+  worktree` and branch per work plan.
+
+The Backlog layer (the Director-facing thread where backlog items are
+approved) is not a group and carries no persona of its own — see ADR 0016
+Rule 1. This section states the persona-to-group mapping only; it does not
+change any persona's responsibilities, inputs, outputs, done-when, or
+must-not fields.
+
 ## Where each persona operates
 
 ```text
-Direction  ->  Planner (with Director)  ->  Specifier  ->  DESIGN AGREEMENT
-                                                          (one work plan)
-                                                                 |
-                                            (human involvement pauses here)
-                                                                 |
-                                            +--------------------+
-                                            v
-                                   Implementer (self-reviews each
-                                   issue's Red/Green/Refactor)
-                                            |
-                                   all issues self-reviewed
-                                            |
-                                            v
-                                       Preflight
-                                            |
-                                            v
-                                       Reviewer (separate context,
-                                       whole work plan)
-                                            |            |
-                                            +---> Arbiter (on deadlock)
-                                            |
-                                            v
-                                   WORK PLAN CLOSE (Director)
-                                            |
-                                            v
-                                  Deterministic Tool
-                                  (gates every approval, both layers)
+Direction -> Backlog item approved (Director, Backlog layer)
+                        |
+                        v
+   ================== Design & Review group ====================
+   Planner (with Director, at backlog approval) -> Specifier
+                        |
+                        v
+                 DESIGN AGREEMENT
+                 (one work plan)
+   ================================================================
+                        |
+        handoff: design agreement recorded -> SendMessage
+                        v
+   ==================== Implementation group =====================
+                   Implementer (self-reviews each
+                   issue's Red/Green/Refactor)
+                        |
+               all issues self-reviewed
+                        |
+                        v
+                    Preflight
+   ================================================================
+                        |
+        handoff: Preflight pass -> SendMessage
+                        v
+   ================== Design & Review group ====================
+                   Reviewer (separate context,
+                   whole work plan)
+                        |            |
+                        +---> Arbiter (on deadlock)
+                        |
+                        v
+   ================================================================
+                        |
+        handoff: Reviewer approval -> SendMessage
+                        v
+              WORK PLAN CLOSE (Director, Backlog layer)
+                        |
+                        v
+              Deterministic Tool
+              (gates every approval, both layers)
 ```
 
 ## Core personas

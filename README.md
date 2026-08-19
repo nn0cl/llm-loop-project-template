@@ -247,10 +247,10 @@ architecture layers. Before using it on a real project:
    stack-specific jobs (lint, test, dependency policy) once those tools
    exist.
 6. Renumber/extend `docs/architecture/adr/` as real architecture decisions are
-   made. The fifteen ADRs included here (0001-0015) describe the
-   collaboration process itself and normally do not need to change; number
-   your project's own decisions from 0016 up, so a later template update does
-   not collide with them.
+   made. The ADRs included here (0001-0019) describe the collaboration
+   process itself and normally do not need to change; number your project's
+   own decisions from 0020 up, so a later template update does not collide
+   with them.
 
 ## Introduce into an existing repository
 
@@ -300,7 +300,7 @@ target project's accepted architecture or feature specifications.
     ├── templates/                  # design agreement, review record, design intake, handoff, trace, issue, ADR, Gherkin
     │   └── examples/               # filled-in stack-specific examples, for reference only
     ├── architecture/               # Clean Architecture rules, quickstart, readiness checklist
-    │   └── adr/                    # architecture decision records (0001-0015 = process ADRs)
+    │   └── adr/                    # architecture decision records (0001-0019 = process ADRs)
     ├── specs/                      # EARS/Gherkin feature specifications
     ├── issues/                     # local issue files (LISS-0000 style)
     ├── work-plans/                 # multi-issue work plans

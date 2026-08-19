@@ -13,9 +13,24 @@ Checks:
   2. Parity completeness Every AGENTS.md section is classified as mirrored or
                         deliberately not, so a new section cannot be added
                         without deciding which it is.
-  3. References         Every relative path a document names resolves.
+  3. References         Every relative path a document names resolves, except
+                        a non-existent target shaped like a path this
+                        template deliberately excludes from adopter copies
+                        (see collaboration_template_exclude_paths), which is
+                        treated as expected-absent rather than dangling.
   4. ADR range          Every stated process-ADR range matches the ADR files.
   5. Version claims     No document claims a released version that has no tag.
+  6. ID range collisions A live numbered document (LISS/WP/backlog item/ADR)
+                        does not reuse a number that belonged to a
+                        different, since-deleted document.
+  7. Issue status sync  A LISS issue's own Status field agrees with its row
+                        in the one work plan whose Issue Graph names it.
+  8. Superseding phrases Every registered ADR-supersession anchor phrase is
+                        still present in its target file.
+  9. Open findings gate A closed work plan's own findings table lists no
+                        review-finding issue whose Status is neither
+                        `closed` nor `wont_do`, when loop-settings.toml
+                        requires it.
 
 What this cannot check, and who does
 ------------------------------------
@@ -64,6 +79,18 @@ What remains is structural, not a bug waiting for the next round:
   * **Anything about a document this repository does not have.** In an adopting
     project the entry documents are the project's own, and checks over them are
     skipped there.
+  * **A reference to a path shaped like an excluded template-history pattern,
+    absent for the wrong reason.** `check_references`'s copy-exclusion
+    exemption (see `_copy_exclusion_patterns` and its call site) accepts any
+    non-existent target matching a pattern in
+    `scripts/lib/collaboration-template-paths.sh`'s
+    `collaboration_template_exclude_paths` as expected-absent — correct on a
+    copied target, where the file was deliberately not copied, but the same
+    acceptance also applies inside this repository's own tree. A genuine typo
+    here that happens to be shaped like an excluded pattern (for example, a
+    misspelled `docs/work-plans/WP-*.md` path) looks identical to this check
+    and is silently accepted, the same pre-existing risk `TEMPLATE_ONLY_FILES`
+    already carries for `README.md`.
   * **Proximity is not the same sentence.** `EXTRA_MIRRORED_RULES` entries that
     use a `.{0,N}` proximity window between two terms (for example, "Reviewer"
     near "whole work plan") can be satisfied by two unrelated mentions that
@@ -94,6 +121,8 @@ them. Stdlib only, so it runs anywhere python3 does.
 from __future__ import annotations
 
 import argparse
+import fnmatch
+import glob
 import os
 import re
 import subprocess
@@ -125,6 +154,8 @@ MIRRORED_SECTIONS = {
     "Personas": r"personas\.md",
     "Expected Workflow": r"agent-quickstart\.md",
     "Session Entry": r"no prior chat context|session-start-and-resume",
+    "Session Topology Across AI Coding Tools":
+        r"0017-portable-three-layer-loop-and-file-based-intervention-fallback",
     "Loop Settings, Spikes, Backlog, and Findings":
         r"Loop Settings, Spikes, Backlog|loop-settings\.toml",
     "Phase Discipline": r"Phase 1|Phase Gate|Phase Discipline",
@@ -215,6 +246,59 @@ TEMPLATE_ONLY_FILES = {
 OPTIONAL_INIT_CREATED_FILES = {
     "docs/collaboration/loop-settings.toml",
 }
+
+
+def _copy_exclusion_patterns(repo: str) -> list[str]:
+    """The glob patterns `scripts/lib/collaboration-template-paths.sh`'s
+    `collaboration_template_exclude_paths` array holds, parsed out of that
+    file rather than duplicated here.
+
+    That array is this template's own single source of truth for which
+    paths (`docs/collaboration/agreements/*.md`,
+    `docs/work-plans/WP-*.md`, and similar) are deliberately left out of
+    `scripts/copy-ai-collaboration-files.sh`'s copies, because they are this
+    template's own planning history, not adopter-owned content. Reusing that
+    list here, instead of hardcoding a second one, is what keeps a reference
+    to one of those paths from being misread as a dangling reference on a
+    copied target — see `check_references` below.
+
+    Every pattern the array currently holds uses only literal path segments
+    and `*`, and `*` matches any run of characters including `/` under both
+    bash's `case ... in $pattern)` (what
+    `is_collaboration_template_excluded` in that file uses) and Python's
+    `fnmatch.fnmatchcase` — verified by direct inspection of the array's
+    contents, not assumed. No `?`, `[...]`, or other glob metacharacter that
+    could diverge between the two implementations is present today.
+
+    Degrades to an empty list, the same way `read_optional` already degrades
+    elsewhere in this script, when the file is missing or unreadable — a
+    target project generally does not carry
+    `scripts/lib/collaboration-template-paths.sh` at all (see
+    `TEMPLATE_ONLY_FILES` and `OPTIONAL_INIT_CREATED_FILES` above for the
+    same shape), so an empty pattern list there simply means the exemption
+    below never fires, not an error.
+    """
+    text = read_optional(repo, "scripts/lib/collaboration-template-paths.sh")
+    if text is None:
+        return []
+    match = re.search(
+        r"collaboration_template_exclude_paths=\((.*?)\)", text, re.DOTALL
+    )
+    if match is None:
+        return []
+    return re.findall(r'"([^"]+)"', match.group(1))
+
+
+def _is_copy_excluded_reference(target: str, patterns: list[str]) -> bool:
+    """True when `target` matches one of `patterns` (see
+    `_copy_exclusion_patterns`). Callers are responsible for confirming
+    `target` does not exist first — mirroring `TEMPLATE_ONLY_FILES` and
+    `OPTIONAL_INIT_CREATED_FILES`'s existing shape: when present, a
+    reference resolves normally and its deletion is still caught; only a
+    genuinely absent, pattern-matching target is treated as expected-absent
+    rather than dangling."""
+    return any(fnmatch.fnmatchcase(target, pattern) for pattern in patterns)
+
 
 # Reference targets that legitimately do not resolve in this repository.
 REFERENCE_ALLOWLIST = {
@@ -341,7 +425,12 @@ def check_parity_completeness(repo: str, failures: Failures) -> None:
 
 
 def check_references(repo: str, failures: Failures) -> None:
-    """Every relative path or filename a current document names must resolve."""
+    """Every relative path or filename a current document names must resolve,
+    except a non-existent target shaped like a path this template
+    deliberately excludes from adopter copies (see
+    `_copy_exclusion_patterns`), which is treated as expected-absent rather
+    than dangling."""
+    copy_exclusion_patterns = _copy_exclusion_patterns(repo)
     basemap: dict[str, list[str]] = {}
     for dirpath, dirnames, filenames in os.walk(repo):
         dirnames[:] = [d for d in dirnames if d != ".git"]
@@ -412,6 +501,10 @@ def check_references(repo: str, failures: Failures) -> None:
                         os.path.join(repo, target)
                     ):
                         continue
+                    if not os.path.exists(
+                        os.path.join(repo, target)
+                    ) and _is_copy_excluded_reference(target, copy_exclusion_patterns):
+                        continue
                     if os.path.exists(os.path.join(repo, target)):
                         continue
                     sibling = os.path.normpath(
@@ -442,6 +535,197 @@ def check_references(repo: str, failures: Failures) -> None:
                         "references",
                         f"{rel}:{lineno} names {target!r}, which does not exist",
                     )
+
+
+# Numbered-document prefixes tracked for reuse detection: directory -> a
+# pattern whose group(1) is the file's full relative path and group(2) is
+# its four-digit number. `docs/architecture/adr` reuses the same numbering
+# space `adr_numbers()` already reads; the other three are the numbered
+# planning-document families named in DA-2026-08-18-06.
+NUMBERED_FILE_PATTERNS: dict[str, re.Pattern[str]] = {
+    "docs/issues": re.compile(r"^(docs/issues/LISS-(\d{4})-[^/]+\.md)$"),
+    "docs/work-plans": re.compile(r"^(docs/work-plans/WP-(\d{4})-[^/]+\.md)$"),
+    "docs/backlog": re.compile(r"^(docs/backlog/item-(\d{4})-[^/]+\.md)$"),
+    "docs/architecture/adr":
+        re.compile(r"^(docs/architecture/adr/(\d{4})-[^/]+\.md)$"),
+}
+
+# This template's own pre-v1.0.0 history contains genuine, deliberate,
+# already-fully-documented number reuse that predates this check: the ADR set
+# was renumbered once during "process: consolidate the operating contract as
+# the first edition (v1.0.0)" (commit cf9da58), and the local-issue/work-plan
+# sequence was reset to a fresh start once during "chore: reset the
+# repository's record artifacts to the initial state" (commit 9fcb2d2, itself
+# an ancestor of cf9da58) — both single, Director-authorized, fully-recorded
+# events, not organic drift. `git log --follow` correctly does not treat
+# either as a rename, because it is not one: an unrelated document now
+# occupies the freed number. Each currently-live path affected by one of
+# those two historical events is listed here explicitly, once, so this check
+# can tell a confirmed, already-explained past event apart from an
+# unexplained new one. A path not on this list still fails the check exactly
+# as designed; adding to this list is a deliberate registration, not a
+# general-purpose escape hatch, and every entry must cite the commit that
+# explains it in the same change that adds it.
+KNOWN_HISTORICAL_ID_REUSE = {
+    # cf9da58 "process: consolidate the operating contract as the first
+    # edition (v1.0.0)" renumbered the ADR set in one commit.
+    "docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md",
+    "docs/architecture/adr/0002-design-first-ai-request-routing.md",
+    "docs/architecture/adr/0003-input-output-reasoning-contracts.md",
+    "docs/architecture/adr/0012-review-issues-minor-fix-and-model-routing.md",
+    "docs/architecture/adr/0013-preflight-validation-before-independent-review.md",
+    # 9fcb2d2 "chore: reset the repository's record artifacts to the initial
+    # state" removed this template's own bootstrap-era local issues and work
+    # plans; the numbering sequence started over from LISS-0001/WP-0001 for
+    # the template's real, post-reset local-issue history.
+    "docs/issues/LISS-0001-review-issues-minor-fix-path.md",
+    "docs/issues/LISS-0002-preflight-validation.md",
+    "docs/issues/LISS-0003-code-path-filter-and-disclosure-history.md",
+    "docs/work-plans/WP-0001-review-issues-minor-fix-path.md",
+    "docs/work-plans/WP-0002-two-group-send-message-loop.md",
+}
+
+
+def _git_output(repo: str, args: list[str]) -> str | None:
+    """Run a read-only git command against `repo`, following the same
+    call-and-degrade pattern check_version_claims uses below: None means git
+    is unavailable or the command failed, not "no results"."""
+    try:
+        result = subprocess.run(
+            ["git", "-C", repo] + args,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return result.stdout
+
+
+def _historical_numbered_files(repo: str) -> dict[str, dict[str, set[str]]] | None:
+    """Every path ever added under a tracked numbered-document prefix, on any
+    branch, grouped by prefix and then by number. Returns None when git is
+    unavailable (nothing to compare)."""
+    output = _git_output(
+        repo,
+        ["log", "--all", "--diff-filter=A", "--name-only", "--pretty=format:"],
+    )
+    if output is None:
+        return None
+    history: dict[str, dict[str, set[str]]] = {
+        prefix: {} for prefix in NUMBERED_FILE_PATTERNS
+    }
+    for line in output.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        for prefix, pattern in NUMBERED_FILE_PATTERNS.items():
+            match = pattern.match(line)
+            if match:
+                history[prefix].setdefault(match.group(2), set()).add(match.group(1))
+    return history
+
+
+def check_id_range_collisions(repo: str, failures: Failures) -> None:
+    """A currently-live numbered document must not reuse a number that
+    belonged to a different, since-deleted document.
+
+    `git log --all --diff-filter=A --name-only` gives every path ever added,
+    on any branch; comparing that against the live file set finds a number
+    reused by a different filename. That alone is not enough to call it a
+    collision: a file that was renamed keeps its old name in its own
+    `git log --follow` history, and that is the same document's lineage, not
+    two different documents sharing a number. Only a historical name the live
+    file's own `--follow` history does not reach is a real collision.
+    """
+    history = _historical_numbered_files(repo)
+    if history is None:
+        return  # no git available; nothing to compare
+
+    for prefix, pattern in NUMBERED_FILE_PATTERNS.items():
+        dir_path = os.path.join(repo, prefix)
+        if not os.path.isdir(dir_path):
+            continue
+        for name in sorted(os.listdir(dir_path)):
+            rel = f"{prefix}/{name}"
+            match = pattern.match(rel)
+            if not match:
+                continue
+            number = match.group(2)
+            historical_names = history.get(prefix, {}).get(number, set())
+            other_names = historical_names - {rel}
+            if not other_names:
+                continue
+
+            follow_output = _git_output(
+                repo,
+                ["log", "--follow", "--name-only", "--pretty=format:", "--", rel],
+            )
+            followed = {
+                line.strip()
+                for line in (follow_output or "").splitlines()
+                if line.strip()
+            }
+            reused = sorted(other_names - followed)
+            if reused and rel not in KNOWN_HISTORICAL_ID_REUSE:
+                failures.add(
+                    "id range collisions",
+                    f"{rel} reuses number {number}, previously assigned to "
+                    f"{', '.join(reused)} — a different, deleted file not "
+                    "reached by `git log --follow` from the live path, so "
+                    "not the same document's rename lineage",
+                )
+
+
+def check_issue_status_sync(repo: str, failures: Failures) -> None:
+    """A LISS issue's own `Status:` field must agree with its row's Status
+    column in the one work plan whose Issue Graph table names it.
+
+    An issue that appears in zero work plans, or in more than one, is not
+    this check's concern: zero means nothing to cross-reference yet, and more
+    than one is ambiguous about which work plan is authoritative — guessing
+    would risk a false positive of exactly the kind this script's docstring
+    already disclaims. Only the unambiguous case (exactly one owning work
+    plan) is checked, and only a genuine value disagreement is reported.
+    """
+    liss_status: dict[str, tuple[str, str]] = {}
+    for path in sorted(glob.glob(os.path.join(repo, "docs/issues/LISS-*.md"))):
+        name = os.path.basename(path)
+        liss_match = re.match(r"^(LISS-\d{4})-", name)
+        if not liss_match:
+            continue
+        text = read(repo, os.path.relpath(path, repo))
+        status_match = re.search(r"^- Status: (.+)$", text, re.MULTILINE)
+        if status_match is None:
+            continue
+        liss_status[liss_match.group(1)] = (status_match.group(1).strip(), name)
+
+    wp_occurrences: dict[str, list[tuple[str, str]]] = {}
+    for path in sorted(glob.glob(os.path.join(repo, "docs/work-plans/WP-*.md"))):
+        wp_rel = os.path.relpath(path, repo)
+        text = read(repo, wp_rel)
+        section = re.search(
+            r"^## Issue Graph\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+        )
+        if section is None:
+            continue
+        for row in re.finditer(
+            r"^\| (LISS-\d{4}) \| ([^|]+) \|", section.group(1), re.MULTILINE
+        ):
+            liss_id, status = row.group(1), row.group(2).strip()
+            wp_occurrences.setdefault(liss_id, []).append((wp_rel, status))
+
+    for liss_id, (own_status, liss_name) in sorted(liss_status.items()):
+        occurrences = wp_occurrences.get(liss_id, [])
+        if len(occurrences) != 1:
+            continue
+        wp_rel, wp_status = occurrences[0]
+        if wp_status != own_status:
+            failures.add(
+                "issue status sync",
+                f"docs/issues/{liss_name} states Status: {own_status}, but "
+                f"{wp_rel}'s Issue Graph lists {liss_id} as {wp_status!r}",
+            )
 
 
 def adr_numbers(repo: str) -> list[str]:
@@ -553,6 +837,155 @@ def check_adr_range(repo: str, failures: Failures) -> None:
                 )
 
 
+# Exact-anchored superseding-phrase requirements, modeled directly on
+# ENTRY_DOCUMENT_ADR_STATEMENTS above: when an ADR supersedes another
+# document's specific clause and that document is updated with a qualifying
+# phrase to reflect it, the phrase is registered here, anchored to the
+# CURRENT, VERIFIED wording. If a pattern stops matching, the check fails
+# closed and says so, rather than silently passing a mirror that quietly
+# reverted to the pre-supersession rule.
+SUPERSEDING_PHRASE_REQUIREMENTS: dict[str, list[tuple[str, str]]] = {
+    "docs/collaboration/design-agreement.md": [
+        (
+            r"Rule\s+3,\s+this\s+does\s+not\s+block\s+unrelated,\s+"
+            r"concurrently\s+in-flight\s+work\s+plans\s+in\s+either\s+group",
+            "ADR 0016",
+        ),
+    ],
+    "docs/collaboration/ai-human-scheme.md": [
+        (
+            r"this\s+checkpoint,\s+for\s+one\s+work\s+plan,\s+does\s+not\s+"
+            r"block\s+the\s+Design\s+&\s+Review\s+group's\s+or\s+the\s+"
+            r"Implementation\s+group's\s+other\s+concurrently\s+in-flight\s+"
+            r"work",
+            "ADR 0016",
+        ),
+    ],
+    "docs/at-tdd/process.md": [
+        (
+            r"Rule\s+3,\s+this\s+does\s+not\s+block\s+unrelated,\s+"
+            r"concurrently\s+in-flight\s+work\s+plans\s+in\s+either\s+group",
+            "ADR 0016",
+        ),
+    ],
+}
+
+
+def check_superseding_phrases(repo: str, failures: Failures) -> None:
+    """Every registered superseding-phrase anchor must still be present in
+    its target file. See SUPERSEDING_PHRASE_REQUIREMENTS above for what
+    "registered" means and why this is presence-of-a-registered-string, not
+    meaning-inference."""
+    for target, requirements in SUPERSEDING_PHRASE_REQUIREMENTS.items():
+        text = read_optional(repo, target)
+        if text is None:
+            continue
+        for pattern, originating_adr in requirements:
+            if re.search(pattern, text) is None:
+                failures.add(
+                    "superseding phrases",
+                    f"{target}: expected qualifying phrase from "
+                    f"{originating_adr} not found (pattern: {pattern!r}). If "
+                    "the sentence was reworded or moved, update "
+                    "SUPERSEDING_PHRASE_REQUIREMENTS in "
+                    "scripts/check-contract-consistency.py to match; if it "
+                    "was removed, the supersession is no longer stated "
+                    "anywhere in this file.",
+                )
+
+
+def _block_work_plan_done_on_open_findings(repo: str) -> bool:
+    """Read `[findings].block_work_plan_done_on_open_findings` from
+    `docs/collaboration/loop-settings.toml`.
+
+    The file is a flat `key = value` list under `[section]` headers (see the
+    file itself), so a section-then-key regex is enough — no TOML library
+    needed. Defaults to `True` when the file or the key is absent, matching
+    this setting's own documented default (`docs/collaboration/loop-settings.md`
+    and the toml file's own comment above the key both state `true` as the
+    contract default)."""
+    text = read_optional(repo, "docs/collaboration/loop-settings.toml")
+    if text is None:
+        return True
+    section = re.search(r"^\[findings\]\n(.*?)(?=^\[|\Z)", text, re.MULTILINE | re.DOTALL)
+    if section is None:
+        return True
+    match = re.search(
+        r"^block_work_plan_done_on_open_findings\s*=\s*(true|false)\s*$",
+        section.group(1),
+        re.MULTILINE,
+    )
+    if match is None:
+        return True
+    return match.group(1) == "true"
+
+
+def check_open_findings_gate(repo: str, failures: Failures) -> None:
+    """A closed work plan's own findings table must list no `Type:
+    review-finding` issue whose Status is neither `closed` nor `wont_do`,
+    when `[findings].block_work_plan_done_on_open_findings` is true.
+
+    "Closed" means the work plan's own "Work-Plan Close" section states a
+    real, date-shaped `Date:` value, not the placeholder text every
+    still-open work plan carries (`_pending Director action_`) — the same
+    signal a human reader already uses, per DA-2026-08-19-03's Settled
+    Ambiguities. A work plan with no "Work-Plan Close" section, or an
+    unclosed one, is not this check's concern.
+
+    Findings are read only from the work plan's own structured
+    `| Issue | Status | Resolution |` table under "Work-Plan Review" — never
+    inferred from a finding's own free-text content — the same
+    anchor-on-existing-structure technique check_issue_status_sync already
+    uses for the Issue Graph table.
+    """
+    if not _block_work_plan_done_on_open_findings(repo):
+        return  # setting disabled; the gate does nothing
+
+    for path in sorted(glob.glob(os.path.join(repo, "docs/work-plans/WP-*.md"))):
+        wp_rel = os.path.relpath(path, repo)
+        text = read(repo, wp_rel)
+
+        close_section = re.search(
+            r"^## Work-Plan Close\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+        )
+        if close_section is None:
+            continue  # no Work-Plan Close section at all (older shape)
+        date_match = re.search(r"^- Date: (.+)$", close_section.group(1), re.MULTILINE)
+        if date_match is None:
+            continue
+        if not re.search(r"\d{4}-\d{2}-\d{2}", date_match.group(1)):
+            continue  # placeholder text, e.g. "_pending Director action_"
+
+        review_section = re.search(
+            r"^## Work-Plan Review\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+        )
+        if review_section is None:
+            continue
+
+        for row in re.finditer(
+            r"^\| (LISS-\d{4}) \|", review_section.group(1), re.MULTILINE
+        ):
+            liss_id = row.group(1)
+            issue_paths = sorted(
+                glob.glob(os.path.join(repo, f"docs/issues/{liss_id}-*.md"))
+            )
+            if not issue_paths:
+                continue  # findings-table row names an issue that no longer exists
+            issue_rel = os.path.relpath(issue_paths[0], repo)
+            issue_text = read(repo, issue_rel)
+            status_match = re.search(r"^- Status: (.+)$", issue_text, re.MULTILINE)
+            if status_match is None:
+                continue
+            status = status_match.group(1).strip()
+            if status not in ("closed", "wont_do"):
+                failures.add(
+                    "open findings gate",
+                    f"{wp_rel} lists {liss_id} in its Work-Plan Review "
+                    f"findings table, but {issue_rel} states Status: "
+                    f"{status!r} — neither 'closed' nor 'wont_do'",
+                )
+
+
 def check_version_claims(repo: str, failures: Failures) -> None:
     """No document may claim a released version that has no tag."""
     try:
@@ -627,6 +1060,10 @@ def main() -> int:
     check_references(repo, failures)
     check_adr_range(repo, failures)
     check_version_claims(repo, failures)
+    check_id_range_collisions(repo, failures)
+    check_issue_status_sync(repo, failures)
+    check_superseding_phrases(repo, failures)
+    check_open_findings_gate(repo, failures)
     return failures.report()
 
 

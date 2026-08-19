@@ -19,10 +19,17 @@ work-plan-level Reviewer, once, at the end.
 ## What the design phase produces
 
 1. A direction stated by the Director for one work plan: what is to be built,
-   under which constraints, and what would count as it being wrong.
-2. A plan built with the Planner through dialogue, covering scope,
-   decomposition, sequencing, and the persona assigned to each task in that
-   work plan.
+   under which constraints, and what would count as it being wrong. Per
+   `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+   (ADR 0016) Rule 2, this direction may be stated once, at
+   `docs/backlog/item-NNNN-*.md` approval, rather than freshly for each work
+   plan the item eventually produces — see "Backlog-item-level agreement"
+   below.
+2. A plan built with the Planner — through dialogue with the Director at
+   backlog-item approval, or autonomously by the Design & Review group
+   within that approved item's stated scope, per ADR 0016 Rule 2 — covering
+   scope, decomposition, sequencing, and the persona assigned to each task
+   in that work plan.
 3. Acceptance specifications written by the Specifier, at the level of detail a
    test can be written from.
 4. A design agreement document recording all of the above as agreed.
@@ -44,6 +51,45 @@ Agreement is explicit and mutual. Neither side reaches it alone:
 If the AI cannot make the second statement, the design phase is not finished,
 regardless of the Director's readiness to proceed. Silence is not agreement,
 and neither is proceeding without objection.
+
+### Backlog-item-level agreement
+
+Per ADR 0016 Rule 2, the Director's agreement statement above may be given
+at `docs/backlog/item-NNNN-*.md` approval, in advance of the specific work
+plan it authorizes, instead of through a fresh live dialogue turn for that
+work plan. When this applies:
+
+- the Design & Review group produces the plan, the specifications, and this
+  record's contents autonomously, within the scope the approved backlog
+  item states;
+- the record's "Agreement" section cites the backlog item's approval as the
+  basis for the Director's agreement statement, rather than a fresh
+  transcript of a live turn for this specific work plan;
+- the AI's own executability statement is still made fresh, by the Design &
+  Review group, against the actual plan and specifications it produced —
+  ADR 0016 does not, and cannot, pre-approve the AI's half of "Reaching
+  agreement" before the plan exists to be judged executable.
+
+This does **not** weaken "Silence is not agreement" above. Backlog-item
+approval is itself an explicit, on-the-record act by the Director — not
+silence, and not proceeding without objection — and it is scoped strictly to
+what the backlog item states. A work plan that goes beyond the approved
+backlog item's stated scope is not covered by backlog-item-level agreement;
+it requires its own reopening request, per "Reopening the agreement" below,
+the same as any other decision the agreement does not settle.
+
+### Intervention-gated provisional records
+
+Per ADR 0016 Rule 4, if the Director sends a chat message directly into
+either group's session while a design-agreement record is being produced or
+amended, the specific in-flight item is gated to per-step Director approval
+until a resolving instruction. Any design-agreement content touched while
+that gate is active is **provisional**: the record must state that it is
+provisional and name the gate, and it does not count as reached agreement
+under "Reaching agreement" above until the Director's resolving instruction
+confirms it. A provisional record is not silently promoted to an agreed
+record by the gate simply lapsing or being forgotten — the resolving
+instruction is what removes the provisional marking.
 
 ## What the record must contain
 
@@ -115,7 +161,13 @@ in the same turn. It is not satisfied by reading alone with no stated next
 step, and it is not two separate acts performed at different times by
 default.
 
-The next work plan does not start without this. A work plan that has not
+This specific work plan's own successor does not start without this — the
+Director's next-direction statement, which opens the next work plan's
+agreement, is part of the same combined close action. Per
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+Rule 3, this does not block unrelated, concurrently in-flight work plans in
+either group — only the one work plan being closed, and what directly
+follows from closing it, wait on this action. A work plan that has not
 closed is not superseded by a new direction stated mid-plan — that is a
 reopening request against the current agreement, not the start of a new one.
 

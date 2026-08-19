@@ -4,9 +4,9 @@
 
 - Item ID: item-0001
 - Title: Separate-context Reviewer for v2.3.0 contract change
-- Status: ready-for-planning
+- Status: promoted
 - Created: 2026-08-10
-- Updated: 2026-08-10
+- Updated: 2026-08-18
 - Note: `v2.3.0` was tagged on Director instruction while this Reviewer
   pass remains open. Completing this item closes the ADR 0006 gap for the
   edition; it does not re-tag unless findings require a patch release.
@@ -50,6 +50,12 @@ contract.
 
 ## Promotion notes
 
-- Date:
-- Decision: subordinate follow-up to v2.3.0 land
-- Reason: Director asked to land incomplete work as dependents and commit
+- Date: 2026-08-18
+- Decision: Promoted, in the Backlog-layer thread, as part of a batch
+  clearing this repo's pre-existing backlog. Per ADR 0016 Rule 2, this
+  approval is the single design-phase gate — the Design & Review group
+  proceeds autonomously from here: confirm the v2.3.0 contract change's
+  actual current review state before assuming it is still open, then build
+  the work plan, spec, and design agreement.
+- Reason: Well-specified, high-priority, real ADR-0006 governance gap; ready
+  to run.

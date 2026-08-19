@@ -8,6 +8,15 @@ and the single-gate model). ADR 0001's Director/Planner/Specifier design
 phase, and its Approval Model's three constraints on any approval that does
 occur in a separate context, are unchanged.
 
+Its Decision, clause 1's restatement of ADR 0001's live per-work-plan
+Planner-Director dialogue, and clause 5's blocking rule ("the next work plan
+does not start without [close]") as applied *across concurrently in-flight
+work plans*, are further superseded by
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+on 2026-08-18. What clause 5 requires for the one work plan it closes is
+unchanged; ADR 0016 only removes the serialization against other,
+unrelated work plans. Clauses 2, 3, 4, 6, and 7 are unchanged.
+
 ## Context
 
 ADR 0001 established one human gate — the design agreement, before the loop —

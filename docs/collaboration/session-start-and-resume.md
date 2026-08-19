@@ -31,7 +31,7 @@ authoritative state. Write new collaboration record bodies in
 `[docs].language` from loop-settings. Prefer post-hoc reconstructability
 (`docs/collaboration/post-hoc-audit.md`).
 
-## Three Session Types
+## Four Session Types
 
 ### 1. First Session After Template Adoption
 
@@ -113,6 +113,54 @@ required.
 Agent follows the selected operating path in
 `docs/architecture/agent-quickstart.md` and reads only the documents that path
 requires.
+
+### 4. Standing Two-Group Pair
+
+Use for the two standing AI session groups introduced by
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+(ADR 0016): the Design & Review group (Planner, Specifier, Reviewer, Arbiter)
+and the Implementation group (Implementer).
+
+Director, at first start of each group's session (once per group, not once
+per work plan):
+
+1. Start the Design & Review group session and the Implementation group
+   session separately, each as its own standing session.
+2. In each session's first message, state which group it is and which
+   persona set operates in it, per the Session Entry Checklist below —
+   exactly as any other session's first message would name its persona and
+   operating path.
+
+Agent, in either standing session, at its own start (same as any other
+session type):
+
+1. Read `AGENTS.md` / `CLAUDE.md` and
+   `docs/architecture/agent-quickstart.md`.
+2. Read `docs/collaboration/loop-settings.toml` and the normal recovery-order
+   documents ("Agent Recovery Order" below) — a standing session's first
+   start is not exempt from the same repository-artifact recovery every
+   other session type uses.
+
+Ongoing operation, once both standing sessions are running:
+
+- Both sessions communicate using the handoff protocol defined in
+  `docs/collaboration/cross-session-messaging.md` (LISS-0022) — this
+  document does not restate that protocol's content; see it for the
+  concrete `SendMessage` / `ListAgents` contract between the two groups.
+- The Director does not restate a full task message per work plan the way
+  Session Type 3 above would. Work arrives through the backlog-item gate and
+  the handoff protocol instead (ADR 0016 Rules 2 and 4).
+
+When a standing session ends (process restart, crash, manual stop): the
+Director, or the other group sending a message that finds no session via
+`ListAgents` (per `docs/collaboration/cross-session-messaging.md`'s
+`ListAgents` handling), re-establishes it. Re-establishing a standing
+session is not a new continuity mechanism — it follows the same
+artifact-only continuity rule as any resumed session under "Core Idea"
+above: the re-established session recovers state from repository artifacts
+(the covering design agreement, work plan, issues, branch, changed files,
+`docs/collaboration/loop-settings.toml`), never from assumed chat memory of
+the session that ended.
 
 ## Session Entry Checklist
 

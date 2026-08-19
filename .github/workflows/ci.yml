@@ -129,8 +129,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for n in 0001 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015; do
-            ls "docs/architecture/adr/${n}-"*.md >/dev/null
+          # Dynamic, contiguous-sequence check (LISS-0035) -- no hardcoded
+          # ADR number list. WP-0007 introduced this; WP-0006 and WP-0004
+          # each temporarily patched the step differently while 0017/0018
+          # were not both present on their own branches (see ADR 0018's
+          # "Numbering note"). Now that both are merged, the sequence is
+          # contiguous again and the strict check applies unmodified.
+          ls docs/architecture/adr/*.md >/dev/null
+          expected=1
+          for f in docs/architecture/adr/[0-9][0-9][0-9][0-9]-*.md; do
+            n=$(basename "$f" | cut -c1-4)
+            printf -v want '%04d' "$expected"
+            if [ "$n" != "$want" ]; then
+              echo "ADR sequence gap: expected ${want}, found ${n} (file: $f)" >&2
+              exit 1
+            fi
+            expected=$((expected + 1))
           done
 
       - name: Check script syntax
@@ -210,6 +224,7 @@ jobs:
           ! ls "$tmp/target/docs/specs/"*.md >/dev/null 2>&1
           ! ls -d "$tmp/target/docs/spike/"case-* >/dev/null 2>&1
           ! ls "$tmp/target/docs/backlog/"item-*.md >/dev/null 2>&1
+          ! ls "$tmp/target/docs/work-plans/"WP-*.md >/dev/null 2>&1
           test -f "$tmp/target/scripts/check-contract-consistency.py"
           (cd "$tmp/target" && python3 scripts/check-contract-consistency.py --repo .)
           if grep -R -n -i -E '<PROJECT_NAME: one-line description|<FILL IN: e\.g\. backend' \
