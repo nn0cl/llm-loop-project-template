@@ -65,10 +65,31 @@ Path applying in substance to everything else.
 
 ## Preflight Validation
 
-- Result: _pending — recorded after Implementation group completes LISS-0042_
-- Checks and command output: _pending_
-- Scope result: _pending_
-- Next action: _pending_
+- Result: `pass`
+- Checks and command output:
+
+  ```console
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  Exit code: 0. Run by the Design & Review group (not the Implementer's own
+  context) after fast-forward-merging the Implementation group's branch
+  `process/prevent-direct-to-main-commits` (commit `37581e1`) into the
+  shared branch.
+- Scope result: `git diff 632a8e4..HEAD --stat` (632a8e4 is the promotion
+  commit both item-0012 and item-0013 share) shows exactly 6 files: this
+  work plan, the design agreement, LISS-0042, the two edited contract
+  files (`docs/collaboration/branch-commit-pr-discipline.md`,
+  `docs/collaboration/local-issue-planning.md`), and the new trace file
+  under `docs/collaboration/traces/`. No edit to `CLAUDE.md` or any
+  mirror. No open `Type: review-finding` issue affects this area (checked
+  all `docs/issues/LISS-*.md` `Status` fields; none `proposed` or
+  `in_progress`). No open spike case blocks this issue.
+- Next action: submit to the Design & Review group's work-plan-level
+  Reviewer pass, in a context separate from both the Planner/Specifier
+  context that wrote the design agreement and the Implementer context that
+  made the edits.
 
 ## Work-Plan Review
 
