@@ -45,13 +45,10 @@ A pull request that changes an agent operating contract file requires:
   `.cursor/rules/*.mdc` still agree with each other in effective content
   after the change, when the change touches shared phase, dependency, or
   read-order rules. Per ADR 0006: agreement means equivalent effective
-  content, not a literal text match — Cursor's effective content is the union of
-  `.cursor/rules/*.mdc` (Cursor complements only) and Cursor's native root
-  `AGENTS.md` auto-apply (no `@AGENTS.md` inside `.mdc`), while `CLAUDE.md`,
-  `.github/copilot-instructions.md`, and `.grok/rules/*.md` are literal full
-  mirrors. `CLAUDE.md` joined that group on 2026-07-25, when the
-  `@AGENTS.md` import was dropped after an adopter showed the import
-  resolved correctly and still did not produce adherence.
+  content, not a literal text match — see this document's own
+  "Per-Agent-Tool Rule Applicability Registry" section below for exactly
+  which sync mode applies to which agent tool, and to record any new
+  intentional difference rather than treating it as an error.
 
 Do not merge an agent operating contract change based only on an AI agent's
 self-review.
@@ -68,6 +65,25 @@ merged on exactly this instruction, and a later retroactive review rejected
 it for that reason among others (see that ADR's own Status section). That
 incident is not precedent for a future skip; it is the reason this paragraph
 exists.
+
+## Per-Agent-Tool Rule Applicability Registry
+
+Not every rule in this contract applies identically to every agent tool's
+own mirror file. Record every *intentional* difference here — a
+difference that exists on purpose, not one this document's own
+mirror-consistency requirement above would otherwise flag as a defect.
+Consult this table before treating an agent-tool difference as an error.
+
+| Sync mode | Agent tool(s) | What it means |
+| --- | --- | --- |
+| Literal full mirror | `CLAUDE.md`, `.github/copilot-instructions.md`, `.grok/rules/*.md` | Effective content matches `AGENTS.md` word-for-word (`CLAUDE.md` joined this group on 2026-07-25, when the `@AGENTS.md` import was dropped after an adopter showed the import resolved correctly and still did not produce adherence). |
+| Union (complement + native auto-apply) | `.cursor/rules/*.mdc` | Cursor's effective content is the union of `.cursor/rules/*.mdc` (Cursor complements only — not a full restatement) and Cursor's own native root `AGENTS.md` auto-apply (Cursor reads `AGENTS.md` directly; the `.mdc` files add only what Cursor-specific behavior requires and do not `@AGENTS.md`-import it). |
+| Canonical source | `AGENTS.md` | The literal-full-mirror group's source of truth; edited first, then propagated to the mirrors listed above. |
+
+Add a new row here, with its own reason, the first time an intentional
+per-agent-tool difference is introduced — do not fold a new difference
+into prose scattered across this document or a PR description where a
+later reader would not think to look for it.
 
 ## Traceability Rule
 

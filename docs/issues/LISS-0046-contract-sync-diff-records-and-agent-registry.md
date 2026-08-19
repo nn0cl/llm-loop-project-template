@@ -161,6 +161,51 @@ Required — planning size `M`. See below.
   Template-owned/Target-owned split — this work plan closes only the two
   genuinely missing pieces (Sync Diff Record, Per-Agent-Tool Rule
   Applicability Registry) rather than rebuilding the existing mechanism.
+- 2026-08-19 — Implementer, self-review (short form, planning size `M`, no
+  ADR 0015 escalation criteria apply — a single cohesive doc-only change):
+
+  ```markdown
+  Phase / finding: Architecture Path, verbatim transcription (Implementer)
+  Command run: python3 scripts/check-contract-consistency.py
+  Result:
+  contract consistency: all checks passed
+  Risks considered:
+  - (a) transcribed content in the 3 files does not match DA-2026-08-19-07's
+    "Exact Content to Produce" verbatim, including exact insertion points
+  - (b) the shortened Review Rule bullet in File 2 loses information rather
+    than just relocating it via cross-reference
+  - (c) some other part of `prompt-instruction-change-control.md` or
+    `contract-file-sync-prompt.md`, beyond the two specified insertion
+    points in each, was touched
+  - (d) `docs/architecture/adr/0008-*.md`, a sync script, `CLAUDE.md`, or a
+    mirror file was touched
+  Why each does not occur:
+  - (a) `git diff` of both edited files, read side by side against
+    DA-2026-08-19-07's "File 2"/"File 3" code blocks, and the new
+    `docs/templates/sync-diff-record.md` read side by side against "File
+    1" — all three are character-for-character identical to the specified
+    text; insertion points match the named anchors ("immediately after ##
+    Review Rule's bullet list and before ## Traceability Rule";
+    "immediately after the intro paragraph ... before 'Do not run this as
+    a mechanical text merge.'"; Step 6 replaced exactly)
+  - (b) the new registry table's "Literal full mirror" and "Union" rows
+    restate the exact same facts the deleted prose stated (the
+    `.cursor/rules/*.mdc` union-with-native-`AGENTS.md`-auto-apply
+    mechanism, and `CLAUDE.md`'s 2026-07-25 `@AGENTS.md`-import removal) —
+    a direct sentence-by-sentence comparison of the deleted bullet text
+    against the new table + shortened bullet confirms no fact is dropped,
+    only relocated and cross-referenced
+  - (c) `git diff` of each edited file shows exactly one bullet replacement
+    and one section insertion per file (File 2), and exactly one paragraph
+    insertion and one Step 6 replacement (File 3) — no other line in either
+    diff
+  - (d) `git status --porcelain` after all edits lists only:
+    `docs/templates/sync-diff-record.md` (new),
+    `docs/collaboration/prompt-instruction-change-control.md` (modified),
+    `docs/templates/contract-file-sync-prompt.md` (modified), this trace
+    file (new), and this Work Notes edit (modified) — no ADR, script, or
+    `CLAUDE.md`/mirror file appears in that list
+  ```
 
 ## Verification
 

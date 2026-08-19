@@ -10,6 +10,16 @@ overwriting it, because these files carry adopter-filled placeholders
 (project name, stack, domain boundaries, external resources) that a text
 merge or a blind overwrite can silently destroy or bury.
 
+This Tier 1 (template-owned, template wins outright) / Tier 2
+(adopter-owned, needs reconciliation) split is this template's own answer
+to keeping template-owned process/methodology conventions and
+target-owned project-specific facts separate — see
+`docs/architecture/adr/0008-template-update-propagation.md`'s Tiered Sync
+Policy. "Syncing" here never means making every mirror file textually
+identical to the template's own copy; it means keeping each file's
+effective rules current while preserving what the adopting project
+actually owns.
+
 Do not run this as a mechanical text merge. The point of routing this to an
 agent instead of `git merge-file` is to distinguish "the adopter's own project
 facts" from "the adopter's incidental edits" and carry only the former
@@ -58,7 +68,15 @@ Fill these in before starting (the sync script's output names them):
 6. Once approved, write the file and record the change like any other
    contract-file edit: a stated reason, and an AI work trace under
    `docs/collaboration/traces/` (see
-   `docs/collaboration/prompt-instruction-change-control.md`).
+   `docs/collaboration/prompt-instruction-change-control.md`). Also
+   produce a Sync Diff Record — `docs/templates/sync-diff-record.md`,
+   stored at `docs/collaboration/sync-records/YYYY-MM-DD-<file-slug>.md`
+   in the adopting project's own repository — naming the template's own
+   change, the target's own change, each conflict, and the
+   adopt/reject/defer decision for it; the fields in this prompt's own
+   "Output" section above map directly onto that record's sections. The
+   Sync Diff Record and the AI work trace are both required; neither
+   substitutes for the other.
 
 ## Output
 
