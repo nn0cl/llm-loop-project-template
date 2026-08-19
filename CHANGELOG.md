@@ -14,9 +14,13 @@ tooling that leave every rule intact.
 rules. Agent operating contract files and collaboration docs were updated and
 mirrored; see `docs/collaboration/traces/2026-08-10-loop-ledgers-and-settings.md`.
 
-Merged via PR #13. Tagged `v2.3.0` on Director instruction. Separate-context
-Reviewer for the contract change remains open as backlog `item-0001` (ADR
-0006) — this tag records the landed edition; it does not close that review.
+Merged via PR #13. Tagged `v2.3.0` on Director instruction, ahead of its
+separate-context Reviewer pass. That review is now complete and Approved:
+`docs/collaboration/reviews/2026-08-19-contract-reviewer-v230-review.md`
+(item-0001, ADR 0006) — no defect found in the landed artifact; the one gap
+the review surfaced (no design-agreement file exists for this land, only a
+2026-08-10 Director session direction) is recorded as a disclosed historical
+process gap, not a correction to this edition's content.
 
 **Landed in this edition**
 
@@ -47,7 +51,7 @@ treat them as delivered by v2.3.0:
 
 | ID | Follow-up |
 | --- | --- |
-| `item-0001` | Separate-context Reviewer approval for this contract change (ADR 0006). This edition is **landed, not Reviewer-closed**. |
+| `item-0001` | **Resolved 2026-08-19.** Separate-context Reviewer approved this contract change (ADR 0006); see the review record linked above. |
 | `item-0002` | Process ADR codifying spike / backlog / loop settings / findings-reuse (docs-first today). |
 | `item-0003` | Deterministic CI/preflight gate that fails on open `review-finding` issues when settings require it. |
 
