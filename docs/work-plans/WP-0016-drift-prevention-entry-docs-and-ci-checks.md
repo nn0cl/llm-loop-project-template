@@ -63,11 +63,37 @@ the rest of this issue).
 
 ## Preflight Validation
 
-- Result: _pending — recorded after the Implementation group completes
-  LISS-0048_
-- Checks and command output: _pending_
-- Scope result: _pending_
-- Next action: _pending_
+- Result: `pass`
+- Checks and command output:
+
+  ```console
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  Exit code: 0. First real-tree run (Implementer's own Task 4) correctly
+  `fail`ed: the design agreement's own File 2 and File 3 contradicted
+  each other — `check_no_archive_reference_from_entry`'s original bare
+  substring match flagged File 3's own legitimate abstract mention of
+  `docs/archive/`. `DA-2026-08-19-08` was amended with a corrected,
+  file-shaped-path regex (`ENTRY_ARCHIVE_REFERENCE`), sent back to the
+  same Implementation-group session, and re-applied (commit `d9fe2a2`).
+  This run is against the merged result, independently re-verified in
+  this worktree (fetched the Implementer's actual branch directly,
+  diffed it against the corrected agreement text — matched exactly —
+  before merging).
+- Scope result: `git diff 3ae03d6..HEAD --stat` (`3ae03d6` is this work
+  plan's own design-intake commit) shows exactly 7 files: this design
+  agreement (the correction), the new terminology-migration table, the
+  script edit, the agent-quickstart.md addition, the new trace file,
+  LISS-0044 (closed), and LISS-0048's own Work Notes. `find docs/archive`
+  confirms no `docs/archive/` path exists anywhere in the tree — the
+  synthetic verification case was fully removed. No `CLAUDE.md`/mirror
+  file touched. No open `Type: review-finding` issue affects this area.
+- Next action: submit to the Design & Review group's work-plan-level
+  Reviewer pass, in a context separate from both the Planner/Specifier
+  context that wrote the design agreement and the Implementer context
+  that transcribed and corrected it.
 
 ## Work-Plan Review
 
