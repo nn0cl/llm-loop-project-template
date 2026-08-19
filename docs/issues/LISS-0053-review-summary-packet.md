@@ -105,6 +105,54 @@ Not required — planning size `S`, first attempt.
   drafted directly on `process/item-0012-remaining-facets`. Exact content
   for both files specified verbatim in the design agreement for the
   Implementation group to transcribe.
+- 2026-08-19 — Implementer self-review (short form, planning size `S`),
+  per `docs/templates/self-review.md`:
+
+  ```markdown
+  Phase / finding: Architecture Path, docs-only content transcription
+    (Implementer, DA-2026-08-19-09 Tasks 1-2)
+  Command run: python3 scripts/check-contract-consistency.py
+  Result:
+    contract consistency: all checks passed
+  Risks considered:
+    (a) transcribed content does not match "Exact Content to Produce"
+      verbatim, or lands at the wrong insertion point, in either file.
+    (b) some other part of either file was touched beyond the specified
+      insertion.
+    (c) the new design-agreement.md section weakens or is read as
+      weakening the Reviewer's three existing constraints (context
+      separation, deterministic precondition, falsification burden).
+    (d) CLAUDE.md, a mirror file, or an already-closed work plan
+      (WP-0013 through WP-0016) was touched.
+  Why each does not occur:
+    (a) `git diff -- docs/templates/work-plan.md
+      docs/collaboration/design-agreement.md` was read through line by
+      line against DA-2026-08-19-09's "File 1" and "File 2" blocks; both
+      inserted sections match character for character, and each lands
+      immediately after the exact paragraph named in the agreement
+      ("...it never replaces the separate-context Reviewer." in
+      work-plan.md; "...the agreement is reopened with the gap named."
+      in design-agreement.md) and immediately before the exact next
+      heading named (`## Work-Plan Review`; `## Closing a work plan`).
+    (b) the same diff shows only one contiguous insertion hunk per file,
+      with no other lines changed; `git status --porcelain` lists only
+      `docs/collaboration/design-agreement.md` and
+      `docs/templates/work-plan.md` as modified.
+    (c) the new design-agreement.md section's own text was read back: it
+      states explicitly "This does not weaken the Reviewer's own
+      falsification burden or the deterministic-precondition/
+      context-separation constraints in `CLAUDE.md`'s 'Constraints'" and
+      that a Reviewer with doubt "still reads the underlying trace or
+      issue file directly... independently re-run[s] a deterministic
+      check rather than trust a pasted claim" — the packet changes only
+      where review starts, not how rigorously it searches, matching
+      DA-2026-08-19-09's Falsification Criteria.
+    (d) `git status --porcelain` after both edits lists only the two
+      target files (plus, once added, this trace/Work-Notes update and
+      the new trace file) — `CLAUDE.md`, its mirrors, and
+      `docs/work-plans/WP-0013*.md` through `WP-0016*.md` do not appear
+      in the diff or status output at any point.
+  ```
 
 ## Verification
 

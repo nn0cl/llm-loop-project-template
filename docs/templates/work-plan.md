@@ -86,6 +86,37 @@ once every issue is self-reviewed and complete. Record `pass` or `fail`, the
 exact checks and outputs, scope result, and next action. `pass` permits
 submission only; it never replaces the separate-context Reviewer.
 
+## Review Summary Packet
+
+Filled in once Preflight Validation passes, before submitting to the
+work-plan-level Reviewer — the Reviewer's own canonical review input, per
+`docs/backlog/item-0012-document-and-log-lifecycle-management.md` facet 6
+and `docs/collaboration/design-agreement.md`'s own "Review Summary
+Packet" section. Detailed traces, self-reviews, and issue Work Notes are
+linked as evidence for a deeper falsification search, not required
+reading to start the review.
+
+- **Scope**: what this work plan actually changed, in one or two
+  sentences.
+- **Current canonical documents**: which ADRs, contract files, or specs
+  this work plan's content is now the current source for (or which
+  existing ones it extends/amends).
+- **Changed files**: the exact file list (new/edited/moved), matching
+  the actual diff — not a paraphrase.
+- **Findings**: any `Type: review-finding` issue this work plan resolved
+  or opened, each with its own current status.
+- **Disposition**: what happened — resolved cleanly, resolved with
+  tracked follow-ups, blocked, etc.
+- **Remaining blockers**: anything still open that could affect the
+  Reviewer's decision.
+- **Verification result**: the actual Preflight command output (or a
+  pointer to its exact location in this same file), not a restated
+  summary.
+- **Next approval required**: which of the four approval types
+  (specification-conformance, phase-correctness, boundary-conformance,
+  evidence-sufficiency — per `CLAUDE.md`'s "Approval Model") this work
+  plan actually needs, given what changed.
+
 ## Work-Plan Review
 
 Reviewer's approval record: <link>

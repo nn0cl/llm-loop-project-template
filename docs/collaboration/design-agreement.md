@@ -143,6 +143,30 @@ The loop does not guess past an unsettled question, and it does not stop
 quietly. Either the agreement covers the case, or the agreement is reopened
 with the gap named.
 
+## Review Summary Packet
+
+Before the work-plan-level Reviewer pass — after Preflight Validation
+passes, per `CLAUDE.md`'s "Work-Plan Review" — the work plan's own
+"Review Summary Packet" section (`docs/templates/work-plan.md`) is
+filled in as the Reviewer's canonical review input. Per item-0012 facet 6
+("Review records as summary packets"): making the Reviewer read every
+trace in full raises cognitive load without a matching audit benefit for
+what changed since the last review. A Reviewer session should read the
+packet first, and treat detailed traces, self-reviews, and issue Work
+Notes as linked evidence to consult for falsification, not as the
+review's own entry point.
+
+This does not weaken the Reviewer's own falsification burden or the
+deterministic-precondition/context-separation constraints in
+`CLAUDE.md`'s "Constraints" — a Reviewer that finds the packet's own
+claims insufficient, or needs to verify a specific detail, still reads
+the underlying trace or issue file directly, the same way it would
+independently re-run a deterministic check rather than trust a pasted
+claim (per `docs/collaboration/design-review-perspectives.md`'s
+"Re-verify state that could have changed underneath you"). The packet
+changes where the review *starts*, not how rigorously it must actually
+search.
+
 ## Closing a work plan
 
 The second gate, per
