@@ -133,7 +133,19 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-| LISS-0044 | proposed | Not actionable against this work plan (no `docs/archive/` content created here); tracked for the retroactive-application or facet-5 work plan, whichever creates `docs/archive/` content first. |
+|  |  |  |
+
+No finding blocks this work plan's Done. `LISS-0044` was opened from this
+Reviewer's own recommendation as a tracked-for-later note, not a
+must-resolve-before-close finding — it is deliberately not listed in the
+table above (which `check_open_findings_gate` treats as blocking until
+each row is `closed`/`wont_do`). It stays `Status: proposed`, legitimately
+deferred to whichever later work plan (the retroactive-application work
+plan, or facet 5 — drift-prevention entry documents and CI checks) first
+creates content under `docs/archive/`, since it is not actionable before
+then. See `docs/issues/LISS-0044-record-dirs-archive-exclusion-gap.md` and
+`docs/collaboration/reviews/2026-08-19-wp-0014-document-log-lifecycle-model-review.md`'s
+own Non-Blocking Observations for the full record.
 
 ## Work-Plan Close
 
