@@ -1104,7 +1104,8 @@ def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None
         text = read_optional(repo, rel)
         if text is None:
             continue
-        for lineno, line in enumerate(text.splitlines(), 1):
+        lines = text.splitlines()
+        for lineno, line in enumerate(lines, 1):
             match = ENTRY_ARCHIVE_REFERENCE.search(line)
             if match:
                 failures.add(
@@ -1113,6 +1114,31 @@ def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None
                     f"file ({match.group(0)!r}) -- Entry documents should "
                     "point at the restoration ledger or a current "
                     "Canonical document instead, per ADR 0020 Rule 1.",
+                )
+        # LISS-0050: a hard line-wrap can split a path across two lines
+        # with no space between them -- this repository's own prose
+        # convention wraps well under 80 columns and does not always
+        # respect a backticked path as a single unbreakable token.
+        # Concatenating each adjacent raw line pair, with no inserted
+        # separator, and re-scanning catches a reference the per-line
+        # scan above would otherwise miss entirely. Skip a pair where
+        # either individual line already matched on its own -- that
+        # reference was already reported above with a precise line
+        # number, and re-reporting it here would duplicate the failure.
+        for i in range(len(lines) - 1):
+            if ENTRY_ARCHIVE_REFERENCE.search(lines[i]) or ENTRY_ARCHIVE_REFERENCE.search(
+                lines[i + 1]
+            ):
+                continue
+            match = ENTRY_ARCHIVE_REFERENCE.search(lines[i] + lines[i + 1])
+            if match:
+                failures.add(
+                    "entry archive reference",
+                    f"{rel}:{i + 1}-{i + 2} references a specific "
+                    f"docs/archive/ file ({match.group(0)!r}), split "
+                    "across a line wrap -- Entry documents should point "
+                    "at the restoration ledger or a current Canonical "
+                    "document instead, per ADR 0020 Rule 1.",
                 )
 
 
@@ -1132,6 +1158,17 @@ def check_retired_terminology(repo: str, failures: Failures) -> None:
     empty table (no rows yet) makes this check a no-op, not a failure --
     there is nothing to enforce until a real retirement is recorded there
     first.
+
+    Matching is word-boundary-anchored (`\\bterm\\b`), not a bare substring
+    test -- LISS-0049 found that a plain substring match on a short or
+    common retired term (e.g. "AI") produces a large, indiscriminate
+    false-positive blast radius by matching inside unrelated identifiers
+    that merely contain the same letters (`AIDE`, `AIP-0043`, and similar).
+    A word boundary still correctly flags a genuine standalone use of the
+    retired term (e.g. "AI-assisted", where "AI" is its own token,
+    hyphen-separated) -- it only excludes matches fused into a longer
+    identifier with no boundary between the retired term and its
+    neighboring characters.
     """
     table_text = read_optional(repo, TERMINOLOGY_MIGRATION_TABLE)
     if table_text is None:
@@ -1144,14 +1181,18 @@ def check_retired_terminology(repo: str, failures: Failures) -> None:
     ]
     if not retired_terms:
         return
+    term_patterns = [
+        (term, re.compile(r"\b" + re.escape(term) + r"\b"))
+        for term in retired_terms
+    ]
 
     for rel in scanned_files(repo):
         if rel.startswith(RECORD_DIRS) or rel == TERMINOLOGY_MIGRATION_TABLE:
             continue
         text = read(repo, rel)
         for lineno, line in enumerate(text.splitlines(), 1):
-            for term in retired_terms:
-                if term in line:
+            for term, pattern in term_patterns:
+                if pattern.search(line):
                     failures.add(
                         "retired terminology",
                         f"{rel}:{lineno} uses retired term {term!r} -- see "

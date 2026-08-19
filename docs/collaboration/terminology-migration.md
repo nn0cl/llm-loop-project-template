@@ -19,7 +19,13 @@ document (anything outside `docs/collaboration/traces/`, `reviews/`,
 `agreements/`, `docs/issues/`, `docs/work-plans/`, `docs/spike/`,
 `docs/backlog/`, or `docs/archive/` — the same record/archive directories
 ADR 0020 and this script already treat as historical). An empty table
-(no rows) makes the check a no-op, not a failure.
+(no rows) makes the check a no-op, not a failure. Matching is
+word-boundary-anchored (a retired term fused into a longer identifier,
+like `AIP-0043`, does not match `AI`), but a short or very common word
+retired on its own will still legitimately flag every standalone use of
+it across the repository — prefer a specific multi-word phrase as the
+retired term when one exists, rather than a single short/common word, to
+keep a real retirement's failure list reviewable.
 
 ## Table
 

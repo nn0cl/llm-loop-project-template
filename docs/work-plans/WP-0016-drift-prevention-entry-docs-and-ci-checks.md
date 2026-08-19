@@ -97,13 +97,31 @@ the rest of this issue).
 
 ## Work-Plan Review
 
-Reviewer's approval record: _pending_
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-19-wp-0016-drift-prevention-entry-docs-and-ci-checks-review.md`
+— **Approved**, separate-context Reviewer session, all three constraints
+satisfied. 18 failure scenarios searched (mechanical transcription
+accuracy, LISS-0044's own resolution independently reconstructed from
+scratch, and active attempts to break both new checks — not merely
+confirming the Implementer's own test cases). Two real, reproducible gaps
+found and made a binding condition of the Approval: `check_retired_terminology`'s
+plain substring match could produce a large false-positive blast radius
+for a short/common retired term (389 failures on the Reviewer's own
+constructed case); `check_no_archive_reference_from_entry`'s per-line-only
+scan misses a genuine reference split across a hard line-wrap (this
+repository's own dominant prose convention). Both are latent (no-ops
+against real content today) — same disposition as `LISS-0044`. Opened as
+`LISS-0049` and `LISS-0050`, and resolved within this same work plan
+(word-boundary regex; cross-line-pair scanning), each verified against
+positive and negative real test cases and confirmed by a separate-context
+Reviewer.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-|  |  |  |
+| LISS-0049 | in_progress | `check_retired_terminology` now matches with a word-boundary-anchored regex instead of a bare substring test; `terminology-migration.md` gained a caution against choosing an overly short/common retired term. Pending separate-context Reviewer confirmation. |
+| LISS-0050 | in_progress | `check_no_archive_reference_from_entry` now also scans adjacent raw line pairs (no inserted separator) to catch a reference split across one hard line-wrap. Pending separate-context Reviewer confirmation. |
 
 ## Work-Plan Close
 
