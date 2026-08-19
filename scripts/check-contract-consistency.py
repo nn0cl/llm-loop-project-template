@@ -1077,6 +1077,19 @@ ENTRY_DOCUMENT_GLOBS = (
 
 ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")
 
+# LISS-0050: matches a specific-file docs/archive/ reference that is
+# bounded by an opening and a closing backtick, allowing the path to
+# continue across one embedded newline (a hard line-wrap splitting the
+# path mid-token). Requiring the backtick delimiters -- this repository's
+# own established convention for every specific-file reference -- is what
+# keeps this pattern from matching a bare, legitimate abstract mention of
+# the directory (never backticked-and-closed around a filename) followed,
+# on the next line, by unrelated prose that happens to start with a
+# dotted token. An earlier version of this check joined adjacent lines
+# with no such requirement and produced exactly that false positive; see
+# LISS-0050's own Work Notes for the reproduced case.
+ENTRY_ARCHIVE_BACKTICKED_SPAN = re.compile(r"`(docs/archive/[\w./\n-]*\.\w+)`")
+
 
 def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None:
     """No Entry-layer document (ADR 0020 Rule 1) may reference a specific
@@ -1115,27 +1128,35 @@ def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None
                     "point at the restoration ledger or a current "
                     "Canonical document instead, per ADR 0020 Rule 1.",
                 )
-        # LISS-0050: a hard line-wrap can split a path across two lines
-        # with no space between them -- this repository's own prose
-        # convention wraps well under 80 columns and does not always
-        # respect a backticked path as a single unbreakable token.
-        # Concatenating each adjacent raw line pair, with no inserted
-        # separator, and re-scanning catches a reference the per-line
-        # scan above would otherwise miss entirely. Skip a pair where
-        # either individual line already matched on its own -- that
-        # reference was already reported above with a precise line
-        # number, and re-reporting it here would duplicate the failure.
+        # LISS-0050: a hard line-wrap can split a backticked docs/archive/
+        # path across two lines -- this repository's own prose convention
+        # wraps well under 80 columns and does not always respect a
+        # backticked path as a single unbreakable token. Scan each
+        # adjacent raw line pair, joined with the real newline preserved,
+        # for a reference still bounded by an opening and a closing
+        # backtick (ENTRY_ARCHIVE_BACKTICKED_SPAN). Requiring the
+        # backticks is what avoids flagging a bare, legitimate abstract
+        # mention of the directory followed by unrelated next-line prose
+        # (a real false positive an earlier, naive no-separator
+        # concatenation of this check produced -- see LISS-0050's own Work
+        # Notes). `finditer` over the two-line join also finds a
+        # same-line match already reported above; skip any match whose
+        # own span does not contain the embedded newline, since only a
+        # genuinely cross-line match belongs in this pass -- this also
+        # correctly handles a line that carries both its own complete
+        # reference *and* a second, separate reference that continues
+        # onto the next line, which an earlier "skip the whole pair if
+        # either line has its own match" approach silently missed.
         for i in range(len(lines) - 1):
-            if ENTRY_ARCHIVE_REFERENCE.search(lines[i]) or ENTRY_ARCHIVE_REFERENCE.search(
-                lines[i + 1]
-            ):
-                continue
-            match = ENTRY_ARCHIVE_REFERENCE.search(lines[i] + lines[i + 1])
-            if match:
+            joined = lines[i] + "\n" + lines[i + 1]
+            for match in ENTRY_ARCHIVE_BACKTICKED_SPAN.finditer(joined):
+                if "\n" not in match.group(0):
+                    continue  # fully on one line; already reported above
+                display_path = match.group(1).replace("\n", "")
                 failures.add(
                     "entry archive reference",
                     f"{rel}:{i + 1}-{i + 2} references a specific "
-                    f"docs/archive/ file ({match.group(0)!r}), split "
+                    f"docs/archive/ file ({display_path!r}), split "
                     "across a line wrap -- Entry documents should point "
                     "at the restoration ledger or a current Canonical "
                     "document instead, per ADR 0020 Rule 1.",

@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0049
 - GitHub issue: none
-- Status: in_progress
+- Status: closed
 - Phase: docs-only
 - Type: review-finding
 - Priority: medium
@@ -84,7 +84,11 @@
   `docs/collaboration/terminology-migration.md`.
 - Deterministic verification output: see Acceptance Notes above and this
   issue's own Verification section.
-- Separate Reviewer closure record: pending — dispatched as a fresh agent.
+- Separate Reviewer closure record:
+  `docs/collaboration/reviews/2026-08-19-liss-0049-liss-0050-word-boundary-and-line-wrap-fix-review.md`
+  — Approved, with one required follow-up condition (a retired term
+  starting/ending in punctuation can silently fail to match, or match
+  only the fused case) opened as `docs/issues/LISS-0051-retired-terminology-punctuation-edged-term-gap.md`.
 
 ## Dependencies
 
@@ -130,6 +134,10 @@ Not required — planning size `S`.
   genuine use) and an isolated negative (false positives eliminated) case
   with real command output. `Status: in_progress`, pending separate-context
   Reviewer confirmation under Minor Fix Path.
+- 2026-08-19 — Design & Review group (Planner): separate-context Reviewer
+  confirmed the fix with independently constructed evidence (see
+  References). `Status: closed`. Opened LISS-0051 for the Reviewer's own
+  required follow-up condition.
 
 ## Verification
 
@@ -147,5 +155,10 @@ Not required — planning size `S`.
   granularity), confirming the standalone token is still detected.
 - Final clean re-run after removing all synthetic artifacts:
   `contract consistency: all checks passed`, exit 0.
-- Separate-context Reviewer confirmation: pending — dispatched as a fresh
-  agent, per Minor Fix Path.
+- Separate-context Reviewer confirmation: Approved (see References) —
+  the Reviewer independently retired a different term ("log," not "AI")
+  and ran the real checker against 132 real files containing "backlog"
+  outside `docs/backlog/`, confirming zero false positives and 29 correct
+  standalone-use flags, a stronger adversarial test than this issue's own
+  evidence. Also independently found and required tracking of a narrower
+  follow-up gap (punctuation-edged terms), opened as LISS-0051.

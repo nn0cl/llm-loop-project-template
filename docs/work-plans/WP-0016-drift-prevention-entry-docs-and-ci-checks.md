@@ -111,17 +111,33 @@ constructed case); `check_no_archive_reference_from_entry`'s per-line-only
 scan misses a genuine reference split across a hard line-wrap (this
 repository's own dominant prose convention). Both are latent (no-ops
 against real content today) — same disposition as `LISS-0044`. Opened as
-`LISS-0049` and `LISS-0050`, and resolved within this same work plan
-(word-boundary regex; cross-line-pair scanning), each verified against
-positive and negative real test cases and confirmed by a separate-context
-Reviewer.
+`LISS-0049` and `LISS-0050`.
+
+`LISS-0049`'s word-boundary fix was confirmed Approved by a
+separate-context Reviewer (`docs/collaboration/reviews/2026-08-19-liss-0049-liss-0050-word-boundary-and-line-wrap-fix-review.md`),
+independently re-tested against a different, more adversarial real-tree
+case (132 real files) than this work plan's own evidence — closed, with
+one narrower follow-up condition (punctuation-edged retired terms) opened
+as `LISS-0051` and resolved via a guidance-text mitigation.
+
+`LISS-0050`'s first fix attempt (no-separator line concatenation) was
+**Rejected** by that same Reviewer pass, which independently found and
+reproduced a genuine new false positive (flagging a docstring-permitted
+bare abstract mention of `docs/archive/` when followed by unrelated
+next-line prose) and a silent under-suppression bug in its own
+de-duplication logic. A corrected second attempt — backtick-delimited
+cross-line matching, using this repository's own convention that every
+specific-file reference is backtick-bounded — was applied and verified
+against all three of the Reviewer's own adversarial cases, reconstructed
+identically; pending a fresh separate-context Reviewer confirmation.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-| LISS-0049 | in_progress | `check_retired_terminology` now matches with a word-boundary-anchored regex instead of a bare substring test; `terminology-migration.md` gained a caution against choosing an overly short/common retired term. Pending separate-context Reviewer confirmation. |
-| LISS-0050 | in_progress | `check_no_archive_reference_from_entry` now also scans adjacent raw line pairs (no inserted separator) to catch a reference split across one hard line-wrap. Pending separate-context Reviewer confirmation. |
+| LISS-0049 | closed | `check_retired_terminology` now matches with a word-boundary-anchored regex instead of a bare substring test; `terminology-migration.md` gained a caution against choosing an overly short/common retired term. Confirmed by a separate-context Reviewer with independently constructed evidence. |
+| LISS-0050 | in_progress | Attempt 1 (no-separator line concatenation) Rejected by Reviewer — new false positive, under-suppression bug. Attempt 2 (backtick-delimited cross-line matching) applied, verified against all three of the Reviewer's own adversarial cases; pending a fresh separate-context Reviewer confirmation. |
+| LISS-0051 | in_progress | `terminology-migration.md`'s guidance now warns against a retired term starting/ending in punctuation (word-boundary semantics can silently fail to match, or invert). Pending separate-context Reviewer confirmation. |
 
 ## Work-Plan Close
 

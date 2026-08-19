@@ -25,7 +25,13 @@ like `AIP-0043`, does not match `AI`), but a short or very common word
 retired on its own will still legitimately flag every standalone use of
 it across the repository — prefer a specific multi-word phrase as the
 retired term when one exists, rather than a single short/common word, to
-keep a real retirement's failure list reviewable.
+keep a real retirement's failure list reviewable. Avoid a term that
+itself starts or ends in punctuation (for example `C++` or `->`) —
+word-boundary matching (`\b`) is defined at a word/non-word character
+transition, so such a term can silently fail to match its own normal
+usage, or match only when fused into a longer token, the reverse of what
+this check exists to catch (LISS-0051). A term made only of letters,
+digits, and internal hyphens/spaces does not have this problem.
 
 ## Table
 
