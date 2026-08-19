@@ -17,7 +17,11 @@
 - In: `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`
   (new), `docs/collaboration/restoration-ledger.md` (new, empty),
   `docs/collaboration/local-issue-planning.md` (one short cross-reference
-  paragraph added to its "Status Values" section), the required AI work
+  paragraph added to its "Status Values" section), `README.md`/
+  `QUICKSTART.md`/`QUICKSTART.ja.md`'s ADR-range statements (0019 -> 0020;
+  addendum added after `check_adr_range` correctly failed on the first
+  Implementation attempt — routine maintenance any new ADR requires, not
+  retroactive application of item-0012's own rules), the required AI work
   trace (`local-issue-planning.md` is an ADR-0006 contract file),
   self-review, Preflight, work-plan-level Reviewer pass.
 - Out: any move, archive, deletion, or content edit of an existing

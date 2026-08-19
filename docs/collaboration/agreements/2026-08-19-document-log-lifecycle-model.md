@@ -55,6 +55,19 @@ deletion.
   - `docs/collaboration/local-issue-planning.md`: exactly one new
     paragraph added to its "Status Values" section (specified below); no
     other part of this file changes.
+  - **Addendum (added after `scripts/check-contract-consistency.py`'s
+    `check_adr_range` correctly failed on the first Implementation
+    attempt):** `README.md`, `QUICKSTART.md`, and `QUICKSTART.ja.md`'s
+    existing ADR-range statements, updated from "0001-0019"/"0020 and
+    up"/"0020 以降" to "0001-0020"/"0021 and up"/"0021 以降" — exact
+    old/new text pairs specified in "Exact Content to Produce" -> "File 4"
+    below. This is routine, pre-existing, checker-enforced maintenance
+    that applies to any new ADR (not specific to item-0012's lifecycle
+    rules, and not "retroactive application" of those rules to existing
+    history) — every prior ADR addition in this repository's history did
+    the same. None of these three files is an ADR-0006 contract file or a
+    `CLAUDE.md` mirror, so this addendum does not change the trace/mirror-
+    sync obligations stated elsewhere in this agreement.
   - The required AI work trace under `docs/collaboration/traces/`
     (`local-issue-planning.md` is an ADR-0006 contract file, so a trace is
     required for this work plan regardless of the ADR itself not being on
@@ -83,6 +96,7 @@ deletion.
 | 1 | Create `docs/architecture/adr/0020-document-and-log-lifecycle-model.md` | Implementer | Architecture Path (a new ADR; content fully specified below, so Implementer transcribes rather than designs) | Matches "Exact Content to Produce" verbatim | read-through diff |
 | 2 | Create `docs/collaboration/restoration-ledger.md` | Implementer | Architecture Path | Matches "Exact Content to Produce" verbatim; Ledger table has no data rows | read-through diff |
 | 3 | Add the one cross-reference paragraph to `docs/collaboration/local-issue-planning.md`'s "Status Values" section | Implementer | Architecture Path | Matches "Exact Content to Produce" verbatim; no other part of the file changes | read-through diff |
+| 3b | Update `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md`'s ADR-range statements (0019 -> 0020) | Implementer | Architecture Path | Matches "Exact Content to Produce" -> "File 4" exactly; `check_adr_range` passes | `scripts/check-contract-consistency.py` |
 | 4 | AI work trace | Implementer | Architecture Path | States which contract file changed (`local-issue-planning.md`), why, and what agent behavior changes; also names the two new non-contract files for completeness | trace file present |
 | 5 | Self-review | Implementer | Architecture Path | Short-form self-review per `docs/templates/self-review.md` (size `L` — full form per ADR 0015, since `L` exceeds the `S` short-form default), recorded in LISS-0043 Work Notes | self-review record |
 | 6 | Preflight Validation | Implementer / deterministic tool | Architecture Path | `pass` recorded with `scripts/check-contract-consistency.py` output and an explicit scope check confirming no existing document was moved/edited beyond the one named paragraph | Preflight section in WP-0014 |
@@ -246,7 +260,9 @@ Archiving a document means an in-tree move, not a working-tree deletion:
 
 The same lifecycle applies to `docs/collaboration/traces/`, with one
 addition specific to traces, adapted directly from `qpex`'s own stated rule
-(`trace-topic-register.md`, quoted and endorsed by item-0012 itself): **a
+(`/Users/nn0cl/Documents/git/qpex/docs/architecture/trace-topic-register.md`,
+a different, external repository's file, quoted and endorsed by
+item-0012 itself): **a
 new trace is not created when the same `LISS-*`/`WP-*` topic already has a
 current representative trace, and the new session found no unresolved
 obligation, no new approval boundary, and no unique review evidence not
@@ -432,6 +448,53 @@ vocabulary `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`
 defines. The two are independent: an issue can be `done` long before it is
 eligible for archival under ADR 0020's Rule 2.
 ```
+
+### File 4: ADR-range statement updates (`README.md`, `QUICKSTART.md`, `QUICKSTART.ja.md`)
+
+Routine maintenance `scripts/check-contract-consistency.py`'s
+`check_adr_range` requires whenever a new ADR is added — apply each
+exact string replacement below (old text -> new text), nowhere else in
+each file:
+
+**`README.md`** (two replacements):
+
+1. Old: `` made. The ADRs included here (0001-0019) describe the collaboration ``
+   New: `` made. The ADRs included here (0001-0020) describe the collaboration ``
+   (line ~250)
+2. Old: `` own decisions from 0020 up, so a later template update does not collide ``
+   New: `` own decisions from 0021 up, so a later template update does not collide ``
+   (line ~252)
+3. Old: `` │   └── adr/                    # architecture decision records (0001-0019 = process ADRs) ``
+   New: `` │   └── adr/                    # architecture decision records (0001-0020 = process ADRs) ``
+   (line ~303 — not required by `check_adr_range`'s anchored patterns, since both 0001 and 0019 remain valid ADR numbers either way, but left stale would misstate the current range; fix for consistency)
+
+**`QUICKSTART.md`** (three replacements):
+
+1. Old: `` - `docs/architecture/adr/0001-*.md` through `0019-*.md` are the process ADRs ``
+   New: `` - `docs/architecture/adr/0001-*.md` through `0020-*.md` are the process ADRs ``
+   (line ~163)
+2. Old: `` project numbered afterward (0020 and up). ``
+   New: `` project numbered afterward (0021 and up). ``
+   (line ~165)
+3. Old: `` records" asserts ADRs 0001–0019. Deleting anything before trimming those ``
+   New: `` records" asserts ADRs 0001–0020. Deleting anything before trimming those ``
+   (line ~191)
+
+**`QUICKSTART.ja.md`** (three replacements):
+
+1. Old: `` - `docs/architecture/adr/0001-*.md` から `0019-*.md` までは、このテンプレー ``
+   New: `` - `docs/architecture/adr/0001-*.md` から `0020-*.md` までは、このテンプレー ``
+   (line ~166)
+2. Old: `` その後採番した ADR（0020 以降）は残します。 ``
+   New: `` その後採番した ADR（0021 以降）は残します。 ``
+   (line ~168)
+3. Old: `` 「Check architecture decision records」step は ADR 0001〜0019 を検査 ``
+   New: `` 「Check architecture decision records」step は ADR 0001〜0020 を検査 ``
+   (line ~195)
+
+Line numbers are approximate (as of this agreement's own drafting) — match
+by the exact old-text string, not by line number, since a prior edit in
+the same file could shift lines.
 
 ## Specifications
 
