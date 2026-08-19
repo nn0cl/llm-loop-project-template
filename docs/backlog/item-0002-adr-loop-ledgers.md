@@ -4,9 +4,9 @@
 
 - Item ID: item-0002
 - Title: Process ADR for spike, backlog, loop-settings, findings-reuse
-- Status: captured
+- Status: promoted
 - Created: 2026-08-10
-- Updated: 2026-08-10
+- Updated: 2026-08-18
 - Priority hint: medium
 - Suggested planning size: M
 - Owner/agent (optional):
@@ -43,6 +43,10 @@ stabilize numbering and supersession for later process changes.
 
 ## Promotion notes
 
-- Date:
-- Decision: subordinate to v2.3.0
-- Reason: docs-first land; ADR is optional hardening
+- Date: 2026-08-18
+- Decision: Promoted, in the Backlog-layer thread, as part of a batch
+  clearing this repo's pre-existing backlog. Per ADR 0016 Rule 2, this
+  approval is the single design-phase gate — the Design & Review group
+  proceeds autonomously from here, including confirming no conflict with
+  ADR 0012-0015's existing numbering/supersession.
+- Reason: Well-specified, docs-first hardening; ready to run.
