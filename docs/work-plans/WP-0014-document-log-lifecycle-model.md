@@ -116,19 +116,32 @@ for how this repository lands a new ADR.
 
 ## Work-Plan Review
 
-Reviewer's approval record: _pending_
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-19-wp-0014-document-log-lifecycle-model-review.md`
+— **Approved**, separate-context Reviewer session, all three constraints
+satisfied. 16 failure scenarios searched (10 mechanical, 6 substantive —
+this review covered both transcription accuracy and the ADR's own
+reasoning, since this work plan lands a genuine new architecture
+decision, not only a documentation edit). One scenario reproduced as a
+real, non-blocking finding: `scripts/check-contract-consistency.py`'s
+`RECORD_DIRS` exclusion list does not yet cover the new `docs/archive/`
+directory ADR 0020's Rule 3 introduces — not actionable against this work
+plan (no `docs/archive/` content exists here, per Rule 7), tracked as
+LISS-0044 for whichever later work plan first creates archive content.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-|  |  |  |
+| LISS-0044 | proposed | Not actionable against this work plan (no `docs/archive/` content created here); tracked for the retroactive-application or facet-5 work plan, whichever creates `docs/archive/` content first. |
 
 ## Work-Plan Close
 
-- Date: _pending_
-- Result read: _pending — Director close is a separate, later action._
-- Next direction: _pending_
+- Date: _pending — Director close is a separate, later action._
+- Result read: _pending._ This work plan stops here, Reviewer-approved and
+  merged into the shared branch `process/backlog-item-0012-and-0013`, and
+  reports readiness to the Director for the work-plan-close action.
+- Next direction: _pending._
 - New design agreement (if any): _pending — the later facet-4/5/6 work
   plans each get their own design agreement when reached, per the spike's
   decomposition table; not opened by this work plan's own close._
