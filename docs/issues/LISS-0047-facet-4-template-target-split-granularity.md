@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0047
 - GitHub issue: none
-- Status: in_progress
+- Status: closed
 - Phase: docs-only
 - Type: review-finding
 - Priority: medium
@@ -197,6 +197,22 @@ Not required — planning size `S`.
   practice, that is a new finding against this same question, not a
   reopening of this one.
 
+- 2026-08-19 — Design & Review group (Planner): separate-context Reviewer
+  confirmed the correction —
+  `docs/collaboration/reviews/2026-08-19-liss-0047-facet-4-split-wording-fix-review.md`,
+  Approved. The Reviewer independently examined the Resolution-1
+  substantive question itself (not only mechanical accuracy) and recorded
+  its own honest assessment: Resolution 1 is "a genuinely defensible
+  reading... not the only reading, and I would not call it the stronger
+  of the two on the text alone" — confirmed on the basis that the
+  reasoning is sound and disclosed, which is Minor Fix Path's actual
+  charge, not a redesign-from-scratch review. `Status: closed` — the
+  correction is confirmed and this finding's own lifecycle is complete;
+  per `check_open_findings_gate` (item-0009/WP-0011), a review-finding
+  referenced in a work plan's own findings table must reach `closed` or
+  `wont_do`, not stop at `resolved`, before that work plan can be
+  Director-closed without tripping the gate.
+
 ## Verification
 
 - Read-through diff confirming the corrected wording in `DA-2026-08-19-07`,
@@ -205,4 +221,5 @@ Not required — planning size `S`.
   Resolution-1 judgment with its reasoning.
 - Separate-context Reviewer confirmation:
   `docs/collaboration/reviews/2026-08-19-liss-0047-facet-4-split-wording-fix-review.md`
-  (pending — dispatched as a fresh agent, per Minor Fix Path).
+  — Approved. `check-contract-consistency.py` independently re-run by the
+  Reviewer, clean.

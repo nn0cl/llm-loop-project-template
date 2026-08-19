@@ -104,19 +104,23 @@ substantive finding: `DA-2026-08-19-07`/`LISS-0046`/this work plan's own
 Goal overstated that ADR 0008's Tier 1/Tier 2 split "already implements"
 facet 4's Template-owned/Target-owned split — it addresses whole-file
 authority, not the content-level rule split facet 4's wording describes.
-Opened as `LISS-0047`; being resolved within this same work plan by a
-wording correction (Resolution 1: the existing per-sync-event process,
-now durably recorded by the new Sync Diff Record, is judged sufficient
-and intentional), pending confirmation by a separate-context Reviewer
-under Minor Fix Path. Neither finding invalidates the two artifacts
-WP-0015 actually built (Sync Diff Record, Per-Agent-Tool Rule
-Applicability Registry), both correctly delivered to spec.
+Opened as `LISS-0047`; resolved within this same work plan by a wording
+correction (Resolution 1: the existing per-sync-event process, now
+durably recorded by the new Sync Diff Record, is judged sufficient and
+intentional) and confirmed by a separate-context Reviewer under Minor Fix
+Path (`docs/collaboration/reviews/2026-08-19-liss-0047-facet-4-split-wording-fix-review.md`,
+Approved — the Reviewer independently examined the Resolution-1 judgment
+itself, not only mechanical accuracy, and recorded it as "a genuinely
+defensible reading... not the only reading," confirmed on the grounds
+that the reasoning is sound and disclosed). Neither finding invalidates
+the two artifacts WP-0015 actually built (Sync Diff Record, Per-Agent-Tool
+Rule Applicability Registry), both correctly delivered to spec.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-| LISS-0047 | in_progress | Wording correction applied to `DA-2026-08-19-07`, `LISS-0046`, and this work plan's own Goal, distinguishing ADR 0008's whole-file split from facet 4's content-level split and recording the Resolution-1 judgment; pending confirmation by a separate-context Reviewer under Minor Fix Path. |
+| LISS-0047 | closed | Wording correction applied to `DA-2026-08-19-07`, `LISS-0046`, and this work plan's own Goal, distinguishing ADR 0008's whole-file split from facet 4's content-level split and recording the Resolution-1 judgment; confirmed by a separate-context Reviewer under Minor Fix Path (Approved). |
 
 ## Work-Plan Close
 
