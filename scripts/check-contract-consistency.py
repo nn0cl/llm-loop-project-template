@@ -13,7 +13,11 @@ Checks:
   2. Parity completeness Every AGENTS.md section is classified as mirrored or
                         deliberately not, so a new section cannot be added
                         without deciding which it is.
-  3. References         Every relative path a document names resolves.
+  3. References         Every relative path a document names resolves, except
+                        a non-existent target shaped like a path this
+                        template deliberately excludes from adopter copies
+                        (see collaboration_template_exclude_paths), which is
+                        treated as expected-absent rather than dangling.
   4. ADR range          Every stated process-ADR range matches the ADR files.
   5. Version claims     No document claims a released version that has no tag.
   6. ID range collisions A live numbered document (LISS/WP/backlog item/ADR)
@@ -75,6 +79,18 @@ What remains is structural, not a bug waiting for the next round:
   * **Anything about a document this repository does not have.** In an adopting
     project the entry documents are the project's own, and checks over them are
     skipped there.
+  * **A reference to a path shaped like an excluded template-history pattern,
+    absent for the wrong reason.** `check_references`'s copy-exclusion
+    exemption (see `_copy_exclusion_patterns` and its call site) accepts any
+    non-existent target matching a pattern in
+    `scripts/lib/collaboration-template-paths.sh`'s
+    `collaboration_template_exclude_paths` as expected-absent — correct on a
+    copied target, where the file was deliberately not copied, but the same
+    acceptance also applies inside this repository's own tree. A genuine typo
+    here that happens to be shaped like an excluded pattern (for example, a
+    misspelled `docs/work-plans/WP-*.md` path) looks identical to this check
+    and is silently accepted, the same pre-existing risk `TEMPLATE_ONLY_FILES`
+    already carries for `README.md`.
   * **Proximity is not the same sentence.** `EXTRA_MIRRORED_RULES` entries that
     use a `.{0,N}` proximity window between two terms (for example, "Reviewer"
     near "whole work plan") can be satisfied by two unrelated mentions that
@@ -105,6 +121,7 @@ them. Stdlib only, so it runs anywhere python3 does.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import glob
 import os
 import re
@@ -229,6 +246,59 @@ TEMPLATE_ONLY_FILES = {
 OPTIONAL_INIT_CREATED_FILES = {
     "docs/collaboration/loop-settings.toml",
 }
+
+
+def _copy_exclusion_patterns(repo: str) -> list[str]:
+    """The glob patterns `scripts/lib/collaboration-template-paths.sh`'s
+    `collaboration_template_exclude_paths` array holds, parsed out of that
+    file rather than duplicated here.
+
+    That array is this template's own single source of truth for which
+    paths (`docs/collaboration/agreements/*.md`,
+    `docs/work-plans/WP-*.md`, and similar) are deliberately left out of
+    `scripts/copy-ai-collaboration-files.sh`'s copies, because they are this
+    template's own planning history, not adopter-owned content. Reusing that
+    list here, instead of hardcoding a second one, is what keeps a reference
+    to one of those paths from being misread as a dangling reference on a
+    copied target — see `check_references` below.
+
+    Every pattern the array currently holds uses only literal path segments
+    and `*`, and `*` matches any run of characters including `/` under both
+    bash's `case ... in $pattern)` (what
+    `is_collaboration_template_excluded` in that file uses) and Python's
+    `fnmatch.fnmatchcase` — verified by direct inspection of the array's
+    contents, not assumed. No `?`, `[...]`, or other glob metacharacter that
+    could diverge between the two implementations is present today.
+
+    Degrades to an empty list, the same way `read_optional` already degrades
+    elsewhere in this script, when the file is missing or unreadable — a
+    target project generally does not carry
+    `scripts/lib/collaboration-template-paths.sh` at all (see
+    `TEMPLATE_ONLY_FILES` and `OPTIONAL_INIT_CREATED_FILES` above for the
+    same shape), so an empty pattern list there simply means the exemption
+    below never fires, not an error.
+    """
+    text = read_optional(repo, "scripts/lib/collaboration-template-paths.sh")
+    if text is None:
+        return []
+    match = re.search(
+        r"collaboration_template_exclude_paths=\((.*?)\)", text, re.DOTALL
+    )
+    if match is None:
+        return []
+    return re.findall(r'"([^"]+)"', match.group(1))
+
+
+def _is_copy_excluded_reference(target: str, patterns: list[str]) -> bool:
+    """True when `target` matches one of `patterns` (see
+    `_copy_exclusion_patterns`). Callers are responsible for confirming
+    `target` does not exist first — mirroring `TEMPLATE_ONLY_FILES` and
+    `OPTIONAL_INIT_CREATED_FILES`'s existing shape: when present, a
+    reference resolves normally and its deletion is still caught; only a
+    genuinely absent, pattern-matching target is treated as expected-absent
+    rather than dangling."""
+    return any(fnmatch.fnmatchcase(target, pattern) for pattern in patterns)
+
 
 # Reference targets that legitimately do not resolve in this repository.
 REFERENCE_ALLOWLIST = {
@@ -355,7 +425,12 @@ def check_parity_completeness(repo: str, failures: Failures) -> None:
 
 
 def check_references(repo: str, failures: Failures) -> None:
-    """Every relative path or filename a current document names must resolve."""
+    """Every relative path or filename a current document names must resolve,
+    except a non-existent target shaped like a path this template
+    deliberately excludes from adopter copies (see
+    `_copy_exclusion_patterns`), which is treated as expected-absent rather
+    than dangling."""
+    copy_exclusion_patterns = _copy_exclusion_patterns(repo)
     basemap: dict[str, list[str]] = {}
     for dirpath, dirnames, filenames in os.walk(repo):
         dirnames[:] = [d for d in dirnames if d != ".git"]
@@ -425,6 +500,10 @@ def check_references(repo: str, failures: Failures) -> None:
                     if target in OPTIONAL_INIT_CREATED_FILES and not os.path.exists(
                         os.path.join(repo, target)
                     ):
+                        continue
+                    if not os.path.exists(
+                        os.path.join(repo, target)
+                    ) and _is_copy_excluded_reference(target, copy_exclusion_patterns):
                         continue
                     if os.path.exists(os.path.join(repo, target)):
                         continue

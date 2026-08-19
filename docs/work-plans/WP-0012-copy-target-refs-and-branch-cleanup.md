@@ -22,8 +22,8 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0040 | proposed | S | S | AIP-0040-001 | - | - | process/copy-target-refs-and-branch-cleanup |
-| LISS-0041 | proposed | S | S | AIP-0041-001 | - | - | process/copy-target-refs-and-branch-cleanup |
+| LISS-0040 | review | S | S | AIP-0040-001 | - | - | process/copy-target-refs-and-branch-cleanup |
+| LISS-0041 | in_progress | S | S | AIP-0041-001 | - | - | process/copy-target-refs-and-branch-cleanup |
 
 ## Plan-Owned Bug Records
 
