@@ -72,11 +72,47 @@ for how this repository lands a new ADR.
 
 ## Preflight Validation
 
-- Result: _pending — recorded after the Implementation group completes
-  LISS-0043_
-- Checks and command output: _pending_
-- Scope result: _pending_
-- Next action: _pending_
+- Result: `pass`
+- Checks and command output:
+
+  ```console
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  Exit code: 0. First Preflight attempt (recorded, not silently discarded,
+  per Invariant 2) correctly `fail`ed with 9 findings: a false-positive-
+  triggering bare-filename citation of an external `qpex` file in ADR
+  0020's own Rule 4, plus 8 stale `check_adr_range` findings across
+  `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md` (not updated for the new
+  ADR 0020 on the first Implementation pass). `DA-2026-08-19-06` and
+  WP-0014 were amended with the exact corrections (see their own Scope
+  "Addendum" and "Exact Content to Produce" -> "File 4"), sent back to the
+  same Implementation-group session, and re-applied (commit `1d177d2`).
+  This second, independently re-run check (above) is against the merged
+  result, not copied from either the Implementer's or any other party's
+  report — fetched the Implementer's actual branch directly from its own
+  worktree, diffed it against the corrected agreement text (matched
+  exactly), and ran the check in this session's own worktree before
+  merging.
+- Scope result: `git diff 0a38d6c..HEAD --stat` (`0a38d6c` is WP-0014's own
+  design-intake commit, before any Implementation work) shows exactly the
+  expected 10 files: the two new docs (ADR 0020, restoration ledger), the
+  one edited contract file (`local-issue-planning.md`), the three
+  ADR-range-maintenance files (`README.md`, `QUICKSTART.md`,
+  `QUICKSTART.ja.md`), the new trace file, LISS-0043's Work Notes
+  addition, and the design-agreement/work-plan correction commits
+  themselves. No existing `docs/issues/`, `docs/work-plans/`,
+  `docs/collaboration/traces/`, `docs/collaboration/reviews/`,
+  `docs/collaboration/agreements/`, or other `docs/architecture/adr/` file
+  was moved, archived, deleted, or edited. No `CLAUDE.md`/mirror file
+  touched. No open `Type: review-finding` issue affects this area (all
+  `docs/issues/LISS-*.md` `Status` fields checked; none `proposed` or
+  `in_progress`).
+- Next action: submit to the Design & Review group's work-plan-level
+  Reviewer pass, in a context separate from both the Planner/Specifier
+  context that wrote the design agreement/ADR text and the Implementer
+  context that transcribed and corrected it.
 
 ## Work-Plan Review
 
