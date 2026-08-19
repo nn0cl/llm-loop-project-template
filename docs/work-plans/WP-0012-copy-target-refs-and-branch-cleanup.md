@@ -22,8 +22,8 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0040 | proposed | S | S | AIP-0040-001 | - | - | process/copy-target-refs-and-branch-cleanup |
-| LISS-0041 | proposed | S | S | AIP-0041-001 | - | - | process/copy-target-refs-and-branch-cleanup |
+| LISS-0040 | review | S | S | AIP-0040-001 | - | - | process/copy-target-refs-and-branch-cleanup |
+| LISS-0041 | review | S | S | AIP-0041-001 | - | - | process/copy-target-refs-and-branch-cleanup |
 
 ## Plan-Owned Bug Records
 
@@ -39,10 +39,9 @@ See each issue's own AI Planning Records section.
 
 ## Current Next Issue
 
-- Issue: LISS-0040 and LISS-0041, both unblocked.
-- Reason it is unblocked: no dependency; both issues touch different files
-  and can proceed in either order or concurrently within the same
-  Implementation-group worktree.
+- Issue: none — LISS-0040 and LISS-0041 are both done and self-reviewed
+  (Status: `review` on both), ready for the work-plan-level Reviewer pass.
+- Reason it is unblocked: N/A; both issues are complete.
 - Reopening request needed: no.
 
 ## Minor Fix Path
@@ -57,7 +56,29 @@ once every issue is self-reviewed and complete. Record `pass` or `fail`, the
 exact checks and outputs, scope result, and next action. `pass` permits
 submission only; it never replaces the separate-context Reviewer.
 
-_pending — recorded once both issues are self-reviewed._
+- Result: `pass`
+- Check run: `python3 scripts/check-contract-consistency.py --repo .`
+- Output:
+  ```
+  contract consistency: all checks passed
+  ```
+- Scope result: only files within this work plan's own scope were touched —
+  `scripts/check-contract-consistency.py` (LISS-0040),
+  `docs/collaboration/branch-commit-pr-discipline.md` (LISS-0041), the new
+  trace file
+  `docs/collaboration/traces/2026-08-19-liss-0041-branch-worktree-cleanup-rule.md`,
+  `docs/issues/LISS-0040-contract-consistency-copy-target-exemption.md`,
+  `docs/issues/LISS-0041-self-directed-worktree-branch-cleanup-rule.md`, and
+  this work plan file itself (`docs/work-plans/WP-0012-copy-target-refs-and-branch-cleanup.md`).
+  No other file was modified. Confirmed with
+  `git diff --stat <WP-0012-base-commit> -- .` against this branch's base
+  commit (`291a414`, the commit that added `DA-2026-08-19-04` and this work
+  plan) plus `git status --short` for the remaining uncommitted files.
+- Open `review-finding` issues affecting this plan: none.
+- Implementation issues blocked on an open spike case: none — this work
+  plan has no spike dependency.
+- Next action: submit to the work-plan-level Reviewer, per direction 3
+  (Trigger B) in `docs/collaboration/cross-session-messaging.md`.
 
 ## Work-Plan Review
 
