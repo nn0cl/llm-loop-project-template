@@ -41,7 +41,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0043 | ready | L | L | AIP-0043-001 | case-0001 (closed) | later item-0012 facet-4/5/6 work plans | process/document-log-lifecycle-model |
+| LISS-0043 | done | L | L | AIP-0043-001 | case-0001 (closed) | later item-0012 facet-4/5/6 work plans | process/document-log-lifecycle-model |
 
 ## Plan-Owned Bug Records
 
@@ -137,14 +137,28 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending — Director close is a separate, later action._
-- Result read: _pending._ This work plan stops here, Reviewer-approved and
-  merged into the shared branch `process/backlog-item-0012-and-0013`, and
-  reports readiness to the Director for the work-plan-close action.
-- Next direction: _pending._
-- New design agreement (if any): _pending — the later facet-4/5/6 work
-  plans each get their own design agreement when reached, per the spike's
-  decomposition table; not opened by this work plan's own close._
+- Date: 2026-08-19
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0014-document-log-lifecycle-model-review.md`,
+  Approved — 16 falsification scenarios covering both mechanical accuracy
+  and ADR 0020's reasoning, one genuine finding opened as LISS-0044 rather
+  than fixed or ignored) via the Backlog thread, which independently
+  confirmed ADR 0020, the restoration ledger, the review record, and a
+  clean `scripts/check-contract-consistency.py` run from a detached
+  checkout before presenting this close. The Backlog thread also caught
+  and fixed a status-sync gap this close itself surfaced: LISS-0043 was
+  still `Status: ready` despite being self-reviewed and Reviewer-approved
+  — corrected to `done` as part of recording this close.
+- Next direction: closed with "はい". Merged content sits on
+  `process/backlog-item-0012-and-0013` (together with WP-0013, already
+  closed). Push/PR/merge-to-main remain separate explicit actions. Facets
+  4 (contract-sync diff record), 5 (drift-prevention CI checks — must also
+  pick up LISS-0044), and 6 (review-summary packets) remain queued as
+  their own later work plans. Retroactive application to this repository's
+  own history stays a separate, later work plan after all rule-defining
+  facets close, per the Director's sequencing decision at promotion.
+- New design agreement (if any): none opened by this close — the later
+  facet-4/5/6 work plans each get their own when reached.
 
 ## Risks
 
