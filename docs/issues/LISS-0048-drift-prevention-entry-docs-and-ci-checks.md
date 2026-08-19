@@ -188,6 +188,97 @@ Required — planning size `M`. See below.
   for both new check functions, the terminology table, and the
   agent-quickstart.md section specified verbatim for the Implementation
   group to transcribe and verify.
+- 2026-08-20 — Implementer (self-review, short form, planning size `M`, no
+  escalation criteria per ADR 0015 — per the dispatching task's explicit
+  instruction): full command transcripts for every step below are in
+  `docs/collaboration/traces/2026-08-19-liss-0048-drift-prevention-entry-docs-and-ci-checks.md`'s
+  Verification section; only the pass/fail results and failure-scenario
+  analysis are restated here.
+
+  Phase: Architecture Path, Tasks 1-8 (content/code fully pre-specified;
+  transcription plus real verification).
+
+  Command run: `python3 -c "import ast; ast.parse(open('scripts/check-contract-consistency.py').read())"`
+  Result: no output, exit 0 — the four-point edit to
+  `scripts/check-contract-consistency.py` still parses as valid Python.
+
+  Task 4 (real-tree run): **FAIL** against the design agreement's own
+  acceptance criterion. `python3 scripts/check-contract-consistency.py`
+  exits 1 with one `entry archive reference` failure at
+  `docs/architecture/agent-quickstart.md:57` — inside File 3's own
+  mandated verbatim text, which itself contains the literal string
+  `docs/archive/`. See trace file and Notes below.
+
+  Task 5 sub-case results (all four executed against constructed synthetic
+  cases, per this repository's own WP-0007 precedent):
+  - Step 1, archive-exemption positive case: **PASS** — no new failure
+    from the archived file's own presence or outbound reference; confirms
+    the `RECORD_DIRS` `docs/archive/` exemption (LISS-0044's fix).
+  - Step 2, inbound-reference-still-resolves case: **PASS** — no new
+    failure; confirms `check_references` still resolves inbound references
+    to paths under `docs/archive/` normally.
+  - Step 3, retired-terminology negative case: **PASS (correctly fails)**
+    — `check_retired_terminology` fails, citing "retired terminology" and
+    naming `FooBarLegacyTerm`, exit 1.
+  - Step 4, entry-archive-reference negative case: **PASS (correctly
+    fails)** — `check_no_archive_reference_from_entry` fails, citing
+    "entry archive reference" for the added line, exit 1.
+  - Step 5, cleanup: **PASS** — `git status --porcelain` after cleanup
+    shows only the intended Task 1-3 files; no `docs/archive/` path, no
+    scratch file.
+  - Step 6, final confirmation run: reproduces exactly the Task 4 baseline
+    (same single failure) — confirms no permanent regression from the
+    synthetic cases, but for the same reason as Task 4, this is **not** a
+    clean pass.
+
+  Risks considered and why each does not occur:
+  - (a) Does every edited/created file match "Exact Content to Produce"
+    verbatim? Checked by direct read-through diff against DA-2026-08-19-08
+    for all three of File 1 (`terminology-migration.md`), File 2 (the four
+    `check-contract-consistency.py` edit points), and File 3
+    (`agent-quickstart.md`'s new section) after editing. All three match
+    character-for-character against the design agreement's own text,
+    including File 3's `docs/archive/` mention — transcribed exactly as
+    specified rather than reworded, per the explicit instruction not to
+    deviate from exact content. Does not occur: no diff found between the
+    committed content and the design agreement's text.
+  - (b) Does the final tree contain zero `docs/archive/` paths and zero
+    scratch files? Checked with `git status --porcelain` after every Task 5
+    cleanup step and again immediately before this commit. Does not occur:
+    every intermediate `git status --porcelain` run (pasted in the trace)
+    shows only the intended files; `find docs/archive -type f` returned
+    nothing after cleanup, and `docs/archive/` itself does not exist as a
+    directory in the final tree (git does not track empty directories, and
+    none was left non-empty).
+  - (c) Does `terminology-migration.md` have exactly zero real data rows
+    (only the placeholder)? Checked by reading the file's final content
+    after Task 5 step 3's temporary row was reverted. Does not occur: the
+    file's Table section contains exactly one row,
+    `| _(no entries yet)_ | | | |`, matching File 1 verbatim; the temporary
+    `FooBarLegacyTerm` row was removed in the same edit that added it back
+    to its original state, confirmed by re-reading the file.
+  - (d) Was `CLAUDE.md` or a mirror touched? Checked with
+    `git status --porcelain` across the whole session — `CLAUDE.md`,
+    `AGENTS.md`, `.github/copilot-instructions.md`, and the other named
+    mirrors never appear in any status output at any point. Does not
+    occur: only `docs/collaboration/terminology-migration.md` (new),
+    `scripts/check-contract-consistency.py`,
+    `docs/architecture/agent-quickstart.md`,
+    `docs/issues/LISS-0044-record-dirs-archive-exclusion-gap.md`, this
+    trace file, and this Work Notes edit were ever modified.
+  - (e) Additional risk found during execution, not in the brief's
+    enumerated list: does the real-tree run pass cleanly, as
+    DA-2026-08-19-08's Plan Task 4 and Falsification Criteria assume? This
+    **does occur** — see the Task 4 result above and the Notes in the
+    trace file. Grounds: File 3's own mandated verbatim content contains
+    the literal string `docs/archive/` inside `agent-quickstart.md`, one of
+    the new check's own `ENTRY_DOCUMENTS`. This is an internal
+    contradiction within the design agreement's own "Exact Content to
+    Produce" section (File 2's new check vs. File 3's own text), not a
+    transcription defect. Flagged for the Design & Review group / Director
+    to resolve (most likely a small DA amendment to File 3's wording, or an
+    explicit documented exemption) before this branch can pass Preflight
+    Validation on a genuinely clean real-tree run.
 
 ## Verification
 

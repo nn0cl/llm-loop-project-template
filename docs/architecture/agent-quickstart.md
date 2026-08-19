@@ -28,6 +28,36 @@ Each new LLM session starts without prior chat context.
    See `docs/collaboration/cross-session-messaging.md`'s "Confirmed failure
    mode" section for the full incident history and the governing rule.
 
+## Document Currency and Canonical Reading
+
+Before treating any document as authoritative:
+
+- **Current vs. historical.** `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`
+  defines the status vocabulary (`draft | active | canonical | superseded |
+  archived`) and the Entry/Canonical/Evidence/Archive layers. A document's
+  own type-specific status field (an ADR's Status section, a local issue's
+  `Status:`, a work plan's Work-Plan-Close state) is the source of truth
+  for whether it is current.
+- **Canonical documents.** The current source for a rule is: an Accepted,
+  not-fully-superseded ADR (`docs/architecture/adr/`); a
+  `docs/collaboration/*.md` or `docs/templates/*.md` contract/policy file;
+  or a current `docs/specs/` file. `CLAUDE.md`'s own "Reading Sequence and
+  Operating Path" section lists the documents a session actually reads, in
+  order — read that, not this bullet, for the literal reading sequence.
+- **Terminology.** `docs/collaboration/terminology-migration.md` is the
+  canonical old-to-new terminology table. Check it before using an
+  unfamiliar or possibly-outdated term; `scripts/check-contract-consistency.py`'s
+  `check_retired_terminology` enforces it deterministically once a term is
+  actually retired there.
+- **Never enter from an old ADR directly.** An ADR is a decision record,
+  not a standing instruction manual — read its own Status section first
+  (superseded clauses are named there, per ADR 0016's own convention) and
+  prefer the current `docs/collaboration/*.md` contract file or a later
+  Accepted ADR for what to actually do today. Once ADR 0020's archive
+  mechanism has moved a document under `docs/archive/`, treat it the same
+  way: consult `docs/collaboration/restoration-ledger.md` for why it moved
+  and what replaced it, rather than reading the archived copy as current.
+
 For session-entry checklists and resume examples, see
 `docs/collaboration/session-start-and-resume.md`.
 

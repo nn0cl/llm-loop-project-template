@@ -31,6 +31,11 @@ Checks:
                         review-finding issue whose Status is neither
                         `closed` nor `wont_do`, when loop-settings.toml
                         requires it.
+  10. Retired terminology A term retired in
+                        docs/collaboration/terminology-migration.md does
+                        not still appear in a current document.
+  11. Entry archive refs No Entry-layer document (ADR 0020 Rule 1)
+                        references a docs/archive/ path directly.
 
 What this cannot check, and who does
 ------------------------------------
@@ -318,6 +323,7 @@ RECORD_DIRS = (
     "docs/work-plans/",
     "docs/spike/",
     "docs/backlog/",
+    "docs/archive/",
 )
 
 SCANNED_SUFFIXES = (".md", ".mdc", ".sh", ".yml", ".py")
@@ -1048,6 +1054,101 @@ def check_version_claims(repo: str, failures: Failures) -> None:
                     )
 
 
+# Entry-layer documents, per ADR 0020 Rule 1 -- the fixed, small set every
+# session reads first. Kept as an explicit list here (not derived from
+# RECORD_DIRS or any other constant) because "Entry" is a document *role*,
+# not a directory pattern, and this repository's actual Entry set is small
+# enough to name directly rather than infer.
+ENTRY_DOCUMENTS = (
+    "docs/architecture/agent-quickstart.md",
+    "CLAUDE.md",
+    "AGENTS.md",
+    ".github/copilot-instructions.md",
+    "README.md",
+    "README.ja.md",
+)
+ENTRY_DOCUMENT_GLOBS = (
+    ".grok/rules/*.md",
+    ".cursor/rules/*.mdc",
+)
+
+
+def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None:
+    """No Entry-layer document (ADR 0020 Rule 1) may reference a
+    `docs/archive/` path directly.
+
+    Entry documents are the fixed, small set every session reads first;
+    they describe current process, not history. If an Entry document ever
+    needs to mention archived material, it should point at the restoration
+    ledger (`docs/collaboration/restoration-ledger.md`) or a current
+    Canonical document instead of the archived file directly -- ADR 0020's
+    own Rule 1 states Archive content is "off the normal reading path."
+    """
+    entry_paths = list(ENTRY_DOCUMENTS)
+    for pattern in ENTRY_DOCUMENT_GLOBS:
+        entry_paths.extend(
+            os.path.relpath(p, repo)
+            for p in sorted(glob.glob(os.path.join(repo, pattern)))
+        )
+
+    for rel in entry_paths:
+        text = read_optional(repo, rel)
+        if text is None:
+            continue
+        for lineno, line in enumerate(text.splitlines(), 1):
+            if "docs/archive/" in line:
+                failures.add(
+                    "entry archive reference",
+                    f"{rel}:{lineno} references a docs/archive/ path -- "
+                    "Entry documents should point at the restoration ledger "
+                    "or a current Canonical document instead, per ADR 0020 "
+                    "Rule 1.",
+                )
+
+
+# The canonical old-to-new terminology table. Starts empty; a row is added
+# only when a term is actually retired by a real decision, not backfilled
+# speculatively. See docs/collaboration/terminology-migration.md itself.
+TERMINOLOGY_MIGRATION_TABLE = "docs/collaboration/terminology-migration.md"
+
+
+def check_retired_terminology(repo: str, failures: Failures) -> None:
+    """No retired term from `docs/collaboration/terminology-migration.md`
+    may appear in a current document.
+
+    "Current" means: not under one of the RECORD_DIRS (dated statements
+    about the past, already exempt from present-tense consistency) and not
+    the migration table itself (which names retired terms on purpose). An
+    empty table (no rows yet) makes this check a no-op, not a failure --
+    there is nothing to enforce until a real retirement is recorded there
+    first.
+    """
+    table_text = read_optional(repo, TERMINOLOGY_MIGRATION_TABLE)
+    if table_text is None:
+        return
+    retired_terms = [
+        row.group(1)
+        for row in re.finditer(
+            r"^\| `([^`]+)` \| `[^`]+` \|", table_text, re.MULTILINE
+        )
+    ]
+    if not retired_terms:
+        return
+
+    for rel in scanned_files(repo):
+        if rel.startswith(RECORD_DIRS) or rel == TERMINOLOGY_MIGRATION_TABLE:
+            continue
+        text = read(repo, rel)
+        for lineno, line in enumerate(text.splitlines(), 1):
+            for term in retired_terms:
+                if term in line:
+                    failures.add(
+                        "retired terminology",
+                        f"{rel}:{lineno} uses retired term {term!r} -- see "
+                        f"{TERMINOLOGY_MIGRATION_TABLE} for its replacement.",
+                    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=".", help="repository root")
@@ -1064,6 +1165,8 @@ def main() -> int:
     check_issue_status_sync(repo, failures)
     check_superseding_phrases(repo, failures)
     check_open_findings_gate(repo, failures)
+    check_no_archive_reference_from_entry(repo, failures)
+    check_retired_terminology(repo, failures)
     return failures.report()
 
 
