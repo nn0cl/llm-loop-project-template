@@ -20,7 +20,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0039 | review | M | M | AIP-0039-001 | - | - | process/ci-open-finding-gate |
+| LISS-0039 | done | M | M | AIP-0039-001 | - | - | process/ci-open-finding-gate |
 
 ## Plan-Owned Bug Records
 
@@ -89,10 +89,23 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-19
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0011-ci-open-finding-gate-review.md`,
+  Approved — the Reviewer built its own independent test, injecting the
+  real historical `LISS-0003` scenario into a copy of the already-closed
+  WP-0003's findings table and confirming both the trigger and the
+  `block_work_plan_done_on_open_findings = false` stand-down path) via the
+  Backlog thread, which independently confirmed the new checker code, the
+  review record, and a clean `scripts/check-contract-consistency.py` run
+  from a detached checkout before presenting this close.
+- Next direction: closed with "はい". Merged into
+  `process/two-group-send-message-loop-design` (commit `a35c25e`, together
+  with WP-0010). Push and PR remain separate explicit actions. This closes
+  the entire pre-existing backlog (item-0001 through item-0003) plus the
+  two-group send_message loop batch (item-0004 through item-0010) — every
+  promoted backlog item as of 2026-08-19 is now Director-closed.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

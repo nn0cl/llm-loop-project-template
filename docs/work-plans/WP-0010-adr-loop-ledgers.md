@@ -17,7 +17,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0038 | review | S | S | - | - | - | process/adr-0019-loop-ledgers |
+| LISS-0038 | done | S | S | - | - | - | process/adr-0019-loop-ledgers |
 
 ## Plan-Owned Bug Records
 
@@ -84,10 +84,18 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-19
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0010-adr-loop-ledgers-review.md`,
+  Approved — independently spot-checked two of ADR 0019's five ledger
+  summaries against their source files rather than trusting the ADR's own
+  prose) via the Backlog thread, which independently confirmed ADR 0019,
+  the review record, and a clean `scripts/check-contract-consistency.py`
+  run from a detached checkout before presenting this close.
+- Next direction: closed with "はい". Merged into
+  `process/two-group-send-message-loop-design` (commit `a35c25e`, together
+  with WP-0011). Push and PR remain separate explicit actions.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

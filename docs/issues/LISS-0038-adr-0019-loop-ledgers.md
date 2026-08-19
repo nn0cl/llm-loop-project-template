@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0038
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design
 - Type: architecture-decision
 - Priority: medium
