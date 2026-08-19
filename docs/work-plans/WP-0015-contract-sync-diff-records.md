@@ -60,11 +60,31 @@ design-agreement + work-plan + Reviewer-pass cycle applies.
 
 ## Preflight Validation
 
-- Result: _pending — recorded after the Implementation group completes
-  LISS-0046_
-- Checks and command output: _pending_
-- Scope result: _pending_
-- Next action: _pending_
+- Result: `pass`
+- Checks and command output:
+
+  ```console
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  Exit code: 0. Run by the Design & Review group after fast-forward-merging
+  the Implementation group's branch `process/contract-sync-diff-records`
+  (commit `10b19df`) into `process/item-0012-remaining-facets`.
+- Scope result: `git diff a68563d..HEAD --stat` (`a68563d` is this work
+  plan's own design-intake commit) shows exactly 5 files: the two edited
+  contract files (`docs/collaboration/prompt-instruction-change-control.md`,
+  `docs/templates/contract-file-sync-prompt.md`), the one new template
+  file (`docs/templates/sync-diff-record.md`), the new trace file, and
+  LISS-0046's own Work Notes addition. No edit to
+  `docs/architecture/adr/0008-*.md`, any sync script, `CLAUDE.md`, or a
+  mirror file. No open `Type: review-finding` issue affects this area
+  (all `docs/issues/LISS-*.md` `Status` fields checked; LISS-0044 remains
+  `proposed` but is unrelated to this work plan's own scope).
+- Next action: submit to the Design & Review group's work-plan-level
+  Reviewer pass, in a context separate from both the Planner/Specifier
+  context that wrote the design agreement and the Implementer context
+  that transcribed it.
 
 ## Work-Plan Review
 
