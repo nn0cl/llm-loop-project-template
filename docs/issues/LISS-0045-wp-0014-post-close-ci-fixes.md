@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0045
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: docs-only
 - Type: process
 - Priority: high
@@ -222,4 +222,10 @@ Not required — planning size `S`, first attempt.
   above (before/after).
 - Separate-context Reviewer confirmation:
   `docs/collaboration/reviews/2026-08-19-liss-0045-wp-0014-post-close-ci-fixes-review.md`
-  (pending — dispatched as a fresh agent, per Minor Fix Path).
+  — **Approved**. Independently re-ran `check-contract-consistency.py`
+  (clean) and `gh pr checks 17` (green, `mergeable: MERGEABLE`); confirmed
+  both fixes structurally sound (not merely passing under today's file
+  layout) by reading the checker's actual regexes; confirmed LISS-0044
+  untouched and no scope creep beyond the two authorized files. One
+  non-blocking cosmetic observation (a leftover empty findings-table row,
+  inert to `check_open_findings_gate`) — not required to fix.
