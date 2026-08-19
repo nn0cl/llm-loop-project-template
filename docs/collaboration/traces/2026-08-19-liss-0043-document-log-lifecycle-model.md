@@ -197,6 +197,58 @@ transcription defect:
    forbids touching `CLAUDE.md` or its mirrors. Not corrected here — out of
    this work plan's scope by design, not an oversight.
 
+### Correction cycle (2026-08-19, same day) — Preflight caught both, agreement amended
+
+Preflight Validation, run independently by the Design & Review group after
+this trace's original entry above, reproduced both findings and treated
+them as real defects requiring correction rather than pre-existing/
+anticipated gaps. `DA-2026-08-19-06` and WP-0014 were amended on
+`origin/process/backlog-item-0012-and-0013` (commit `be1d857`) to: (a) add
+a Scope "Addendum" bringing the three README/QUICKSTART ADR-range
+statements into this work plan's scope, as routine `check_adr_range`
+maintenance rather than item-0012's own retroactive-application rules; (b)
+correct ADR 0020's Rule 4 citation from a bare `` `trace-topic-register.md` ``
+backtick reference to the full external absolute path
+`` `/Users/nn0cl/Documents/git/qpex/docs/architecture/trace-topic-register.md` ``,
+explicitly marked as a different, external repository's file; and (c) add
+"File 4" specifying the exact old-text -> new-text string-replacement pairs
+for the three files.
+
+Both corrections were applied on this same branch, from the amended
+agreement fetched at `origin/process/backlog-item-0012-and-0013`
+(`be1d857`):
+
+- ADR 0020's Rule 4 sentence updated to the corrected wording; verified
+  byte-identical (`diff`, no output) against the amended agreement's own
+  File 1 text (lines 113-384 of the amended agreement file).
+- The 7 exact string replacements from "File 4" applied to `README.md` (2
+  sentence replacements + 1 tree-diagram comment), `QUICKSTART.md` (3), and
+  `QUICKSTART.ja.md` (3), matched by exact old-text string per the
+  agreement's own instruction (not by line number).
+
+Re-run after the correction:
+
+```text
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+exit code: 0
+
+$ git diff 874c6ce --stat
+ QUICKSTART.ja.md                                               | 6 +++---
+ QUICKSTART.md                                                  | 6 +++---
+ README.md                                                      | 6 +++---
+ docs/architecture/adr/0020-document-and-log-lifecycle-model.md | 4 +++-
+ 4 files changed, 12 insertions(+), 10 deletions(-)
+```
+
+Exactly the 4 files expected to change did change: the 3 mirror-adjacent
+entry files named in the Addendum, plus the one-sentence ADR correction.
+No other file changed; `git status --porcelain` after this correction
+shows only those 4 modifications, nothing untracked beyond what this
+correction cycle itself produced. `CLAUDE.md` and its four mirrors were
+not touched (`README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md` are not among
+them — confirmed against ADR 0006's mirror list before this cycle began).
+
 ```text
 $ git diff origin/process/backlog-item-0012-and-0013..HEAD --stat
  docs/collaboration/local-issue-planning.md | 6 ++++++
@@ -227,29 +279,42 @@ file, this 1 new trace file, and the 1 Work Notes addition to LISS-0043.)
   self-review record appended to Work Notes; the existing Work Notes entry
   is preserved unchanged)
 
+Added in the correction cycle (see "Correction cycle" under Verification
+above), on the same branch, on top of the changes listed above:
+
+- `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`
+  (corrected — Rule 4's `qpex` citation only; no other content changed)
+- `README.md` (edited — 3 ADR-range statement updates per
+  `DA-2026-08-19-06`'s amended "File 4")
+- `QUICKSTART.md` (edited — 3 ADR-range statement updates per "File 4")
+- `QUICKSTART.ja.md` (edited — 3 ADR-range statement updates per "File 4")
+
 ## Next Safe Action
 
-- Design & Review group runs Preflight Validation on WP-0014 (recording the
-  same `scripts/check-contract-consistency.py` output and scope result
-  above), then dispatches to the work-plan-level Reviewer in a separate
-  context, per WP-0014's Plan Tasks 6-7.
+- Design & Review group re-runs Preflight Validation on WP-0014 against the
+  corrected branch (recording the clean
+  `scripts/check-contract-consistency.py` output above), then dispatches to
+  the work-plan-level Reviewer in a separate context, per WP-0014's Plan
+  Tasks 6-7.
 
 ## Notes
 
-- Two `scripts/check-contract-consistency.py` findings are flagged to the
-  Design & Review group rather than corrected here, per the Implementer's
-  instruction not to unilaterally alter specified content or touch
-  out-of-scope files — see Verification above for the full explanation of
-  each:
-  1. The `references` finding on ADR 0020 line 151
-     (`trace-topic-register.md`) is a checker heuristic limitation on an
-     external-repository filename citation, present in DA-2026-08-19-06's
-     own specified text.
-  2. The 8 `ADR range` findings on `README.md`/`QUICKSTART.md`/
-     `QUICKSTART.ja.md` are the exact, named, deliberately deferred gap
-     from ADR 0020's own Consequences section (facet 5, a later separate
-     work plan) — out of this work plan's Scope by design.
+- Two `scripts/check-contract-consistency.py` findings were originally
+  flagged to the Design & Review group rather than corrected in this
+  trace's first entry, on the reasoning that both looked pre-existing/
+  anticipated rather than defects — see Verification above for the
+  original explanation of each. **Superseded by the correction cycle
+  below**: the Design & Review group's independent Preflight run treated
+  both as real, amended `DA-2026-08-19-06`/WP-0014 to bring the fix
+  in scope, and both are now corrected (see "Correction cycle" under
+  Verification above). This entry is left in place rather than rewritten,
+  per Invariant 2 — the failed-then-fixed sequence should stay visible,
+  not be smoothed over.
 - No existing repository document was moved, archived, deleted, or edited
-  beyond the one named paragraph in `local-issue-planning.md`.
+  beyond the one named paragraph in `local-issue-planning.md` and the
+  correction cycle's own explicitly in-scope ADR-range statements in
+  `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md`.
 - No data row was added to the restoration ledger's Ledger table.
-- `CLAUDE.md` and its mirrors were not touched.
+- `CLAUDE.md` and its mirrors were not touched at any point (confirmed:
+  `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md` are not among ADR 0006's
+  four `CLAUDE.md` mirrors).

@@ -148,7 +148,9 @@ Archiving a document means an in-tree move, not a working-tree deletion:
 
 The same lifecycle applies to `docs/collaboration/traces/`, with one
 addition specific to traces, adapted directly from `qpex`'s own stated rule
-(`trace-topic-register.md`, quoted and endorsed by item-0012 itself): **a
+(`/Users/nn0cl/Documents/git/qpex/docs/architecture/trace-topic-register.md`,
+a different, external repository's file, quoted and endorsed by
+item-0012 itself): **a
 new trace is not created when the same `LISS-*`/`WP-*` topic already has a
 current representative trace, and the new session found no unresolved
 obligation, no new approval boundary, and no unique review evidence not

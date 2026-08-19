@@ -286,6 +286,63 @@ Required — planning size `L`. See below.
     Implementer-introduced content, and fall under the Reviewer's
     substantive-soundness check, not this self-review.
 
+- 2026-08-19 — Implementer (Claude Sonnet 5, Claude Code): **correction
+  cycle**, same day, following the Design & Review group's independent
+  Preflight run. Preflight reproduced the same 9
+  `scripts/check-contract-consistency.py` findings this self-review's
+  Falsification Search row 7 (above) had judged pre-existing/anticipated,
+  and treated both as real defects requiring a fix rather than a note.
+  `DA-2026-08-19-06` and WP-0014 were amended on
+  `origin/process/backlog-item-0012-and-0013` (commit `be1d857`) to bring
+  the fix into scope: a Scope "Addendum" adding `README.md`/
+  `QUICKSTART.md`/`QUICKSTART.ja.md`'s ADR-range statements as routine
+  `check_adr_range` maintenance (not item-0012's own retroactive-
+  application rules), a corrected Rule 4 citation in "File 1" (the bare
+  `` `trace-topic-register.md` `` backtick reference replaced with the
+  full external absolute path
+  `` `/Users/nn0cl/Documents/git/qpex/docs/architecture/trace-topic-register.md` ``,
+  explicitly marked as a different, external repository's file), and a new
+  "File 4" giving the exact old-text -> new-text string-replacement pairs.
+
+  Row 7's original "not reproduced" verdict is superseded by this entry,
+  per Invariant 2 (the failed-then-fixed sequence stays visible, not
+  smoothed over) — left in place above rather than edited.
+
+  Both corrections applied on this branch from the amended agreement text
+  (`be1d857`): ADR 0020's Rule 4 sentence updated (verified byte-identical
+  by `diff` against the amended agreement's own File 1 text; only that one
+  sentence changed, confirmed by `git diff 874c6ce` below showing a
+  4-line change in the ADR file); the 7 exact string replacements from
+  "File 4" applied to `README.md` (2 sentences + 1 tree-diagram comment),
+  `QUICKSTART.md` (3), and `QUICKSTART.ja.md` (3), matched by exact
+  old-text string per the agreement's own instruction.
+
+  ```text
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  exit code: 0
+
+  $ git diff 874c6ce --stat
+   QUICKSTART.ja.md                                               | 6 +++---
+   QUICKSTART.md                                                  | 6 +++---
+   README.md                                                      | 6 +++---
+   docs/architecture/adr/0020-document-and-log-lifecycle-model.md | 4 +++-
+   4 files changed, 12 insertions(+), 10 deletions(-)
+
+  $ git status --porcelain
+   M QUICKSTART.ja.md
+   M QUICKSTART.md
+   M README.md
+   M docs/architecture/adr/0020-document-and-log-lifecycle-model.md
+  ```
+
+  Exactly the 4 files the amended agreement's Addendum and corrected File 1
+  named changed; no other file. `CLAUDE.md` and its four mirrors were not
+  touched — `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md` are not among
+  them (confirmed against ADR 0006's mirror list). No ledger data row
+  added; no other existing repository document moved, archived, deleted,
+  or edited.
+
 ## Verification
 
 - `scripts/check-contract-consistency.py` — recorded in WP-0014's
