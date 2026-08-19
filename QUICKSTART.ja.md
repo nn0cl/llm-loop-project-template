@@ -163,9 +163,9 @@ scaffolding として導入されたファイルの中には、その後プロ�
 これらは `rm -rf` しないでください。フォルダ内のテンプレート由来ファイル
 だけを取り除き、プロジェクトが追加したものは残します。
 
-- `docs/architecture/adr/0001-*.md` から `0018-*.md` までは、このテンプレー
-  トが同梱する process ADR です。この 18 件だけを削除し、プロジェクトが
-  その後採番した ADR（0019 以降）は残します。
+- `docs/architecture/adr/0001-*.md` から `0019-*.md` までは、このテンプレー
+  トが同梱する process ADR です。この 19 件だけを削除し、プロジェクトが
+  その後採番した ADR（0020 以降）は残します。
 - `docs/architecture/` はそれ以外にも、テンプレート提供ファイル
   （`agent-quickstart.md`、`implementation-readiness.md`、
   `ai-request-routing.md`、`io-reasoning-contracts.md`、
@@ -192,7 +192,7 @@ scaffolding として導入されたファイルの中には、その後プロ�
   「Check required project documents」step は、上の「そのまま削除して
   よい」節に挙げたスクリプト・テンプレート・process 文書を含む、この
   テンプレートが導入するほぼすべてのファイルの存在を検査し、
-  「Check architecture decision records」step は ADR 0001〜0018 を検査
+  「Check architecture decision records」step は ADR 0001〜0019 を検査
   します。リストを削る前に何かを削除すると、次の push で CI が落ちます。
   実際に残す内容に合わせて step を書き換えるか削除してください。
 
