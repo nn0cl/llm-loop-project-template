@@ -110,13 +110,19 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending — Director close is a separate, later action._
-- Result read: _pending._ This work plan stops here, Reviewer-approved and
-  merged into the shared branch `process/backlog-item-0012-and-0013`
-  (commit range `632a8e4..d9b9926` plus this closing commit), and reports
-  readiness to the Director for the work-plan-close action.
-- Next direction: _pending._
-- New design agreement (if any): _pending._
+- Date: 2026-08-19
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0013-prevent-direct-to-main-commits-review.md`,
+  Approved — nine failure scenarios searched, one non-blocking wording
+  observation) via the Backlog thread, which independently confirmed the
+  fix, the review record, and a clean `scripts/check-contract-consistency.py`
+  run from a detached checkout before presenting this close.
+- Next direction: closed with "はい". Merged content sits on
+  `process/backlog-item-0012-and-0013` (currently ahead of `main`, together
+  with WP-0014's still-in-progress work — not itself an approval of that).
+  Push/PR/merge-to-main remain separate explicit actions, deferred until
+  WP-0014 or a suitable batch point.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
