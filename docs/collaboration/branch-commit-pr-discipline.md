@@ -98,9 +98,40 @@ stated in this document.
   plan"), whichever happens first under this repository's existing merge
   timing. A worktree for a work plan that has not yet closed is not removed
   while issues in that plan are still in progress.
+- **Who removes it, and when**: the session whose content the worktree/branch
+  held is responsible for removing both, immediately, as part of that same
+  session's own completion step, once it has confirmed its own content
+  actually landed upstream (the merge it was waiting on happened, or the
+  work plan closed) — not something deferred to a later sweep by a
+  different thread. See "Self-directed branch and worktree cleanup at merge
+  time" below for the same expectation, stated generally, across both
+  groups in this repository's two-group topology.
 - This does not change branch-naming, the CI gate, the feature-unit branch
   creation steps, or any other rule in this document — it only states where
   the Implementation group's checkout lives while it works.
+
+### Self-directed branch and worktree cleanup at merge time
+
+This generalizes the "who removes it, and when" rule above beyond the
+Implementation group specifically. In this repository's standing two-group
+topology (per
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`),
+any session whose branch is merged into whatever it was feeding —
+Implementation group work merged into the Design & Review group's own
+branch; the Design & Review group's own working branch merged into the
+shared `process/*` branch — removes its own now-redundant branch and
+worktree as its own next step, immediately after confirming the merge
+landed, not deferred to a later sweep by another thread or session.
+
+This does not change the merge-timing constraint already stated above: a
+worktree or branch is not removed before its content has actually merged,
+or before the work plan it belongs to closes, and never while issues in
+that work plan are still in progress. It only makes explicit that
+performing the removal is each session's own responsibility, done as part
+of its own completion step, not a separate housekeeping task left for
+someone else to do later. See
+`docs/collaboration/cross-session-messaging.md` for the full handoff
+protocol between the two groups this expectation generalizes over.
 
 ## Stacked Branches for Phase Splitting
 
