@@ -76,10 +76,19 @@ requiring correction.
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-19
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-contract-reviewer-v230-review.md`,
+  Approved — reviewing six-week-old v2.3.0 content this session did not
+  author, closing the ADR-0006 gap left open since 2026-08-10) via the
+  Backlog thread, which independently confirmed the review record, the
+  design agreement, and a clean `scripts/check-contract-consistency.py` run
+  from a detached checkout before presenting this close.
+- Next direction: closed with "承認". Merged into
+  `process/two-group-send-message-loop-design` (commit `0e0c36f`, together
+  with WP-0010/0011's still-in-progress design work — not itself an
+  approval of those). Push and PR remain separate explicit actions.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
