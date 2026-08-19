@@ -133,6 +133,8 @@ MIRRORED_SECTIONS = {
     "Personas": r"personas\.md",
     "Expected Workflow": r"agent-quickstart\.md",
     "Session Entry": r"no prior chat context|session-start-and-resume",
+    "Session Topology Across AI Coding Tools":
+        r"0017-portable-three-layer-loop-and-file-based-intervention-fallback",
     "Loop Settings, Spikes, Backlog, and Findings":
         r"Loop Settings, Spikes, Backlog|loop-settings\.toml",
     "Phase Discipline": r"Phase 1|Phase Gate|Phase Discipline",

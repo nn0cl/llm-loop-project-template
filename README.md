@@ -250,9 +250,7 @@ architecture layers. Before using it on a real project:
    made. The ADRs included here (0001-0018) describe the collaboration
    process itself and normally do not need to change; number your project's
    own decisions from 0019 up, so a later template update does not collide
-   with them. (Numbering note: on this branch, `0017` is a temporary gap —
-   it belongs to a separate, not-yet-merged change; see ADR 0018's own
-   "Numbering note.")
+   with them.
 
 ## Introduce into an existing repository
 

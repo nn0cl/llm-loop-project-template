@@ -101,6 +101,37 @@ One persona at a time. An agent that is implementing is not also reviewing.
 - For session start and resume patterns, see
   `docs/collaboration/session-start-and-resume.md`.
 
+## Session Topology Across AI Coding Tools
+
+This repository's contract is written for multiple AI coding tools, not only
+this one. The three-layer session topology the loop runs on — Backlog,
+Design & Review, Implementation — is itself tool-agnostic; see
+`docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+(ADR 0016) for the full model, personas, and rules.
+
+The portable baseline handoff between the Design & Review and Implementation
+layers, across any AI coding tool, is: a parent session spawns a child
+subagent, the child works in its own dedicated `git worktree` and branch,
+and the parent waits on that tool's own native parent-child completion
+signal. This baseline needs nothing beyond ordinary parent-child subagent
+spawning with per-child worktree isolation.
+
+`SendMessage`/`ListAgents`, and the Director's live intervention channel
+built on them, are specific to this environment (Claude Code); they are
+described in full only in `docs/collaboration/cross-session-messaging.md`. A
+session running in a tool without an equivalent should not attempt to
+reproduce that peer-to-peer mechanism.
+
+Where `SendMessage`/`ListAgents` are unavailable, the default intervention-
+channel fallback is a status file, one per in-flight work plan, at
+`docs/collaboration/handoffs/WP-<NNNN>-status.md`. Read its `Director
+intervention gate` field as part of ordinary session-start artifact recovery
+— the same recovery model "Session Entry" above already uses, not a new
+automation surface. See
+`docs/architecture/adr/0017-portable-three-layer-loop-and-file-based-intervention-fallback.md`
+(ADR 0017) for the full statement, including the file's exact required
+fields.
+
 ## Loop Settings, Spikes, Backlog, and Findings
 
 Human presence inside a work plan is minimal. Later readers reconstruct work
