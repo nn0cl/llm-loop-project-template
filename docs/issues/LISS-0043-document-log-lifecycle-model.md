@@ -184,6 +184,108 @@ Required — planning size `L`. See below.
   verbatim in the design agreement's Plan section. Dispatched to the
   Implementation group on branch `process/document-log-lifecycle-model`.
 
+- 2026-08-19 — Implementer (Claude Sonnet 5, Claude Code): self-review,
+  full form (planning size `L`, per
+  `docs/architecture/adr/0015-review-cost-discipline.md` and WP-0014's own
+  Plan table). Covers Tasks 1-4 of `DA-2026-08-19-06`'s Plan (creating
+  `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`,
+  `docs/collaboration/restoration-ledger.md`, the cross-reference
+  paragraph in `docs/collaboration/local-issue-planning.md`, and the AI
+  work trace at
+  `docs/collaboration/traces/2026-08-19-liss-0043-document-log-lifecycle-model.md`).
+  Full form per `docs/templates/self-review.md`, using
+  `docs/templates/review-record.md`'s "Deterministic Verification Output"
+  and "Falsification Search" sections, filled out as the Implementer.
+
+  ### Deterministic Verification Output
+
+  Diff of each transcribed file against `DA-2026-08-19-06`'s own "Exact
+  Content to Produce" text (extracted from the agreement file by exact
+  line range, then diffed byte-for-byte against the created/edited file):
+
+  ```text
+  $ sed -n '99,368p' docs/collaboration/agreements/2026-08-19-document-log-lifecycle-model.md > /tmp/expected_adr0020.md
+  $ diff /tmp/expected_adr0020.md docs/architecture/adr/0020-document-and-log-lifecycle-model.md
+  (no output — files identical)
+
+  $ sed -n '374,419p' docs/collaboration/agreements/2026-08-19-document-log-lifecycle-model.md > /tmp/expected_ledger.md
+  $ diff /tmp/expected_ledger.md docs/collaboration/restoration-ledger.md
+  (no output — files identical)
+
+  $ sed -n '429,433p' docs/collaboration/agreements/2026-08-19-document-log-lifecycle-model.md > /tmp/expected_para.md
+  $ sed -n '219,223p' docs/collaboration/local-issue-planning.md > /tmp/actual_para.md
+  $ diff /tmp/expected_para.md /tmp/actual_para.md
+  (no output — identical)
+
+  $ git diff docs/collaboration/local-issue-planning.md
+  --- a/docs/collaboration/local-issue-planning.md
+  +++ b/docs/collaboration/local-issue-planning.md
+  @@ -216,6 +216,12 @@ Use:
+   - `done`
+   - `wont_do`
+
+  +This is the issue's own lifecycle status, not the same field as the
+  +document-lifecycle role (Entry/Canonical/Evidence/Archive) and status
+  +vocabulary `docs/architecture/adr/0020-document-and-log-lifecycle-model.md`
+  +defines. The two are independent: an issue can be `done` long before it is
+  +eligible for archival under ADR 0020's Rule 2.
+  +
+   ## Phase Values
+
+   Use:
+  (single hunk — exactly one paragraph inserted, nothing else in the file
+  touched)
+
+  $ python3 scripts/check-contract-consistency.py
+  references:
+    docs/architecture/adr/0020-document-and-log-lifecycle-model.md:151 names 'trace-topic-register.md', which does not exist
+
+  ADR range:
+    README.md states 0019 where 0020 is expected (pattern: 'ADRs included here \(0001-(\d{4})\)')
+    README.md states 0020 where 0021 is expected (pattern: 'own decisions from (\d{4}) up')
+    QUICKSTART.md states 0019 where 0020 is expected (pattern: '`docs/architecture/adr/0001-\*\.md` through `(\d{4})-\*\.md`')
+    QUICKSTART.md states 0020 where 0021 is expected (pattern: 'keep any ADR your\s+project numbered afterward \((\d{4}) and up\)')
+    QUICKSTART.md states 0019 where 0020 is expected (pattern: 'records" asserts ADRs 0001[-–](\d{4})')
+    QUICKSTART.ja.md states 0019 where 0020 is expected (pattern: '`docs/architecture/adr/0001-\*\.md` から `(\d{4})-\*\.md` までは')
+    QUICKSTART.ja.md states 0020 where 0021 is expected (pattern: 'ADR（(\d{4}) 以降）')
+    QUICKSTART.ja.md states 0019 where 0020 is expected (pattern: 'ADR 0001〜(\d{4}) を検査')
+
+  contract consistency: 9 failure(s)
+  exit code: 1
+
+  $ git status --porcelain
+   M docs/collaboration/local-issue-planning.md
+  ?? docs/architecture/adr/0020-document-and-log-lifecycle-model.md
+  ?? docs/collaboration/restoration-ledger.md
+  ?? docs/collaboration/traces/2026-08-19-liss-0043-document-log-lifecycle-model.md
+  ```
+
+  ### Falsification Search
+
+  | # | Failure scenario searched for | Grounds it does not occur | Result |
+  |---|---|---|---|
+  | 1 | Transcribed content diverges from `DA-2026-08-19-06`'s "Exact Content to Produce" (File 1, ADR 0020), including internal cross-references (e.g. the ADR's own references to `DA-2026-08-19-06`, LISS-0043, WP-0014, item-0012, case-0001) | `diff` against the agreement's own text (lines 99-368) produced no output — byte-identical | not reproduced |
+  | 2 | Transcribed content diverges from File 2 (`restoration-ledger.md`), including the nested `git show` code-fence (outer/inner fence nesting) | `diff` against the agreement's own text (lines 374-419) produced no output — byte-identical, fence nesting preserved | not reproduced |
+  | 3 | Transcribed content diverges from File 3's cross-reference paragraph, or is placed in the wrong location within `local-issue-planning.md` | `diff` against the agreement's own text (lines 429-433) produced no output; `git diff` shows a single hunk inserting the paragraph directly after the `wont_do` bullet and before `## Phase Values`, matching the specified insertion point exactly | not reproduced |
+  | 4 | An existing repository document outside the one named paragraph (any `docs/issues/`, `docs/work-plans/`, `docs/collaboration/traces/`, `docs/collaboration/reviews/`, `docs/collaboration/agreements/`, or other `docs/architecture/adr/` file) was moved, archived, deleted, or edited | `git status --porcelain` before this Work Notes edit lists only 2 untracked new files (`0020-...md`, `restoration-ledger.md`) plus the trace file and 1 modified file (`local-issue-planning.md`); `git diff` on the modified file shows exactly one inserted hunk and no deletions or moves anywhere else | not reproduced |
+  | 5 | The restoration ledger's Ledger table contains a data row | `tail -3 docs/collaboration/restoration-ledger.md` shows only the header, separator, and the literal placeholder row `_(no entries yet — ...)_ \| \| \| \| \| \|` — no populated row | not reproduced |
+  | 6 | `CLAUDE.md` or a mirror file (`AGENTS.md`, `.cursor/rules/*`, `.grok/rules/*`, `.gemini/*`, etc.) was touched | `git status --porcelain` does not list `CLAUDE.md`, `AGENTS.md`, or any mirror path among the 4 changed files | not reproduced |
+  | 7 | `scripts/check-contract-consistency.py`'s 9 findings indicate an actual transcription defect requiring correction | Findings inspected individually: the 1 `references` finding is the checker's `CODE_PATH` heuristic tripping on a backtick-wrapped external-repository filename (`trace-topic-register.md`, a `qpex` file cited by the spike, not a local path) present verbatim in the agreement's own specified text; the 8 `ADR range` findings are `README.md`/`QUICKSTART.md`/`QUICKSTART.ja.md` stating a now-stale ADR count, which is the exact, named, deliberately deferred gap in ADR 0020's own Consequences section (facet 5, a later separate work plan) and is outside `DA-2026-08-19-06`'s Scope (only 3 files are in scope; these mirror/README files are not among them, and are separately covered by the Boundaries section's `CLAUDE.md`-and-mirrors prohibition) | not reproduced (both are pre-existing/anticipated, not a content defect) |
+
+  ### Scenarios Not Searched
+
+  - Substantive soundness of ADR 0020's reasoning (four-layer mapping,
+    consolidation triggers, archive mechanism) — this is explicitly the
+    work-plan-level Reviewer's job per `DA-2026-08-19-06`'s Plan Task 7
+    ("confirms the ADR's substantive soundness, not only mechanical
+    transcription accuracy"), not the Implementer's self-review, which is
+    scoped to transcription accuracy and scope-boundary conformance.
+  - Whether ADR 0020's own internal claims (e.g. "19 ADRs," specific line
+    references to other ADRs) are independently correct — these are
+    design-authored claims from the covering design agreement, not
+    Implementer-introduced content, and fall under the Reviewer's
+    substantive-soundness check, not this self-review.
+
 ## Verification
 
 - `scripts/check-contract-consistency.py` — recorded in WP-0014's
