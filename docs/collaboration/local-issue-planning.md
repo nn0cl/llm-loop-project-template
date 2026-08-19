@@ -185,10 +185,13 @@ Allowed dependency meanings:
 Agents must not start work on an issue with unresolved `depends_on` entries.
 An unresolved dependency is a reopening request, not a judgment call.
 
-Agents must not implement issue work directly on `main` or the trunk branch.
-Every local issue or GitHub Issue requires a dedicated branch before any
-commit for that issue is made, per
-`docs/collaboration/branch-commit-pr-discipline.md`.
+Agents must not commit any repository record directly on `main` or the
+trunk branch — issue work included, but not only issue work; this also
+covers Backlog-layer records such as backlog items, local issues, and work
+plans. Every local issue or GitHub Issue requires a dedicated branch before
+any commit for that issue is made. See
+`docs/collaboration/branch-commit-pr-discipline.md`'s "Pre-Commit Branch
+Confirmation" for the general rule covering every kind of commit.
 
 ## Planning Flow
 

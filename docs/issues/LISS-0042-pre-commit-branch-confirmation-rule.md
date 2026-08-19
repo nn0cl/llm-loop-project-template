@@ -111,6 +111,56 @@ Not required — planning size `S`, first attempt.
   `DA-2026-08-19-01`) drafted on the shared branch
   `process/backlog-item-0012-and-0013`. Dispatched to the Implementation
   group on branch `process/prevent-direct-to-main-commits`.
+- 2026-08-19 — Implementer, self-review (short form, planning size `S`, per
+  `docs/templates/self-review.md`):
+
+  ```markdown
+  Phase / finding: Fast Path, single-attempt documentation edit (no
+    Red/Green/Refactor — process-only, no application specification)
+  Command run: python3 scripts/check-contract-consistency.py
+  Result:
+    contract consistency: all checks passed
+  Risks considered:
+    1. Does the new "Pre-Commit Branch Confirmation" rule state the
+       confirm-before-commit requirement for every record kind, not only
+       AT-TDD issue work, per DA-2026-08-19-01's Falsification Criteria?
+    2. Does the new wording accidentally imply Backlog-layer records now
+       need separate-context Reviewer approval (out of scope per
+       DA-2026-08-19-01 and item-0013's own "Boundaries or non-goals")?
+    3. Does the broadened local-issue-planning.md sentence duplicate or
+       contradict the general rule in branch-commit-pr-discipline.md
+       instead of cross-referencing it?
+    4. Was CLAUDE.md or any of its four mirrors touched?
+    5. Does scripts/check-contract-consistency.py still pass (mirror
+       parity, references) given both files are referenced by, not
+       mirrored into, CLAUDE.md/AGENTS.md/etc.?
+  Why each does not occur:
+    1. Does not occur: the added subsection's third bullet names
+       "Backlog-layer records such as `docs/backlog/item-NNNN-*.md`,
+       local issues, and work plans" explicitly, and cites the incident
+       (commit `b6c8961`) as the concrete case this was written to cover.
+    2. Does not occur: re-read the full added text in both files after
+       writing it — it states only branch-checking and commit-timing
+       obligations ("confirm the current branch," "create or switch to a
+       dedicated branch first"); neither file's new or edited text
+       contains the words "review," "approval," or "Reviewer" anywhere,
+       so nothing in the wording extends ADR-0006-style review
+       requirements to Backlog-layer records.
+    3. Does not occur: local-issue-planning.md's replaced sentence states
+       the issue-work-specific obligation once (dedicated branch before
+       any commit for that issue) and then points to
+       branch-commit-pr-discipline.md's "Pre-Commit Branch Confirmation"
+       by name for the general rule, rather than restating the general
+       rule's own text a second time.
+    4. Does not occur: only docs/collaboration/branch-commit-pr-discipline.md,
+       docs/collaboration/local-issue-planning.md, this issue file, and the
+       new trace file were changed, per `git status` reviewed before
+       committing; CLAUDE.md and its mirrors (AGENTS.md,
+       .github/copilot-instructions.md, .grok/rules/*.md,
+       .cursor/rules/*.mdc) were not opened for writing.
+    5. Does not occur: ran the check after both edits landed (see Command
+       run/Result above) rather than assuming it — it passed cleanly.
+  ```
 
 ## Verification
 

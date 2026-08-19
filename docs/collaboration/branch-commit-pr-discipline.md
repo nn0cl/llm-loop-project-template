@@ -42,6 +42,33 @@ Rules:
   the local/GitHub issue requirement above, but must still go through a PR and
   the CI gate before merging; they must never commit to `main` directly.
 
+### Pre-Commit Branch Confirmation
+
+Before any `git commit` — for every kind of record this repository's
+process produces, not only AT-TDD issue work — confirm the current branch
+is not `main`/the trunk branch.
+
+- Check the current branch (for example, `git branch --show-current`)
+  immediately before the first commit of a session or task, and again
+  after any branch switch made for a read-only purpose (for example,
+  checking out `main` to inspect a just-merged state).
+- If the current branch is `main`/the trunk branch, create or switch to a
+  dedicated branch first, per the branch-naming conventions above, before
+  committing anything.
+- This applies to every record this repository's process produces,
+  explicitly including Backlog-layer records such as
+  `docs/backlog/item-NNNN-*.md`, local issues, and work plans — not only
+  the AT-TDD "issue work" `docs/collaboration/local-issue-planning.md`
+  names. A record that looks small, low-risk, or documentation-only is not
+  exempt: the incident this rule corrects was exactly that — a backlog
+  item, reverted after landing on `main` unreviewed (commit `b6c8961`, see
+  `docs/backlog/item-0013-prevent-direct-to-main-commits.md`).
+- The guard is on the commit action, not on checking out `main` itself:
+  reading `main` (to inspect a merge, compare state, or verify a revert) is
+  fine. The failure mode this rule targets is a branch switch made for one
+  reason (reading) whose working tree is still checked out there when an
+  unrelated commit follows.
+
 ## Continuous Integration Gate
 
 - a branch must pass CI before it merges into `main` or the trunk branch; do
