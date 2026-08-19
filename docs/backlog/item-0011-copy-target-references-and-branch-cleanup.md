@@ -90,10 +90,13 @@ layer instead of the document layer.
 ## Links
 
 - Spike case: none
-- Work plan (when promoted): none yet
-- Design agreement (when promoted): none yet
-- Local issue (LISS): none yet
-- Spec: none yet
+- Work plan (when promoted): `docs/work-plans/WP-0012-copy-target-refs-and-branch-cleanup.md`
+- Design agreement (when promoted): `docs/collaboration/agreements/2026-08-19-copy-target-refs-and-branch-cleanup.md`
+  (`DA-2026-08-19-04`)
+- Local issue (LISS): LISS-0040 (checker fix), LISS-0041 (branch-cleanup
+  rule)
+- Spec: none — tooling and process-document changes, no application
+  specification
 - ADR: none yet — related:
   `scripts/check-contract-consistency.py`,
   `scripts/lib/collaboration-template-paths.sh`,
