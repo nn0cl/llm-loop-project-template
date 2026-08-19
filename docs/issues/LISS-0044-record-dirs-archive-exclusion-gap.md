@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0044
 - GitHub issue: none
-- Status: proposed
+- Status: closed
 - Phase: docs-only
 - Type: review-finding
 - Priority: medium
@@ -143,7 +143,56 @@ prerequisite work plan existing).
   is real but not yet actionable (no `docs/archive/` content exists to fix
   against) — will move to `accepted` once a work plan is ready to pick it
   up alongside the first `docs/archive/`-creating change.
+- 2026-08-20 — Implementer (WP-0016 / LISS-0048, DA-2026-08-19-08): resolved
+  the outbound/inbound distinction the Acceptance Notes asked for by adding
+  `"docs/archive/",` to `RECORD_DIRS` in
+  `scripts/check-contract-consistency.py` (the blanket exemption choice —
+  `check_references`'s existing per-file scan already treats any RECORD_DIRS
+  member as exempt from outbound reference/consistency scanning while still
+  resolving other documents' inbound references to files under it by
+  ordinary existence checking, since `check_references` never special-cases
+  the *target* side of a link, only which files it scans as a *source*).
+  Verified with a real, throwaway synthetic case (created and fully removed
+  before this commit; full command transcripts in
+  `docs/collaboration/traces/2026-08-19-liss-0048-drift-prevention-entry-docs-and-ci-checks.md`):
+  (1) created `docs/archive/issues/LISS-9999-synthetic-test.md` containing an
+  outbound Markdown/backticked reference to the real, existing
+  `docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md`
+  — ran `python3 scripts/check-contract-consistency.py`; the archived file's
+  own presence and its outbound reference were not flagged (no new failure
+  beyond the pre-existing, unrelated `entry archive reference` baseline
+  failure documented in the trace and in LISS-0048's self-review) — confirms
+  the RECORD_DIRS exemption. (2) temporarily added an inbound backticked
+  reference to that same archived path from a scratch file outside any
+  RECORD_DIRS path — ran the checker again; still no new failure, confirming
+  `check_references`'s ordinary existence check continues to resolve inbound
+  references to files under `docs/archive/` normally, satisfying the
+  Acceptance Notes' requirement that inbound checking "very likely remain
+  checked." (3) deleted the synthetic archived file, its directory, and the
+  scratch file before the final commit — `git status --porcelain` after
+  cleanup showed no `docs/archive/` path and no scratch file remaining.
 
 ## Verification
 
-- Not yet run — blocked on this issue becoming actionable.
+- `python3 scripts/check-contract-consistency.py`, run after all synthetic
+  Task 5 artifacts were removed (final confirmation run):
+
+  ```
+  entry archive reference:
+    docs/architecture/agent-quickstart.md:57 references a docs/archive/ path -- Entry documents should point at the restoration ledger or a current Canonical document instead, per ADR 0020 Rule 1.
+
+  contract consistency: 1 failure(s)
+  ```
+
+  The one remaining failure is unrelated to this issue: it is
+  `check_no_archive_reference_from_entry` (a new check added by the same
+  work plan, WP-0016) correctly firing on File 3's own mandated content in
+  `docs/architecture/agent-quickstart.md` line 57 — a genuine design-
+  agreement content defect flagged in LISS-0048's self-review and the
+  WP-0016 trace, not a `RECORD_DIRS`/`check_references` problem. This
+  issue's own fix (the `RECORD_DIRS` `docs/archive/` entry) is confirmed
+  working: no `check_references` failure of any kind appears, for either
+  the archived file's own outbound link or the scratch file's inbound link
+  to it, across every Task 5 sub-step. Full transcripts of all four Task 5
+  sub-steps are in
+  `docs/collaboration/traces/2026-08-19-liss-0048-drift-prevention-entry-docs-and-ci-checks.md`.

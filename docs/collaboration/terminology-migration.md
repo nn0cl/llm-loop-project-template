@@ -1,0 +1,28 @@
+# Terminology Migration Table
+
+The old-to-new terminology this repository has actually retired, per
+`docs/architecture/adr/0020-document-and-log-lifecycle-model.md`'s Entry
+document requirements (item-0012 facet 5). Every session should be able to
+tell, from this one table, whether a term it is about to write or read is
+current or retired.
+
+This table starts empty. A row is added only when a term is actually
+retired by a real decision (an Accepted ADR, a design agreement, or an
+equivalent recorded decision) — not backfilled speculatively for terms
+that were never actually used, and not populated ahead of the later
+retroactive-application work plan's own review of this repository's
+existing history.
+
+`scripts/check-contract-consistency.py`'s `check_retired_terminology`
+check fails a build if a retired term below still appears in a current
+document (anything outside `docs/collaboration/traces/`, `reviews/`,
+`agreements/`, `docs/issues/`, `docs/work-plans/`, `docs/spike/`,
+`docs/backlog/`, or `docs/archive/` — the same record/archive directories
+ADR 0020 and this script already treat as historical). An empty table
+(no rows) makes the check a no-op, not a failure.
+
+## Table
+
+| Retired term | Replacement | Retired by | Date |
+| --- | --- | --- | --- |
+| _(no entries yet)_ | | | |
