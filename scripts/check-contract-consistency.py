@@ -23,6 +23,10 @@ Checks:
                         in the one work plan whose Issue Graph names it.
   8. Superseding phrases Every registered ADR-supersession anchor phrase is
                         still present in its target file.
+  9. Open findings gate A closed work plan's own findings table lists no
+                        review-finding issue whose Status is neither
+                        `closed` nor `wont_do`, when loop-settings.toml
+                        requires it.
 
 What this cannot check, and who does
 ------------------------------------
@@ -811,6 +815,98 @@ def check_superseding_phrases(repo: str, failures: Failures) -> None:
                 )
 
 
+def _block_work_plan_done_on_open_findings(repo: str) -> bool:
+    """Read `[findings].block_work_plan_done_on_open_findings` from
+    `docs/collaboration/loop-settings.toml`.
+
+    The file is a flat `key = value` list under `[section]` headers (see the
+    file itself), so a section-then-key regex is enough — no TOML library
+    needed. Defaults to `True` when the file or the key is absent, matching
+    this setting's own documented default (`docs/collaboration/loop-settings.md`
+    and the toml file's own comment above the key both state `true` as the
+    contract default)."""
+    text = read_optional(repo, "docs/collaboration/loop-settings.toml")
+    if text is None:
+        return True
+    section = re.search(r"^\[findings\]\n(.*?)(?=^\[|\Z)", text, re.MULTILINE | re.DOTALL)
+    if section is None:
+        return True
+    match = re.search(
+        r"^block_work_plan_done_on_open_findings\s*=\s*(true|false)\s*$",
+        section.group(1),
+        re.MULTILINE,
+    )
+    if match is None:
+        return True
+    return match.group(1) == "true"
+
+
+def check_open_findings_gate(repo: str, failures: Failures) -> None:
+    """A closed work plan's own findings table must list no `Type:
+    review-finding` issue whose Status is neither `closed` nor `wont_do`,
+    when `[findings].block_work_plan_done_on_open_findings` is true.
+
+    "Closed" means the work plan's own "Work-Plan Close" section states a
+    real, date-shaped `Date:` value, not the placeholder text every
+    still-open work plan carries (`_pending Director action_`) — the same
+    signal a human reader already uses, per DA-2026-08-19-03's Settled
+    Ambiguities. A work plan with no "Work-Plan Close" section, or an
+    unclosed one, is not this check's concern.
+
+    Findings are read only from the work plan's own structured
+    `| Issue | Status | Resolution |` table under "Work-Plan Review" — never
+    inferred from a finding's own free-text content — the same
+    anchor-on-existing-structure technique check_issue_status_sync already
+    uses for the Issue Graph table.
+    """
+    if not _block_work_plan_done_on_open_findings(repo):
+        return  # setting disabled; the gate does nothing
+
+    for path in sorted(glob.glob(os.path.join(repo, "docs/work-plans/WP-*.md"))):
+        wp_rel = os.path.relpath(path, repo)
+        text = read(repo, wp_rel)
+
+        close_section = re.search(
+            r"^## Work-Plan Close\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+        )
+        if close_section is None:
+            continue  # no Work-Plan Close section at all (older shape)
+        date_match = re.search(r"^- Date: (.+)$", close_section.group(1), re.MULTILINE)
+        if date_match is None:
+            continue
+        if not re.search(r"\d{4}-\d{2}-\d{2}", date_match.group(1)):
+            continue  # placeholder text, e.g. "_pending Director action_"
+
+        review_section = re.search(
+            r"^## Work-Plan Review\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+        )
+        if review_section is None:
+            continue
+
+        for row in re.finditer(
+            r"^\| (LISS-\d{4}) \|", review_section.group(1), re.MULTILINE
+        ):
+            liss_id = row.group(1)
+            issue_paths = sorted(
+                glob.glob(os.path.join(repo, f"docs/issues/{liss_id}-*.md"))
+            )
+            if not issue_paths:
+                continue  # findings-table row names an issue that no longer exists
+            issue_rel = os.path.relpath(issue_paths[0], repo)
+            issue_text = read(repo, issue_rel)
+            status_match = re.search(r"^- Status: (.+)$", issue_text, re.MULTILINE)
+            if status_match is None:
+                continue
+            status = status_match.group(1).strip()
+            if status not in ("closed", "wont_do"):
+                failures.add(
+                    "open findings gate",
+                    f"{wp_rel} lists {liss_id} in its Work-Plan Review "
+                    f"findings table, but {issue_rel} states Status: "
+                    f"{status!r} — neither 'closed' nor 'wont_do'",
+                )
+
+
 def check_version_claims(repo: str, failures: Failures) -> None:
     """No document may claim a released version that has no tag."""
     try:
@@ -888,6 +984,7 @@ def main() -> int:
     check_id_range_collisions(repo, failures)
     check_issue_status_sync(repo, failures)
     check_superseding_phrases(repo, failures)
+    check_open_findings_gate(repo, failures)
     return failures.report()
 
 

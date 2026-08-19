@@ -20,7 +20,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0039 | ready | M | M | AIP-0039-001 | - | - | process/ci-open-finding-gate |
+| LISS-0039 | review | M | M | AIP-0039-001 | - | - | process/ci-open-finding-gate |
 
 ## Plan-Owned Bug Records
 
@@ -36,10 +36,11 @@ See LISS-0039's own AI Planning Records section.
 
 ## Current Next Issue
 
-- Issue: LISS-0039
-- Reason it is unblocked: no dependencies; `DA-2026-08-19-03` covers it
-  fully, including the exact anchor structure (each work plan's own
-  findings table).
+- Issue: none — LISS-0039 is executed and self-reviewed (`Status: review`).
+  Preflight Validation below recorded `pass`.
+- Reason: nothing left for the Implementer within this work plan's scope;
+  the whole work plan is ready for the Design & Review group's
+  separate-context Reviewer pass (Task 5).
 - Reopening request needed: no.
 
 ## Minor Fix Path
@@ -48,10 +49,33 @@ Not applicable — new check function, planning size `M`.
 
 ## Preflight Validation
 
-- Result: _pending Implementation-group execution_
-- Checks and command output: _to be recorded by the Implementer_
-- Scope result: _to be recorded_
-- Next action: _to be recorded_
+- Result: **pass**
+- Checks and command output:
+
+  ```text
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+  ```
+
+  Exit code 0. Also see LISS-0039's own Deterministic Verification Output
+  for the synthetic failure and synthetic pass-with-flag-false cases run
+  against isolated scratch fixtures (not against this repository), which
+  together demonstrate the new `check_open_findings_gate` function actually
+  fires when it should and actually reads
+  `[findings].block_work_plan_done_on_open_findings` rather than always
+  passing or always failing.
+- Scope result: LISS-0039's Status is `review`; full-form self-review is
+  recorded in its own Work Notes (planning size `M`); no open
+  `Type: review-finding` issue affects this area (`LISS-0003` is explicitly
+  out of this item's own scope, per `DA-2026-08-19-03`'s Settled
+  Ambiguities); no issue in this plan is blocked on an open spike case. Only
+  `scripts/check-contract-consistency.py` was touched, matching this work
+  plan's Scope; no other file was edited. `scripts/check-contract-consistency.py`
+  is not an ADR-0006 contract file, so no AI work trace is required, per
+  `DA-2026-08-19-03`'s own Scope statement.
+- Next action: submit to the Design & Review group's separate-context
+  Reviewer pass (Task 5). This Preflight result is not itself an approval
+  and does not set any issue to `done`/`closed`.
 
 ## Work-Plan Review
 
