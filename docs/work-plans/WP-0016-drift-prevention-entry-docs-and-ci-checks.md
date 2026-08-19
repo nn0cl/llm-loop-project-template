@@ -158,11 +158,24 @@ open finding blocks Director close.
 
 ## Work-Plan Close
 
-- Date: _pending_
-- Result read: _pending — Director close is a separate, later action._
-- Next direction: _pending_
-- New design agreement (if any): _pending — the deferred checks and
-  facet 6 each get their own design agreement when reached._
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0016-drift-prevention-entry-docs-and-ci-checks-review.md`,
+  Approved after three adversarial review rounds that caught two genuine
+  bugs — a word-boundary false-positive and a line-wrap detection gap,
+  both fixed and independently re-verified) via the Backlog thread, which
+  independently confirmed the two new checks, LISS-0044's closure,
+  LISS-0049/0050/0051's `closed` status, LISS-0052 correctly left
+  non-blocking and tracked, and a clean
+  `scripts/check-contract-consistency.py` run from a detached checkout.
+- Next direction: closed with "クローズして". Merged content sits on
+  `origin/process/item-0012-remaining-facets` (together with facet 6,
+  still in progress — not itself approved by this close). Push/PR/
+  merge-to-main remain separate explicit actions, deferred to a suitable
+  batch point.
+- New design agreement (if any): none opened by this close — the deferred
+  checks (LISS-0052 and the three unbuilt facet-5 checks) and facet 6 each
+  get their own when reached.
 
 ## Risks
 
