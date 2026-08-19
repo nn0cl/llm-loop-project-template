@@ -108,10 +108,24 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
 one combined Director action, after the Reviewer approves:
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-19
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0012-copy-target-refs-and-branch-cleanup-review.md`,
+  Approved — the Reviewer independently reconstructed the Red/Green
+  scratch-copy reproduction rather than trusting the Implementer's
+  recorded output, plus a negative-case check) via the Backlog thread,
+  which independently confirmed the fix, the review record, and a clean
+  `scripts/check-contract-consistency.py` run from a detached checkout,
+  then confirmed PR #16's CI ("Repository sanity") actually turned green
+  after this fix landed, before presenting this close.
+- Next direction: closed with "はい". Merged into
+  `process/two-group-send-message-loop-design` (commit `f906b63`,
+  fast-forward). Design & Review practiced LISS-0041's own new rule
+  immediately, cleaning up its own worktree/branch once merged; the
+  Backlog thread removed the one remaining empty detached worktree.
+  PR #16 is now green and ready for the Director's merge-to-`main`
+  decision.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
