@@ -16,6 +16,13 @@ Checks:
   3. References         Every relative path a document names resolves.
   4. ADR range          Every stated process-ADR range matches the ADR files.
   5. Version claims     No document claims a released version that has no tag.
+  6. ID range collisions A live numbered document (LISS/WP/backlog item/ADR)
+                        does not reuse a number that belonged to a
+                        different, since-deleted document.
+  7. Issue status sync  A LISS issue's own Status field agrees with its row
+                        in the one work plan whose Issue Graph names it.
+  8. Superseding phrases Every registered ADR-supersession anchor phrase is
+                        still present in its target file.
 
 What this cannot check, and who does
 ------------------------------------
@@ -94,6 +101,7 @@ them. Stdlib only, so it runs anywhere python3 does.
 from __future__ import annotations
 
 import argparse
+import glob
 import os
 import re
 import subprocess
@@ -125,6 +133,8 @@ MIRRORED_SECTIONS = {
     "Personas": r"personas\.md",
     "Expected Workflow": r"agent-quickstart\.md",
     "Session Entry": r"no prior chat context|session-start-and-resume",
+    "Session Topology Across AI Coding Tools":
+        r"0017-portable-three-layer-loop-and-file-based-intervention-fallback",
     "Loop Settings, Spikes, Backlog, and Findings":
         r"Loop Settings, Spikes, Backlog|loop-settings\.toml",
     "Phase Discipline": r"Phase 1|Phase Gate|Phase Discipline",
@@ -444,6 +454,197 @@ def check_references(repo: str, failures: Failures) -> None:
                     )
 
 
+# Numbered-document prefixes tracked for reuse detection: directory -> a
+# pattern whose group(1) is the file's full relative path and group(2) is
+# its four-digit number. `docs/architecture/adr` reuses the same numbering
+# space `adr_numbers()` already reads; the other three are the numbered
+# planning-document families named in DA-2026-08-18-06.
+NUMBERED_FILE_PATTERNS: dict[str, re.Pattern[str]] = {
+    "docs/issues": re.compile(r"^(docs/issues/LISS-(\d{4})-[^/]+\.md)$"),
+    "docs/work-plans": re.compile(r"^(docs/work-plans/WP-(\d{4})-[^/]+\.md)$"),
+    "docs/backlog": re.compile(r"^(docs/backlog/item-(\d{4})-[^/]+\.md)$"),
+    "docs/architecture/adr":
+        re.compile(r"^(docs/architecture/adr/(\d{4})-[^/]+\.md)$"),
+}
+
+# This template's own pre-v1.0.0 history contains genuine, deliberate,
+# already-fully-documented number reuse that predates this check: the ADR set
+# was renumbered once during "process: consolidate the operating contract as
+# the first edition (v1.0.0)" (commit cf9da58), and the local-issue/work-plan
+# sequence was reset to a fresh start once during "chore: reset the
+# repository's record artifacts to the initial state" (commit 9fcb2d2, itself
+# an ancestor of cf9da58) — both single, Director-authorized, fully-recorded
+# events, not organic drift. `git log --follow` correctly does not treat
+# either as a rename, because it is not one: an unrelated document now
+# occupies the freed number. Each currently-live path affected by one of
+# those two historical events is listed here explicitly, once, so this check
+# can tell a confirmed, already-explained past event apart from an
+# unexplained new one. A path not on this list still fails the check exactly
+# as designed; adding to this list is a deliberate registration, not a
+# general-purpose escape hatch, and every entry must cite the commit that
+# explains it in the same change that adds it.
+KNOWN_HISTORICAL_ID_REUSE = {
+    # cf9da58 "process: consolidate the operating contract as the first
+    # edition (v1.0.0)" renumbered the ADR set in one commit.
+    "docs/architecture/adr/0001-director-centered-planning-and-closed-loop.md",
+    "docs/architecture/adr/0002-design-first-ai-request-routing.md",
+    "docs/architecture/adr/0003-input-output-reasoning-contracts.md",
+    "docs/architecture/adr/0012-review-issues-minor-fix-and-model-routing.md",
+    "docs/architecture/adr/0013-preflight-validation-before-independent-review.md",
+    # 9fcb2d2 "chore: reset the repository's record artifacts to the initial
+    # state" removed this template's own bootstrap-era local issues and work
+    # plans; the numbering sequence started over from LISS-0001/WP-0001 for
+    # the template's real, post-reset local-issue history.
+    "docs/issues/LISS-0001-review-issues-minor-fix-path.md",
+    "docs/issues/LISS-0002-preflight-validation.md",
+    "docs/issues/LISS-0003-code-path-filter-and-disclosure-history.md",
+    "docs/work-plans/WP-0001-review-issues-minor-fix-path.md",
+    "docs/work-plans/WP-0002-two-group-send-message-loop.md",
+}
+
+
+def _git_output(repo: str, args: list[str]) -> str | None:
+    """Run a read-only git command against `repo`, following the same
+    call-and-degrade pattern check_version_claims uses below: None means git
+    is unavailable or the command failed, not "no results"."""
+    try:
+        result = subprocess.run(
+            ["git", "-C", repo] + args,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return None
+    return result.stdout
+
+
+def _historical_numbered_files(repo: str) -> dict[str, dict[str, set[str]]] | None:
+    """Every path ever added under a tracked numbered-document prefix, on any
+    branch, grouped by prefix and then by number. Returns None when git is
+    unavailable (nothing to compare)."""
+    output = _git_output(
+        repo,
+        ["log", "--all", "--diff-filter=A", "--name-only", "--pretty=format:"],
+    )
+    if output is None:
+        return None
+    history: dict[str, dict[str, set[str]]] = {
+        prefix: {} for prefix in NUMBERED_FILE_PATTERNS
+    }
+    for line in output.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        for prefix, pattern in NUMBERED_FILE_PATTERNS.items():
+            match = pattern.match(line)
+            if match:
+                history[prefix].setdefault(match.group(2), set()).add(match.group(1))
+    return history
+
+
+def check_id_range_collisions(repo: str, failures: Failures) -> None:
+    """A currently-live numbered document must not reuse a number that
+    belonged to a different, since-deleted document.
+
+    `git log --all --diff-filter=A --name-only` gives every path ever added,
+    on any branch; comparing that against the live file set finds a number
+    reused by a different filename. That alone is not enough to call it a
+    collision: a file that was renamed keeps its old name in its own
+    `git log --follow` history, and that is the same document's lineage, not
+    two different documents sharing a number. Only a historical name the live
+    file's own `--follow` history does not reach is a real collision.
+    """
+    history = _historical_numbered_files(repo)
+    if history is None:
+        return  # no git available; nothing to compare
+
+    for prefix, pattern in NUMBERED_FILE_PATTERNS.items():
+        dir_path = os.path.join(repo, prefix)
+        if not os.path.isdir(dir_path):
+            continue
+        for name in sorted(os.listdir(dir_path)):
+            rel = f"{prefix}/{name}"
+            match = pattern.match(rel)
+            if not match:
+                continue
+            number = match.group(2)
+            historical_names = history.get(prefix, {}).get(number, set())
+            other_names = historical_names - {rel}
+            if not other_names:
+                continue
+
+            follow_output = _git_output(
+                repo,
+                ["log", "--follow", "--name-only", "--pretty=format:", "--", rel],
+            )
+            followed = {
+                line.strip()
+                for line in (follow_output or "").splitlines()
+                if line.strip()
+            }
+            reused = sorted(other_names - followed)
+            if reused and rel not in KNOWN_HISTORICAL_ID_REUSE:
+                failures.add(
+                    "id range collisions",
+                    f"{rel} reuses number {number}, previously assigned to "
+                    f"{', '.join(reused)} — a different, deleted file not "
+                    "reached by `git log --follow` from the live path, so "
+                    "not the same document's rename lineage",
+                )
+
+
+def check_issue_status_sync(repo: str, failures: Failures) -> None:
+    """A LISS issue's own `Status:` field must agree with its row's Status
+    column in the one work plan whose Issue Graph table names it.
+
+    An issue that appears in zero work plans, or in more than one, is not
+    this check's concern: zero means nothing to cross-reference yet, and more
+    than one is ambiguous about which work plan is authoritative — guessing
+    would risk a false positive of exactly the kind this script's docstring
+    already disclaims. Only the unambiguous case (exactly one owning work
+    plan) is checked, and only a genuine value disagreement is reported.
+    """
+    liss_status: dict[str, tuple[str, str]] = {}
+    for path in sorted(glob.glob(os.path.join(repo, "docs/issues/LISS-*.md"))):
+        name = os.path.basename(path)
+        liss_match = re.match(r"^(LISS-\d{4})-", name)
+        if not liss_match:
+            continue
+        text = read(repo, os.path.relpath(path, repo))
+        status_match = re.search(r"^- Status: (.+)$", text, re.MULTILINE)
+        if status_match is None:
+            continue
+        liss_status[liss_match.group(1)] = (status_match.group(1).strip(), name)
+
+    wp_occurrences: dict[str, list[tuple[str, str]]] = {}
+    for path in sorted(glob.glob(os.path.join(repo, "docs/work-plans/WP-*.md"))):
+        wp_rel = os.path.relpath(path, repo)
+        text = read(repo, wp_rel)
+        section = re.search(
+            r"^## Issue Graph\n(.*?)(?=^## |\Z)", text, re.MULTILINE | re.DOTALL
+        )
+        if section is None:
+            continue
+        for row in re.finditer(
+            r"^\| (LISS-\d{4}) \| ([^|]+) \|", section.group(1), re.MULTILINE
+        ):
+            liss_id, status = row.group(1), row.group(2).strip()
+            wp_occurrences.setdefault(liss_id, []).append((wp_rel, status))
+
+    for liss_id, (own_status, liss_name) in sorted(liss_status.items()):
+        occurrences = wp_occurrences.get(liss_id, [])
+        if len(occurrences) != 1:
+            continue
+        wp_rel, wp_status = occurrences[0]
+        if wp_status != own_status:
+            failures.add(
+                "issue status sync",
+                f"docs/issues/{liss_name} states Status: {own_status}, but "
+                f"{wp_rel}'s Issue Graph lists {liss_id} as {wp_status!r}",
+            )
+
+
 def adr_numbers(repo: str) -> list[str]:
     adr_dir = os.path.join(repo, "docs/architecture/adr")
     if not os.path.isdir(adr_dir):
@@ -553,6 +754,63 @@ def check_adr_range(repo: str, failures: Failures) -> None:
                 )
 
 
+# Exact-anchored superseding-phrase requirements, modeled directly on
+# ENTRY_DOCUMENT_ADR_STATEMENTS above: when an ADR supersedes another
+# document's specific clause and that document is updated with a qualifying
+# phrase to reflect it, the phrase is registered here, anchored to the
+# CURRENT, VERIFIED wording. If a pattern stops matching, the check fails
+# closed and says so, rather than silently passing a mirror that quietly
+# reverted to the pre-supersession rule.
+SUPERSEDING_PHRASE_REQUIREMENTS: dict[str, list[tuple[str, str]]] = {
+    "docs/collaboration/design-agreement.md": [
+        (
+            r"Rule\s+3,\s+this\s+does\s+not\s+block\s+unrelated,\s+"
+            r"concurrently\s+in-flight\s+work\s+plans\s+in\s+either\s+group",
+            "ADR 0016",
+        ),
+    ],
+    "docs/collaboration/ai-human-scheme.md": [
+        (
+            r"this\s+checkpoint,\s+for\s+one\s+work\s+plan,\s+does\s+not\s+"
+            r"block\s+the\s+Design\s+&\s+Review\s+group's\s+or\s+the\s+"
+            r"Implementation\s+group's\s+other\s+concurrently\s+in-flight\s+"
+            r"work",
+            "ADR 0016",
+        ),
+    ],
+    "docs/at-tdd/process.md": [
+        (
+            r"Rule\s+3,\s+this\s+does\s+not\s+block\s+unrelated,\s+"
+            r"concurrently\s+in-flight\s+work\s+plans\s+in\s+either\s+group",
+            "ADR 0016",
+        ),
+    ],
+}
+
+
+def check_superseding_phrases(repo: str, failures: Failures) -> None:
+    """Every registered superseding-phrase anchor must still be present in
+    its target file. See SUPERSEDING_PHRASE_REQUIREMENTS above for what
+    "registered" means and why this is presence-of-a-registered-string, not
+    meaning-inference."""
+    for target, requirements in SUPERSEDING_PHRASE_REQUIREMENTS.items():
+        text = read_optional(repo, target)
+        if text is None:
+            continue
+        for pattern, originating_adr in requirements:
+            if re.search(pattern, text) is None:
+                failures.add(
+                    "superseding phrases",
+                    f"{target}: expected qualifying phrase from "
+                    f"{originating_adr} not found (pattern: {pattern!r}). If "
+                    "the sentence was reworded or moved, update "
+                    "SUPERSEDING_PHRASE_REQUIREMENTS in "
+                    "scripts/check-contract-consistency.py to match; if it "
+                    "was removed, the supersession is no longer stated "
+                    "anywhere in this file.",
+                )
+
+
 def check_version_claims(repo: str, failures: Failures) -> None:
     """No document may claim a released version that has no tag."""
     try:
@@ -627,6 +885,9 @@ def main() -> int:
     check_references(repo, failures)
     check_adr_range(repo, failures)
     check_version_claims(repo, failures)
+    check_id_range_collisions(repo, failures)
+    check_issue_status_sync(repo, failures)
+    check_superseding_phrases(repo, failures)
     return failures.report()
 
 

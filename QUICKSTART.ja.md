@@ -164,11 +164,8 @@ scaffolding として導入されたファイルの中には、その後プロ�
 だけを取り除き、プロジェクトが追加したものは残します。
 
 - `docs/architecture/adr/0001-*.md` から `0018-*.md` までは、このテンプレー
-  トが同梱する process ADR です。実際に存在するファイルだけを削除してくだ
-  さい（注: このブランチでは `0017-*.md` は一時的な欠番です。別の、まだ
-  マージされていない変更に属する番号です。詳細は ADR 0018 自身の
-  「Numbering note」を参照してください）。プロジェクトがその後採番した
-  ADR（0019 以降）は残します。
+  トが同梱する process ADR です。この 18 件だけを削除し、プロジェクトが
+  その後採番した ADR（0019 以降）は残します。
 - `docs/architecture/` はそれ以外にも、テンプレート提供ファイル
   （`agent-quickstart.md`、`implementation-readiness.md`、
   `ai-request-routing.md`、`io-reasoning-contracts.md`、

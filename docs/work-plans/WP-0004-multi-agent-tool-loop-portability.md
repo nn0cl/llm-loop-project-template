@@ -23,8 +23,14 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0029 | ready | M | M | AIP-0029-001 | - | LISS-0030 | process/adr-0017-portable-loop |
-| LISS-0030 | ready | M | M | AIP-0030-001 | LISS-0029 | - | process/mirror-portable-loop-wording |
+| LISS-0029 | review | M | M | AIP-0029-001 | - | LISS-0030 | process/adr-0017-portable-loop |
+| LISS-0030 | review | M | M | AIP-0030-001 | LISS-0029 | - | process/adr-0017-portable-loop |
+
+Branch note (Implementer, 2026-08-18): both issues landed on the single
+branch `process/adr-0017-portable-loop` rather than the two separate branches
+originally listed, because LISS-0030 strictly depends on LISS-0029 landing
+first and the two together form one small, sequential, reviewable unit; the
+`Branch` column above has been updated to match what was actually done.
 
 ## Plan-Owned Bug Records
 
@@ -56,10 +62,34 @@ plan's accepted result.
 
 ## Preflight Validation
 
-- Result: _pending Implementation-group execution_
-- Checks and command output: _to be recorded by the Implementer_
-- Scope result: _to be recorded_
-- Next action: _to be recorded_
+- Result: `pass`
+- Checks and command output: `python3 scripts/check-contract-consistency.py`
+  (run from the Implementation-group worktree, branch
+  `process/adr-0017-portable-loop`, after both LISS-0029 and LISS-0030 were
+  self-reviewed and their Status fields set to `review`):
+
+  ```
+  contract consistency: all checks passed
+  ```
+
+  Also verified, per the same run: `git diff --stat` against the branch
+  point (`d9c6e6b`) shows the five mirror-file edits (`AGENTS.md`,
+  `CLAUDE.md`, `.github/copilot-instructions.md`,
+  `.grok/rules/03-collaboration-and-completion.md`,
+  `.cursor/rules/03-collaboration-and-completion.mdc`) are insertion-only
+  (0 deletions), and `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+  and `docs/collaboration/cross-session-messaging.md` do not appear in the
+  diff at all — confirming this work plan's own Boundaries and
+  Falsification Criteria (no edit to either file).
+- Scope result: both LISS-0029 and LISS-0030 self-reviewed and complete
+  (self-review records in each issue's own Work Notes/Self-Review section);
+  no open `Type: review-finding` issues affect this area; no implementation
+  issue in this work plan is blocked on an open spike case. In scope for
+  this Preflight: ADR 0017 (LISS-0029), the five mirror-file edits and
+  their trace (LISS-0030). Out of scope, and confirmed untouched: ADR 0016,
+  `docs/collaboration/cross-session-messaging.md`.
+- Next action: submit the whole work plan to the Design & Review group's
+  separate-context Reviewer pass.
 
 ## Work-Plan Review
 

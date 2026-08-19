@@ -161,10 +161,8 @@ Do not `rm -rf` these. Remove only the template-authored files inside them
 and keep anything your project added:
 
 - `docs/architecture/adr/0001-*.md` through `0018-*.md` are the process ADRs
-  this template ships with; remove only the ones actually present (note: on
-  this branch, `0017-*.md` is a temporary numbering gap — it belongs to a
-  separate, not-yet-merged change; see ADR 0018's own "Numbering note"), and
-  keep any ADR your project numbered afterward (0019 and up).
+  this template ships with; remove only those eighteen, and keep any ADR your
+  project numbered afterward (0019 and up).
 - `docs/architecture/` otherwise holds a mix of template-provided files
   (`agent-quickstart.md`, `implementation-readiness.md`,
   `ai-request-routing.md`, `io-reasoning-contracts.md`,
