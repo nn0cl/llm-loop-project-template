@@ -20,7 +20,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0036 | review | S | S | - | - | - | process/coordinator-role-inoculation-rule |
+| LISS-0036 | done | S | S | - | - | - | process/coordinator-role-inoculation-rule |
 
 ## Plan-Owned Bug Records
 
@@ -83,10 +83,18 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-18
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-18-wp-0008-coordinator-role-inoculation-rule-review.md`,
+  Approved) via the Backlog thread, which independently confirmed the
+  `agent-quickstart.md` diff against the Implementer's own report before
+  the Reviewer pass, and again confirmed the review record and a clean
+  `scripts/check-contract-consistency.py` run from a detached checkout
+  before presenting this close.
+- Next direction: closed with "はい。Close". Merged into
+  `process/two-group-send-message-loop-design` (commit `456680d`, together
+  with WP-0004/0005/0007). Push and PR remain separate explicit actions.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

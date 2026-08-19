@@ -22,7 +22,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0035 | review | M | M | AIP-0035-001 | - | - | process/document-consistency-drift-checks |
+| LISS-0035 | done | M | M | AIP-0035-001 | - | - | process/document-consistency-drift-checks |
 
 ## Plan-Owned Bug Records
 
@@ -91,10 +91,20 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-18
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-18-wp-0007-document-consistency-drift-checks-review.md`,
+  Approved — the Reviewer built its own synthetic failure case against
+  `check_issue_status_sync` rather than only re-reading the reported one,
+  and disclosed narrower verification depth for the other two new checks
+  rather than glossing over it) via the Backlog thread, which independently
+  confirmed the new checker code, the review record, and a clean
+  `scripts/check-contract-consistency.py` run from a detached checkout
+  before presenting this close.
+- Next direction: closed with "はい。Close". Merged into
+  `process/two-group-send-message-loop-design` (commit `456680d`, together
+  with WP-0004/0005/0008). Push and PR remain separate explicit actions.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

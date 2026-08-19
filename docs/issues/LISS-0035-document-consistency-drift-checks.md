@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0035
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design (tooling extension, no application code)
 - Type: tooling-enhancement
 - Priority: high

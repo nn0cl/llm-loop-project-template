@@ -23,8 +23,8 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0029 | review | M | M | AIP-0029-001 | - | LISS-0030 | process/adr-0017-portable-loop |
-| LISS-0030 | review | M | M | AIP-0030-001 | LISS-0029 | - | process/adr-0017-portable-loop |
+| LISS-0029 | done | M | M | AIP-0029-001 | - | LISS-0030 | process/adr-0017-portable-loop |
+| LISS-0030 | done | M | M | AIP-0030-001 | LISS-0029 | - | process/adr-0017-portable-loop |
 
 Branch note (Implementer, 2026-08-18): both issues landed on the single
 branch `process/adr-0017-portable-loop` rather than the two separate branches
@@ -103,10 +103,20 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-18
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-18-wp-0004-multi-agent-tool-loop-portability-review.md`,
+  Approved) via the Backlog thread, which independently confirmed ADR 0017,
+  both issue files, and the review record exist on the merged branch and
+  that `scripts/check-contract-consistency.py` passes from a detached
+  checkout before presenting this close.
+- Next direction: closed with "はい。Close". Merged into
+  `process/two-group-send-message-loop-design` (commit `456680d`, together
+  with WP-0005/0007/0008). The anticipated ADR-0017/0018 numbering conflict
+  with WP-0006 was resolved during this merge, as both work plans'
+  Reviewer records anticipated. Push and PR remain separate explicit
+  actions.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

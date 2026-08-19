@@ -22,7 +22,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0031 | review | S | S | - | - | - | process/template-propagation-work-plan-exclusion |
+| LISS-0031 | done | S | S | - | - | - | process/template-propagation-work-plan-exclusion |
 
 ## Plan-Owned Bug Records
 
@@ -174,10 +174,18 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending Director action_
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-18
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-18-wp-0005-template-propagation-work-plan-exclusion-review.md`,
+  Approved — the Reviewer independently re-ran the full empirical
+  copy/update test from scratch rather than reusing the Implementer's
+  fixtures) via the Backlog thread, which independently confirmed the fix,
+  the review record, and a clean `scripts/check-contract-consistency.py`
+  run from a detached checkout before presenting this close.
+- Next direction: closed with "はい。Close". Merged into
+  `process/two-group-send-message-loop-design` (commit `456680d`, together
+  with WP-0004/0007/0008). Push and PR remain separate explicit actions.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 

@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0029
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: phase-0-design (produces an Architecture Path artifact, not
   application code)
 - Type: architecture-decision

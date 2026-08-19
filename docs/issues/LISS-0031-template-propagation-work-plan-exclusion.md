@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0031
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: process-only
 - Type: tooling-fix
 - Priority: medium
