@@ -2,13 +2,19 @@
 
 ## Goal
 
-- Close item-0012 facet 4 by adding a structured Sync Diff Record template
-  and a canonical Per-Agent-Tool Rule Applicability Registry, extending
-  ADR 0008's already-existing Tier 1/Tier 2 sync mechanism rather than
-  rebuilding it, per
-  `docs/backlog/item-0012-document-and-log-lifecycle-management.md` and
+- Close item-0012 facet 4's diff-record and per-agent-tool-registry pieces
+  by adding a structured Sync Diff Record template and a canonical
+  Per-Agent-Tool Rule Applicability Registry, extending ADR 0008's
+  already-existing Tier 1/Tier 2 sync mechanism rather than rebuilding it,
+  per `docs/backlog/item-0012-document-and-log-lifecycle-management.md`
+  and
   `docs/collaboration/agreements/2026-08-19-contract-sync-diff-records.md`
-  (`DA-2026-08-19-07`).
+  (`DA-2026-08-19-07`). Facet 4's own "split rules explicitly" wording is
+  resolved as satisfied by the existing per-sync-event reconciliation
+  process, now durably recorded by this work plan's own Sync Diff Record —
+  see `docs/issues/LISS-0047-facet-4-template-target-split-granularity.md`
+  (a Reviewer finding raised and resolved within this same work plan) for
+  the full reasoning; no separate standing document was needed.
 
 ## Scope
 
@@ -88,13 +94,29 @@ design-agreement + work-plan + Reviewer-pass cycle applies.
 
 ## Work-Plan Review
 
-Reviewer's approval record: _pending_
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-19-wp-0015-contract-sync-diff-records-review.md`
+— **Approved**, separate-context Reviewer session, all three constraints
+satisfied. 14 failure scenarios searched (9 mechanical, 5 substantive —
+this review tested not only transcription accuracy but whether the
+design agreement's central research claim actually held). One real,
+substantive finding: `DA-2026-08-19-07`/`LISS-0046`/this work plan's own
+Goal overstated that ADR 0008's Tier 1/Tier 2 split "already implements"
+facet 4's Template-owned/Target-owned split — it addresses whole-file
+authority, not the content-level rule split facet 4's wording describes.
+Opened as `LISS-0047`; being resolved within this same work plan by a
+wording correction (Resolution 1: the existing per-sync-event process,
+now durably recorded by the new Sync Diff Record, is judged sufficient
+and intentional), pending confirmation by a separate-context Reviewer
+under Minor Fix Path. Neither finding invalidates the two artifacts
+WP-0015 actually built (Sync Diff Record, Per-Agent-Tool Rule
+Applicability Registry), both correctly delivered to spec.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-|  |  |  |
+| LISS-0047 | in_progress | Wording correction applied to `DA-2026-08-19-07`, `LISS-0046`, and this work plan's own Goal, distinguishing ADR 0008's whole-file split from facet 4's content-level split and recording the Resolution-1 judgment; pending confirmation by a separate-context Reviewer under Minor Fix Path. |
 
 ## Work-Plan Close
 

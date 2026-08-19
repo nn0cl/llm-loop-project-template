@@ -24,13 +24,23 @@
   defer decision for each — plus recording per-agent-tool intentional
   differences in a canonical document.
 - Research finding, before designing anything new: this template already
-  has (a) — `docs/architecture/adr/0008-template-update-propagation.md`'s
+  has half of (a) — `docs/architecture/adr/0008-template-update-propagation.md`'s
   Tiered Sync Policy (Tier 1: template-owned, template wins outright;
   Tier 2: the five agent-persona contract files, adopter-owned
   placeholders, AI-assisted reconciliation via
-  `docs/templates/contract-file-sync-prompt.md`) already implements this
-  split. This issue does not rebuild it — it confirms and cross-references
-  it, and closes the two genuinely missing pieces:
+  `docs/templates/contract-file-sync-prompt.md`) addresses the split at
+  the **whole-file** level, but not at the **content level within one
+  file** that facet 4's own wording also describes. **Correction, added
+  after the work-plan-level Reviewer found the original wording here
+  overstated ("already implements this split"):** see
+  `docs/issues/LISS-0047-facet-4-template-target-split-granularity.md`
+  — this issue's own resolution judges the existing per-sync-event
+  reconciliation process (`contract-file-sync-prompt.md`'s Steps 2-4),
+  now durably recorded by this issue's own new Sync Diff Record, a
+  sufficient and intentional answer to the content-level half, rather
+  than building a separate standing document. This issue does not rebuild
+  ADR 0008's mechanism — it confirms and cross-references it, and closes
+  the two genuinely missing pieces:
   1. A structured, durable **Sync Diff Record** — `docs/templates/sync-diff-record.md`
      (new) — produced every time the Tier 2 reconciliation process runs,
      naming the template's own change, the target's own change, each
@@ -207,6 +217,20 @@ Required — planning size `M`. See below.
     `CLAUDE.md`/mirror file appears in that list
   ```
 
+- 2026-08-19 — Design & Review group (Planner), correction: the
+  work-plan-level Reviewer (separate context) found the Work Notes entry
+  above ("Research confirmed ADR 0008's Tiered Sync Policy already
+  satisfies facet 4's Template-owned/Target-owned split") overstated —
+  ADR 0008 addresses whole-file authority, not the content-level rule
+  split facet 4's own wording describes. Left the original entry in place
+  above, not edited, per Invariant 2; this entry records the correction
+  rather than silently smoothing it over. Opened as
+  `docs/issues/LISS-0047-facet-4-template-target-split-granularity.md`,
+  resolved via wording correction (Resolution 1: the per-sync-event
+  process, now durably recorded by the new Sync Diff Record, is judged
+  sufficient) — see the corrected Summary above and
+  `DA-2026-08-19-07`'s own Reopening Log entry.
+
 ## Verification
 
 - `scripts/check-contract-consistency.py` — recorded in WP-0015's
@@ -215,3 +239,6 @@ Required — planning size `M`. See below.
   agreement's "Exact Content to Produce" verbatim, and that no other
   repository file changed.
 - Work-plan-level Reviewer approval, separate context, per ADR 0006.
+- `LISS-0047`'s own resolution: read-through diff confirming the
+  corrected wording in this issue and `DA-2026-08-19-07`; separate-context
+  Reviewer confirmation of the correction itself (Minor Fix Path).

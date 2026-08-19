@@ -15,13 +15,25 @@ Per `docs/backlog/item-0012-document-and-log-lifecycle-management.md`
 (`Status: promoted`) facet 4 ("Single-source multi-agent contract sync"),
 whose Promotion notes are this agreement's Director authorization under
 ADR 0016 Rule 2: research showed `docs/architecture/adr/0008-template-update-propagation.md`'s
-Tiered Sync Policy already implements facet 4's Template-owned vs
-Target-owned split (Tier 1: template-owned, template wins outright; Tier
-2: the five agent-persona contract files, adopter-owned placeholders,
-AI-assisted reconciliation via `docs/templates/contract-file-sync-prompt.md`).
-This agreement closes the two genuinely missing pieces facet 4 also asks
-for: a structured Sync Diff Record (naming the template's own change, the
-target's own change, each conflict, and the adopt/reject/defer decision)
+Tiered Sync Policy already addresses facet 4's Template-owned vs
+Target-owned split at the whole-file level (Tier 1: template-owned,
+template wins outright; Tier 2: the five agent-persona contract files,
+adopter-owned placeholders, AI-assisted reconciliation via
+`docs/templates/contract-file-sync-prompt.md`) — not, by itself, at the
+content level within one file, which facet 4's own wording also asks for.
+**Correction, recorded after this work plan's own Reviewer pass found the
+original wording here overstated:** see
+`docs/issues/LISS-0047-facet-4-template-target-split-granularity.md` for
+the full distinction and this agreement's resolution — the existing
+per-sync-event reconciliation process
+(`docs/templates/contract-file-sync-prompt.md`'s Steps 2-4), now durably
+recorded by this agreement's own new Sync Diff Record, is judged the
+intentional answer to "split rules explicitly": explicit at the moment it
+matters (an actual sync), not as a separate, ahead-of-time standing
+document that would need independent upkeep. This agreement closes the
+two genuinely missing pieces facet 4 also asks for: a structured Sync
+Diff Record (naming the template's own change, the target's own change,
+each conflict, and the adopt/reject/defer decision)
 and a canonical Per-Agent-Tool Rule Applicability Registry — without
 rebuilding the already-working mechanism.
 
@@ -284,6 +296,7 @@ Do not change anything else anywhere in this file.
 | Does facet 4 need a new ADR? | No — it refines an already-Accepted ADR's (0008) mechanism by adding a record-keeping artifact and formalizing existing prose into a registry, rather than introducing a new architectural concept. Matches item-0013's own precedent (a process-rule addition needed no new ADR). | Design & Review group (Planner) |
 | Does ADR 0008 itself need a forward-pointer edit for discoverability? | No — both new/edited files already cross-reference ADR 0008 directly by name; a reader is more likely to land on `prompt-instruction-change-control.md` or `contract-file-sync-prompt.md` first (they are read far more often than a specific old ADR), so the added discoverability from an ADR 0008 edit is marginal against the cost of touching another file. | Design & Review group (Planner) |
 | Should `CLAUDE.md` reference the new `sync-diff-record.md` template? | No — `CLAUDE.md`'s own template enumeration is not exhaustive today (`contract-file-sync-prompt.md` itself, the template this new one directly supports, is not listed there either); adding one without the other would be inconsistent, and neither omission is a defect under the existing convention. | Design & Review group (Planner) |
+| Does the existing per-sync-event reconciliation process (Steps 2-4 of `contract-file-sync-prompt.md`, now recorded by the Sync Diff Record) satisfy facet 4's "split rules explicitly into Template-owned versus Target-owned," or is a separate, ahead-of-time standing document required (`docs/issues/LISS-0047-facet-4-template-target-split-granularity.md`, Resolution 1 vs. Resolution 2)? | Resolution 1: the per-sync-event process is judged sufficient and intentional — it makes the split explicit at the moment it is actually needed (a real sync), durably recorded going forward by the Sync Diff Record this agreement adds, rather than requiring a standing document to be kept current independent of any real sync. LISS-0047 is resolved on this basis; a standing, ahead-of-time rule-level registry (Resolution 2) is not built. | Design & Review group (Planner), correcting this agreement's own original overstated Direction wording, per the work-plan-level Reviewer's finding |
 
 ## Deferred Questions
 
@@ -323,4 +336,4 @@ Do not change anything else anywhere in this file.
 
 | Date | What was unsettled | Resolution |
 |---|---|---|
-|  |  |  |
+| 2026-08-19 | The work-plan-level Reviewer found this agreement's original Direction section overstated that ADR 0008's Tier 1/Tier 2 split "already implements" facet 4's Template-owned/Target-owned split — it addresses whole-file authority, not facet 4's content-level rule split. Tracked as `LISS-0047`. | Corrected the Direction section and added the Settled Ambiguities row above (Resolution 1: the existing per-sync-event process, now durably recorded by the Sync Diff Record, is judged sufficient). Does not change this agreement's Scope, Plan, or any already-produced artifact — a wording correction, not a reopening of what was built. |

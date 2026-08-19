@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0047
 - GitHub issue: none
-- Status: proposed
+- Status: in_progress
 - Phase: docs-only
 - Type: review-finding
 - Priority: medium
@@ -167,7 +167,42 @@ Not required — planning size `S`.
   rather than leaving it as prose inside the review record alone.
   `Status: proposed` — real and actionable now, but not yet triaged into a
   work plan.
+- 2026-08-19 — Design & Review group (Planner): triaged and resolved
+  within the same session, choosing Resolution 1 from this issue's own
+  Acceptance Notes. Judgment: item-0012 facet 4's own text reads, taken as
+  one flowing sentence ("Split rules explicitly... Syncing should not
+  mean... it should produce a diff record naming... the adopt/reject/
+  defer decision for each"), as describing the split being made explicit
+  *through* the diff-record process itself, at the moment a real sync
+  happens — not necessarily as a separate, permanent, ahead-of-time
+  lookup table that would need independent upkeep whether or not a sync
+  ever occurs. Under this reading, the existing per-sync-event
+  reconciliation process (`docs/templates/contract-file-sync-prompt.md`'s
+  Steps 2-4), now durably recorded going forward by WP-0015's own new
+  Sync Diff Record, is a sufficient and intentional answer — not a gap
+  requiring new mechanism. Corrected the overstated wording in
+  `DA-2026-08-19-07` (Direction section + new Settled Ambiguities row +
+  Reopening Log entry), `LISS-0046` (Summary + a new Work Notes
+  correction entry, original entry left in place per Invariant 2), and
+  `WP-0015` (Goal). `Status: in_progress`, pending separate-context
+  Reviewer confirmation of this correction under Minor Fix Path (none of
+  the four edited files are ADR-0006 contract files — `docs/collaboration/agreements/`
+  and `docs/issues/` and `docs/work-plans/` are all outside that list —
+  but Minor Fix Path's own separate-Reviewer-confirmation requirement
+  still applies).
+  Resolution 2 (a new standing rule-level document) was not pursued —
+  this issue's own Resolution 1 explicitly frames itself as a complete
+  resolution path, not a placeholder pending further mechanism work; if a
+  future session finds the dynamic-process answer insufficient in
+  practice, that is a new finding against this same question, not a
+  reopening of this one.
 
 ## Verification
 
-- Not yet run — resolution has not started.
+- Read-through diff confirming the corrected wording in `DA-2026-08-19-07`,
+  `LISS-0046`, and `WP-0015` accurately distinguishes ADR 0008's
+  whole-file split from facet 4's content-level split and records the
+  Resolution-1 judgment with its reasoning.
+- Separate-context Reviewer confirmation:
+  `docs/collaboration/reviews/2026-08-19-liss-0047-facet-4-split-wording-fix-review.md`
+  (pending — dispatched as a fresh agent, per Minor Fix Path).
