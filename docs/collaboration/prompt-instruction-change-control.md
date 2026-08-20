@@ -19,6 +19,10 @@ These files are the agent operating contract:
 - `docs/at-tdd/process.md`
 - `docs/collaboration/*.md` (except the record directories below)
 - `docs/templates/*.md`
+- `AGENTS.md` is also read natively by Codex CLI and by Google
+  Antigravity (confirmed via primary source,
+  `docs/spike/case-0004-ai-tool-support-status-survey/case.md`) —
+  neither needs its own dedicated mirror file for this reason.
 
 Files under `docs/collaboration/traces/`, `docs/collaboration/reviews/`, and
 `docs/collaboration/agreements/` are records produced by following the
@@ -79,6 +83,7 @@ Consult this table before treating an agent-tool difference as an error.
 | Literal full mirror | `CLAUDE.md`, `.github/copilot-instructions.md`, `.grok/rules/*.md` | Effective content matches `AGENTS.md` word-for-word (`CLAUDE.md` joined this group on 2026-07-25, when the `@AGENTS.md` import was dropped after an adopter showed the import resolved correctly and still did not produce adherence). |
 | Union (complement + native auto-apply) | `.cursor/rules/*.mdc` | Cursor's effective content is the union of `.cursor/rules/*.mdc` (Cursor complements only — not a full restatement) and Cursor's own native root `AGENTS.md` auto-apply (Cursor reads `AGENTS.md` directly; the `.mdc` files add only what Cursor-specific behavior requires and do not `@AGENTS.md`-import it). |
 | Canonical source | `AGENTS.md` | The literal-full-mirror group's source of truth; edited first, then propagated to the mirrors listed above. |
+| Canonical source (also read directly, no mirror needed) | Codex CLI, Google Antigravity | Both tools read `AGENTS.md` natively — confirmed via primary source for Antigravity in `docs/spike/case-0004-ai-tool-support-status-survey/case.md`; no `.antigravity/` or equivalent mirror file exists or is needed for this reason. |
 
 Add a new row here, with its own reason, the first time an intentional
 per-agent-tool difference is introduced — do not fold a new difference
