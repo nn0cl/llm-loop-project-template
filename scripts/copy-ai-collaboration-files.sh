@@ -10,6 +10,10 @@ Copies the AI-human collaboration template files into another repository.
 Existing files are skipped by default so an existing project's architecture and
 specifications are not overwritten.
 
+Missing values are prompted for interactively when a real terminal is
+present (stdin and stdout are both TTYs); --non-interactive forces
+flag-only behavior even in a real terminal.
+
 Options:
   --target PATH          Target repository directory. Required.
   --project-name TEXT    Replace generic project-name placeholders.
@@ -17,6 +21,7 @@ Options:
   --stack TEXT           Replace generic stack placeholders.
   --force                Overwrite existing files that are part of this template.
   --dry-run              Print planned actions without copying.
+  --non-interactive      Never prompt for missing values; require flags.
   -h, --help             Show this help.
 USAGE
 }
@@ -30,6 +35,7 @@ domain_summary=""
 stack=""
 force=false
 dry_run=false
+non_interactive=false
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -57,6 +63,10 @@ while [ "$#" -gt 0 ]; do
       dry_run=true
       shift
       ;;
+    --non-interactive)
+      non_interactive=true
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -68,6 +78,34 @@ while [ "$#" -gt 0 ]; do
       ;;
   esac
 done
+
+# Whether stdin/stdout are both a real terminal, i.e. an operator is
+# present to answer prompts interactively. Mirrors
+# scripts/update-ai-collaboration-files.sh's own is_interactive_tty().
+is_interactive_tty() {
+  [ "$non_interactive" != true ] && [ -t 0 ] && [ -t 1 ]
+}
+
+if is_interactive_tty && [ -z "$target" ]; then
+  while [ -z "$target" ]; do
+    read -r -p "Target repository directory (required): " target || true
+    if [ -z "$target" ]; then
+      echo "A target directory is required." >&2
+    fi
+  done
+fi
+
+if is_interactive_tty; then
+  if [ -z "$project_name" ]; then
+    read -r -p "Project name (optional, press Enter to skip): " project_name || true
+  fi
+  if [ -z "$domain_summary" ]; then
+    read -r -p "One-line domain summary (optional, press Enter to skip): " domain_summary || true
+  fi
+  if [ -z "$stack" ]; then
+    read -r -p "Stack (optional, press Enter to skip): " stack || true
+  fi
+fi
 
 if [ -z "$target" ]; then
   echo "--target is required." >&2
