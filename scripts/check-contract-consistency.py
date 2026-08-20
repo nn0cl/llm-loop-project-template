@@ -31,6 +31,13 @@ Checks:
                         review-finding issue whose Status is neither
                         `closed` nor `wont_do`, when loop-settings.toml
                         requires it.
+  10. Retired terminology A term retired in
+                        docs/collaboration/terminology-migration.md does
+                        not still appear in a current document.
+  11. Entry archive refs No Entry-layer document (ADR 0020 Rule 1)
+                        references a specific docs/archive/ file
+                        directly (a bare mention of the directory, with
+                        no file-shaped path after it, is not flagged).
 
 What this cannot check, and who does
 ------------------------------------
@@ -318,6 +325,7 @@ RECORD_DIRS = (
     "docs/work-plans/",
     "docs/spike/",
     "docs/backlog/",
+    "docs/archive/",
 )
 
 SCANNED_SUFFIXES = (".md", ".mdc", ".sh", ".yml", ".py")
@@ -1048,6 +1056,171 @@ def check_version_claims(repo: str, failures: Failures) -> None:
                     )
 
 
+# Entry-layer documents, per ADR 0020 Rule 1 -- the fixed, small set every
+# session reads first. Kept as an explicit list here (not derived from
+# RECORD_DIRS or any other constant) because "Entry" is a document *role*,
+# not a directory pattern, and this repository's actual Entry set is small
+# enough to name directly rather than infer.
+ENTRY_DOCUMENTS = (
+    "docs/architecture/agent-quickstart.md",
+    "CLAUDE.md",
+    "AGENTS.md",
+    ".github/copilot-instructions.md",
+    "README.md",
+    "README.ja.md",
+)
+ENTRY_DOCUMENT_GLOBS = (
+    ".grok/rules/*.md",
+    ".cursor/rules/*.mdc",
+)
+
+
+ENTRY_ARCHIVE_REFERENCE = re.compile(r"docs/archive/[\w./-]*\.\w+")
+
+# LISS-0050: matches a specific-file docs/archive/ reference that is
+# bounded by an opening and a closing backtick, allowing the path to
+# continue across one embedded newline (a hard line-wrap splitting the
+# path mid-token). Requiring the backtick delimiters -- this repository's
+# own established convention for every specific-file reference -- is what
+# keeps this pattern from matching a bare, legitimate abstract mention of
+# the directory (never backticked-and-closed around a filename) followed,
+# on the next line, by unrelated prose that happens to start with a
+# dotted token. An earlier version of this check joined adjacent lines
+# with no such requirement and produced exactly that false positive; see
+# LISS-0050's own Work Notes for the reproduced case.
+ENTRY_ARCHIVE_BACKTICKED_SPAN = re.compile(r"`(docs/archive/[\w./\n-]*\.\w+)`")
+
+
+def check_no_archive_reference_from_entry(repo: str, failures: Failures) -> None:
+    """No Entry-layer document (ADR 0020 Rule 1) may reference a specific
+    file under `docs/archive/` directly.
+
+    Entry documents are the fixed, small set every session reads first;
+    they may describe the archive *mechanism* in the abstract (this
+    document itself does, in "Document Currency and Canonical Reading"),
+    but must not link to a specific archived file -- ADR 0020's own Rule 1
+    states Archive content is "off the normal reading path." A bare
+    mention of the `docs/archive/` directory with no file-shaped path
+    after it (no `.` plus extension) is not flagged; only a path that
+    continues into an actual filename is -- this distinguishes "explains
+    what the mechanism is" from "points a reader at one specific archived
+    file," which is the actual thing this check exists to catch.
+    """
+    entry_paths = list(ENTRY_DOCUMENTS)
+    for pattern in ENTRY_DOCUMENT_GLOBS:
+        entry_paths.extend(
+            os.path.relpath(p, repo)
+            for p in sorted(glob.glob(os.path.join(repo, pattern)))
+        )
+
+    for rel in entry_paths:
+        text = read_optional(repo, rel)
+        if text is None:
+            continue
+        lines = text.splitlines()
+        for lineno, line in enumerate(lines, 1):
+            match = ENTRY_ARCHIVE_REFERENCE.search(line)
+            if match:
+                failures.add(
+                    "entry archive reference",
+                    f"{rel}:{lineno} references a specific docs/archive/ "
+                    f"file ({match.group(0)!r}) -- Entry documents should "
+                    "point at the restoration ledger or a current "
+                    "Canonical document instead, per ADR 0020 Rule 1.",
+                )
+        # LISS-0050: a hard line-wrap can split a backticked docs/archive/
+        # path across two lines -- this repository's own prose convention
+        # wraps well under 80 columns and does not always respect a
+        # backticked path as a single unbreakable token. Scan each
+        # adjacent raw line pair, joined with the real newline preserved,
+        # for a reference still bounded by an opening and a closing
+        # backtick (ENTRY_ARCHIVE_BACKTICKED_SPAN). Requiring the
+        # backticks is what avoids flagging a bare, legitimate abstract
+        # mention of the directory followed by unrelated next-line prose
+        # (a real false positive an earlier, naive no-separator
+        # concatenation of this check produced -- see LISS-0050's own Work
+        # Notes). `finditer` over the two-line join also finds a
+        # same-line match already reported above; skip any match whose
+        # own span does not contain the embedded newline, since only a
+        # genuinely cross-line match belongs in this pass -- this also
+        # correctly handles a line that carries both its own complete
+        # reference *and* a second, separate reference that continues
+        # onto the next line, which an earlier "skip the whole pair if
+        # either line has its own match" approach silently missed.
+        for i in range(len(lines) - 1):
+            joined = lines[i] + "\n" + lines[i + 1]
+            for match in ENTRY_ARCHIVE_BACKTICKED_SPAN.finditer(joined):
+                if "\n" not in match.group(0):
+                    continue  # fully on one line; already reported above
+                display_path = match.group(1).replace("\n", "")
+                failures.add(
+                    "entry archive reference",
+                    f"{rel}:{i + 1}-{i + 2} references a specific "
+                    f"docs/archive/ file ({display_path!r}), split "
+                    "across a line wrap -- Entry documents should point "
+                    "at the restoration ledger or a current Canonical "
+                    "document instead, per ADR 0020 Rule 1.",
+                )
+
+
+# The canonical old-to-new terminology table. Starts empty; a row is added
+# only when a term is actually retired by a real decision, not backfilled
+# speculatively. See docs/collaboration/terminology-migration.md itself.
+TERMINOLOGY_MIGRATION_TABLE = "docs/collaboration/terminology-migration.md"
+
+
+def check_retired_terminology(repo: str, failures: Failures) -> None:
+    """No retired term from `docs/collaboration/terminology-migration.md`
+    may appear in a current document.
+
+    "Current" means: not under one of the RECORD_DIRS (dated statements
+    about the past, already exempt from present-tense consistency) and not
+    the migration table itself (which names retired terms on purpose). An
+    empty table (no rows yet) makes this check a no-op, not a failure --
+    there is nothing to enforce until a real retirement is recorded there
+    first.
+
+    Matching is word-boundary-anchored (`\\bterm\\b`), not a bare substring
+    test -- LISS-0049 found that a plain substring match on a short or
+    common retired term (e.g. "AI") produces a large, indiscriminate
+    false-positive blast radius by matching inside unrelated identifiers
+    that merely contain the same letters (`AIDE`, `AIP-0043`, and similar).
+    A word boundary still correctly flags a genuine standalone use of the
+    retired term (e.g. "AI-assisted", where "AI" is its own token,
+    hyphen-separated) -- it only excludes matches fused into a longer
+    identifier with no boundary between the retired term and its
+    neighboring characters.
+    """
+    table_text = read_optional(repo, TERMINOLOGY_MIGRATION_TABLE)
+    if table_text is None:
+        return
+    retired_terms = [
+        row.group(1)
+        for row in re.finditer(
+            r"^\| `([^`]+)` \| `[^`]+` \|", table_text, re.MULTILINE
+        )
+    ]
+    if not retired_terms:
+        return
+    term_patterns = [
+        (term, re.compile(r"\b" + re.escape(term) + r"\b"))
+        for term in retired_terms
+    ]
+
+    for rel in scanned_files(repo):
+        if rel.startswith(RECORD_DIRS) or rel == TERMINOLOGY_MIGRATION_TABLE:
+            continue
+        text = read(repo, rel)
+        for lineno, line in enumerate(text.splitlines(), 1):
+            for term, pattern in term_patterns:
+                if pattern.search(line):
+                    failures.add(
+                        "retired terminology",
+                        f"{rel}:{lineno} uses retired term {term!r} -- see "
+                        f"{TERMINOLOGY_MIGRATION_TABLE} for its replacement.",
+                    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", default=".", help="repository root")
@@ -1064,6 +1237,8 @@ def main() -> int:
     check_issue_status_sync(repo, failures)
     check_superseding_phrases(repo, failures)
     check_open_findings_gate(repo, failures)
+    check_no_archive_reference_from_entry(repo, failures)
+    check_retired_terminology(repo, failures)
     return failures.report()
 
 
