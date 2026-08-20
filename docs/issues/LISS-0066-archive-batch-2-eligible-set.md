@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0066
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -134,6 +134,108 @@ proposal's own sweep is exhaustive without re-checking.
 
 - 2026-08-20 — Design & Review group (Planner persona). Issue opened as
   part of WP-0024, scoped per the design agreement. Not yet dispatched.
+- 2026-08-20 — Implementation group (Implementer persona), on branch
+  `wp-0024-execution` (created off `process/item-0016-batch-2-proposal`).
+  Re-confirmed, before moving anything, that `grep -rln
+  "DA-2026-08-18-02\|DA-2026-08-18-04\|DA-2026-08-18-06\|DA-2026-08-18-07\|DA-2026-08-19-01"
+  docs/architecture/adr/ docs/collaboration/*.md docs/templates/*.md` and
+  the equivalent sweep for the five work plans' own paths and the five
+  issue IDs both returned zero hits — no reference update is required for
+  this issue's own five work plans, matching the issue's own claim.
+  `git mv`'d all 21 files verbatim to their named `docs/archive/...`
+  destinations (`git status --short` showed all 21 as `R` renames, no
+  content diff). Appended 21 rows to `docs/collaboration/restoration-ledger.md`
+  with `source_commit: PENDING` (this repository's own precedent from
+  batch 1, `docs/collaboration/restoration-ledger.md`'s WP-0001 rows'
+  history: a same-commit amend attempting to embed the commit's own final
+  hash produces a *different* hash, since a commit's hash is a function of
+  its content — batch 1 first hit this with a guessed hash and had to
+  follow up with a correction commit anyway, per `d02eb3c`'s own commit
+  message. This execution uses a literal `PENDING` placeholder instead of
+  a guessed hash, to avoid recording a wrong hash even transiently, then
+  a small separate follow-up commit corrects all 21 rows to the real,
+  final hash of the move commit — same overall pattern, chosen for
+  clarity over guessing.) Ran `python3
+  scripts/check-contract-consistency.py` — `contract consistency: all
+  checks passed` (recorded in full in the Self-Review below). Committed
+  the 21 moves plus the ledger rows plus this Status/Work-Notes update in
+  one commit, then ran a small follow-up commit correcting the 21
+  `PENDING` values to that commit's real hash. Both hashes are recorded in
+  the Self-Review below and in the parent work plan's Preflight section.
+
+## Self-Review (full form, per `docs/templates/self-review.md`, planning size M)
+
+### Deterministic Verification Output
+
+Command: `python3 scripts/check-contract-consistency.py` (run after all 21
+moves and the ledger update, working tree state):
+
+```text
+contract consistency: all checks passed
+```
+
+Command: `git status --short` (run after the 21 `git mv` calls, before
+committing) showed all 21 files as `R  <old path> -> <new path>` with no
+unstaged content diff — confirmed no content was rewritten in the move
+itself.
+
+Command: `git log --follow --oneline -- docs/archive/work-plans/WP-0003-coordinator-message-correction.md`
+and the same for `docs/archive/collaboration/agreements/2026-08-19-contract-reviewer-v230.md`
+and `docs/archive/collaboration/traces/2026-08-18-liss-0028-coordinator-message-correction.md`
+(run after this issue's own commit landed): each shows the full pre-move
+commit history plus the move commit itself, confirming `--follow`
+preserves history across the rename for a representative sample spanning
+a work plan, a design agreement, and a trace.
+
+### Falsification Search
+
+- **Risk: a file was moved with content rewritten, not a pure rename.**
+  Checked via `git status --short` immediately after the 21 `git mv`
+  calls — git reports a rename (`R`, with a similarity score, no `M`) only
+  when content is unchanged or near-unchanged; all 21 entries showed as
+  clean renames with no accompanying diff hunk in `git diff --cached`.
+  Does not occur: confirmed no `M` (modify) status appeared for any of the
+  21 paths.
+- **Risk: one of the five design agreements is actually still cited by a
+  current ADR or collaboration/template contract file, making it
+  ineligible for archival.** Re-ran the `grep -rln` sweep for all five
+  agreement IDs (`DA-2026-08-18-02`, `-04`, `-06`, `-07`, `DA-2026-08-19-01`)
+  across `docs/architecture/adr/`, `docs/collaboration/*.md`,
+  `docs/templates/*.md` immediately before moving anything — zero hits,
+  matching the issue's own claim and `LISS-0065`'s own recorded sweep.
+  Does not occur: independently re-verified, not just trusted from the
+  issue text.
+- **Risk: a current Canonical document still references one of the five
+  work plans' own file paths, an owned issue ID, or a review-record path
+  by direct citation, which this issue's own "no reference updates
+  required" claim would then be wrong about.** Ran a second `grep -rln`
+  sweep for all five work-plan filenames and all five issue IDs
+  (LISS-0028, -0031, -0035, -0036, -0037) across the same three Canonical
+  locations — zero hits. Does not occur: independently re-verified.
+- **Risk: `check-contract-consistency.py` passing is a stale/cached
+  result, not reflecting the actual post-move tree.** Ran the script after
+  the moves and the ledger edit were both already applied to the working
+  tree, with no intervening `git stash` or checkout; the tool reads the
+  working tree directly (confirmed by its own dangling-reference and
+  ADR-range checks, which depend on current file listings) — a stale
+  result would require the tool to cache output across invocations, which
+  it does not do (no cache file or persisted state found under
+  `scripts/`).
+- **Risk: a restoration-ledger row's `canonical_destination` or
+  `source_path` has a typo that would make it non-resolving.** Each of the
+  21 rows was written by direct copy-paste of the exact source/destination
+  pairs from this issue's own "Files to move" table, not retyped from
+  memory; spot-checked three rows (WP-0003, the WP-0003 trace, and the
+  WP-0009 agreement) against the actual post-move file listing
+  (`ls docs/archive/...`) and all three resolve to real files.
+
+### Risks Not Fully Closed
+
+- The `source_commit` value is `PENDING` in the first commit by
+  construction (a commit cannot contain its own final hash) — closed by
+  the mandatory small follow-up commit recorded in Work Notes above and
+  cross-referenced from the parent work plan's Preflight section, not
+  left open.
 
 ## Verification
 
