@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0025
 - GitHub issue: none
-- Status: review
+- Status: done
 - Phase: process-only
 - Type: architecture
 - Priority: high
