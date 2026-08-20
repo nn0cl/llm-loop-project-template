@@ -185,13 +185,22 @@ Preflight Validation section.
 ## Work-Plan Close
 
 Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
-one combined Director action, after the Reviewer approves — not
-performed by the Design & Review group itself.
+one combined Director action, after the Reviewer approves.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0022-wp-0019-missing-trace-review.md`,
+  Approved — the Reviewer independently rebuilt the branch via `git
+  archive`, re-ran the checker clean, and independently re-verified the
+  trace's factual claims against the actual commits) via the Backlog
+  thread, which independently confirmed the trace file, the review
+  record, and a clean `scripts/check-contract-consistency.py` run from a
+  detached checkout.
+- Next direction: closed with "はい". This resolves the second of two
+  post-close CI gaps found in WP-0019's content (after item-0018). Merged
+  content sits on `process/promote-item-0016`, which now carries WP-0019's
+  archival batch plus both fixes. Pushing to update PR #21 next.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
