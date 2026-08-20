@@ -237,6 +237,12 @@ jobs:
             exit 1
           fi
 
+      - name: Check interactive copy script prompting
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/tests/test_copy_ai_collaboration_files_interactive.py
+
       - name: Check agent operating contract change traceability
         if: github.event_name == 'pull_request'
         shell: bash

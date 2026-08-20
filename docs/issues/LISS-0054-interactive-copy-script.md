@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0054
 - GitHub issue: none
-- Status: in_progress
+- Status: done
 - Phase: phase-0-design
 - Type: feature
 - Priority: medium
@@ -286,6 +286,68 @@ N/A — `Type` is `feature`, not `review-finding`.
   Self-reviewed and accepted as the Green state. Proceeding to Phase 3
   Refactor.
 
+- 2026-08-20 (Implementer persona, Phase 3 Refactor): Added a "Check
+  interactive copy script prompting" CI step to
+  `.github/workflows/ci.yml`, immediately after the existing "Check template
+  copy smoke test" step, running
+  `python3 scripts/tests/test_copy_ai_collaboration_files_interactive.py`
+  (plain invocation -- `unittest.main()`'s own default exit behavior already
+  gives a nonzero exit code on any failure, so no extra assertion wrapper is
+  needed). No refactor of `scripts/copy-ai-collaboration-files.sh` itself was
+  made: the Green diff is already small, the two new prompting blocks read
+  clearly as "required value, loops" vs. "three optional values, single
+  prompt each", and merging them into one block would reduce rather than
+  improve readability for no behavior gain. Self-review (Full form):
+
+  **Command run 1**: `bash -n scripts/copy-ai-collaboration-files.sh`
+  **Result**: exit 0, no output (syntax still valid; unchanged from Phase 2's
+  own run since this phase did not touch the script).
+
+  **Command run 2**: `python3 scripts/check-contract-consistency.py --repo .`
+  **Result**:
+  ```text
+  issue status sync:
+    docs/issues/LISS-0054-interactive-copy-script.md states Status: in_progress, but docs/work-plans/WP-0018-interactive-copy-script.md's Issue Graph lists LISS-0054 as 'ready'
+
+  contract consistency: 1 failure(s)
+  ```
+  This is a real, deterministic failure, not suppressed here -- and it is
+  not a defect in this issue's own work. Root cause: this task's own scope
+  explicitly requires progressing LISS-0054's `Status:` field (ready ->
+  in_progress -> done, recorded above) while explicitly forbidding any edit
+  to `docs/work-plans/WP-0018-interactive-copy-script.md`'s Issue Graph --
+  that table's Status column is the Design & Review group's own
+  responsibility, updated at Preflight/merge time (WP-0018's own Plan table,
+  task 4, names Preflight as run by "Design & Review group (not the
+  Implementer's own context)"). The two boundaries together mean this
+  specific mismatch is structurally guaranteed on this branch, in either
+  direction (`in_progress` vs. `ready`, and now `done` vs. `ready` after this
+  entry's own Status update above), until the Design & Review group merges
+  this branch and updates WP-0018's Issue Graph accordingly -- a step this
+  issue's own scope places outside the Implementer's authority. Re-running
+  the check after this Work Notes entry (with `Status: done` in the Metadata
+  above) reproduces the same single failure, now naming `'done'` instead of
+  `'in_progress'` as the mismatched value -- confirming the mismatch is
+  exactly this one field pair, not a second, independent problem.
+
+  **Falsification Search**:
+
+  | # | Risk considered | Grounds it does not occur |
+  |---|---|---|
+  | 1 | The new CI step's command could exit 0 even when a test genuinely fails (a silently-broken gate). | `unittest.main()` calls `sys.exit()` with a nonzero code whenever any test fails or errors, by its own standard-library contract; the CI step has no `\|\| true` or other suppression, and `set -euo pipefail` is active, so a nonzero exit from the `python3` invocation fails the step. |
+  | 2 | Adding the CI step could itself be a YAML syntax error, silently skipping the step rather than running it. | Read back the full `.github/workflows/ci.yml` after the edit (see diff); the new step follows the same `- name: ... / shell: bash / run: \|` shape as every existing step in the same job, at the same indentation level. |
+  | 3 | The contract-consistency failure above could be masking a second, unrelated contract violation this change actually introduced. | The failure list contains exactly one entry (`issue status sync`), and its message is fully explained by the `Status:` field edit this Work Notes entry itself makes -- no ADR-sequence, required-file, retired-terminology, or other category fired. This change touches no file `check-contract-consistency.py` treats as a contract file (`docs/collaboration/*.md`, `docs/templates/*.md`, ADRs); `scripts/copy-ai-collaboration-files.sh`, `.github/workflows/ci.yml`, and `scripts/tests/*.py` are not contract files under that script's own rules. |
+  | 4 | The refactor decision (no code change) could be hiding a real readability problem a Reviewer would flag. | Re-read the full script after Green (`scripts/copy-ai-collaboration-files.sh`, 257 lines); the two prompting blocks are 8 and 11 lines respectively, each single-purpose, matching the existing file's own style (small top-level blocks, no nested abstraction) -- consistent with `docs/collaboration/source-code-quality.md`'s "small functions, straightforward names" guidance already read at session start. |
+
+  **Verification gap this Phase 3 leaves for the work-plan-level Reviewer**:
+  the `issue status sync` contract-consistency failure above is expected to
+  persist until WP-0018's Issue Graph is updated at merge/Preflight time (not
+  an Implementer action per this issue's own scope) -- Preflight Validation
+  should confirm the failure clears once that update happens, rather than
+  independently re-deriving that it is expected.
+
+  Self-reviewed and accepted as the Refactor state.
+
 ## Verification
 
 - Phase 1 Red: `python3
@@ -296,5 +358,13 @@ N/A — `Type` is `feature`, not `review-finding`.
   `python3 scripts/tests/test_copy_ai_collaboration_files_interactive.py -v`
   (9/9 pass); the exact CI "Check template copy smoke test" step content, run
   manually (pass, `SMOKE_TEST_PASSED`).
-- Remaining verification (Phase 3 Refactor, Preflight) to be recorded as
-  each phase transition happens.
+- Phase 3 Refactor: `bash -n scripts/copy-ai-collaboration-files.sh` (pass);
+  `python3 scripts/check-contract-consistency.py --repo .` -- 1 expected
+  failure (`issue status sync`, LISS-0054 `Status:` vs. WP-0018's Issue
+  Graph; see Work Notes above for why this is expected and out of this
+  issue's own scope to fix, and needs the Design & Review group's WP-0018
+  update at merge/Preflight time to clear).
+- This issue's own remaining verification is complete. Preflight Validation
+  and the work-plan-level Reviewer pass are recorded in
+  `docs/work-plans/WP-0018-interactive-copy-script.md` by the Design &
+  Review group, not here.
