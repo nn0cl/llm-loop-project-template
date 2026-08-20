@@ -51,19 +51,126 @@ data model, or architecture boundary changed.
 
 ## Preflight Validation
 
-To be recorded here by the Implementation group once LISS-0058 is
-self-reviewed and complete, before requesting the work-plan-level Reviewer
-pass. Required checks, at minimum:
+Recorded by the Implementation group, 2026-08-20, after LISS-0058 was
+self-reviewed and complete. All three required checks below: **pass**.
 
-1. The fixture-based before/after reproduction LISS-0058's own Acceptance
-   Notes describe — full pasted output, both runs.
-2. `python3 scripts/check-contract-consistency.py` (default `--repo .`,
-   against the real repository) — full output, confirming no regression.
-3. `git diff scripts/check-contract-consistency.py` — confirms the change
-   is confined to the two named prune lines (plus, if needed, a shared
-   constant if the Implementer chooses to factor the exclusion list out
-   rather than duplicate the tuple — either is acceptable, state which was
-   chosen).
+### Check 1 — fixture-based before/after reproduction
+
+Fixture built at a throwaway scratch path (`<fixture>` below), per LISS-0058's
+"Required reproduction": `git archive HEAD | tar -x -C <fixture>`, then the
+same archive extracted again into `<fixture>/.claude/worktrees/fake-sibling/`.
+
+**Before the fix** — `python3 scripts/check-contract-consistency.py --repo <fixture>`
+(script at commit `08e0a36`, i.e. before this work plan's own fix commit):
+
+```
+references:
+  .claude/worktrees/fake-sibling/CHANGELOG.md:123 names '2026-08-03-work-plan-scoped-governance-review.md', which 2 files answer to (.claude/worktrees/fake-sibling/docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-review.md, docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-review.md). Write the path.
+  .claude/worktrees/fake-sibling/CHANGELOG.md:124 names '2026-08-03-work-plan-scoped-governance-review-2.md', which 2 files answer to (.claude/worktrees/fake-sibling/docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-review-2.md, docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-review-2.md). Write the path.
+  ... [806 ambiguous-basename lines total, each pairing a top-level file
+      with its identical nested .claude/worktrees/fake-sibling/ copy] ...
+  docs/collaboration/session-start-and-resume.md:62 names 'init-loop-settings.sh', which 2 files answer to (.claude/worktrees/fake-sibling/scripts/init-loop-settings.sh, scripts/init-loop-settings.sh). Write the path.
+  docs/collaboration/session-start-and-resume.md:62 names 'init-llm-context.sh', which 2 files answer to (.claude/worktrees/fake-sibling/scripts/init-llm-context.sh, scripts/init-llm-context.sh). Write the path.
+  docs/collaboration/session-start-and-resume.md:211 names 'init-llm-context.sh', which 2 files answer to (.claude/worktrees/fake-sibling/scripts/init-llm-context.sh, scripts/init-llm-context.sh). Write the path.
+
+contract consistency: 906 failure(s)
+```
+
+Exit code: `1`. 911 lines of output total; 806 are ambiguous-basename
+"Write the path" lines (`grep -c "Write the path"` on the captured output).
+Genuine reproduction of the reported bug, confirmed real, not assumed.
+
+**After the fix** — same command, same fixture, fixed script:
+
+```
+contract consistency: all checks passed
+```
+
+Exit code: `0`. All 806 ambiguous-basename lines and all other duplication-
+driven noise gone.
+
+Fixture removed (`rm -rf <fixture>`) immediately after this check; confirmed
+removed by re-listing the scratch directory. Not committed to the repository.
+
+### Check 2 — real repository, no regression
+
+**Before the fix** (script at `08e0a36`), from this worktree's own root:
+
+```
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+```
+
+Exit code: `0`.
+
+**After the fix** (script at `a12e8a7`), same command:
+
+```
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+```
+
+Exit code: `0`. Identical baseline before and after — no new failure, no
+newly hidden failure (none existed to hide). This worktree has no nested
+`.claude/worktrees/` copy of its own (worktrees live *under*
+`.claude/worktrees/<id>/` of the main repository, not replicated inside
+themselves), so this run does not itself exercise the fix — Check 1's
+fixture is what demonstrates the bug and the fix; this check only confirms
+no regression against real, tracked content.
+
+### Check 3 — diff scope
+
+`git diff scripts/check-contract-consistency.py` (commit `a12e8a7`):
+
+```
+@@ -330,6 +330,15 @@ RECORD_DIRS = (
+
+ SCANNED_SUFFIXES = (".md", ".mdc", ".sh", ".yml", ".py")
+
++# Directories every os.walk-based scan below must prune: .git is version
++# control metadata, and .claude is this harness's own untracked scratch
++# space (agent worktrees live under .claude/worktrees/<id>/, each a full
++# nested checkout of the repository) — neither holds contract-relevant
++# content, and walking into .claude/worktrees/ duplicates every scanned
++# file once per active sibling worktree, producing false-positive
++# ambiguous-basename noise in check_references().
++EXCLUDED_DIRS = (".git", ".claude")
++
+ MD_LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
+ CODE_PATH = re.compile(r"`([^`\s]+\.(?:md|mdc|sh|py|yml|yaml|toml|json))`")
+
+@@ -388,7 +397,7 @@ def read_optional(repo: str, rel: str) -> str | None:
+ def scanned_files(repo: str) -> list[str]:
+     out = []
+     for dirpath, dirnames, filenames in os.walk(repo):
+-        dirnames[:] = [d for d in dirnames if d != ".git"]
++        dirnames[:] = [d for d in dirnames if d not in EXCLUDED_DIRS]
+         for name in filenames:
+             if name.endswith(SCANNED_SUFFIXES):
+                 out.append(os.path.relpath(os.path.join(dirpath, name), repo))
+@@ -441,7 +450,7 @@ def check_references(repo: str, failures: Failures) -> None:
+     copy_exclusion_patterns = _copy_exclusion_patterns(repo)
+     basemap: dict[str, list[str]] = {}
+     for dirpath, dirnames, filenames in os.walk(repo):
+-        dirnames[:] = [d for d in dirnames if d != ".git"]
++        dirnames[:] = [d for d in dirnames if d not in EXCLUDED_DIRS]
+         for name in filenames:
+             rel_path = os.path.relpath(os.path.join(dirpath, name), repo)
+             basemap.setdefault(name, []).append(rel_path)
+```
+
+Scope: confined to the two named `os.walk` prune lines plus one new shared
+module-level constant (`EXCLUDED_DIRS`) the Implementer chose to factor the
+exclusion list into, per the work plan's own either-is-acceptable note (see
+LISS-0058's Work Notes for the stated reason). No other check function,
+constant (`SCANNED_SUFFIXES`, `RECORD_DIRS`, etc.), or logic touched.
+
+### Preflight result
+
+**Pass.** All three checks recorded above with real command output. No
+open `review-finding` issues affect this area; no implementation issue in
+this work plan is blocked on an open spike case. Next action: submit to
+the work-plan-level Reviewer, in a separate context.
 
 ## Review Summary Packet
 
@@ -80,10 +187,18 @@ Filled in by the Implementation group once Preflight passes.
   2026-08-02 review history, per that same note.
 - **Changed files**: `scripts/check-contract-consistency.py` only.
 - **Findings**: none opened or resolved by this work plan.
-- **Disposition**: <filled in at Preflight>
-- **Remaining blockers**: none expected; state any found.
-- **Verification result**: <pointer to this file's own Preflight
-  Validation section, populated above>.
+- **Disposition**: Preflight passed. LISS-0058 self-reviewed and complete;
+  ready for submission to the work-plan-level Reviewer, in a separate
+  context. Not yet submitted by the Implementation group (out of scope for
+  this dispatch, per the work plan's own "Do not attempt the work-plan-level
+  Reviewer pass yourself" instruction).
+- **Remaining blockers**: none found. No open `review-finding` issue
+  affects this area; no issue in this work plan is blocked on an open
+  spike case.
+- **Verification result**: see this file's own "Preflight Validation"
+  section above — all three required checks (fixture before/after,
+  real-repository no-regression, diff-scope) recorded with full pasted
+  command output, all passing.
 - **Next approval required**: evidence-sufficiency (is the false positive
   genuinely reproduced and genuinely fixed, with real pasted output) —
   the one approval type most directly at stake for a bug-fix this narrow;
