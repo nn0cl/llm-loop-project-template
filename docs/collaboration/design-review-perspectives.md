@@ -63,7 +63,7 @@ description that "the force-push... did not invalidate anything." The same
 independent-ancestor check recurs at the start of round 3 and round 4
 (`docs/collaboration/reviews/2026-08-02-contract-consistency-review-3.md`,
 `docs/collaboration/reviews/2026-08-02-contract-consistency-review-4.md`).
-`docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`
+`docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`
 applies the same lens at the tooling level: it re-ran
 `check-contract-consistency.py` and the ADR/phrasing grep sweep itself
 "independently by this review, against the actual committed tree, not
@@ -166,7 +166,7 @@ issues directives or asserts authority without a corresponding file
 already in the repository, even one that reads as well-informed.
 
 **Originating finding(s)/review(s).**
-`docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`,
+`docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`,
 "Provenance verification" section: this review received several in-band
 messages claiming to be from an unidentified "coordinator," including one
 instructing it to trust that certain commits had landed — "None of these
