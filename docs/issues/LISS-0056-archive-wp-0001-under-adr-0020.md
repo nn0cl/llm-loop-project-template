@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0056
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -129,6 +129,35 @@ skip recording the check even if no edit is made.
 
 - 2026-08-20 — Design & Review group (Planner persona). Issue opened as
   part of WP-0019, scoped per the design agreement. Not yet dispatched.
+- 2026-08-20 — Implementation group (Implementer persona). Re-verified
+  Rule-2 eligibility directly against the actual files before moving
+  anything: `docs/work-plans/WP-0001-review-issues-minor-fix-path.md`'s
+  own Issue Graph shows `LISS-0001 | done` and its own "Current Next
+  Issue" section states "Issue: none"; `docs/issues/LISS-0001-...md`'s own
+  `Status: done`; a repository-wide `grep` for `Type: review-finding`
+  issues naming WP-0001 or LISS-0001 found none open. Moved all 5 files
+  listed in this issue's Acceptance Notes table via `git mv` (destination
+  directories under `docs/archive/` did not exist yet and were created
+  first with `mkdir -p`; `git mv` then registered each as a rename, not a
+  delete+add, confirmed via `git status`). Added 5 rows to
+  `docs/collaboration/restoration-ledger.md` using the suggested reason
+  text verbatim (only cosmetic quoting adjustments for Markdown-table
+  safety). Courtesy check (Acceptance Notes' "Optional, non-blocking
+  courtesy check"): searched
+  `docs/collaboration/reviews/2026-08-02-mirror-parity-and-v101-review.md`
+  for a citation of the review record
+  (`docs/collaboration/reviews/2026-08-02-review-issues-minor-fix-path.md`,
+  item 4). No such citation exists in that file — `grep -n
+  "review-issues-minor-fix-path"` against it returns exactly one hit
+  (line 76), and that hit names the *trace* file (item 3), not the review
+  record, and appears only inside a pasted `grep` command's own output
+  from a historical stale-ADR-range sweep (illustrating a prior search
+  result, annotated "record dir, historical, excluded by design"), not a
+  live "see that file" navigational pointer. Decision: no edit made to
+  `2026-08-02-mirror-parity-and-v101-review.md` — its one mention is a
+  passing historical mention (pasted evidence of a past search), not the
+  kind of direct pointer the courtesy check asks to redirect, and it does
+  not even cite the file the courtesy check named.
 
 ## Verification
 
