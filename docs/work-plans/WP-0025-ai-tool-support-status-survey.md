@@ -35,7 +35,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0069 | ready | M | M | N/A | - | - | process/item-0021-status-survey |
+| LISS-0069 | done | M | M | N/A | - | - | process/item-0021-status-survey |
 
 ## Recommended Order
 
@@ -116,10 +116,22 @@ complete, on branch `wp-0025-execution` (commit `76d04e4`, branched from
 
    No other file touched by LISS-0069's own commit (`76d04e4`).
 
-**Result: pass.** Permits submission to the independent, separate-context
-Reviewer. This is not itself an approval and does not set any issue to
-`wont_do` or `closed` beyond LISS-0069's own `done` status already
-recorded in its own file.
+4. **Issue status sync** (caught during this Preflight pass, not
+   anticipated by the work plan's own original three-item checklist
+   above): the first Preflight run of
+   `check-contract-consistency.py` surfaced a fourth, real failure —
+   `docs/issues/LISS-0069-antigravity-contract-registry-entry.md` had
+   been set to `Status: done` (commit `76d04e4`) while this file's own
+   Issue Graph table (line 38) still listed LISS-0069 as `ready`. Fixed
+   in this same Preflight pass by updating the Issue Graph row to
+   `done`. Re-ran the checker after the fix: back to the same 3
+   pre-existing, out-of-scope failures shown in item 2 above — the sync
+   failure is resolved, confirmed by direct re-run, not merely asserted.
+
+**Result: pass**, after the Issue Graph sync fix above. Permits
+submission to the independent, separate-context Reviewer. This is not
+itself an approval and does not set any issue to `wont_do` or `closed`
+beyond LISS-0069's own `done` status already recorded in its own file.
 
 ## Review Summary Packet
 
