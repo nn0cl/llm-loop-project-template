@@ -5,7 +5,7 @@
 - Item ID: item-0021
 - Title: Survey this template's support status across Claude Code, Codex,
   Cursor, Grok, and Antigravity, and update what can be updated
-- Status: captured
+- Status: promoted
 - Created: 2026-08-20
 - Updated: 2026-08-20
 - Priority hint: medium
@@ -148,6 +148,10 @@ Design & Review's own spike/proposal, not decided here.
 
 Filled when status becomes `promoted` or `spiked` or `dropped`.
 
-- Date:
-- Decision:
-- Reason:
+- Date: 2026-08-20
+- Decision: Promoted, in the Backlog-layer thread ("はい。承認"). Per ADR
+  0016 Rule 2, Design & Review proceeds autonomously from here, starting
+  with the spike (confirming the existing Codex/Grok research is current,
+  and fully investigating Antigravity from primary sources).
+- Reason: Concrete, well-scoped request with existing ground truth to
+  build on for 3 of the 5 tools; ready to begin with the spike.
