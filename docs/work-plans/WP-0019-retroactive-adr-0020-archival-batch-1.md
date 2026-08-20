@@ -247,13 +247,26 @@ submitting to the work-plan-level Reviewer, per
 
 ## Work-Plan Review
 
-Reviewer's approval record: <link, filled in after the Reviewer pass>
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-20-wp-0019-retroactive-adr-0020-archival-batch-1-review.md`
+— **Approved** (2026-08-20, Reviewer persona, Design & Review group
+standing session, separate context from the Implementation-group subagent
+session that executed LISS-0056/LISS-0057 in its own worktree/branch).
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
 |  |  |  |
+
+No `Type: review-finding` issues were opened — the review found no defect
+requiring correction. Both deviations the Implementation group flagged
+during execution (the ledger's hash self-reference resolution mechanic;
+the Verification-section grep command that cannot literally pass post-fix
+by construction) were independently confirmed as genuine plan-text
+imprecisions, not defects in the archival work itself; the review record's
+own "Reasons" section carries a non-blocking suggestion for a future ADR
+0020 documentation clarification.
 
 ## Work-Plan Close
 
