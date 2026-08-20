@@ -199,10 +199,29 @@ Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkp
 one combined Director action, after the Reviewer approves — not performed
 by the Design & Review group itself.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0023-self-sustaining-wakeup-protocol-review.md`,
+  Approved — all three constraints satisfied) via the Backlog thread,
+  which independently re-verified from a fresh, isolated
+  `git worktree add --detach` checkout of `process/promote-item-0020`
+  (tip `d6690fc`) before presenting this close: a clean
+  `check-contract-consistency.py` run, ADR 0016 Rule 7 and
+  `cross-session-messaging.md`'s new "Queue continuation and
+  resume-before-duplicate-spawn" section both present by direct `grep`,
+  LISS-0062/LISS-0063 at `Status: done` and LISS-0064 at
+  `Status: closed`, WP-0023's own Issue Graph row correctly showing
+  LISS-0063 as `done`, and a scope diff against `main` confined to the
+  12 expected files (no unrelated file touched).
+- Next direction: closed with "承認。続けて" (approved; proceed) —
+  merging `process/promote-item-0020` into `main` and pushing now.
+- New design agreement (if any): none opened by this close. One
+  non-blocking follow-up was flagged during review (not acted on): the
+  `to: "general-purpose"` → `to: "main"` grandchild-routing nuance
+  observed during this work plan's own execution is worth a future,
+  separately-governed addition to `cross-session-messaging.md`'s
+  documented-failure-modes section — left for a later backlog item, not
+  this close.
 
 ## Risks
 
