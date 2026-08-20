@@ -58,17 +58,68 @@ require a separate-context Reviewer plus a trace, regardless of size.
 
 ## Preflight Validation
 
-To be recorded here by the Implementation group once LISS-0069 is
-self-reviewed and complete, before requesting the work-plan-level
-Reviewer pass. Required checks, at minimum:
+Recorded by the Implementation group, LISS-0069 self-reviewed and
+complete, on branch `wp-0025-execution` (commit `76d04e4`, branched from
+`process/item-0021-status-survey` at `7d61ab5`). Result: **pass**.
 
-1. The two independent URL re-fetches LISS-0069's own Acceptance Notes
-   require, with the actual confirmation (or discrepancy) recorded.
-2. `python3 scripts/check-contract-consistency.py` — full output,
-   confirming no regression.
-3. `git diff` scope check — confined to
-   `docs/collaboration/prompt-instruction-change-control.md`, the new
-   trace file, and this work plan's own tracking files.
+1. **Independent URL re-fetches** (LISS-0069's own Acceptance Notes
+   requirement):
+
+   - `https://ai.google.dev/gemini-api/docs/antigravity-agent` — found:
+     "you can mount files like `AGENTS.md` for instructions and skills
+     under `.agents/skills/` directly into the sandbox." Matches
+     `docs/architecture/ai-tool-support-status.md` and
+     `docs/spike/case-0004-.../case.md` exactly.
+   - `https://antigravity.google/docs/subagents/` — found: "A maximum
+     nesting depth of **10 levels**... is strictly enforced," and
+     "Agents can communicate with parent agents, subagents, or peer
+     agents whose ID is known." Matches both source documents exactly,
+     word for word.
+   - **Confirmation, no discrepancy.** Full detail in
+     `docs/issues/LISS-0069-antigravity-contract-registry-entry.md`'s
+     Work Notes.
+
+2. **`python3 scripts/check-contract-consistency.py`** — full output:
+
+   ```text
+   references:
+     docs/architecture/ai-tool-support-status.md:67 names '.cursor/worktrees.json', which does not exist
+     docs/architecture/ai-tool-support-status.md:91 names 'github.com/xai-org/grok-build/.../16-subagents.md', which does not exist
+     docs/architecture/ai-tool-support-status.md:110 names 'ANTIGRAVITY.md', which does not exist
+
+   contract consistency: 3 failure(s)
+   ```
+
+   These 3 failures are **pre-existing**, confined entirely to
+   `docs/architecture/ai-tool-support-status.md` (out of LISS-0069's own
+   scope; already committed at `7d61ab5`, this work plan's own opening
+   commit, before LISS-0069 started). Confirmed via `git stash` A/B
+   comparison: byte-identical checker output with and without
+   LISS-0069's changes staged. **No regression introduced by LISS-0069.**
+   The 3 failures are the checker's `check_references` path-existence
+   check flagging backtick-quoted strings that are not actual repository
+   file paths (a Cursor-side config filename mentioned in prose, a
+   GitHub URL fragment, and a hypothetical filename the source document
+   explicitly states was *not* found) — not a broken cross-reference.
+   Not fixed here: the owning file is outside LISS-0069's scope by this
+   work plan's own explicit boundary. Named here as a candidate follow-up
+   item, not resolved by this work plan.
+
+3. **`git diff` scope check** — confined to exactly the three permitted
+   files:
+
+   ```text
+    docs/collaboration/prompt-instruction-change-control.md           |   5 +
+    docs/issues/LISS-0069-antigravity-contract-registry-entry.md      | 113 +++++-
+    docs/collaboration/traces/2026-08-20-ai-tool-support-status-survey.md | new file
+   ```
+
+   No other file touched by LISS-0069's own commit (`76d04e4`).
+
+**Result: pass.** Permits submission to the independent, separate-context
+Reviewer. This is not itself an approval and does not set any issue to
+`wont_do` or `closed` beyond LISS-0069's own `done` status already
+recorded in its own file.
 
 ## Review Summary Packet
 
@@ -87,10 +138,20 @@ Filled in by the Implementation group once Preflight passes.
   `docs/spike/case-0004-...md` land in this work plan's own opening
   commit, not as part of LISS-0069's own diff.)
 - **Findings**: none opened or resolved by this work plan.
-- **Disposition**: <filled in at Preflight>
-- **Remaining blockers**: none expected; state any found.
-- **Verification result**: <pointer to this file's own Preflight
-  Validation section, populated above>.
+- **Disposition**: Preflight Validation passed. LISS-0069 is
+  self-reviewed (full form, planning size M) and complete on branch
+  `wp-0025-execution` (commit `76d04e4`). Ready for the work-plan-level
+  Reviewer pass, in a separate context.
+- **Remaining blockers**: none found. The 3 pre-existing
+  `check-contract-consistency.py` failures in
+  `docs/architecture/ai-tool-support-status.md` are out of LISS-0069's
+  own scope and were confirmed (via `git stash` A/B comparison) to
+  predate this work plan's LISS-0069 diff entirely — not a blocker this
+  work plan introduced, though worth flagging to the Reviewer as a
+  candidate follow-up item outside this work plan's own boundary.
+- **Verification result**: see this file's own "Preflight Validation"
+  section above (populated 2026-08-20) for the full pasted output of all
+  three required checks.
 - **Next approval required**: evidence-sufficiency (are the report's own
   claims genuinely sourced and independently re-confirmed, not merely
   asserted) and boundary-conformance (does the contract-file edit stay
