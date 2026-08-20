@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0064
 - GitHub issue: none
-- Status: accepted
+- Status: resolved
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -126,9 +126,23 @@ No other change is authorized by this finding.
   eligible. Not fixed silently by the Reviewer itself — sent back to the
   Implementation-group session that produced WP-0023 for correction, per
   this repository's own separation-of-duties discipline.
+- 2026-08-20 — Implementation group (Implementer persona), Minor Fix Path.
+  Merged the Reviewer's finding commit (`269384e`) into `wp-0023-execution`.
+  Applied the exact one-cell fix from this issue's own Acceptance Notes:
+  `docs/work-plans/WP-0023-self-sustaining-wakeup-protocol.md`'s Issue
+  Graph row for `LISS-0063` changed from `ready` to `done`, no other cell
+  touched. Re-ran `python3 scripts/check-contract-consistency.py` and
+  confirmed `all checks passed` (see Verification below). `Status` updated
+  to `resolved`.
 
 ## Verification
 
-- To be recorded once the fix lands: full `python3
-  scripts/check-contract-consistency.py` output against the corrected
-  commit, showing `all checks passed`.
+```text
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+```
+
+Confirms `check_issue_status_sync` no longer fails: WP-0023's Issue Graph
+row for LISS-0063 now reads `done`, matching
+`docs/issues/LISS-0063-check-and-spawn-wake-protocol.md`'s own `Status`
+field.

@@ -45,7 +45,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0063 | ready | M | M | N/A | LISS-0062 | - | process/promote-item-0020 |
+| LISS-0063 | done | M | M | N/A | LISS-0062 | - | process/promote-item-0020 |
 
 ## Recommended Order
 
