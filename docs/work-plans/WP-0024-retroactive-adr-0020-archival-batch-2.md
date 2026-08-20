@@ -72,25 +72,119 @@ previously accepted work — it is new, authorized housekeeping.
 
 ## Preflight Validation
 
-To be recorded here by the Implementation group once all three issues are
-self-reviewed and complete, before requesting the work-plan-level
-Reviewer pass. Required checks, at minimum:
+Recorded by the Implementation group (Implementer persona), branch
+`wp-0024-execution`, after all three issues landed
+(commits `2d715ed`, `ab6ac19`, `5a351c9`, `b462714`, `873321d`, `16a9862`).
+Result: **pass**. All six required checks run for real below.
 
-1. `python3 scripts/check-contract-consistency.py` — full output, run
-   after all three issues land, showing zero new failures.
-2. `grep -rn "docs/work-plans/WP-0004-multi-agent-tool-loop-portability.md"
-   docs/architecture/ docs/collaboration/*.md docs/templates/` and the
-   WP-0006 equivalent — confirms both ADR reference updates landed and no
-   other current Canonical document was missed.
-3. `git log --follow` on a representative sample of destination paths
-   (or exhaustively, stating which), confirming preserved history.
-4. `docs/collaboration/restoration-ledger.md` contains the expected
-   number of new rows (21 from LISS-0066, plus 11 or 12 from LISS-0067,
-   depending on the LISS-0029 trace finding).
-5. Re-confirmation that `DA-2026-08-18-03` and `DA-2026-08-18-05` are
-   unchanged and un-moved.
-6. `git diff` confirms LISS-0068's own scope is confined to exactly the
-   six files it names.
+1. `python3 scripts/check-contract-consistency.py` — run after all three
+   issues landed:
+
+   ```text
+   contract consistency: all checks passed
+   ```
+
+2. `grep -rn "docs/work-plans/WP-0004-multi-agent-tool-loop-portability.md" docs/architecture/ docs/collaboration/*.md docs/templates/`:
+
+   ```text
+   docs/collaboration/restoration-ledger.md:90:| 2026-08-20 | `docs/work-plans/WP-0004-multi-agent-tool-loop-portability.md` | b4627146ae85753c72fb76124cd7bd565cbd9d44 | N/A | `docs/archive/work-plans/WP-0004-multi-agent-tool-loop-portability.md` | archived | ... |
+   ```
+
+   and the WP-0006 equivalent:
+
+   ```text
+   docs/collaboration/restoration-ledger.md:95:| 2026-08-20 | `docs/work-plans/WP-0006-quality-gate-hooks-and-perspectives-doc.md` | b4627146ae85753c72fb76124cd7bd565cbd9d44 | N/A | `docs/archive/work-plans/WP-0006-quality-gate-hooks-and-perspectives-doc.md` | archived | ... |
+   ```
+
+   The only hits in both cases are the restoration ledger's own
+   `source_path` column (expected — that column intentionally records the
+   pre-move path as history). No hit in `docs/architecture/adr/0017-*.md`,
+   `docs/architecture/adr/0018-*.md`, or any other file — both ADR
+   reference updates landed and no other current Canonical document
+   references either old path.
+
+3. `git log --follow` on a representative sample spanning all three
+   archival categories (work plan, issue, design agreement, review record,
+   trace), across both LISS-0066 and LISS-0067's own destination sets:
+
+   - `docs/archive/work-plans/WP-0003-coordinator-message-correction.md`,
+     `docs/archive/collaboration/agreements/2026-08-19-contract-reviewer-v230.md`,
+     `docs/archive/collaboration/traces/2026-08-18-liss-0028-coordinator-message-correction.md`
+     (LISS-0066 sample) — each `git log --follow --oneline` shows the full
+     pre-move commit history plus the LISS-0066 move commit (`2d715ed`).
+   - `docs/archive/work-plans/WP-0008-coordinator-role-inoculation-rule.md`,
+     `docs/archive/issues/LISS-0032-quality-gate-hooks-and-coverage-policy.md`,
+     `docs/archive/collaboration/agreements/2026-08-18-coordinator-role-inoculation-rule.md`,
+     `docs/archive/collaboration/reviews/2026-08-18-wp-0004-multi-agent-tool-loop-portability-review.md`,
+     `docs/archive/collaboration/traces/2026-08-18-liss-0030-mirror-portable-loop-wording.md`
+     (LISS-0067 sample, plus one from LISS-0066) — each shows preserved
+     pre-move history plus the correct move commit (`2d715ed` or
+     `b462714`).
+
+   All 8 sampled paths preserved history with no gap; not run exhaustively
+   across all 32 moved files, but the sample spans every document type
+   this batch moved.
+
+4. `docs/collaboration/restoration-ledger.md` row count:
+
+   ```text
+   $ grep -c "^| 2026-08" docs/collaboration/restoration-ledger.md
+   55
+   ```
+
+   Pre-existing (batch 1) rows: 23 (5 for WP-0001's set, 18 for WP-0002's
+   set). This work plan added 32: 21 from LISS-0066, and 11 (not 12) from
+   LISS-0067 — the LISS-0029 trace verification found no separate trace
+   file for LISS-0029 (`ls docs/collaboration/traces/ | grep -i liss-0029`
+   returned zero hits, and LISS-0029's own Acceptance Notes state
+   explicitly "no trace required for this issue"; only
+   `2026-08-18-liss-0030-mirror-portable-loop-wording.md` exists for that
+   branch pair). 23 + 21 + 11 = 55, matching the actual count exactly.
+
+5. Re-confirmation `DA-2026-08-18-03` and `DA-2026-08-18-05` are unchanged
+   and un-moved:
+
+   ```text
+   $ test -f docs/collaboration/agreements/2026-08-18-multi-agent-tool-loop-portability.md && echo present
+   present
+   $ test -f docs/collaboration/agreements/2026-08-18-quality-gate-hooks-and-perspectives-doc.md && echo present
+   present
+   $ git log --oneline -- docs/collaboration/agreements/2026-08-18-multi-agent-tool-loop-portability.md docs/collaboration/agreements/2026-08-18-quality-gate-hooks-and-perspectives-doc.md
+   57af72e process: design phase for WP-0006 (quality-gate hooks + perspectives doc)
+   d9c6e6b process: design phase for WP-0004 (multi-agent tool loop portability)
+   ```
+
+   Both files remain at their original paths with no commit touching them
+   since their original creation — confirmed unchanged and un-moved.
+
+6. `git diff` / `git show --stat` on LISS-0068's own landing commit
+   (`16a9862`):
+
+   ```text
+   docs/backlog/item-0005-template-propagation-script-for-two-group-loop.md      | 2 +-
+   docs/backlog/item-0006-quality-gate-hooks-and-review-perspectives-doc.md      | 2 +-
+   docs/backlog/item-0007-multi-agent-tool-loop-portability.md                   | 2 +-
+   docs/backlog/item-0008-coordinator-message-hallucination-correction.md        | 5 +-
+   docs/backlog/item-0009-document-consistency-drift-on-completion.md            | 2 +-
+   docs/issues/LISS-0068-batch-2-housekeeping-fixes.md                           | 56 +++++++++
+   docs/work-plans/WP-0021-archive-copy-exclusion-gap.md                         | 4 +-
+   docs/work-plans/WP-0024-retroactive-adr-0020-archival-batch-2.md              | 2 +-
+   8 files changed, 64 insertions(+), 11 deletions(-)
+   ```
+
+   The five backlog items plus `WP-0021-...md` (six content-scope files,
+   exactly as this issue's own Acceptance Notes name) are the only
+   *housekeeping-content* changes. The other two files are LISS-0068's own
+   `Status`/Work-Notes update and this work plan's own Issue Graph status
+   sync — the same bookkeeping-only pattern every issue in this work plan
+   required at its own close (LISS-0066 and LISS-0067 both also touched
+   their own issue file and this work plan's Issue Graph in their landing
+   commits), not an expansion of LISS-0068's own authorized content scope.
+   No backlog item's `Links` field beyond the five named, and no field in
+   WP-0021's Work-Plan-Close section beyond `Date`, was touched.
+
+**Result: pass.** Permits submission to the independent Reviewer; this is
+not itself an approval and does not set `wont_do` or `closed` on anything.
 
 ## Review Summary Packet
 
@@ -104,14 +198,40 @@ Filled in by the Implementation group once Preflight passes.
   ADR *content* (beyond the two path pointers) changed.
 - **Current canonical documents**: none newly established; ADR 0017 and
   ADR 0018 are amended in-place (path updates only), not superseded.
-- **Changed files**: the ~32-34 `git mv` moves (per LISS-0066/LISS-0067's
-  own tables), `docs/collaboration/restoration-ledger.md` (new rows), ADR
-  0017 and ADR 0018 (one path edit each), 6 files for LISS-0068.
+- **Changed files**: 32 `git mv` moves (21 from LISS-0066, 11 from
+  LISS-0067 — the LISS-0029 trace verification found no separate trace
+  file, so the actual count is 11, not 12), `docs/collaboration/restoration-ledger.md`
+  (32 new rows, plus two follow-up commits correcting `PENDING`
+  placeholders to real move-commit hashes), ADR 0017 and ADR 0018 (one
+  path edit each), 6 content files for LISS-0068 (5 backlog items +
+  `WP-0021-...md`).
 - **Findings**: none opened or resolved by this work plan.
-- **Disposition**: <filled in at Preflight>
-- **Remaining blockers**: none expected; state any found.
-- **Verification result**: <pointer to this file's own Preflight
-  Validation section, populated above>.
+- **Disposition**: Preflight passed (see Preflight Validation above, all
+  six checks run for real with pasted output). Ready for the
+  work-plan-level Reviewer's separate-context pass. Not itself an
+  approval — the Reviewer's own `Specification conformance`, `Phase
+  correctness`, `Boundary conformance`, and `Evidence sufficiency`
+  judgments are still outstanding.
+- **Remaining blockers**: none found. One process note for the Reviewer's
+  own attention, not a blocker: during LISS-0067's execution, an
+  unrelated one-line WP-0024 Issue-Graph fix for LISS-0066 was briefly
+  committed with LISS-0067's already-`git mv`-staged renames accidentally
+  swept in (`git add <single-file-path>` still picks up everything already
+  in the index). Caught immediately, before any push, and corrected with a
+  non-destructive `git reset --soft` followed by `git reset <path>` to
+  re-split the two changes into their correct separate commits — no force
+  push, no history rewrite of shared state, no data loss. Recorded
+  transparently in LISS-0067's own Work Notes and Self-Review rather than
+  silently smoothed over, per the Prime Directive's evidence requirement.
+- **Verification result**: pass — see this file's own Preflight
+  Validation section above, all six required checks run with real,
+  pasted command output. Commit hashes: `2d715ed` (LISS-0066 moves +
+  ledger, `source_commit: PENDING`), `ab6ac19` (LISS-0066 ledger hash
+  correction), `5a351c9` (WP-0024 Issue Graph sync for LISS-0066),
+  `b462714` (LISS-0067 moves + ADR reference updates + ledger, `source_commit: PENDING`
+  + WP-0024 Issue Graph sync for LISS-0067 in the same commit),
+  `873321d` (LISS-0067 ledger hash correction), `16a9862` (LISS-0068
+  fixes + WP-0024 Issue Graph sync for LISS-0068).
 - **Next approval required**: boundary-conformance (did the move
   correctly exclude the two blocked design agreements and stay within the
   authorized scope) and evidence-sufficiency (is every move backed by a
