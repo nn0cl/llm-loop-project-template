@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0060
 - GitHub issue: none
-- Status: accepted
+- Status: resolved
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -135,10 +135,41 @@ plan's own content.
   Implementation-group session that produced WP-0021 for correction, per
   this repository's own separation-of-duties discipline.
 
+- 2026-08-20 — Implementer persona, `wp-0021-execution`. Merged this
+  issue's own commit (`bbe05c8`, from `process/promote-item-0018`) into
+  `wp-0021-execution` (clean merge, no conflicts — sibling commits off the
+  same `54f73c7` base touching disjoint files). Applied the exact one-line
+  diff from this issue's own Acceptance Notes:
+  `docs/work-plans/WP-0021-archive-copy-exclusion-gap.md`'s Issue Graph
+  row for `LISS-0059` changed from `ready` to `done`. Re-ran
+  `python3 scripts/check-contract-consistency.py` against the real
+  repository (no `--repo` flag) and confirmed `contract consistency: all
+  checks passed` for real this time. No other line of the work plan file,
+  and no other file, touched by this correction.
+
 ## Verification
 
-- To be recorded once the fix lands: full `python3
-  scripts/check-contract-consistency.py` output against the corrected
-  commit, showing `all checks passed`, plus a repeat of the command that
-  originally reproduced this failure (against a fresh `git archive`
-  extraction), now clean.
+Before fix (Reviewer's own independent reproduction, against a fresh
+`git archive` extraction of `wp-0021-execution`'s committed state, quoted
+from this finding's own Summary section above):
+
+```
+docs/issues/LISS-0059-archive-copy-exclusion-gap.md states Status: done,
+but docs/work-plans/WP-0021-archive-copy-exclusion-gap.md's Issue Graph
+lists LISS-0059 as 'ready'
+
+contract consistency: 1 failure(s)
+```
+
+After fix (`python3 scripts/check-contract-consistency.py`, real
+repository, no `--repo` flag, run by the Implementer on
+`wp-0021-execution` after applying the one-line Issue Graph correction):
+
+```
+contract consistency: all checks passed
+```
+
+`docs/work-plans/WP-0021-archive-copy-exclusion-gap.md`'s Issue Graph row
+for `LISS-0059` now reads `done`, matching
+`docs/issues/LISS-0059-archive-copy-exclusion-gap.md`'s own `Status`
+field. No other line in the diff.

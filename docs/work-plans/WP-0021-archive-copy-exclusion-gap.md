@@ -34,7 +34,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0059 | ready | S | S | N/A | - | - | process/promote-item-0018 |
+| LISS-0059 | done | S | S | N/A | - | - | process/promote-item-0018 |
 
 ## Recommended Order
 
