@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0061
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -183,6 +183,59 @@ that change.
   `.github/workflows/ci.yml`'s own step logic and
   `docs/issues/LISS-0056-...md`/`LISS-0057-...md`'s Work Notes that no
   trace was in fact ever created for these two edits. Not yet dispatched.
+- 2026-08-20 — Implementation group (Implementer persona). Dispatched from
+  WP-0022 on branch `wp-0022-execution` (created from local branch
+  `process/promote-item-0016` at commit `1c6a28a`). Wrote
+  `docs/collaboration/traces/2026-08-20-wp-0019-contract-file-edits.md`
+  using `docs/templates/ai-work-trace.md`, documenting WP-0019's two
+  already-completed contract-file edits: `docs/collaboration/design-review-perspectives.md`
+  (2 line changes, both citations of WP-0002's review record, made in
+  commit `81ddf2a`) and `docs/collaboration/restoration-ledger.md` (23 new
+  rows total — 5 added in commit `dfe5030`/LISS-0056, 18 added in commit
+  `81ddf2a`/LISS-0057). Every factual claim in the trace (line numbers,
+  row counts, commit hashes) was independently reproduced by direct
+  command output against the real committed tree (`git show 81ddf2a`,
+  `git show dfe5030`, `grep -n`/`grep -c` against the current files), not
+  copied unverified from this issue's or WP-0019's own prose. Confirmed
+  the CI traceability check's own condition is now satisfied:
+  `git diff --name-only main HEAD` includes
+  `docs/collaboration/traces/2026-08-20-wp-0019-contract-file-edits.md`.
+  Ran `python3 scripts/check-contract-consistency.py` — no regression (see
+  this trace's own Verification section and
+  `docs/work-plans/WP-0022-...md`'s own Preflight Validation section for
+  full pasted output). No edit was made to
+  `docs/collaboration/design-review-perspectives.md`,
+  `docs/collaboration/restoration-ledger.md`, or any of WP-0019's own 23
+  archived files. `Status` updated to `done`.
+
+  **Self-review (short form, planning size `S`, per
+  `docs/templates/self-review.md`):**
+
+  - Deterministic precondition: `python3 scripts/check-contract-consistency.py`
+    exits 0 ("contract consistency: all checks passed"); `git diff
+    --name-only main HEAD` shows exactly the new trace file and this issue
+    file, with the trace path present, satisfying the CI check's own
+    `trace_added` condition; `git status --porcelain` before commit showed
+    no unexpected file touched.
+  - Falsification burden — failure scenarios searched for:
+    1. The trace cites a commit or line number that does not actually
+       match the real diff. Not reproduced: `git show 81ddf2a` and
+       `git show dfe5030` were read directly, and the cited line numbers
+       (66, 169) and row counts (5, 18, 23 total) were independently
+       reproduced via `grep -n`/`grep -c` against the current working
+       tree, not taken from either issue's own prose.
+    2. `docs/collaboration/restoration-ledger.md`'s "23 new rows" claim
+       actually came from a single commit rather than the two-commit
+       split (5 from LISS-0056, 18 from LISS-0057) the trace states. Not
+       reproduced: `git show dfe5030 -- docs/collaboration/design-review-perspectives.md`
+       returns no output (that commit did not touch the file), confirming
+       only `81ddf2a` edited `design-review-perspectives.md`, while both
+       `dfe5030` and `81ddf2a` each added ledger rows (5 and 18
+       respectively, verified by `grep -c '^+|'` on each commit's diff).
+    3. This commit accidentally re-edits one of the two contract files or
+       one of WP-0019's own archived files. Not reproduced: `git status
+       --porcelain` before staging shows only the new trace file and the
+       modified `LISS-0061-...md`; no other path appears.
 
 ## Verification
 
