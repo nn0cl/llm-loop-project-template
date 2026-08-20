@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0055
 - GitHub issue: none
-- Status: proposed
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -177,6 +177,42 @@ aggressive should the first archival pass be? Concretely:
   own Promotion notes, before any document is moved or archived. No
   Implementation work has been dispatched. Awaiting Director/Backlog-thread
   response before opening the execution work plan and design agreement.
+- 2026-08-20 — Design & Review group (Planner persona). **Backlog-thread
+  decision received**: option 1 from "What is being asked of the Backlog
+  thread" above — the proposed first batch (WP-0001 plus WP-0002) is
+  authorized, oldest-first, with later work-plan-scoped batches to follow
+  as separate, later executions, each re-verified fresh. This resolves the
+  batching-aggressiveness decision this issue exists to record.
+  WP-0002's own open sub-question (issue-status gap, LISS-0019 through
+  LISS-0027 frozen at `Status: review` despite the work plan's own Director
+  close) is resolved via path (a) of the two this issue's own "Proposed
+  batching plan" section named: those nine issues' `Status` fields were
+  corrected to `done` as ordinary bookkeeping, in commit `73ab2ce`
+  ("process: sync WP-0002's nine issue statuses to done"), merged to `main`
+  via PR #20 (merge commit `6e52ad7`). Independently re-verified against
+  the actual files (not taken on the commit message alone), after merging
+  `main` into `process/promote-item-0016` (merge commit `9be0223`): all
+  nine issues now show `Status: done`, and no open `Type: review-finding`
+  issue names either WP-0001 or WP-0002. WP-0002 is therefore genuinely
+  Rule-2-eligible on the same footing as WP-0001, not merely
+  judgment-called eligible. Full detail recorded in case-0002's own
+  post-close Addendum (2026-08-20), including two new findings that
+  addendum surfaced and this spike itself had not: `DA-2026-08-02-04`
+  (WP-0001's design agreement) and `DA-2026-08-18-01` (WP-0002's) are each
+  blocked from archival in this batch by ADR 0020 Rule 2's general opening
+  clause — a current, Accepted ADR (0012 and 0016 respectively) cites each
+  normatively as its own Accepted-status grounding, not in passing — while
+  `design-review-perspectives.md`'s two citations of WP-0002's review
+  records are the non-blocking, Rule-3 reference-update case instead.
+- 2026-08-20 — Design & Review group (Planner persona). Execution work plan
+  and design agreement opened per this issue's own Acceptance Notes:
+  `docs/work-plans/WP-0019-retroactive-adr-0020-archival-batch-1.md`,
+  `docs/collaboration/agreements/2026-08-20-retroactive-adr-0020-batch-1.md`
+  (`DA-2026-08-20-02`). This issue is resolved; further batch-2-and-later
+  scope questions (WP-0003 through WP-0018) are out of scope for this issue
+  and this batch, per item-0016's own "do not go further than this batch"
+  instruction — a new check-in issue opens if and when a later batch is
+  proposed.
 
 ## Verification
 

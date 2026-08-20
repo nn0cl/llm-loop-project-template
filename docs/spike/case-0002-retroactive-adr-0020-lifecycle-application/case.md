@@ -276,3 +276,81 @@ together, not the row first).
   re-checked file-by-file the way WP-0001/WP-0002 were) — the
   retroactive-application work plan's own Preflight must do this
   verification directly, not assume this spike's spot-check covers them.
+
+## Addendum (2026-08-20, post-close): WP-0002 issue-status gap resolved; batch authorized
+
+Recorded after this spike's own close, once the Backlog thread responded to
+LISS-0055 (see that issue's own Work Notes for the full decision record —
+this addendum states only what changes for this spike's own findings above,
+not a re-litigation of the batching-posture selection, which stands as
+recorded).
+
+- **WP-0002 issue-status gap, closed**: the "Open risks after close" gap
+  above (LISS-0019 through LISS-0027 frozen at `Status: review` despite
+  WP-0002's own Director close) was resolved by path (a) of the two this
+  spike named — the nine issues' `Status` fields were corrected to `done`,
+  not judgment-called around. Commit `73ab2ce` ("process: sync WP-0002's
+  nine issue statuses to done"), merged to `main` via PR #20 (merge commit
+  `6e52ad7`). Independently re-confirmed directly against the files
+  themselves in the retroactive-application work plan's own worktree (not
+  taken on the commit message's word alone), after merging `main` into
+  `process/promote-item-0016` (merge commit `9be0223`):
+  `grep -H "^- Status:" docs/issues/LISS-0019-*.md docs/issues/LISS-0020-*.md
+  docs/issues/LISS-0021-*.md docs/issues/LISS-0022-*.md
+  docs/issues/LISS-0023-*.md docs/issues/LISS-0024-*.md
+  docs/issues/LISS-0025-*.md docs/issues/LISS-0026-*.md
+  docs/issues/LISS-0027-*.md` shows `Status: done` for all nine. No open
+  `Type: review-finding` issue names either WP-0001 or WP-0002 (confirmed by
+  `grep -rl "Type: review-finding" docs/issues/` cross-checked against each
+  matched file's own `Type:` field — the four incidental text hits for
+  "WP-0001"/"WP-0002" are LISS-0022, LISS-0028, LISS-0039, LISS-0055, none of
+  which is itself `Type: review-finding`). **WP-0002 is now genuinely
+  Rule-2-eligible**, on the same footing as WP-0001, not merely
+  judgment-called eligible.
+- **New finding this spike did not surface: two of the four candidate
+  design agreements are blocked from archival by the general Rule 2 opening
+  clause**, independent of the per-type design-agreement trigger this
+  spike's Selection section described. A current, Accepted,
+  not-fully-superseded Canonical document (an ADR) cites each of WP-0001's
+  and WP-0002's own design agreements *normatively* — as the grounding for
+  its own Accepted status, not as a passing or historical mention:
+  - `docs/architecture/adr/0012-review-issues-minor-fix-and-model-routing.md`'s
+    Status section: "Accepted. Covered by `DA-2026-08-02-04`." — WP-0001's
+    own design agreement.
+  - `docs/architecture/adr/0016-...md`'s Status section: "`Accepted` status
+    requires a design agreement with the Director covering the decision.
+    That agreement is `DA-2026-08-18-01`..." — WP-0002's own design
+    agreement, additionally quoted from directly in ADR 0016's own Context
+    section.
+
+  Rule 2's opening paragraph is explicit that this blocks archival
+  regardless of a type's own terminal status: "A document with... content a
+  current Canonical document still references by more than a passing
+  mention is never eligible." Both citations name the specific agreement ID
+  as the ADR's own Accepted-status grounding — this is exactly "more than a
+  passing mention," not the "see the historical record" case Rule 3
+  reserves for a reference-update instead of a block. **Neither
+  `DA-2026-08-02-04` nor `DA-2026-08-18-01` is archived in this batch**;
+  both stay in place regardless of their owning work plan's own archival.
+  This does not affect WP-0001 or WP-0002's own file-level eligibility, or
+  their issues'/traces'/review-records' eligibility — only the two design
+  agreements themselves.
+- **Confirmed non-blocking, Rule-3 reference-update case**:
+  `docs/collaboration/design-review-perspectives.md` (a Canonical contract
+  file) cites both of WP-0002's own review records
+  (`docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`
+  twice, at its "Re-verify state" and "Verify a claimed authority"
+  perspective entries) as historical provenance for lessons the document
+  already states in full — not as content the document's own validity
+  depends on. This is the "see the historical record" case Rule 3 itself
+  names: the review records are still archival-eligible once WP-0002 is
+  archived, but the retroactive-application work plan must update
+  `design-review-perspectives.md`'s two citations to point at the new
+  `docs/archive/` paths in the same commit as the move, per Rule 3's own
+  requirement not to leave a current Canonical document pointing at a path
+  that no longer exists.
+- **Decision recorded**: the Backlog thread authorized this spike's own
+  Option B first batch as WP-0001 and WP-0002 together (see LISS-0055's
+  Work Notes) — the WP-0002 issue-status gap that would otherwise have
+  required a judgment call is resolved as ordinary bookkeeping instead, per
+  the first of the two paths this spike's Selection section named.
