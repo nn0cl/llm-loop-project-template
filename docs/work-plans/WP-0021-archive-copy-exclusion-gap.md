@@ -227,7 +227,9 @@ Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkp
 one combined Director action, after the Reviewer approves — not performed by
 the Design & Review group itself.
 
-- Date:
+- Date: 2026-08-20 (filled in retroactively — folded into WP-0019's own
+  combined close narrative at the time; PR #21's merge record confirms
+  this date)
 - Result read:
 - Next direction:
 - New design agreement (if any):

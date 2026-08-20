@@ -97,10 +97,7 @@ Implementation sessions.
 ## Links
 
 - Spike case: none
-- Work plan (when promoted): none yet — likely a Minor Fix Path addendum to
-  WP-0002 (mirroring how LISS-0027 was handled) if DA-2026-08-18-01 is still
-  treated as open for this kind of correction, or a new small work plan
-  otherwise
+- Work plan (when promoted): `docs/archive/work-plans/WP-0003-coordinator-message-correction.md` — confirmed via direct cross-reference; this item's own `Links` field was never updated when the work landed (see `docs/issues/LISS-0065-...md`'s own cross-reference table).
 - Design agreement (when promoted): none yet
 - Local issue (LISS): none yet
 - Spec: none yet

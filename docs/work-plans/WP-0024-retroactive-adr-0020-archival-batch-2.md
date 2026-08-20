@@ -40,7 +40,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | LISS-0066 | done | M | M | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
 | LISS-0067 | done | M | M | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
-| LISS-0068 | ready | S | S | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
+| LISS-0068 | done | S | S | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
 
 ## Recommended Order
 
