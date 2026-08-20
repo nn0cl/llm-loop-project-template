@@ -205,13 +205,21 @@ Filled in by the Implementation group once Preflight passes.
 
 ## Work-Plan Review
 
-Reviewer's approval record: <link, filled in after the Reviewer pass>
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-20-wp-0021-archive-copy-exclusion-gap-review.md`
+— **Approved** (2026-08-20, Reviewer persona, Design & Review group
+standing session, separate context from the Implementation-group subagent
+session that executed LISS-0059/LISS-0060 in its own worktree/branch).
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-|  |  |  |
+| LISS-0060 | closed | The Reviewer's own independent re-verification (not trusting the Implementer's pasted Preflight output) found `check_issue_status_sync` genuinely failing against the actual committed state — this work plan's own Issue Graph row for LISS-0059 was never synced from `ready` to `done`. Routed via the Minor Fix Path back to the Implementation group; corrected in commit `9574fbc`; independently re-confirmed clean by a fresh reproduction. |
+
+One finding was opened and resolved during this review — see the review
+record's own Falsification Search row 6 for the full account of catching
+a self-reported "passing" claim that was not actually reproducible.
 
 ## Work-Plan Close
 

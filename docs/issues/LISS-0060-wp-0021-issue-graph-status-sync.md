@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0060
 - GitHub issue: none
-- Status: resolved
+- Status: closed
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -86,11 +86,11 @@ plan's own content.
   (one table cell)
 - Deterministic verification output: recorded in this issue's own
   Verification section once the fix lands
-- Separate Reviewer closure record: this issue's own resolution is
-  confirmed by the Reviewer (Design & Review group, same session as the
-  main WP-0021 review, but as an explicitly separate confirmation step
-  against the corrected commit — not folded silently into the original
-  Preflight claim)
+- Separate Reviewer closure record:
+  `docs/collaboration/reviews/2026-08-20-wp-0021-archive-copy-exclusion-gap-review.md`
+  (Falsification Search row 6) — confirmed independently, against a fresh
+  `git archive` extraction of the corrected commit (`9574fbc`), not against
+  the Implementer's own pasted output.
 
 ## Dependencies
 
