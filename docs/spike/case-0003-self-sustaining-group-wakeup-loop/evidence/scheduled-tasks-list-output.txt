@@ -1,0 +1,24 @@
+Direct empirical test, 2026-08-20, this session (Design & Review group,
+spawned worktree-isolated sub-agent session).
+
+Command: mcp__scheduled-tasks__list_scheduled_tasks (no parameters)
+
+Called directly from inside this spawned session, after loading the tool
+schema via ToolSearch (select:mcp__scheduled-tasks__list_scheduled_tasks,
+mcp__scheduled-tasks__create_scheduled_task).
+
+Output:
+
+No scheduled tasks found. Use create_scheduled_task to create one.
+
+Interpretation: the call succeeded (no permission error, no "tool
+unreachable" error, no indication the API is scoped away from a spawned
+sub-agent context) and returned a normal, well-formed response. This
+confirms the mcp__scheduled-tasks__* API is genuinely callable from
+inside a spawned, worktree-isolated Design & Review sub-agent session,
+not only from the top-level/interactive Backlog-thread session.
+
+No scheduled task was created as part of this test — per this spike's own
+Constraints, only reachability was investigated, not adoption. See
+case.md's "Candidates" (option B) and "Selection" sections for the full
+analysis of what this primitive does and does not provide.
