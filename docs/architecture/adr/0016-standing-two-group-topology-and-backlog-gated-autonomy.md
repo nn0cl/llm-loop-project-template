@@ -20,7 +20,7 @@ how ADR 0001's Status section already points forward to ADR 0014.
 decision. That agreement is `DA-2026-08-18-01`, reached through the
 multi-turn dialogue quoted in its own Direction section, including the
 three-layer clarification quoted in "Context" below. Follow-up issues:
-LISS-0020 through LISS-0026 (`docs/work-plans/WP-0002-two-group-send-message-loop.md`).
+LISS-0020 through LISS-0026 (`docs/archive/work-plans/WP-0002-two-group-send-message-loop.md`).
 
 ## Context
 
