@@ -122,3 +122,25 @@ realistic test of whether the rules work as designed.
   unprompted.
 - Reason: The deliberately-deferred second half of item-0012, now that all
   six rule-defining facets are closed; ready to begin with the spike.
+- Date: 2026-08-20
+- Decision: Backlog thread authorizes continuing to batch 2, following the
+  exact same process batch 1 used — Design & Review proposes a concrete
+  batch-2 plan (batching unit, candidate work plans, fresh eligibility
+  re-verification per ADR 0020 Rule 2/4, treatment of any items whose
+  already-done status is uncertain rather than assumed) as a new check-in
+  issue mirroring `docs/issues/LISS-0055-retroactive-adr-0020-batching-aggressiveness-decision.md`'s
+  own shape, the Backlog thread records its decision in that issue's own
+  Work Notes (same as LISS-0055's second Work Notes entry did for batch
+  1), and only then does an execution work plan and design agreement open.
+  This entry itself is the recorded authorization to begin that proposal
+  step — it is not itself the batch-2 scope decision, which per this
+  item's own Promotion notes above remains a human-decision point reserved
+  for the check-in issue once Design & Review's concrete plan exists to
+  decide against.
+- Reason: `SendMessage` alone is not a durable, independently-checkable
+  record of a Director decision in this repository's own model (Prime
+  Directive: "no execution without a recorded design agreement"; "every
+  decision produces a document"). Design & Review correctly declined to
+  proceed on batch 2 from an unbacked message and asked for the same kind
+  of artifact every prior decision in this thread has had — this commit is
+  that artifact.

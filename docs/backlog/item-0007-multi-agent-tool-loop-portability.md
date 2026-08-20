@@ -132,7 +132,7 @@ contract/tool mismatch ADR 0006 exists to prevent.
 ## Links
 
 - Spike case: none yet
-- Work plan (when promoted): none yet
+- Work plan (when promoted): `docs/archive/work-plans/WP-0004-multi-agent-tool-loop-portability.md` — confirmed via direct cross-reference; this item's own `Links` field was never updated when the work landed (see `docs/issues/LISS-0065-...md`'s own cross-reference table).
 - Design agreement (when promoted): none yet
 - Local issue (LISS): none yet
 - Spec: none yet
