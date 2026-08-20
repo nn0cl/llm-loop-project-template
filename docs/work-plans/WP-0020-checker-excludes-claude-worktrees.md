@@ -230,13 +230,22 @@ requiring correction.
 ## Work-Plan Close
 
 Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
-one combined Director action, after the Reviewer approves — not performed by
-the Design & Review group itself.
+one combined Director action, after the Reviewer approves.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0020-checker-excludes-claude-worktrees-review.md`,
+  Approved — the Reviewer built its own independent fixture reproducing
+  the identical pre-fix failure signature, 906 failures/806 ambiguous-basename
+  lines, confirmed fully resolved post-fix, no regression on the real
+  repository) via the Backlog thread, which independently confirmed the
+  `EXCLUDED_DIRS` fix, a clean `scripts/check-contract-consistency.py` run
+  from a detached checkout, and caught and fixed one more status-sync gap
+  (LISS-0058's Issue Graph row was still `ready`) before this close.
+- Next direction: closed with "はい". Merged content sits on
+  `process/promote-item-0017`. Push/PR/merge-to-main are separate explicit
+  actions, pending.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
