@@ -174,13 +174,24 @@ Filled in by the Implementation group once Preflight passes.
 
 ## Work-Plan Review
 
-Reviewer's approval record: <link, filled in after the Reviewer pass>
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-20-wp-0023-self-sustaining-wakeup-protocol-review.md`
+— **Approved** (2026-08-20, Reviewer persona, Design & Review group
+standing session, separate context from the Implementation-group subagent
+session that executed LISS-0063 in its own worktree/branch). Every
+inserted sentence in ADR 0016 and `cross-session-messaging.md` was
+independently confirmed, by line-by-line diff comparison, to match
+LISS-0063's own verbatim specification exactly, and Rules 1-6 were
+independently confirmed provably untouched (zero deletion lines in the
+ADR 0016 diff).
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
-|  |  |  |
+| LISS-0064 | closed | The Reviewer's own independent re-verification (not trusting the Implementer's pasted Preflight output) found `check_issue_status_sync` genuinely failing against the actual committed state — this work plan's own Issue Graph row for LISS-0063 was never synced from `ready` to `done`. Third occurrence of this exact defect class this session (WP-0021: `LISS-0060`; WP-0022: self-caught). Routed via the Minor Fix Path back to the Implementation group; corrected in commit `4c4d861`; independently re-confirmed clean by a fresh reproduction. |
+
+One finding was opened and resolved during this review.
 
 ## Work-Plan Close
 

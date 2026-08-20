@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0064
 - GitHub issue: none
-- Status: resolved
+- Status: closed
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -77,9 +77,12 @@ No other change is authorized by this finding.
   (one table cell)
 - Deterministic verification output: recorded in this issue's own
   Verification section once the fix lands
-- Separate Reviewer closure record: this issue's own resolution is
-  confirmed independently by the Reviewer against the corrected commit,
-  same as `LISS-0060`'s own precedent
+- Separate Reviewer closure record:
+  `docs/collaboration/reviews/2026-08-20-wp-0023-self-sustaining-wakeup-protocol-review.md`
+  (Falsification Search row 5) — confirmed independently, against a fresh
+  `git archive` extraction of the corrected commit (`4c4d861`), not
+  against the Implementer's own pasted output. Same precedent as
+  `LISS-0060`.
 
 ## Dependencies
 
