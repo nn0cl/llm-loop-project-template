@@ -215,14 +215,22 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 ## Work-Plan Close
 
 Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
-one combined Director action, after the Reviewer approves. Pending — this
-work plan does not merge to `main`; per this session's own mandate, the
-Backlog thread/Director performs the eventual `main` merge and close.
+one combined Director action, after the Reviewer approves.
 
-- Date: pending
-- Result read: pending
-- Next direction: pending
-- New design agreement (if any): pending
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0018-interactive-copy-script-review.md`,
+  Approved — including live manual interactive-terminal sessions and
+  adversarial EOF/Ctrl-D testing beyond the Implementer's own stated scope)
+  via the Backlog thread, which independently confirmed all six commits,
+  the review record, the Gherkin spec, the pty test suite's existence, a
+  clean `bash -n` syntax check, a clean `scripts/check-contract-consistency.py`
+  run, and a manual non-TTY invocation correctly falling back to
+  flag-required behavior (no hang), all from a detached checkout, before
+  presenting this close.
+- Next direction: closed with "クローズ、メインにマージしてプッシュ".
+  Merging into `main` and pushing now.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
