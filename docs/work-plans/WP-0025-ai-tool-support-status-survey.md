@@ -200,10 +200,28 @@ Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkp
 one combined Director action, after the Reviewer approves — not performed
 by the Design & Review group itself.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-21
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0025-ai-tool-support-status-survey-review.md`,
+  Approved) via the Backlog thread, which independently re-verified from a
+  fresh, isolated `git worktree add --detach` checkout of
+  `process/item-0021-status-survey` (tip `f5ec3ae`) before presenting this
+  close: `docs/collaboration/prompt-instruction-change-control.md` carries
+  the new Antigravity registry row and bullet; `docs/architecture/ai-tool-support-status.md`
+  exists; LISS-0069 at `Status: done` and correctly synced to `done` in
+  WP-0025's own Issue Graph. The checker's 3 reported failures were
+  independently reproduced against the pre-LISS-0069 commit (`7d61ab5`,
+  checked out in a second detached worktree) and found identical at the
+  same lines — confirmed genuinely pre-existing and unrelated to this
+  work plan's own change, not merely taken on the Implementer's or
+  Reviewer's word.
+- Next direction: closed (Director resumed the Design & Review session
+  after a session-limit reset and it reported this work plan at
+  close-readiness) — merging `process/item-0021-status-survey` into
+  `main` and pushing now.
+- New design agreement (if any): none opened by this close. The checker
+  false-positive gap (the 3 pre-existing failures) was separately flagged
+  by Design & Review via its own follow-up task, not decided here.
 
 ## Risks
 
