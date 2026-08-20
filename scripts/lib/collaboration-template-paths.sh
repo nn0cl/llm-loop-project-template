@@ -46,6 +46,7 @@ collaboration_template_exclude_paths=(
   "docs/backlog/item-*.md"
   "docs/work-plans/WP-*.md"
   "docs/collaboration/loop-settings.toml"
+  "docs/archive/*"
 )
 
 is_collaboration_template_excluded() {
