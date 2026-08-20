@@ -139,12 +139,27 @@ Findings, if any, tracked as `Type: review-finding` local issues:
 
 ## Work-Plan Close
 
-- Date: _pending_
-- Result read: _pending — Director close is a separate, later action._
-- Next direction: _pending_
-- New design agreement (if any): _pending — this closes item-0012's
-  rule-defining facets (1-6); the retroactive-application work plan gets
-  its own design agreement when reached._
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-19-wp-0017-review-summary-packet-review.md`,
+  Approved — reviewed under its own new Review Summary Packet convention
+  on the first use, with an explicit meta-finding that the convention
+  itself works as intended, real orientation speedup with no loss of
+  independent verification) via the Backlog thread, which independently
+  confirmed the new "Review Summary Packet" sections in
+  `design-agreement.md` and `docs/templates/work-plan.md`, the review
+  record, and a clean `scripts/check-contract-consistency.py` run from a
+  detached checkout.
+- Next direction: closed with "Close". This closes all six rule-defining
+  facets of item-0012 (facets 1-3/ADR 0020 and 4 and 5 already closed;
+  facet 6 closed here). Merged content sits on
+  `origin/process/item-0012-remaining-facets`. Push/PR/merge-to-main are
+  separate explicit actions, pending. The retroactive-application work
+  plan — applying ADR 0020's lifecycle rules to this repository's own
+  existing history — remains, sequenced as its own separate, later effort
+  per the Director's decision at item-0012's promotion.
+- New design agreement (if any): none opened by this close; the
+  retroactive-application work plan gets its own when reached.
 
 ## Risks
 
