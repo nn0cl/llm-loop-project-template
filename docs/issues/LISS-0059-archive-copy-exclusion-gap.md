@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0059
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -188,6 +188,140 @@ data-driven from this one array.
   `scripts/check-contract-consistency.py` line ~328 — the backlog item's
   premise that this issue "closes LISS-0044" does not hold; recorded
   above as a correction, not acted on by reopening that issue.
+
+- 2026-08-20 — Implementation group (Implementer persona), on branch
+  `wp-0021-execution` (created off `process/promote-item-0018`).
+
+  First attempt: `process/promote-item-0018` at commit `95f3eab` did not
+  yet contain the WP-0019/archival-batch commits (`81ddf2a`, `dfe5030`,
+  only reachable from `process/promote-item-0016`) that create
+  `docs/archive/` content, so `docs/archive/` did not exist on that branch
+  at all and the pre-fix reproduction genuinely showed zero
+  `docs/archive/...` dangling-reference failures (`contract consistency:
+  all checks passed`, both against a copied target and against the real
+  repository). Per the design agreement's own Falsification Criteria ("The
+  reproduction does not actually show the real CI failure shape before the
+  fix"), the fix was not applied against that state; the gap was reported
+  back instead of guessed past. The coordinating session merged
+  `process/promote-item-0016` into `process/promote-item-0018` (merge
+  commit `54f73c7`, clean, disjoint files) to bring the archived content
+  onto this issue's branch, and this branch was reset onto that merge
+  commit before re-attempting.
+
+  Reproduction (before fix), against `wp-0021-execution` at `54f73c7`,
+  using the exact CI invocation from `.github/workflows/ci.yml`'s "Check
+  template copy smoke test" step (`scripts/copy-ai-collaboration-files.sh
+  --target <tmp> --project-name "Smoke App" --domain-summary "template
+  smoke test" --stack "test stack"`, then
+  `python3 scripts/check-contract-consistency.py --repo <tmp>`):
+
+  ```
+  references:
+    docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md:23 names 'docs/archive/work-plans/WP-0002-two-group-send-message-loop.md', which does not exist
+    docs/collaboration/design-review-perspectives.md:66 names 'docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md', which does not exist
+    docs/collaboration/design-review-perspectives.md:169 names 'docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md', which does not exist
+    docs/collaboration/restoration-ledger.md:46 names 'docs/archive/work-plans/WP-0001-review-issues-minor-fix-path.md', which does not exist
+    docs/collaboration/restoration-ledger.md:47 names 'docs/archive/issues/LISS-0001-review-issues-minor-fix-path.md', which does not exist
+    docs/collaboration/restoration-ledger.md:48 names 'docs/archive/collaboration/traces/2026-08-02-review-issues-minor-fix-path.md', which does not exist
+    docs/collaboration/restoration-ledger.md:49 names 'docs/archive/collaboration/reviews/2026-08-02-review-issues-minor-fix-path.md', which does not exist
+    docs/collaboration/restoration-ledger.md:50 names 'docs/archive/collaboration/reviews/2026-08-02-review-issues-minor-fix-path-arbiter.md', which does not exist
+    docs/collaboration/restoration-ledger.md:51 names 'docs/archive/work-plans/WP-0002-two-group-send-message-loop.md', which does not exist
+    docs/collaboration/restoration-ledger.md:52 names 'docs/archive/issues/LISS-0019-adr-0016-two-group-topology.md', which does not exist
+    docs/collaboration/restoration-ledger.md:53 names 'docs/archive/issues/LISS-0020-personas-group-mapping.md', which does not exist
+    docs/collaboration/restoration-ledger.md:54 names 'docs/archive/issues/LISS-0021-ai-human-scheme-loop-update.md', which does not exist
+    docs/collaboration/restoration-ledger.md:55 names 'docs/archive/issues/LISS-0022-cross-session-messaging-protocol.md', which does not exist
+    docs/collaboration/restoration-ledger.md:56 names 'docs/archive/issues/LISS-0023-session-start-standing-pair.md', which does not exist
+    docs/collaboration/restoration-ledger.md:57 names 'docs/archive/issues/LISS-0024-implementation-group-worktree-rule.md', which does not exist
+    docs/collaboration/restoration-ledger.md:58 names 'docs/archive/issues/LISS-0025-design-agreement-backlog-gate-reconciliation.md', which does not exist
+    docs/collaboration/restoration-ledger.md:59 names 'docs/archive/issues/LISS-0026-backlog-readme-bulk-gate.md', which does not exist
+    docs/collaboration/restoration-ledger.md:60 names 'docs/archive/issues/LISS-0027-at-tdd-process-adr-0016-qualification.md', which does not exist
+    docs/collaboration/restoration-ledger.md:61 names 'docs/archive/collaboration/traces/2026-08-18-liss-0020-personas-group-mapping.md', which does not exist
+    docs/collaboration/restoration-ledger.md:62 names 'docs/archive/collaboration/traces/2026-08-18-liss-0021-ai-human-scheme-loop-update.md', which does not exist
+    docs/collaboration/restoration-ledger.md:63 names 'docs/archive/collaboration/traces/2026-08-18-liss-0022-cross-session-messaging-protocol.md', which does not exist
+    docs/collaboration/restoration-ledger.md:64 names 'docs/archive/collaboration/traces/2026-08-18-liss-0023-session-start-standing-pair.md', which does not exist
+    docs/collaboration/restoration-ledger.md:65 names 'docs/archive/collaboration/traces/2026-08-18-liss-0024-implementation-group-worktree-rule.md', which does not exist
+    docs/collaboration/restoration-ledger.md:66 names 'docs/archive/collaboration/traces/2026-08-18-liss-0025-design-agreement-backlog-gate-reconciliation.md', which does not exist
+    docs/collaboration/restoration-ledger.md:67 names 'docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md', which does not exist
+    docs/collaboration/restoration-ledger.md:68 names 'docs/archive/collaboration/reviews/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification-review.md', which does not exist
+
+  contract consistency: 26 failure(s)
+  ```
+
+  Exactly 26 failures, all `docs/archive/...` shape, matching PR #21's own
+  CI run count.
+
+  Fix applied: added `"docs/archive/*"` as the last entry of
+  `collaboration_template_exclude_paths` in
+  `scripts/lib/collaboration-template-paths.sh` (`git diff` confirmed
+  exactly one line added, nothing else touched).
+
+  Reproduction (after fix), same invocation against a fresh throwaway
+  target:
+
+  ```
+  contract consistency: all checks passed
+  ```
+
+  All 26 `docs/archive/...` dangling-reference failures are gone.
+  `find <target> -path '*docs/archive*'` on the post-fix copied target
+  returned no output — `docs/archive` remains un-copied, confirming the
+  fix did not also touch `collaboration_template_paths`.
+  `python3 scripts/check-contract-consistency.py` against the real,
+  uncopied worktree (no `--repo` flag) also reported `contract
+  consistency: all checks passed` — no regression. All throwaway `$tmp`
+  directories and their `git init`-ed contents were removed
+  (`rm -rf`) after each reproduction; nothing from either reproduction was
+  committed.
+
+  **Self-review (short form, per `docs/templates/self-review.md`)**
+
+  ```
+  Phase: Fast Path
+  Command run: scripts/copy-ai-collaboration-files.sh --target <tmp>/target \
+    --project-name "Smoke App" --domain-summary "template smoke test" \
+    --stack "test stack" && python3 scripts/check-contract-consistency.py \
+    --repo <tmp>/target
+  Result: before fix, "contract consistency: 26 failure(s)", all
+    docs/archive/... dangling-reference shape (full output above); after
+    fix, "contract consistency: all checks passed" (both the copied
+    target and, separately, the real repository with no --repo flag).
+  Risks considered:
+    1. The `docs/archive/*` exclude pattern could be too broad and start
+       exempting a currently-checked reference that should stay flagged as
+       genuinely dangling (i.e., masking a real bug elsewhere under
+       `docs/archive/`).
+    2. The fix could accidentally cause `docs/archive` to start being
+       copied to adopter targets (an over-broad change reaching into
+       `collaboration_template_paths` instead of, or in addition to,
+       `collaboration_template_exclude_paths`).
+    3. `_copy_exclusion_patterns()` could fail to parse the new array
+       entry (e.g. a quoting/regex mismatch), silently leaving the
+       exemption inactive.
+  Why each does not occur:
+    1. The pattern `docs/archive/*` only ever matches paths that literally
+       start with `docs/archive/`. That prefix is populated exclusively by
+       this template's own ADR-0020 archival mechanism (Rule 3, in-tree
+       moves under `docs/archive/<original-directory>/<original-filename>`)
+       — it holds only this template's own superseded/consolidated
+       records, never adopter- or feature-specific content, so exempting
+       the whole prefix cannot mask a reference to anything outside that
+       mechanism's own output.
+    2. `git diff scripts/lib/collaboration-template-paths.sh` (recorded
+       above and in the commit) shows the one added line lands inside
+       `collaboration_template_exclude_paths`, not
+       `collaboration_template_paths`; the post-fix
+       `find <target> -path '*docs/archive*'` returning empty directly
+       confirms `docs/archive` is still never copied.
+    3. The post-fix reproduction's clean "all checks passed" result against
+       the copied target is itself the direct evidence the array is parsed
+       correctly — `_copy_exclusion_patterns()`'s existing regex
+       (`collaboration_template_exclude_paths=\((.*?)\)` then
+       `"([^"]+)"`) already matches every other quoted, no-special-char
+       entry in that array, and the new entry uses the same quoting style
+       (`"docs/archive/*"`) with no glob metacharacter the two
+       implementations (bash `case` vs Python `fnmatch.fnmatchcase`) could
+       diverge on.
+  ```
 
 ## Verification
 
