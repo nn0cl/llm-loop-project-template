@@ -271,14 +271,25 @@ own "Reasons" section carries a non-blocking suggestion for a future ADR
 ## Work-Plan Close
 
 Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkpoint.md`,
-one combined Director action, after the Reviewer approves — not performed by
-the Design & Review group itself. This section is filled in by the Director
-at close.
+one combined Director action, after the Reviewer approves.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0019-retroactive-adr-0020-archival-batch-1-review.md`,
+  Approved — the Reviewer independently re-ran `scripts/check-contract-consistency.py`
+  against a fresh `git archive` of the branch, confirmed all 23 moves show
+  `R100` similarity, and independently confirmed the two Implementer-flagged
+  deviations were genuine plan-wording gaps, not defects) via the Backlog
+  thread, which independently confirmed a clean
+  `scripts/check-contract-consistency.py` run from a detached checkout,
+  `docs/archive/` containing real moved content, and 25 rows (23 entries
+  plus header/separator) in `docs/collaboration/restoration-ledger.md`.
+- Next direction: closed with "はい". This is item-0016's first archival
+  batch only (WP-0001, WP-0002) — report back with what was learned before
+  proposing the next batch, per the original mandate. Merged content sits
+  on `process/promote-item-0016`. Push/PR/merge-to-main are separate
+  explicit actions, pending.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
