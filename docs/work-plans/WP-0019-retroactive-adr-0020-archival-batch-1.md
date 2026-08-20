@@ -76,30 +76,129 @@ previously accepted work.
 
 ## Preflight Validation
 
-To be recorded here by the Implementation group once both issues are
-self-reviewed and complete, before requesting the work-plan-level Reviewer
-pass. Required checks, at minimum:
+Run by the Implementation group after both LISS-0056 and LISS-0057 landed
+and were self-reviewed. **Result: pass.** All six required checks below
+were run for real against the actual committed tree (not against either
+issue's own self-review record alone); full output pasted, not
+summarized.
 
-1. `python3 scripts/check-contract-consistency.py` — full output, run after
-   both issues land, showing zero new failures attributable to this work
-   plan's changes.
+1. `python3 scripts/check-contract-consistency.py` — full output:
+
+   ```text
+   contract consistency: all checks passed
+   ```
+
 2. `grep -rn "docs/work-plans/WP-0002-two-group-send-message-loop.md"
-   docs/architecture/ docs/collaboration/*.md docs/templates/` — confirms
-   the ADR 0016 reference update landed and no other current Canonical
-   document was missed.
+   docs/architecture/ docs/collaboration/*.md docs/templates/` — full
+   output:
+
+   ```text
+   docs/collaboration/restoration-ledger.md:51:| 2026-08-20 | `docs/work-plans/WP-0002-two-group-send-message-loop.md` | 81ddf2a8afcdda027f713fcb35242eb0d793c168 | N/A | `docs/archive/work-plans/WP-0002-two-group-send-message-loop.md` | archived | Director-closed (2026-08-18); all nine owned issues at terminal `Status: done` (corrected by commit `73ab2ce`/PR #20, verified independently in `docs/spike/case-0002-retroactive-adr-0020-lifecycle-application/case.md`'s post-close Addendum); no open `Type: review-finding` issue names it. |
+   ```
+
+   The single hit is the restoration ledger's own `source_path` column —
+   an Evidence-layer historical record of the pre-move path, not a
+   Canonical document pointing at a dead path. Zero hits in
+   `docs/architecture/` or `docs/templates/`, and zero in any other
+   `docs/collaboration/*.md` file. Confirms the ADR 0016 reference update
+   landed and no other current Canonical document was missed.
+
 3. `grep -rn "docs/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md"
-   docs/collaboration/design-review-perspectives.md` — confirms both
-   citations now point at the archive path.
-4. `git log --follow -- <each of the 23 destination paths>` (or a
-   representative sample naming which were spot-checked and which were
-   checked exhaustively) — confirms `git mv` history preservation, not
-   delete+recreate.
-5. `docs/collaboration/restoration-ledger.md` contains exactly 23 new rows,
-   each with a real `source_commit` hash.
-6. Re-confirmation that `docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md`
+   docs/collaboration/design-review-perspectives.md` — as literally
+   written, this returns **zero hits** (exit code 1) once the fix is
+   correctly applied: the correct archive path is
+   `docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`,
+   and inserting `archive/` immediately after `docs/` means the pre-move
+   path string is no longer a substring of the post-move one — so this
+   exact command cannot show a passing result after a correct fix. This
+   is an imprecision in this check's own wording (also present in
+   LISS-0057's own Verification section, flagged there in Work Notes),
+   not a real defect. The equivalent corrected search (matching the
+   filename without the stale `docs/collaboration/` prefix) confirms both
+   citations:
+
+   ```text
+   $ grep -rn "2026-08-18-wp-0002-two-group-send-message-loop-review.md" docs/collaboration/design-review-perspectives.md
+   docs/collaboration/design-review-perspectives.md:66:`docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`
+   docs/collaboration/design-review-perspectives.md:169:`docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md`,
+   ```
+
+4. `git log --follow --oneline -- <path>` run exhaustively (not sampled)
+   against all 23 destination paths; every one returned 2 or more
+   commits, confirming a preserved rename in every case, not
+   delete+recreate:
+
+   ```text
+    2 : docs/archive/work-plans/WP-0001-review-issues-minor-fix-path.md
+    2 : docs/archive/issues/LISS-0001-review-issues-minor-fix-path.md
+    2 : docs/archive/collaboration/traces/2026-08-02-review-issues-minor-fix-path.md
+    2 : docs/archive/collaboration/reviews/2026-08-02-review-issues-minor-fix-path.md
+    2 : docs/archive/collaboration/reviews/2026-08-02-review-issues-minor-fix-path-arbiter.md
+    7 : docs/archive/work-plans/WP-0002-two-group-send-message-loop.md
+    4 : docs/archive/issues/LISS-0019-adr-0016-two-group-topology.md
+    4 : docs/archive/issues/LISS-0020-personas-group-mapping.md
+    4 : docs/archive/issues/LISS-0021-ai-human-scheme-loop-update.md
+    4 : docs/archive/issues/LISS-0022-cross-session-messaging-protocol.md
+    4 : docs/archive/issues/LISS-0023-session-start-standing-pair.md
+    4 : docs/archive/issues/LISS-0024-implementation-group-worktree-rule.md
+    4 : docs/archive/issues/LISS-0025-design-agreement-backlog-gate-reconciliation.md
+    4 : docs/archive/issues/LISS-0026-backlog-readme-bulk-gate.md
+    5 : docs/archive/issues/LISS-0027-at-tdd-process-adr-0016-qualification.md
+    2 : docs/archive/collaboration/traces/2026-08-18-liss-0020-personas-group-mapping.md
+    2 : docs/archive/collaboration/traces/2026-08-18-liss-0021-ai-human-scheme-loop-update.md
+    2 : docs/archive/collaboration/traces/2026-08-18-liss-0022-cross-session-messaging-protocol.md
+    3 : docs/archive/collaboration/traces/2026-08-18-liss-0023-session-start-standing-pair.md
+    4 : docs/archive/collaboration/traces/2026-08-18-liss-0024-implementation-group-worktree-rule.md
+    2 : docs/archive/collaboration/traces/2026-08-18-liss-0025-design-agreement-backlog-gate-reconciliation.md
+    3 : docs/archive/collaboration/reviews/2026-08-18-wp-0002-two-group-send-message-loop-review.md
+    2 : docs/archive/collaboration/reviews/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification-review.md
+   ```
+
+5. `docs/collaboration/restoration-ledger.md` row count and hash check:
+
+   ```text
+   $ grep -c "| archived |" docs/collaboration/restoration-ledger.md
+   23
+
+   $ grep -oE '\| [0-9a-f]{40} \|' docs/collaboration/restoration-ledger.md | sort -u
+   | 81ddf2a8afcdda027f713fcb35242eb0d793c168 |
+   | dfe5030a7ead7e8e1bcf472e47ce6af4022f287c |
+   ```
+
+   Exactly 23 new rows (5 from LISS-0056 + 18 from LISS-0057), each with a
+   real, 40-character `source_commit` hash, exactly one of two values
+   (matching the two moves' own final commit hashes) — no `PENDING`
+   placeholder remains anywhere in the file.
+
+6. Re-confirmation that
+   `docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md`
    and `docs/collaboration/agreements/2026-08-18-two-group-send-message-loop.md`
-   are unchanged and un-moved (`git status`/`git diff` show no touch to
-   either path).
+   are unchanged and un-moved:
+
+   ```text
+   $ git status --short -- docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md docs/collaboration/agreements/2026-08-18-two-group-send-message-loop.md
+   (no output)
+
+   $ git diff --stat docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md docs/collaboration/agreements/2026-08-18-two-group-send-message-loop.md
+   (no output)
+
+   $ ls -la docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md docs/collaboration/agreements/2026-08-18-two-group-send-message-loop.md
+   -rw-r--r--@ 1 nn0cl  staff   5511 ... 2026-08-02-review-issue-and-minor-fix-path.md
+   -rw-r--r--@ 1 nn0cl  staff  17899 ... 2026-08-18-two-group-send-message-loop.md
+   ```
+
+   Both files present, unmodified, at their original paths.
+
+**Deviations found during Preflight** (both already recorded in
+LISS-0057's own Work Notes, restated here for the work-plan-level
+record): the hash self-reference correction mechanic (a commit cannot
+literally contain its own final hash via a single amend — resolved with a
+small follow-up correction commit for each of LISS-0056 and LISS-0057
+instead), and the item-3/item-2-in-LISS-0057 grep command's wording
+(the literal command necessarily shows zero hits once the fix is correct,
+not "both hits point at the archive path" — an equivalent corrected
+search confirms the underlying fact is true). Neither is a defect in the
+archival work itself.
 
 ## Review Summary Packet
 
@@ -119,10 +218,25 @@ submitting to the work-plan-level Reviewer, per
   tables), `docs/collaboration/restoration-ledger.md` (23 new rows), ADR
   0016 (one path edit), `design-review-perspectives.md` (two path edits).
 - **Findings**: none opened or resolved by this work plan.
-- **Disposition**: <filled in at Preflight>
-- **Remaining blockers**: none expected; state any found.
-- **Verification result**: <pointer to this file's own Preflight
-  Validation section, populated above>.
+- **Disposition**: Preflight Validation passed (all 6 required checks,
+  full output above); both LISS-0056 and LISS-0057 are `Status: done`
+  with self-review records recorded in their own Work Notes (short form
+  for LISS-0056, full form for LISS-0057). Ready for the work-plan-level
+  Reviewer pass in a separate context.
+- **Remaining blockers**: none found. Two non-blocking deviations from
+  the plan's own literal text were found and recorded (not silently
+  resolved): (1) the ledger's `source_commit` self-reference cannot be
+  produced by a single `git commit --amend`, since amending changes the
+  commit's own hash again — resolved with a small follow-up correction
+  commit for each issue instead (LISS-0056: `d02eb3c`; LISS-0057:
+  `42f4ea6`); (2) LISS-0057's own Verification section's second `grep`
+  command (and this file's own Preflight item 3, mirroring it) shows zero
+  hits once the fix is correctly applied, not "both hits point at the
+  archive path" as originally worded — confirmed via an equivalent
+  corrected search that the underlying fact (both citations updated) is
+  true. Neither affects the archival work's correctness.
+- **Verification result**: see this file's own Preflight Validation
+  section above — all 6 required checks passed with full output pasted.
 - **Next approval required**: boundary-conformance (did the move stay
   inside ADR 0020's own rules, correctly excluding the two blocked design
   agreements and item-0004) and evidence-sufficiency (is every move backed
