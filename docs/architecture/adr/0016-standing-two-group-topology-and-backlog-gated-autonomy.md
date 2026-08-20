@@ -21,6 +21,12 @@ decision. That agreement is `DA-2026-08-18-01`, reached through the
 multi-turn dialogue quoted in its own Direction section, including the
 three-layer clarification quoted in "Context" below. Follow-up issues:
 LISS-0020 through LISS-0026 (`docs/archive/work-plans/WP-0002-two-group-send-message-loop.md`).
+Rule 7 (the check-and-spawn wake protocol) is covered by a
+separate, later design agreement, `DA-2026-08-20-06`, following
+`docs/backlog/item-0020-self-sustaining-group-wakeup-loop.md`'s own
+promotion and the required-first spike
+(`docs/spike/case-0003-self-sustaining-group-wakeup-loop/case.md`);
+Rules 1-6 remain covered by `DA-2026-08-18-01` as before.
 
 ## Context
 
@@ -226,6 +232,63 @@ None of the following are altered by this ADR:
   blocking behavior across concurrently in-flight work plans change, per
   Rules 2 and 3.
 
+### Rule 7 — Check-and-spawn wake protocol
+
+Neither standing session is expected to revive itself from full dormancy
+with no external trigger — no primitive in this environment provides
+that (confirmed by direct investigation,
+`docs/spike/case-0003-self-sustaining-group-wakeup-loop/case.md`).
+Instead, responsibility for waking the next layer moves to the event that
+produces new approved work:
+
+1. **Backlog approval -> Design & Review.** When the Backlog thread
+   approves a backlog item (`docs/backlog/item-NNNN-*.md` moves to
+   `Status: promoted`), the Backlog thread checks, via `ListAgents`,
+   whether a Design & Review session is already running. If one is
+   found, it sends the new item to that session via `SendMessage`. If
+   none is found, it spawns one (Agent-tool, worktree-isolated, per the
+   existing convention this repository already uses for Implementation-
+   group dispatch) with the approved item as its task.
+2. **Work-plan approval -> Implementation.** When the Design & Review
+   group has a work plan ready for implementation (a freshly built plan
+   from the Planner, or a Reviewer-approved plan awaiting execution), the
+   Design & Review group itself checks, via `ListAgents`, whether an
+   Implementation session is already running. If one is found, it sends
+   the work plan to that session via `SendMessage`. If none is found, it
+   spawns one.
+3. **Queue continuation before going idle.** Inside each standing loop
+   (Design & Review, Implementation), before going idle after finishing a
+   task, the loop checks its own queue for other already-approved-but-
+   unstarted work — promoted backlog items not yet picked up, for Design
+   & Review; Reviewer-approved work plans not yet implemented, for
+   Implementation — and proceeds directly to the next one if any exists.
+   A loop goes idle only when its own queue is genuinely empty.
+4. **Resume before duplicate-spawn.** Before any party spawns a new
+   session for a role (Backlog thread spawning Design & Review, Design &
+   Review spawning Implementation, or any session recovering after an
+   error), it first checks whether a session already exists for that
+   role — including one that has just failed or errored, since its git
+   worktree and branch survive the failure and may hold uncommitted or
+   unpushed work. If a prior worktree/branch for that role's in-flight
+   task exists and has not been merged or cleaned up, the spawning party
+   resumes it (`SendMessage` to its `agentId` once reachable, or a new
+   session re-pointed at the same worktree/branch) rather than spawning a
+   fresh session that would duplicate the worktree or strand the earlier
+   content.
+
+This closes the gap
+`docs/backlog/item-0020-self-sustaining-group-wakeup-loop.md` named: ADR
+0016 and `docs/collaboration/cross-session-messaging.md` previously
+described the two groups as "standing" and "autonomous" without
+specifying a concrete wake-up mechanism. It does not claim full
+self-revival from dormancy is achieved — no primitive in this
+environment delivers that (per the spike). The one residual case is
+brand-new work arriving while both loops are fully idle and no session
+exists to check `ListAgents` on either's behalf; that case still needs
+the Backlog thread (or whatever originates the first approval) to
+perform rule 1's own check-and-spawn, which is the natural entry point,
+not a gap this protocol fails to close.
+
 ## Supersession, precisely
 
 | Superseded clause | What it required | What replaces it |
@@ -307,3 +370,10 @@ Code review should reject:
   separate-context Reviewer, regardless of which group produced it.
 - a `SendMessage` chat transcript treated as the record of a decision with
   no corresponding file, contradicting Invariant 1.
+- a spawning party creating a duplicate session/worktree for a role
+  without first checking, via `ListAgents`, whether one already exists
+  (Rule 7) — including a role recovering from a session that just failed
+  or errored, whose worktree/branch may hold undiscovered work.
+- a standing loop going idle while its own queue still has
+  already-approved-but-unstarted work it did not check for (Rule 7,
+  point 3).

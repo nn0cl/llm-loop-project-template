@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0063
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Architecture Path
@@ -256,6 +256,70 @@ queue before going idle).
 - 2026-08-20 — Design & Review group (Planner persona). Issue opened as
   part of WP-0023, scoped per the design agreement. Every inserted
   sentence is specified verbatim above. Not yet dispatched.
+- 2026-08-20 — Implementation group (Implementer persona). Dispatched via
+  WP-0023; worktree created from `process/promote-item-0020` at `954abf1`,
+  branch `wp-0023-execution`. Inserted `### Rule 7 — Check-and-spawn wake
+  protocol` into ADR 0016 immediately after Rule 6 and before "Supersession,
+  precisely"; added the Status-section sentence after the existing
+  follow-up-issues sentence; added the two Enforcement bullets at the end of
+  the Enforcement list. Updated `docs/collaboration/cross-session-messaging.md`:
+  replaced direction 1's "Message" bullet, added direction 2's "Wake
+  mechanic" bullet, and added the new "Queue continuation and
+  resume-before-duplicate-spawn (ADR 0016 Rule 7)" section immediately
+  before "## Handling a missing or malformed handoff". Wrote the mandatory
+  trace at `docs/collaboration/traces/2026-08-20-check-and-spawn-wake-protocol.md`.
+  `Status` updated to `done`. No script, helper, scheduled task, or
+  `.claude/settings.json` hook was added or found necessary to hook into —
+  confirmed no existing code surface in `scripts/` or `.claude/settings.json`
+  orchestrates cross-session spawning/messaging.
+
+  **Self-review (Implementer, full form — planning size M, per
+  `docs/templates/self-review.md` and `docs/templates/review-record.md`'s
+  "Deterministic Verification Output" and "Falsification Search" sections)**
+
+  Phase: Architecture Path, fully specified insertion (Fast-Path-like
+  execution — no design judgment exercised; every inserted sentence copied
+  verbatim from this issue's own Acceptance Notes).
+
+  Deterministic Verification Output:
+
+  ```text
+  $ python3 scripts/check-contract-consistency.py
+  contract consistency: all checks passed
+
+  $ grep -n "Rule 7" docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md
+  24:Rule 7 (the check-and-spawn wake protocol) is covered by a
+  235:### Rule 7 — Check-and-spawn wake protocol
+  375:  (Rule 7) — including a role recovering from a session that just failed
+  378:  already-approved-but-unstarted work it did not check for (Rule 7,
+
+  $ grep -n "Queue continuation and resume-before-duplicate-spawn" docs/collaboration/cross-session-messaging.md
+  259:## Queue continuation and resume-before-duplicate-spawn (ADR 0016 Rule 7)
+  ```
+
+  Falsification Search:
+
+  | # | Failure scenario searched for | Grounds it does not occur | Result |
+  |---|---|---|---|
+  | 1 | The inserted text drifted from this issue's own verbatim specification (e.g. reworded, reordered, or trimmed during insertion) | Direct `git diff` of both edited files was compared line-by-line against this issue's own fenced-code-block source text at insertion time; every added line matches character-for-character (see the Implementer's trace, `docs/collaboration/traces/2026-08-20-check-and-spawn-wake-protocol.md`, Verification section, for the full comparison record) | not reproduced |
+  | 2 | An existing sentence in either file was accidentally altered or removed during insertion | `git diff` on both files shows only added (`+`) lines — zero removed (`-`) lines outside the one deliberate replacement of direction 1's "Message" bullet in `cross-session-messaging.md`, which LISS-0063's own Acceptance Notes explicitly specify as a replacement, not an accidental change; ADR 0016 Rules 1-6 and all Enforcement/Status prose predating this change remain byte-identical apart from the three specified insertion points | not reproduced |
+  | 3 | A file other than the two contract files, the trace, or this issue's/the work plan's own tracking files was changed | `git status --porcelain` immediately before this commit shows only `docs/architecture/adr/0016-...md`, `docs/collaboration/cross-session-messaging.md`, `docs/collaboration/traces/2026-08-20-check-and-spawn-wake-protocol.md`, and this issue file as modified/new | not reproduced |
+  | 4 | The new Rule 7 content was inserted at the wrong location (e.g. before Rule 6, inside Rule 6, or after "Supersession, precisely" rather than before it) | `grep -n "Rule 7"` above shows line 235, and direct reading of the surrounding diff context confirms it lands immediately after Rule 6's closing bullet list and immediately before the `## Supersession, precisely` heading, as LISS-0063 specifies | not reproduced |
+  | 5 | The new `cross-session-messaging.md` section was inserted in the wrong position relative to "## Handling a missing or malformed handoff" | `grep -n` above shows the new section heading at line 259, immediately followed by its content and then the pre-existing "## Handling a missing or malformed handoff" heading, confirmed by direct reading of the post-edit file | not reproduced |
+
+  Scenarios not searched: whether the protocol itself is practically
+  effective once exercised by a live spawning session (e.g. whether
+  `ListAgents` behaves as this text assumes in every session type) — out of
+  scope for this documentation-only change and already named as an accepted
+  limitation in WP-0023's own Risks section; not a defect this self-review
+  is positioned to find.
+
+  This self-review satisfies the deterministic-precondition and
+  falsification-burden constraints for the Implementer's own phase
+  transition. It does not satisfy context separation and is not a
+  substitute for the work-plan-level Reviewer's own separate-context
+  approval, which ADR 0006 requires unconditionally for both edited
+  contract files.
 
 ## Verification
 

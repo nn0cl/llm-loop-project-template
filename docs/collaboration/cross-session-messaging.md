@@ -142,14 +142,17 @@ and the file(s) that carry the actual record.
 
 - **Trigger**: the Director approves a backlog item for promotion (status
   moves toward `promoted`, per `docs/backlog/README.md`).
-- **Message**: none needed. The Backlog layer is the Director's own thread,
-  not a session the Design & Review group must be signaled from externally
-  in the same sense as the other four directions — the approved backlog
-  item file's existence and status are themselves sufficient. If the
-  Director's own workflow does use `SendMessage` to notify the Design &
-  Review group's standing session that a new item is ready, that message is
-  purely a trigger; it still carries no content beyond pointing at the
-  backlog item file.
+- **Message**: required, per ADR 0016 Rule 7. On approving a backlog
+  item, the Backlog thread checks via `ListAgents` whether a Design &
+  Review session is already running. If found, it sends the approved
+  item to that session via `SendMessage`; the message still carries no
+  content beyond pointing at the backlog item file (the governing rule
+  above is unchanged). If no Design & Review session is found — including
+  the case where a candidate session exists but is unreachable because it
+  just failed or errored, per Rule 7 point 4 — the Backlog thread spawns
+  one (Agent-tool, worktree-isolated) with the approved item as its task,
+  rather than spawning a fresh one when a resumable worktree/branch for
+  an in-flight Design & Review task already exists.
 - **Record**: `docs/backlog/item-NNNN-*.md`, with `Status: promoted`.
 
 ### 2. Design agreement recorded -> Implementation group
@@ -164,6 +167,15 @@ and the file(s) that carry the actual record.
   "Recommended Order" or "Current Next Issue" section) — this is a
   convenience, not a substitute for the Implementation group reading the
   work plan itself.
+- **Wake mechanic**: per ADR 0016 Rule 7, the Design & Review group
+  checks via `ListAgents` whether an Implementation session is already
+  running before sending this handoff. If found, it sends the work plan
+  to that session via `SendMessage`. If not found — including when a
+  prior Implementation session for a related, unfinished task just failed
+  or errored, leaving a resumable worktree/branch behind, per Rule 7
+  point 4 — it spawns one (Agent-tool, worktree-isolated), rather than
+  duplicating a worktree that already holds in-flight or uncommitted
+  work.
 - **Record**: the work plan and the design-agreement file named above. The
   message body is not the record.
 - **Acknowledgment**: the Implementation group acknowledges by starting
@@ -243,6 +255,37 @@ group until it passes.
 - **Scope**: other concurrently in-flight work plans or backlog items, in
   either group, are unaffected and continue under standing backlog-level
   authorization (ADR 0016 Rule 3).
+
+## Queue continuation and resume-before-duplicate-spawn (ADR 0016 Rule 7)
+
+Two rules apply inside every standing session, independent of which
+specific handoff direction triggered its current work, restated here for
+this tool's own concrete `SendMessage`/`ListAgents` mechanics (ADR 0016
+Rule 7 is the authoritative statement; this section does not add new
+substance beyond stating it in terms of this environment's own tools):
+
+- **Before going idle, check the queue.** A standing session finishing
+  one task does not simply end its turn — it checks whether other
+  already-approved-but-unstarted work exists in its own queue (promoted
+  backlog items not yet picked up, for Design & Review; Reviewer-approved
+  work plans not yet implemented, for Implementation) and proceeds
+  directly to the next one if so. Only a genuinely empty queue is a
+  reason to go idle.
+- **Before spawning, check for a resumable session.** Before creating a
+  new Agent-tool worktree-isolated session for a role, the spawning party
+  calls `ListAgents` to check whether a session for that role already
+  exists — including one that just failed or errored. A failed session's
+  git worktree and branch survive the failure and may hold real,
+  committed-but-unpushed work with no other session aware of it. If a
+  prior worktree/branch for that role's in-flight task exists and has not
+  been merged or cleaned up, resume it — `SendMessage` to its `agentId`
+  once it is reachable again, or point a new session at the same
+  worktree/branch — rather than spawning a fresh session that would
+  duplicate the worktree or strand the earlier content. Per Invariant 1,
+  a session's own local commits are real evidence the moment they exist,
+  regardless of whether they have been pushed; losing track of a worktree
+  that holds them is a process failure this rule exists to prevent, not
+  an acceptable cost of a session ending unexpectedly.
 
 ## Handling a missing or malformed handoff
 
