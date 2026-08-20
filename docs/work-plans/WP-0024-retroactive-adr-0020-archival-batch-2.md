@@ -266,10 +266,25 @@ Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkp
 one combined Director action, after the Reviewer approves — not performed
 by the Design & Review group itself.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-20
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-20-wp-0024-retroactive-adr-0020-archival-batch-2-review.md`,
+  Approved) via the Backlog thread, which independently re-verified from a
+  fresh, isolated `git worktree add --detach` checkout of
+  `process/item-0016-batch-2-proposal` (tip `bfffd04`) before presenting
+  this close: a clean `check-contract-consistency.py` run; all 11 commits
+  present and in the described sequence; the Reviewer record's own
+  `[x] Approved` line; the restoration ledger at 55 rows (23 pre-existing
+  + 21 from LISS-0066 + 11 from LISS-0067); `docs/archive/work-plans/`
+  now holding WP-0003, WP-0005, WP-0007, WP-0008, and WP-0009 in full,
+  with WP-0004 and WP-0006 archived minus their normatively-blocked
+  design agreements; all five of backlog items 0005-0009's own `Links`
+  fields correctly pointing at their archived work-plan paths; and
+  WP-0021's own close date correctly filled in as `2026-08-20`.
+- Next direction: closed with "はい。承認" / "directorクローズ待ちはCloseして"
+  — merging `process/item-0016-batch-2-proposal` into `main` and pushing
+  now.
+- New design agreement (if any): none opened by this close.
 
 ## Risks
 
