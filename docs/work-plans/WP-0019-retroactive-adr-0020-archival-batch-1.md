@@ -49,7 +49,7 @@
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | LISS-0056 | done | S | S | N/A | LISS-0055 | - | process/promote-item-0016 |
-| LISS-0057 | ready | M | M | N/A | LISS-0055 | - | process/promote-item-0016 |
+| LISS-0057 | done | M | M | N/A | LISS-0055 | - | process/promote-item-0016 |
 
 ## Recommended Order
 
@@ -62,10 +62,10 @@
 
 ## Current Next Issue
 
-- Issue: LISS-0056
-- Reason it is unblocked: its only dependency, LISS-0055, is `Status: done`
-  (Backlog-thread authorization recorded there); this work plan's own
-  design agreement covers its full scope with no unresolved ambiguity.
+- Issue: none
+- Reason it is unblocked: both LISS-0056 and LISS-0057 are `Status: done`;
+  Preflight Validation (below) is the only remaining step before
+  submitting this work plan to the work-plan-level Reviewer.
 - Reopening request needed: no.
 
 ## Minor Fix Path
