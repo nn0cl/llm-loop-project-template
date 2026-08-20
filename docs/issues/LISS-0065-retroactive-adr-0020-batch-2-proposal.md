@@ -247,6 +247,24 @@ below, and either:
   rather than assuming case-0002's now-dated spot-check generalizes. No
   document moved. Awaiting Backlog-thread response before opening the
   execution work plan and design agreement.
+- 2026-08-20 — Backlog-thread decision received: option 1 combined with
+  option 4 from "What is being asked of the Backlog thread" above. The
+  proposed batch-2 scope (WP-0003 through WP-0009, 7 work plans, excluding
+  the 2 normatively-blocked design agreements `DA-2026-08-18-03` and
+  `DA-2026-08-18-05`) is authorized, oldest-first, same footing as batch
+  1's precedent. Additionally, fold into this same batch's execution work
+  plan: (a) the stale `Links: Work plan` field fix across
+  `docs/backlog/item-0005-*.md` through `item-0009-*.md` (pointing each at
+  its actual resolving work plan — WP-0005, WP-0006, WP-0004, WP-0003, and
+  WP-0007 respectively, per this issue's own cross-reference table above),
+  and (b) `docs/work-plans/WP-0021-archive-copy-exclusion-gap.md`'s own
+  empty Work-Plan Close `Date:` field, filled in as `2026-08-20` per PR
+  #21's own merge record (already named as the known, correct value in
+  this issue's "Real gap found" section above). Option 3 (the WP-0019-0023
+  longer-hold recommendation) is agreed as proposed — no redirection.
+  Standard mandate otherwise applies once past this check-in: open the
+  execution work plan and design agreement, proceed autonomously per ADR
+  0016 Rule 2/7.
 
 ## Verification
 
