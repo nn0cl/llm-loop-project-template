@@ -31,15 +31,15 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0019 | review | M | M | AIP-0019-001 | - | LISS-0020..0026 | process/adr-0016-two-group-topology |
-| LISS-0020 | review | S | S | - | LISS-0019 | - | process/personas-group-mapping |
-| LISS-0021 | review | M | M | AIP-0021-001 | LISS-0019 | - | process/ai-human-scheme-loop-update |
-| LISS-0022 | review | M | M | AIP-0022-001 | LISS-0019 | - | process/cross-session-messaging-protocol |
-| LISS-0023 | review | S | S | - | LISS-0019 | - | process/session-start-standing-pair |
-| LISS-0024 | review | S | S | - | LISS-0019 | - | process/implementation-group-worktree-rule |
-| LISS-0025 | review | M | M | AIP-0025-001 | LISS-0019 | - | process/design-agreement-backlog-gate |
-| LISS-0026 | review | S | S | - | LISS-0019 | - | process/backlog-readme-bulk-gate |
-| LISS-0027 | review | S | S | - | Minor Fix Path addendum, post-Reviewer (2026-08-18) | - | process/at-tdd-process-adr-0016-qualification |
+| LISS-0019 | done | M | M | AIP-0019-001 | - | LISS-0020..0026 | process/adr-0016-two-group-topology |
+| LISS-0020 | done | S | S | - | LISS-0019 | - | process/personas-group-mapping |
+| LISS-0021 | done | M | M | AIP-0021-001 | LISS-0019 | - | process/ai-human-scheme-loop-update |
+| LISS-0022 | done | M | M | AIP-0022-001 | LISS-0019 | - | process/cross-session-messaging-protocol |
+| LISS-0023 | done | S | S | - | LISS-0019 | - | process/session-start-standing-pair |
+| LISS-0024 | done | S | S | - | LISS-0019 | - | process/implementation-group-worktree-rule |
+| LISS-0025 | done | M | M | AIP-0025-001 | LISS-0019 | - | process/design-agreement-backlog-gate |
+| LISS-0026 | done | S | S | - | LISS-0019 | - | process/backlog-readme-bulk-gate |
+| LISS-0027 | done | S | S | - | Minor Fix Path addendum, post-Reviewer (2026-08-18) | - | process/at-tdd-process-adr-0016-qualification |
 
 ## Plan-Owned Bug Records
 
