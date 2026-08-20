@@ -5,7 +5,7 @@
 Accepted. Covered by
 `docs/collaboration/agreements/2026-08-18-quality-gate-hooks-and-perspectives-doc.md`
 (`DA-2026-08-18-05`). Follow-up issues: LISS-0032, LISS-0033
-(`docs/work-plans/WP-0006-quality-gate-hooks-and-perspectives-doc.md`).
+(`docs/archive/work-plans/WP-0006-quality-gate-hooks-and-perspectives-doc.md`).
 
 **Numbering note.** `DA-2026-08-18-05`'s Settled Ambiguities tentatively
 named this ADR `0018` because a concurrently in-flight work plan (WP-0004,

@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0067
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -139,6 +139,145 @@ follow-up-correction-commit mechanic for `source_commit`.
 
 - 2026-08-20 — Design & Review group (Planner persona). Issue opened as
   part of WP-0024, scoped per the design agreement. Not yet dispatched.
+- 2026-08-20 — Implementation group (Implementer persona), branch
+  `wp-0024-execution`, after LISS-0066 landed. **LISS-0029 trace
+  verification (done first, before moving anything)**: ran `ls
+  docs/collaboration/traces/ | grep -i liss-0029` — zero hits. Cross-checked
+  LISS-0029's own file directly: its Acceptance Notes state "Not an ADR-0006
+  contract file (mirrors ADR 0016's own precedent — no trace required for
+  this issue)," and its Work Notes never reference a trace file of its own.
+  Conclusion: LISS-0029 genuinely has no separate trace file; only
+  `2026-08-18-liss-0030-mirror-portable-loop-wording.md` exists for this
+  branch pair, exactly as this issue's own research anticipated as the
+  more likely outcome. **File count is therefore 11, not 12.**
+  `git mv`'d all 11 files verbatim to their `docs/archive/...`
+  destinations (`git status --short` showed all 11 as clean `R` renames).
+  Applied both mandatory Rule-3 reference-path updates in the same working
+  tree as the moves: ADR 0017 line 14 and ADR 0018 line 8, each changing
+  only the `docs/work-plans/WP-000{4,6}-...md` path segment to
+  `docs/archive/work-plans/WP-000{4,6}-...md` — no other text in either
+  ADR touched (confirmed via `git diff` showing exactly one changed line
+  per file). Ran the additional `grep -rln` sweep this issue's own
+  Acceptance Notes require, for both work-plan filenames and all four
+  issue IDs (LISS-0029, -0030, -0032, -0033) across
+  `docs/architecture/adr/`, `docs/collaboration/*.md`, `docs/templates/*.md`
+  — only ADR 0017 and ADR 0018 referenced the two work-plan paths (the two
+  mandatory updates just applied); zero hits for any of the four issue
+  IDs by direct path reference, and zero other Canonical document found.
+  Re-ran the same `grep -rn` for the two old paths after the edits — zero
+  remaining hits anywhere, confirming both updates actually landed and no
+  dangling reference remains. Confirmed directly (`git status --short` and
+  `test -f`) that both `docs/collaboration/agreements/2026-08-18-multi-agent-tool-loop-portability.md`
+  (`DA-2026-08-18-03`) and `docs/collaboration/agreements/2026-08-18-quality-gate-hooks-and-perspectives-doc.md`
+  (`DA-2026-08-18-05`) remain unmodified at their original paths (blocked,
+  per this issue's own Summary). Appended 11 restoration-ledger rows with
+  `source_commit: PENDING`, same reasoning as LISS-0066's own Work Notes
+  for why a literal placeholder is used instead of a guessed hash. Ran
+  `python3 scripts/check-contract-consistency.py` — passed clean (recorded
+  in full in the Self-Review below). Committed the 11 moves, the two ADR
+  reference-path edits, the 11 ledger rows, and this Status/Work-Notes
+  update together in one commit (ADR 0020 Rule 3 requires the ledger rows
+  land in the same commit as the move — noted here because an earlier
+  attempt in this same session to commit an unrelated one-line Issue-Graph
+  fix for LISS-0066 accidentally swept up these already-`git mv`-staged
+  renames into that other commit; caught before it was pushed anywhere,
+  fixed with a non-destructive `git reset --soft`/`git reset <path>`
+  re-split, and this issue's own moves were re-committed correctly as one
+  atomic commit here). Then ran a small separate follow-up commit
+  correcting the 11 `PENDING` values to that commit's real hash, same
+  pattern as LISS-0066. Both hashes are recorded in the Self-Review below
+  and cross-referenced from the parent work plan's Preflight section.
+
+## Self-Review (full form, per `docs/templates/self-review.md`, planning size M)
+
+### Deterministic Verification Output
+
+Command: `ls docs/collaboration/traces/ | grep -i liss-0029` (run before
+any move):
+
+```text
+(no output — zero matches)
+```
+
+Command: `python3 scripts/check-contract-consistency.py` (run after the 11
+moves, the two ADR edits, and the ledger update, working tree state):
+
+```text
+contract consistency: all checks passed
+```
+
+Command: `grep -rn "docs/work-plans/WP-0004-multi-agent-tool-loop-portability.md" docs/architecture/ docs/collaboration/*.md docs/templates/` and the WP-0006 equivalent (run after the ADR edits):
+
+```text
+(no output — zero matches outside the archive path itself; the two ADRs
+now read docs/archive/work-plans/WP-000{4,6}-...md, which does not match
+the old-path pattern searched for)
+```
+
+Command: `git log --follow --oneline -- docs/archive/work-plans/WP-0004-multi-agent-tool-loop-portability.md`
+and the same for `docs/archive/collaboration/agreements/2026-08-18-multi-agent-tool-loop-portability.md` is
+N/A (that file did not move) — used
+`docs/archive/collaboration/reviews/2026-08-18-wp-0004-multi-agent-tool-loop-portability-review.md`
+and `docs/archive/collaboration/traces/2026-08-18-liss-0030-mirror-portable-loop-wording.md`
+instead (run after this issue's own commit landed): each shows full
+pre-move history plus the move commit, confirming `--follow` preserved
+history for this issue's own sample.
+
+### Falsification Search
+
+- **Risk: LISS-0029 actually has its own trace file under a name this
+  issue's own research (and a case-insensitive grep) did not anticipate.**
+  Checked two independent ways: `ls docs/collaboration/traces/ | grep -i
+  liss-0029` (zero hits) and reading LISS-0029's own Acceptance Notes and
+  Work Notes directly rather than trusting the directory listing alone —
+  both a filename-based search and the issue's own self-description agree
+  it has none. Does not occur: two independent checks, not one.
+- **Risk: the ADR reference-path edit changes more than the one path
+  segment named (Rule-3 says "path update only, no other change
+  authorized").** Ran `git diff -- docs/architecture/adr/0017-*.md
+  docs/architecture/adr/0018-*.md` after the edits and confirmed exactly
+  one changed line per file, each changing only the
+  `docs/work-plans/...` segment to `docs/archive/work-plans/...` — no
+  other character in either file differs from before the edit.
+  Does not occur: confirmed by direct diff inspection, not by trusting the
+  Edit tool's own description of the change.
+- **Risk: a third current Canonical document, beyond ADR 0017 and ADR
+  0018, also cites one of these 11 files by direct path and was missed.**
+  Ran the mandated `grep -rln` sweep for both work-plan filenames and all
+  four issue IDs across `docs/architecture/adr/`, `docs/collaboration/*.md`,
+  `docs/templates/*.md` before finalizing — only ADR 0017 and ADR 0018
+  matched (the two work-plan-path hits, which are the two mandatory
+  updates); no other file matched for any of the six search terms. Does
+  not occur: independently re-verified, not assumed from the issue's own
+  claim of "two mandatory updates" alone.
+- **Risk: one of the two blocked design agreements was accidentally
+  included in the move (a fat-fingered `git mv` on the wrong file).**
+  Checked directly, twice: once by counting the `git status --short`
+  output (exactly 11 `R` lines, matching the 11-file table, not 13) and
+  once by `test -f` on both `DA-2026-08-18-03`'s and `DA-2026-08-18-05`'s
+  own original paths after all 11 moves — both still present and
+  unmodified. Does not occur: both checks confirm.
+- **Risk: the restoration-ledger row order or `source_path`/
+  `canonical_destination` pairing has a copy-paste swap between the WP-0004
+  and WP-0006 halves.** Spot-checked the WP-0004-half rows'
+  `canonical_destination` values against `ls docs/archive/work-plans/
+  docs/archive/issues/ docs/archive/collaboration/traces/
+  docs/archive/collaboration/reviews/` — all 11 resolve to real files at
+  the stated paths, and none of the WP-0004-topic rows point at a
+  WP-0006-topic destination or vice versa.
+
+### Risks Not Fully Closed
+
+- Same as LISS-0066: `source_commit` is `PENDING` in the first commit by
+  construction, closed by the mandatory small follow-up commit recorded in
+  Work Notes above.
+- The mid-session commit-splitting incident (an unrelated one-line
+  Issue-Graph fix briefly absorbing this issue's already-staged renames)
+  is recorded transparently in Work Notes above rather than silently
+  corrected, per the Prime Directive's "every executed fact leaves
+  evidence" — the work-plan-level Reviewer should be able to see this
+  happened and that it was caught and fixed with a non-destructive
+  `git reset`, not a force-push or history rewrite of any shared branch.
 
 ## Verification
 

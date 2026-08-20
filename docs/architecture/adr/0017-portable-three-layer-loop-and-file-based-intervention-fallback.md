@@ -11,7 +11,7 @@ are, Claude-Code-oriented, for the routine Design & Review <-> Implementation
 handoff and the live Director intervention channel where that tool is in use
 (see "What this ADR leaves untouched" below). Follow-up issues: LISS-0029
 (this document) and LISS-0030 (mirror-wording propagation),
-`docs/work-plans/WP-0004-multi-agent-tool-loop-portability.md`.
+`docs/archive/work-plans/WP-0004-multi-agent-tool-loop-portability.md`.
 
 `Accepted` status requires a design agreement with the Director covering the
 decision. That agreement is `DA-2026-08-18-03`, whose Direction section rests
