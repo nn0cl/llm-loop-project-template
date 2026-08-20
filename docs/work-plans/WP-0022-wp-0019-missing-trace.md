@@ -33,7 +33,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0061 | ready | S | S | N/A | - | - | process/promote-item-0016 |
+| LISS-0061 | done | S | S | N/A | - | - | process/promote-item-0016 |
 
 ## Recommended Order
 
@@ -64,21 +64,63 @@ contract change and does not require its own trace").
 
 ## Preflight Validation
 
-To be recorded here by the Implementation group once LISS-0061 is
-self-reviewed and complete, before requesting the work-plan-level
-Reviewer pass. Required checks, at minimum:
+Run by the Implementation group on branch `wp-0022-execution` (created
+from local branch `process/promote-item-0016` at commit `1c6a28a`) after
+LISS-0061 landed (commit `d190dd7`) and was self-reviewed (short form, in
+LISS-0061's own Work Notes). **Result: pass.** All three required checks
+below were run for real against the actual committed tree; full output
+pasted, not summarized.
 
-1. `python3 scripts/check-contract-consistency.py` — full output,
-   confirming no regression.
-2. `git diff --name-only <base> <head>` (mirroring
-   `.github/workflows/ci.yml`'s own "Check agent operating contract
-   change traceability" step invocation, using the same base/head this
-   branch will actually merge against) shows the new trace file's path
-   present — confirming the CI check's own `trace_added` condition is
-   satisfied.
+1. `python3 scripts/check-contract-consistency.py` — full output:
+
+   ```text
+   $ python3 scripts/check-contract-consistency.py
+   contract consistency: all checks passed
+   ```
+
+   (One regression was found and fixed before this pass: LISS-0061's
+   `Status: done` was initially out of sync with this file's own Issue
+   Graph row, which still read `ready`. Corrected in the Issue Graph table
+   above, as part of this same Preflight step — not silently pre-fixed.)
+
+2. `git diff --name-only main HEAD` (mirroring `.github/workflows/ci.yml`'s
+   own "Check agent operating contract change traceability" step
+   invocation, using `main` — this worktree's available local stand-in for
+   the PR's actual base — against this branch's current head):
+
+   ```text
+   $ git diff --name-only main HEAD | grep '^docs/collaboration/traces/'
+   docs/collaboration/traces/2026-08-20-wp-0019-contract-file-edits.md
+   ```
+
+   The new trace file's path is present, confirming the CI check's own
+   `trace_added` condition is satisfied. Cross-checked against the
+   `contract_changed` side of the same condition:
+
+   ```text
+   $ git diff --name-only main HEAD | grep -E '^docs/collaboration/[^/]+\.md$'
+   docs/collaboration/design-review-perspectives.md
+   docs/collaboration/restoration-ledger.md
+   ```
+
+   Both contract files this trace documents are indeed in the diff
+   (`contract_changed=true`), and the new trace file is also in the diff
+   (`trace_added=true`) — the exact combination the CI step requires and
+   that this work plan exists to satisfy.
+
 3. Confirmation, by direct reading, that the new trace's content
-   accurately cites real commits, issues, and review records (not
-   invented or approximate).
+   accurately cites real commits, issues, and review records: performed
+   directly by the Implementer while writing the trace (see
+   `docs/collaboration/traces/2026-08-20-wp-0019-contract-file-edits.md`'s
+   own Verification section) — `git show 81ddf2a` and `git show dfe5030`
+   were read in full, and every factual claim in the trace (line numbers
+   66/169 in `design-review-perspectives.md`; row counts 5+18=23 in
+   `restoration-ledger.md`; the two source commit hashes) was independently
+   reproduced by direct command output against the real committed tree,
+   not copied unverified from LISS-0061's or WP-0019's own prose. Not a
+   separate-context check (Preflight does not require context separation
+   from the Implementer, only from the work-plan-level Reviewer that
+   follows it) — the deterministic commands themselves are the check.
 
 ## Review Summary Packet
 
@@ -95,10 +137,20 @@ Filled in by the Implementation group once Preflight passes.
   `docs/collaboration/traces/2026-08-20-wp-0019-contract-file-edits.md`
   only.
 - **Findings**: none opened or resolved by this work plan.
-- **Disposition**: <filled in at Preflight>
-- **Remaining blockers**: none expected; state any found.
-- **Verification result**: <pointer to this file's own Preflight
-  Validation section, populated above>.
+- **Disposition**: Preflight Validation passed (all 3 required checks, full
+  output in this file's own "Preflight Validation" section above);
+  LISS-0061 is `Status: done` with a short-form self-review record in its
+  own Work Notes. Ready for the work-plan-level Reviewer pass in a separate
+  context.
+- **Remaining blockers**: none found. One non-blocking sync gap was found
+  and corrected during this Preflight step itself, not silently pre-fixed:
+  this file's own Issue Graph row for LISS-0061 still read `ready` after
+  the issue's `Status` was set to `done`, which
+  `scripts/check-contract-consistency.py`'s issue-status-sync check
+  correctly flagged; corrected in the Issue Graph table above, and the
+  checker now passes clean.
+- **Verification result**: see this file's own "Preflight Validation"
+  section above — all 3 required checks passed with full output pasted.
 - **Next approval required**: evidence-sufficiency (does the trace
   accurately and completely document the two contract-file edits it
   claims to) — the one approval type most directly at stake for a pure
