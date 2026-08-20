@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0062
 - GitHub issue: none
-- Status: proposed
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: docs-only
@@ -152,6 +152,97 @@ Exactly the question the spike's own Selection reserved:
   correction or new automation is adopted. No `.claude/settings.json` or
   scheduled task was created or modified. Awaiting Director/Backlog-thread
   response before opening the follow-up work plan and design agreement.
+- 2026-08-20 — Design & Review group (Planner persona). **Director
+  decision received.** None of the four listed options (1/2/3/4) as
+  drafted — the Director's actual direction is a fifth model that
+  reassigns *who* checks and wakes *whom*, rather than asking a dormant
+  session to revive itself (which the spike correctly found impossible).
+  Quoted verbatim, as received:
+
+  > バックログが承認されたら、設計、レビューループが既に走っているか確認
+  > し、無ければ起動する。設計、レビューループもWPが承認になるタイミング
+  > で実装ループの存在を確認し、無ければ起動する。設計、レビューループお
+  > よび実装ループはループの中で、次のタスクに着手できるようになったら、
+  > 承認済みのタスクを探し、存在するなら着手する。
+
+  In English, as three concrete rules:
+
+  1. **Backlog-thread action, on approving a backlog item**: check via
+     `ListAgents` whether a Design & Review session is already running.
+     If yes, `SendMessage` the new work to it. If no, spawn one
+     (Agent-tool, worktree-isolated, per existing convention) with the
+     approved item as its task.
+  2. **Design & Review action, on approving a work plan ready for
+     implementation**: Design & Review itself checks via `ListAgents`
+     whether an Implementation session is already running. If yes,
+     `SendMessage` the work plan to it. If no, spawn one.
+  3. **Inside each loop** (Design & Review, Implementation): before going
+     idle after finishing a task, check the loop's own queue for other
+     already-approved-but-unstarted work (promoted backlog items not yet
+     picked up, for Design & Review; Reviewer-approved work plans not yet
+     implemented, for Implementation) and proceed directly to the next
+     one if any exists. Only go idle when the queue is genuinely empty.
+
+  Plus one addendum, sent as a follow-up in the same decision round,
+  addressing a live failure this exact session's own worktree
+  demonstrated mid-task (a session-limit interruption that left this
+  worktree/branch — `process/promote-item-0020` — holding real, already-
+  committed work no other session had a way to discover): **before any
+  party spawns a new session for a role, it must first check whether an
+  existing session for that role already exists — including one that
+  just failed or errored, since its git worktree and branch survive the
+  failure and may hold uncommitted or unpushed work.** If a prior
+  worktree/branch for that role's in-flight task exists and has not been
+  merged/cleaned up, resume it (`SendMessage` to its `agentId` once
+  reachable, or re-point a new session at the same worktree/branch)
+  rather than spawning a fresh one that would duplicate the worktree or
+  strand the earlier content.
+
+  **Correction to the addendum's own premise, recorded for the audit
+  trail rather than silently accepted**: the specific claim that this
+  issue's own content was "uncommitted... sitting only in your worktree"
+  at the time of that message does not hold — `git log` independently
+  confirms this issue was already committed (`6c797ca`) before that
+  message arrived; nothing was at risk of being lost. What *is* accurate,
+  and is exactly the gap the addendum's own rule addresses regardless of
+  this one incident's precise details, is that the commit was not yet
+  *pushed* to `origin` — a genuinely different session picking up this
+  worktree's role would have had no way to discover this branch's content
+  without either being pointed at this exact local worktree or the branch
+  being pushed first. The addendum's own rule (check for and resume a
+  surviving worktree/branch before spawning a duplicate) is adopted on
+  its own merits as a sound, generally-applicable rule, independent of
+  whether this specific triggering incident was accurately described.
+
+  This settled decision **supersedes options 1/2/3/4** from this issue's
+  own original "What is being asked of the Backlog thread" section above
+  — none of those four is what was chosen; a fifth, more specific
+  check-and-spawn/queue-continuation protocol was.
+
+  Uses only tools already confirmed reachable and working this session
+  (`ListAgents`, `SendMessage`, Agent-tool worktree spawning) — no
+  `mcp__scheduled-tasks__*` recurring cost, no untested `Stop` hook,
+  matching this session's own spike findings about which candidates were
+  actually verified versus merely inferred. Does not achieve true
+  self-revival from full dormancy — the spike's own finding that no
+  primitive delivers this stands unchanged — but it eliminates the
+  actual observed pain point (a human having to manually notice an idle
+  session and reconstruct what to resume it with) for every case except
+  the first one: brand-new work arriving while both loops are fully idle
+  and no session exists to check `ListAgents` on their behalf, which
+  still needs the Backlog thread (or whatever originates the first
+  approval) to do rule 1's own check-and-spawn — an expected, accepted
+  residual, not a gap this protocol failed to close.
+
+  Follow-up work plan and design agreement opened:
+  `docs/work-plans/WP-0023-self-sustaining-wakeup-protocol.md`,
+  `docs/collaboration/agreements/2026-08-20-self-sustaining-wakeup-protocol.md`
+  (`DA-2026-08-20-06`), to correct
+  `docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md`
+  and `docs/collaboration/cross-session-messaging.md` to state this
+  protocol precisely, replacing the vague "standing"/"autonomous"
+  language that never specified an actual mechanism. This issue is now
+  resolved.
 
 ## Verification
 
