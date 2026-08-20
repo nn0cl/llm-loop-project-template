@@ -70,22 +70,73 @@ Reviewer plus a trace, regardless of size or Director-level urgency.
 
 ## Preflight Validation
 
-To be recorded here by the Implementation group once LISS-0063 is
-self-reviewed and complete, before requesting the work-plan-level
-Reviewer pass. Required checks, at minimum:
+Recorded by the Implementation group, LISS-0063 self-reviewed and complete
+(commit `6125931` on `wp-0023-execution`, branched from
+`process/promote-item-0020` at `954abf1`). Result: **pass**.
 
-1. `python3 scripts/check-contract-consistency.py` — full output,
-   confirming no regression.
+1. `python3 scripts/check-contract-consistency.py` — full output:
+
+   ```text
+   $ python3 scripts/check-contract-consistency.py
+   contract consistency: all checks passed
+   ```
+
+   No regression.
+
 2. `grep -n "Rule 7" docs/architecture/adr/0016-...md` and equivalent
-   confirmation for each of `cross-session-messaging.md`'s new/updated
-   sections — confirms every piece of LISS-0063's own required content
-   actually landed, not only that the checker passes.
+   confirmation for `cross-session-messaging.md`'s new/updated sections:
+
+   ```text
+   $ grep -n "Rule 7" docs/architecture/adr/0016-standing-two-group-topology-and-backlog-gated-autonomy.md
+   24:Rule 7 (the check-and-spawn wake protocol) is covered by a
+   235:### Rule 7 — Check-and-spawn wake protocol
+   375:  (Rule 7) — including a role recovering from a session that just failed
+   378:  already-approved-but-unstarted work it did not check for (Rule 7,
+
+   $ grep -n "Queue continuation and resume-before-duplicate-spawn" docs/collaboration/cross-session-messaging.md
+   259:## Queue continuation and resume-before-duplicate-spawn (ADR 0016 Rule 7)
+
+   $ grep -n "Wake mechanic" docs/collaboration/cross-session-messaging.md
+   170:- **Wake mechanic**: per ADR 0016 Rule 7, the Design & Review group
+
+   $ grep -n "required, per ADR 0016 Rule 7" docs/collaboration/cross-session-messaging.md
+   145:- **Message**: required, per ADR 0016 Rule 7. On approving a backlog
+   ```
+
+   Every piece of LISS-0063's own required content landed with the exact
+   headings/labels specified.
+
 3. `git diff` scope check — confined to the two contract files, the new
    trace file, and this work plan's own tracking files (LISS-0063,
-   WP-0023 itself).
+   WP-0023 itself):
+
+   ```text
+   $ git diff process/promote-item-0020...HEAD --stat
+    ...wo-group-topology-and-backlog-gated-autonomy.md |  70 ++++++
+    docs/collaboration/cross-session-messaging.md      |  59 ++++-
+    .../2026-08-20-check-and-spawn-wake-protocol.md    | 256 +++++++++++++++++++++
+    .../LISS-0063-check-and-spawn-wake-protocol.md     |  66 +++++-
+    4 files changed, 442 insertions(+), 9 deletions(-)
+   ```
+
+   Confirmed: only ADR 0016, `cross-session-messaging.md`, the new trace,
+   and `LISS-0063-...md` changed. This file (WP-0023) is edited in a
+   separate, subsequent commit for this Preflight/Review Summary Packet
+   section only, per the covering design agreement's own sequencing.
+
 4. Confirmation the new trace file
    (`docs/collaboration/traces/2026-08-20-check-and-spawn-wake-protocol.md`)
-   exists and states which files changed, why, and what behavior changes.
+   exists and states which files changed, why, and what behavior changes —
+   confirmed by direct reading: its "Changed Files" section names both
+   contract files and states the reason (closing the gap named in
+   `docs/backlog/item-0020-...md` and its spike, per the Director's settled
+   decision in `docs/issues/LISS-0062-...md`) and the expected behavior
+   change (a spawning party checks `ListAgents` before spawning and resumes
+   a surviving worktree/branch instead of duplicating it; a standing loop
+   checks its own queue before going idle).
+
+**Next action**: submit to the work-plan-level Reviewer pass, in a separate
+context, per ADR 0006's contract-file governance.
 
 ## Review Summary Packet
 
@@ -104,10 +155,15 @@ Filled in by the Implementation group once Preflight passes.
   `docs/collaboration/cross-session-messaging.md`,
   `docs/collaboration/traces/2026-08-20-check-and-spawn-wake-protocol.md`.
 - **Findings**: none opened or resolved by this work plan.
-- **Disposition**: <filled in at Preflight>
-- **Remaining blockers**: none expected; state any found.
-- **Verification result**: <pointer to this file's own Preflight
-  Validation section, populated above>.
+- **Disposition**: Preflight **pass**. Both contract-file edits landed
+  verbatim per LISS-0063's own Acceptance Notes, confirmed by direct
+  `git diff` comparison; no existing sentence in either file was altered
+  or removed; the mandatory trace exists and states all three required
+  facts. Ready for submission to the work-plan-level Reviewer pass.
+- **Remaining blockers**: none found.
+- **Verification result**: see this file's own "Preflight Validation"
+  section above, populated with full command output (all four required
+  checks, `pass`).
 - **Next approval required**: boundary-conformance (did the edit land
   exactly the text LISS-0063 specifies, touching nothing else) and
   evidence-sufficiency (does the trace correctly document the two
