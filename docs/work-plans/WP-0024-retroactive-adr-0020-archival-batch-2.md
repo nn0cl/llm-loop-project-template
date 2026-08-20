@@ -38,7 +38,7 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0066 | ready | M | M | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
+| LISS-0066 | done | M | M | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
 | LISS-0067 | ready | M | M | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
 | LISS-0068 | ready | S | S | N/A | LISS-0065 | - | process/item-0016-batch-2-proposal |
 
