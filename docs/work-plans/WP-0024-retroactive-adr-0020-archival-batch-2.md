@@ -239,13 +239,26 @@ Filled in by the Implementation group once Preflight passes.
 
 ## Work-Plan Review
 
-Reviewer's approval record: <link, filled in after the Reviewer pass>
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-20-wp-0024-retroactive-adr-0020-archival-batch-2-review.md`
+— **Approved** (2026-08-20, Reviewer persona, Design & Review group
+standing session, separate context from the Implementation-group subagent
+session that executed LISS-0066/LISS-0067/LISS-0068 in its own
+worktree/branch). Independently re-verified all 32 moved files' rename
+integrity and ledger-row accuracy, both ADR reference-path updates, both
+excluded design agreements' untouched state, and both housekeeping
+fixes — including a targeted, independent check of the self-reported
+mid-session mis-staging deviation, confirmed to have genuinely not
+reached the final commit history.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
 |  |  |  |
+
+No `Type: review-finding` issues were opened — the review found no
+defect requiring correction.
 
 ## Work-Plan Close
 
