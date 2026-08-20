@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0054
 - GitHub issue: none
-- Status: ready
+- Status: in_progress
 - Phase: phase-0-design
 - Type: feature
 - Priority: medium
@@ -161,9 +161,76 @@ N/A — `Type` is `feature`, not `review-finding`.
   persona) under `DA-2026-08-20-01`, following ADR 0016 Rule 2 autonomous
   planning from `docs/backlog/item-0015-interactive-copy-script.md`'s
   promotion.
+- 2026-08-20 (Implementer persona, Phase 1 Red): Added
+  `scripts/tests/test_copy_ai_collaboration_files_interactive.py` (pty-based,
+  one test per Gherkin scenario in
+  `docs/specs/interactive-copy-script.feature.md`, 9 tests total) and ran it
+  against the current, unmodified `scripts/copy-ai-collaboration-files.sh`.
+  Self-review (Full form, per `docs/templates/self-review.md` and
+  `docs/templates/review-record.md`, planning size `M`):
+
+  **Command run**: `python3
+  scripts/tests/test_copy_ai_collaboration_files_interactive.py -v`
+
+  **Deterministic Verification Output** (test names and outcomes; full
+  transcript captured in this session's own record):
+
+  ```text
+  test_empty_optional_response_skips_placeholder_replacement ... ok
+  test_force_and_dry_run_stay_flag_only_never_prompted ... ok
+  test_non_interactive_flag_forces_flag_only_behavior ... FAIL
+  test_non_interactive_shell_skips_all_prompting ... ok
+  test_prompts_for_each_missing_optional_value_once ... FAIL
+  test_prompts_for_missing_target_when_omitted_interactively ... FAIL
+  test_prompts_still_fire_under_dry_run ... FAIL
+  test_reprompts_target_on_empty_response ... FAIL
+  test_supplied_flags_are_never_prompted_for ... ok
+
+  Ran 9 tests in 7.410s
+  FAILED (failures=5)
+  ```
+
+  **Falsification Search** (why each of the 5 failures is a genuine Red, and
+  why each of the 4 passes is not a false/gamed Red rather than a real gap):
+
+  | # | Scenario | Result | Grounds |
+  |---|---|---|---|
+  | 1 | Prompt for missing target interactively | FAIL | Script exits 2 with `--target is required.` before any prompt text can appear -- no prompting code exists yet; genuine Red for what task 2 must add. |
+  | 2 | Re-prompt on empty target response | FAIL | Same `--target is required.` exit; `A target directory is required.` is never printed -- the re-prompt loop does not exist yet. |
+  | 3 | Prompt for each missing optional value once | FAIL (`PROJECT_NAME_PROMPT` count `0 != 1`) | The three optional-value prompts do not exist yet; the unmodified script silently treats an omitted flag as `""` and completes a full copy with no prompt. |
+  | 4 | Prompts still fire under `--dry-run` | FAIL | Same root cause as #1 (no `--target` flag was passed and no prompt exists to collect it) -- this scenario specifically needs the prompting code path task 2 adds. |
+  | 5 | `--non-interactive` forces flag-only behavior | FAIL, via a different mechanism than #1-#4: the unmodified script has no `--non-interactive` flag, so argument parsing itself rejects it (`Unknown option: --non-interactive`, exit 2) rather than reaching `--target is required.` | This is the expected Red shape for this scenario specifically, named in advance in this task's own instructions -- confirms `--non-interactive` truly does not exist pre-implementation, not an assertion bug. |
+  | 6 | A supplied flag is never prompted for | PASS (trivially) | With no prompting code present at all, no prompt can ever be printed, so "no prompt" assertions hold vacuously -- a regression guard for task 2, not evidence the feature already works. |
+  | 7 | Non-interactive shell skips all prompting | PASS (trivially) | Same vacuous-truth reasoning as #6: the unmodified script already never prompts, under any condition. |
+  | 8 | `--force`/`--dry-run` stay flag-only, never prompted | PASS (trivially) | Same vacuous-truth reasoning as #6 -- and stays true after Green too, since no force/dry-run prompt is ever added (settled ambiguity in `DA-2026-08-20-01`). |
+  | 9 | Empty optional response skips placeholder replacement | PASS, not vacuously | The unmodified script already implements "empty value = no placeholder replacement" for *flag-omitted* values (`replace_placeholders`'s `[ -n "$project_name" ]` guards). This test supplies `--target` as a flag and never triggers a prompt (none exists), so the three optional fields stay `""` by flag-omission -- behaviorally identical to what an empty *prompted* response should produce once Green lands. Expected to keep passing unchanged through Green: a real regression guard proving the two "empty" paths (omitted flag, empty prompt response) stay equivalent, per `DA-2026-08-20-01`'s Settled Ambiguities. |
+
+  **Risks considered and why each does not invalidate this Red state**:
+  - A "FAIL" could be a broken test (assertion bug) rather than a genuine
+    behavior gap. Does not occur: each failure's captured output was
+    inspected above and traces to "prompting code does not exist yet" (an
+    immediate `--target is required.` exit, or `Unknown option` for the
+    not-yet-recognized `--non-interactive` flag), not a Python-side harness
+    error -- the harness ran the script to completion in all 9 cases with
+    the exit-code shape expected for each pre-implementation branch.
+  - A "PASS" could be a false negative hiding an actual gap (test not
+    exercising what it claims to). Does not occur: traced per scenario
+    (6-9) above -- each pass is either vacuous non-prompting truth, or
+    (scenario 9) an intentional equivalence the design agreement itself
+    settles, not an assertion that silently no-ops.
+  - Pty timing flakiness (named in WP-0018's own "Risks" section) could
+    produce a spurious FAIL or a hang. Does not occur here: the harness
+    polls with `select.select(..., 0.2)` against a wall-clock budget rather
+    than a single fixed sleep, and this run completed in 7.4s across all 9
+    tests with no `ScriptTimeout` raised.
+
+  Self-reviewed and accepted as the Red state. Proceeding to Phase 2 Green.
 
 ## Verification
 
-- To be recorded by the Implementer at each phase transition, and by this
-  work plan's Preflight Validation section before the separate-context
-  Reviewer pass.
+- Phase 1 Red: `python3
+  scripts/tests/test_copy_ai_collaboration_files_interactive.py -v` against
+  the unmodified script -- 5 genuine failures, 4 trivial/regression-guard
+  passes (see Work Notes above for the full breakdown and grounds).
+- Remaining verification (Phase 2 Green, Phase 3 Refactor, Preflight) to be
+  recorded as each phase transition happens.
