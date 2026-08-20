@@ -158,6 +158,45 @@ skip recording the check even if no edit is made.
   passing historical mention (pasted evidence of a past search), not the
   kind of direct pointer the courtesy check asks to redirect, and it does
   not even cite the file the courtesy check named.
+- 2026-08-20 — Implementation group (Implementer persona). Hash
+  self-reference note: the plan's suggested "commit, then amend to insert
+  this commit's own hash" mechanic does not actually converge — amending
+  changes the commit's content (the ledger cell now holding a hash),
+  which changes the commit's own hash again, so the first amend
+  (`a771e48...`) left the ledger referencing a hash that was immediately
+  stale and now dangling/unreachable. Corrected via the plan's own
+  documented alternative ("a small follow-up correction commit"): a
+  second commit (`d02eb3c...`) edited only the ledger's `source_commit`
+  cells to the real, final, reachable hash of the move commit
+  (`dfe5030a7ead7e8e1bcf472e47ce6af4022f287c`), which is not touched
+  again after that. Flagging this as a deviation from the literal
+  amend-only mechanic described in the dispatch instructions, though it
+  matches the fallback the same instructions also offered.
+- 2026-08-20 — Implementation group (Implementer persona). Self-review
+  (short form, per `docs/templates/self-review.md`):
+  - Phase / finding: Fast Path — docs-only archival move (no Red/Green/
+    Refactor cycle; ADR 0020 Rules 2-3 mechanics).
+  - Command run: `python3 scripts/check-contract-consistency.py`
+  - Result: initial run failed with one finding —
+    `docs/issues/LISS-0056-archive-wp-0001-under-adr-0020.md states
+    Status: done, but docs/work-plans/WP-0019-retroactive-adr-0020-archival-batch-1.md's
+    Issue Graph lists LISS-0056 as 'ready'` — fixed by updating WP-0019's
+    Issue Graph row for LISS-0056 to `done`; re-run:
+    `contract consistency: all checks passed`.
+  - Risks considered: (1) a moved file's git history broken by
+    delete+recreate instead of `git mv`; (2) a restoration-ledger row's
+    `source_commit` not matching the actual, final, reachable move
+    commit; (3) the work plan's own Issue Graph status drifting from the
+    issue's own `Status` field.
+  - Why each does not occur: (1) `git log --follow --oneline -- docs/archive/work-plans/WP-0001-review-issues-minor-fix-path.md`
+    shows two commits (`dfe5030` then, following back, the pre-move
+    `39cf12f`), confirming rename history was preserved, not
+    delete+recreate. (2) all five ledger rows were corrected in commit
+    `d02eb3c` to `dfe5030a7ead7e8e1bcf472e47ce6af4022f287c`, the actual
+    commit containing the `git mv`s and the ledger rows, verified via
+    `git show --stat dfe5030` showing all five renames. (3) resolved and
+    re-verified — `check-contract-consistency.py` now passes with zero
+    failures after syncing WP-0019's Issue Graph.
 
 ## Verification
 
