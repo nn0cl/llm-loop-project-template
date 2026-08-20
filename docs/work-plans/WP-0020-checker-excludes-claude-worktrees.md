@@ -208,13 +208,24 @@ Filled in by the Implementation group once Preflight passes.
 
 ## Work-Plan Review
 
-Reviewer's approval record: <link, filled in after the Reviewer pass>
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-20-wp-0020-checker-excludes-claude-worktrees-review.md`
+— **Approved** (2026-08-20, Reviewer persona, Design & Review group
+standing session, separate context from the Implementation-group subagent
+session that executed LISS-0058 in its own worktree/branch). The review
+independently built its own fresh fixture and reproduced the identical
+906-failure/806-ambiguous-basename-line signature before the fix, and
+confirmed it fully resolved after, rather than trusting the Implementer's
+own pasted output.
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
 |  |  |  |
+
+No `Type: review-finding` issues were opened — the review found no defect
+requiring correction.
 
 ## Work-Plan Close
 
