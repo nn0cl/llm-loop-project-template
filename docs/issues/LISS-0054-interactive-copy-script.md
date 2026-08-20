@@ -226,11 +226,75 @@ N/A — `Type` is `feature`, not `review-finding`.
 
   Self-reviewed and accepted as the Red state. Proceeding to Phase 2 Green.
 
+- 2026-08-20 (Implementer persona, Phase 2 Green): Implemented the smallest
+  change satisfying every test from task 1, in
+  `scripts/copy-ai-collaboration-files.sh`: `non_interactive=false` beside
+  `force`/`dry_run`; a `--non-interactive)` case in the existing flag-parsing
+  loop; `is_interactive_tty()` (identical shape to
+  `scripts/update-ai-collaboration-files.sh`'s own helper); the required-target
+  prompt loop and the three optional-value prompts, both inserted between the
+  end of flag parsing and the existing (untouched) `if [ -z "$target" ]...
+  exit 2` / `if [ ! -d "$target" ]... exit 1` checks; and a `usage()` update
+  documenting `--non-interactive` and the new interactive-prompting behavior.
+  No test was edited to pass. Self-review (Full form):
+
+  **Command run 1**: `bash -n scripts/copy-ai-collaboration-files.sh`
+  **Result**: exit 0, no output (syntax valid).
+
+  **Command run 2**: `python3
+  scripts/tests/test_copy_ai_collaboration_files_interactive.py -v`
+  **Result**:
+  ```text
+  test_empty_optional_response_skips_placeholder_replacement ... ok
+  test_force_and_dry_run_stay_flag_only_never_prompted ... ok
+  test_non_interactive_flag_forces_flag_only_behavior ... ok
+  test_non_interactive_shell_skips_all_prompting ... ok
+  test_prompts_for_each_missing_optional_value_once ... ok
+  test_prompts_for_missing_target_when_omitted_interactively ... ok
+  test_prompts_still_fire_under_dry_run ... ok
+  test_reprompts_target_on_empty_response ... ok
+  test_supplied_flags_are_never_prompted_for ... ok
+
+  Ran 9 tests in 7.647s
+  OK
+  ```
+  All 9 tests pass, including the 5 that were genuinely Red in task 1.
+
+  **Command run 3**: the exact block from `.github/workflows/ci.yml`'s
+  "Check template copy smoke test" step, pasted into a local shell against a
+  fresh `mktemp -d` target (adjusted only to `cd` into this worktree first).
+  **Result**: every `test -f` / `! ls` assertion passed, `python3
+  scripts/check-contract-consistency.py --repo .` inside the copied target
+  printed `contract consistency: all checks passed`, the placeholder-leftover
+  grep found nothing, and the script printed `SMOKE_TEST_PASSED` at the end.
+  No prompt text appeared anywhere in the transcript (flags supplied all four
+  values, confirming the additive-only requirement holds under an actual,
+  non-pty shell invocation too, not just the pty harness).
+
+  **Falsification Search**:
+
+  | # | Risk considered | Grounds it does not occur |
+  |---|---|---|
+  | 1 | The new prompting code could fire even when a value was supplied as a flag (breaking the "additive only" falsification criterion in `DA-2026-08-20-01`). | Every prompt is guarded by `[ -z "$<var>" ]` (target) or nested `if [ -z "$<var>" ]` per optional field; a flag-supplied value is never empty at that point in the script, so the guard skips the prompt. Directly exercised by `test_supplied_flags_are_never_prompted_for` (pass) and the manual smoke-test run above (no prompt text in output). |
+  | 2 | The prompting code could run and block even without a real TTY (breaking the "never hang a scripted/CI caller" falsification criterion). | `is_interactive_tty()` requires `[ -t 0 ] && [ -t 1 ]`; `run_non_interactive()` in the test harness redirects stdin from `/dev/null` (never a TTY), and CI's own smoke-test step never allocates a pty either. Exercised by `test_non_interactive_shell_skips_all_prompting` (pass, no timeout) and the smoke-test run (completed without hanging). |
+  | 3 | `--non-interactive` could fail to override a real TTY (breaking the same falsification criterion from the other direction). | `is_interactive_tty()`'s first condition is `[ "$non_interactive" != true ]`; with the flag set this short-circuits false before the `-t` checks run, regardless of terminal state. Exercised by `test_non_interactive_flag_forces_flag_only_behavior` (pass, no timeout despite running under a real pty). |
+  | 4 | The existing "Check template copy smoke test" CI step could start failing (the design agreement's explicit falsification criterion for backward compatibility). | Re-ran the exact step content manually against this Green implementation; see Command run 3 above -- passed unchanged, ending in `SMOKE_TEST_PASSED`. |
+  | 5 | The re-prompt loop on empty target input could go infinite or exit incorrectly instead of looping. | `while [ -z "$target" ]; do read -r -p ... target || true; ... done` re-evaluates `$target` each iteration; `test_reprompts_target_on_empty_response` sends one empty response then a real path and asserts the prompt is printed exactly twice and the process still exits 0 -- pass, so the loop terminates on the first non-empty input rather than looping forever or falling through early. |
+  | 6 | Empty optional responses could still trigger `replace_placeholders`'s substitutions (breaking the settled "empty prompt == omitted flag" equivalence). | `replace_placeholders()`'s guards (`[ -n "$project_name" ]`, etc.) are unchanged by this diff; an empty `read -r -p` response leaves the variable `""`, identical to an omitted flag. Exercised end-to-end (real copy, not `--dry-run`) by `test_empty_optional_response_skips_placeholder_replacement` (pass): the copied `CLAUDE.md` still contains the literal `<PROJECT_NAME:` placeholder. |
+  | 7 | `--force`/`--dry-run` could have accidentally gained a prompt (out of scope per the design agreement). | No code path in the diff reads or prompts for `force` or `dry_run` at all -- grep of the diff confirms neither identifier appears inside either new `if is_interactive_tty` block. Exercised by `test_force_and_dry_run_stay_flag_only_never_prompted` (pass). |
+
+  Self-reviewed and accepted as the Green state. Proceeding to Phase 3
+  Refactor.
+
 ## Verification
 
 - Phase 1 Red: `python3
   scripts/tests/test_copy_ai_collaboration_files_interactive.py -v` against
   the unmodified script -- 5 genuine failures, 4 trivial/regression-guard
   passes (see Work Notes above for the full breakdown and grounds).
-- Remaining verification (Phase 2 Green, Phase 3 Refactor, Preflight) to be
-  recorded as each phase transition happens.
+- Phase 2 Green: `bash -n scripts/copy-ai-collaboration-files.sh` (pass);
+  `python3 scripts/tests/test_copy_ai_collaboration_files_interactive.py -v`
+  (9/9 pass); the exact CI "Check template copy smoke test" step content, run
+  manually (pass, `SMOKE_TEST_PASSED`).
+- Remaining verification (Phase 3 Refactor, Preflight) to be recorded as
+  each phase transition happens.
