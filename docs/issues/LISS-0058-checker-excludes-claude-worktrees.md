@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0058
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -136,6 +136,90 @@ reliable, re-runnable reproduction):
 
 - 2026-08-20 — Design & Review group (Planner persona). Issue opened as
   part of WP-0020, scoped per the design agreement. Not yet dispatched.
+- 2026-08-20 — Implementation group (Implementer persona), on branch
+  `wp-0020-execution` (created off `process/promote-item-0017`). Executed
+  Fast Path per the work plan's Plan table (tasks 1-3).
+
+  Approach chosen: factored the exclusion list into a shared module-level
+  constant, `EXCLUDED_DIRS = (".git", ".claude")`, placed immediately after
+  `SCANNED_SUFFIXES` (around line 331), and used it at both `os.walk` prune
+  sites (`scanned_files()` line ~397, `check_references()` line ~452) in
+  place of the duplicated `d != ".git"` literal — rather than duplicating
+  the tuple literal at each site, per the work plan's stated either-is-
+  acceptable choice.
+
+  Fixture location convention: a throwaway directory under this session's
+  own scratchpad path
+  (`/private/tmp/claude-501/.../scratchpad/liss-0058-fixture`), built by
+  `git archive HEAD | tar -x` into the fixture root and again into
+  `<fixture>/.claude/worktrees/fake-sibling/`, per the design agreement's
+  Settled Ambiguities and LISS-0058's own "Required reproduction" steps.
+  The fixture directory was removed (`rm -rf`) immediately after the
+  post-fix verification runs completed; confirmed removed by listing the
+  scratchpad directory afterward and observing it no longer appears (only
+  pre-existing, unrelated scratch files from other sessions remain). No
+  fixture content was committed to the repository.
+
+  Self-review (short form, per `docs/templates/self-review.md`):
+
+  ```
+  Phase / finding: Fast Path (single-attempt bug fix, WP-0020 tasks 1-3)
+  Command run (before fix, fixture): python3 scripts/check-contract-consistency.py --repo <fixture>
+  Result: "contract consistency: 906 failure(s)", exit code 1; 806 of the
+    906 lines are ambiguous-basename "... which 2 files answer to ...
+    Write the path." entries, each pairing a top-level file with its
+    identical nested .claude/worktrees/fake-sibling/ copy (e.g.
+    ".claude/worktrees/fake-sibling/CHANGELOG.md:123 names
+    '2026-08-03-work-plan-scoped-governance-review.md', which 2 files
+    answer to (.claude/worktrees/fake-sibling/docs/collaboration/reviews/...,
+    docs/collaboration/reviews/...). Write the path."). Full 911-line
+    output captured this session; genuine reproduction of the bug as
+    described, not a synthetic or assumed result.
+  Command run (after fix, same fixture): python3 scripts/check-contract-consistency.py --repo <fixture>
+  Result: "contract consistency: all checks passed", exit code 0 — all 806
+    ambiguous-basename lines and all other duplication-driven noise gone.
+  Command run (after fix, real repository): python3 scripts/check-contract-consistency.py
+  Result: "contract consistency: all checks passed", exit code 0 — identical
+    to the real-repository run captured before the fix was applied (also
+    "all checks passed", exit code 0); no regression, no new failure, no
+    newly hidden failure (there were none to hide).
+  Risks considered:
+    - A real, tracked reference could coincidentally target a path or
+      filename that collides with the literal string ".claude", causing
+      the fix to silently exclude genuine content.
+    - The broader fix (excluding the whole .claude/ subtree, not only
+      .claude/worktrees/) could lose some other, currently-untracked but
+      contract-relevant file living elsewhere under .claude/.
+    - Factoring the tuple into a shared EXCLUDED_DIRS constant could
+      accidentally change behavior at one call site but not the other, or
+      leave the .git exclusion behavior altered.
+    - The fixture might not faithfully reproduce the real bug shape (e.g.
+      too shallow to trigger ambiguous-basename detection).
+  Why each does not occur:
+    - ".claude" is matched as an exact `dirnames` entry (a directory
+      basename equality check, not a substring or pattern match), and
+      `git ls-tree -r --name-only HEAD` confirms nothing tracked lives at
+      or under any path component literally named ".claude" — so no real,
+      tracked reference can be affected.
+    - Confirmed directly per the design agreement's Settled Ambiguities:
+      `git ls-tree -r --name-only HEAD | grep "^\.claude/"` returns
+      nothing, i.e. nothing under `.claude/` anywhere is tracked, so
+      excluding the whole subtree loses no real, contract-relevant content
+      regardless of what else might later be placed there.
+    - `git diff scripts/check-contract-consistency.py` (pasted in the
+      Preflight Validation section of WP-0020) shows the constant applied
+      identically at both prune sites, and the post-fix real-repository
+      run reproduces the exact same "all checks passed" baseline as the
+      pre-fix run, confirming the .git exclusion itself is unchanged in
+      effect.
+    - The fixture was built from this repository's actual tracked working-
+      tree content (via `git archive HEAD | tar -x`, not synthetic minimal
+      files), duplicated once under `.claude/worktrees/fake-sibling/`,
+      exactly per LISS-0058's own "Required reproduction" steps and the
+      design agreement's Settled Ambiguities — and it did in fact produce
+      906 genuine failures pre-fix, confirming it faithfully reproduces
+      the bug shape.
+  ```
 
 ## Verification
 

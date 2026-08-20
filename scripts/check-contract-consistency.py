@@ -330,6 +330,15 @@ RECORD_DIRS = (
 
 SCANNED_SUFFIXES = (".md", ".mdc", ".sh", ".yml", ".py")
 
+# Directories every os.walk-based scan below must prune: .git is version
+# control metadata, and .claude is this harness's own untracked scratch
+# space (agent worktrees live under .claude/worktrees/<id>/, each a full
+# nested checkout of the repository) — neither holds contract-relevant
+# content, and walking into .claude/worktrees/ duplicates every scanned
+# file once per active sibling worktree, producing false-positive
+# ambiguous-basename noise in check_references().
+EXCLUDED_DIRS = (".git", ".claude")
+
 MD_LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 CODE_PATH = re.compile(r"`([^`\s]+\.(?:md|mdc|sh|py|yml|yaml|toml|json))`")
 
@@ -388,7 +397,7 @@ def read_optional(repo: str, rel: str) -> str | None:
 def scanned_files(repo: str) -> list[str]:
     out = []
     for dirpath, dirnames, filenames in os.walk(repo):
-        dirnames[:] = [d for d in dirnames if d != ".git"]
+        dirnames[:] = [d for d in dirnames if d not in EXCLUDED_DIRS]
         for name in filenames:
             if name.endswith(SCANNED_SUFFIXES):
                 out.append(os.path.relpath(os.path.join(dirpath, name), repo))
@@ -441,7 +450,7 @@ def check_references(repo: str, failures: Failures) -> None:
     copy_exclusion_patterns = _copy_exclusion_patterns(repo)
     basemap: dict[str, list[str]] = {}
     for dirpath, dirnames, filenames in os.walk(repo):
-        dirnames[:] = [d for d in dirnames if d != ".git"]
+        dirnames[:] = [d for d in dirnames if d not in EXCLUDED_DIRS]
         for name in filenames:
             rel_path = os.path.relpath(os.path.join(dirpath, name), repo)
             basemap.setdefault(name, []).append(rel_path)
