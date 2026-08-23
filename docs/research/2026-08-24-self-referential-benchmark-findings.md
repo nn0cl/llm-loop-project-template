@@ -19,20 +19,31 @@ At commit `68848c6` (this template's `main` tip throughout this
 investigation): 373 commits over 2026-07-05..2026-08-23, 28 design
 agreements, 20 ADRs, 32 AI work traces (21 active, 11 archived), 59 review
 records (48 active, 11 archived, including Preflight self-review filings),
-38 local issues (24 of them `Type: review-finding`), 26 work plans (17
-active, 9 archived under `docs/archive/work-plans/`). This is a substantial
-artifact set — the question was never whether there was enough data, but
-whether the data measures what a benchmark needs it to measure.
+38 local issues (9 of them carrying `- Type: review-finding` as their own
+Metadata field), 26 work plans (17 active, 9 archived under
+`docs/archive/work-plans/`). This is a substantial artifact set — the
+question was never whether there was enough data, but whether the data
+measures what a benchmark needs it to measure.
 
-*Note on verification:* an earlier draft of this section under-counted
-several of these figures (e.g. it stated 358 commits and 16 active work
-plans, missing `WP-0026`), from a first pass that summarized long directory
-listings by eye rather than re-deriving each count mechanically. A
-separate-context Reviewer pass on this document caught two of the resulting
-arithmetic errors (see the review-finding closure rate below); re-deriving
-every count here directly from `git show 68848c6:<path> | grep -c
-'\.md$'` — rather than trusting an earlier summary — caught the rest. The
-figures above are that mechanical re-derivation, not a restated summary.
+*Note on verification:* this section went through three revisions before
+its numbers held up under independent re-derivation. A first pass summarized
+long directory listings by eye rather than counting them (understating
+commits, agreements, traces, reviews, issues, and work plans — it missed
+`WP-0026` entirely). A first separate-context Reviewer pass caught two
+arithmetic slips in the fixed version. A second separate-context Reviewer
+pass, re-deriving every figure independently rather than trusting the
+document's claim that it had already done so, then caught two further
+defects that were not slips: a review-finding count (24) inflated by an
+unanchored substring search that matched *mentions* of the term as well as
+the field itself (true count, from `git grep -e '^- Type: review-finding'`:
+9), and a "zero rework after 2026-08-18" claim that a review record's own
+text (`2026-08-19-liss-0050-attempt2-liss-0051-review.md`, which names
+itself "Round 2") directly contradicted. Both are corrected below. This
+history is left in rather than cleaned up because it is itself evidence for
+this document's own thesis: even a document *about* rigorous
+self-measurement needed two rounds of independent, adversarial
+re-verification — not self-checking — to stop asserting numbers its own
+author had not actually confirmed.
 
 A sibling template, `llm-project-template` (this template's predecessor
 lineage, forked 2026-07-05), was considered as a comparison point and
@@ -63,12 +74,19 @@ trailing round number) and counted. This produced a striking split:
   spanning the numbered work plans WP-0010..WP-0026, the archived WP-0002..
   WP-0008 batch, the WP-0009 `contract-reviewer-v230` review, the
   minor-fix-path LISS reviews, and the most recent
-  contract-consistency-checker fix): zero topics reached a second round.
-  Every item passed on its first Reviewer pass.
+  contract-consistency-checker fix): all but one passed on the first round.
+  The one exception is itself informative, not a counterexample to what
+  follows: LISS-0050 was rejected in
+  `2026-08-19-liss-0049-liss-0050-word-boundary-and-line-wrap-fix-review.md`
+  (bundled with LISS-0049) and approved on a second attempt in
+  `2026-08-19-liss-0050-attempt2-liss-0051-review.md` (bundled with
+  LISS-0051) — a single, bounded reject-and-redo cycle through the Minor
+  Fix Path, not the same topic bouncing through six rounds the way
+  `contract-consistency` did before 2026-08-18.
 
-Read naively, this looks like strong evidence that ADR 0014/0015 (adopted
-2026-08-03, operational from 2026-08-18) fixed the process. It is not
-strong evidence of that, for the reason found next.
+Read naively, this near-clean split still looks like strong evidence that
+ADR 0014/0015 (adopted 2026-08-03, operational from 2026-08-18) fixed the
+process. It is not strong evidence of that, for the reason found next.
 
 ## Why the naive reading is wrong
 
@@ -101,17 +119,22 @@ two things:
    work plan — and the original work plan is still approved. **"Rounds per
    topic" therefore stopped measuring the same thing partway through the
    history it was computed over.** It went from "how many times did this
-   exact change get rejected and resubmitted" to "how many times did this
-   exact change get rejected" (answer, after 2026-08-18: consistently zero),
-   while genuine defect-finding moved to a different, differently-named
-   artifact (the review-finding issue).
+   exact change get rejected and resubmitted, with no bound observed in
+   practice (up to 6, for `contract-consistency`)" to "how many times did
+   this exact change get rejected" (after 2026-08-18: zero for 30 of the 31
+   items, one bounded single redo for LISS-0050), while genuine
+   defect-finding moved to a different, differently-named artifact (the
+   review-finding issue).
 
-   Following that thread: 24 `Type: review-finding` issues exist in
-   `docs/issues/`; 22 of 24 (91.7%) have reached `closed`, `done`, or
-   `resolved` status (7 closed, 14 done, 1 resolved, 2 still `proposed`).
-   Findings routed this way are being tracked to closure at a high rate, not
-   silently dropped — this weighs against a pure rubber-stamping
-   explanation, though it does not resolve the confound below.
+   Following that thread: exactly 9 issues in `docs/issues/` carry
+   `- Type: review-finding` as their own Metadata field (not merely a
+   mention of the term in another issue's body — an earlier, looser
+   substring search over-counted this at 24); 8 of 9 (88.9%) have reached
+   `closed` or `resolved` status (7 closed, 1 resolved, 1 still
+   `proposed`, 0 `done`). Findings routed this way are being tracked to
+   closure at a high rate, not silently dropped — this weighs against a
+   pure rubber-stamping explanation, though it does not resolve the
+   confound below.
 
 ## Second metric tried: reproduced-defect rate from Falsification Search tables
 
