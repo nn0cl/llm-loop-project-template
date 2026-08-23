@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0071
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -120,6 +120,58 @@ script — this is a pure data addition to the existing array.
   opened as part of WP-0026, scoped per the design agreement. Not yet
   dispatched. Independently confirmed via direct read that the gap is
   real and current before writing this issue.
+- 2026-08-23 — Implementer persona. Applied the exact 3-entry addition to
+  `required_files`, then ran the full 7-step required reproduction against
+  a throwaway target built via `git archive HEAD` of this branch, copied
+  into the scratchpad, with `.cursor/rules/02-architecture-boundaries.mdc`
+  removed.
+
+  Phase/finding: Fast Path implementation.
+  Command run (pre-fix, target missing the Cursor file):
+  ```
+  $ bash scripts/init-llm-context.sh "$TMP_DIR"
+  ```
+  Result (pre-fix): script printed the normal setup prompt and exited 0 —
+  did NOT report the missing `.cursor/rules/02-architecture-boundaries.mdc`
+  file, confirming the gap.
+  Edit applied: added
+  `.cursor/rules/01-quickstart.mdc`, `.cursor/rules/02-architecture-boundaries.mdc`,
+  `.cursor/rules/03-collaboration-and-completion.mdc` to `required_files`,
+  immediately after the `.grok/rules/*.md` block, per the issue's exact
+  code block. No other line in the script changed.
+  Command run (post-fix, same target, still missing the file):
+  ```
+  $ bash scripts/init-llm-context.sh "$TMP_DIR"
+  ```
+  Result (post-fix):
+  ```
+  Missing required file: .cursor/rules/02-architecture-boundaries.mdc
+  Install the template files before generating the LLM setup prompt.
+  EXIT CODE: 1
+  ```
+  Command run (post-fix, file restored, complete target):
+  ```
+  $ cp .cursor/rules/02-architecture-boundaries.mdc "$TMP_DIR/.cursor/rules/02-architecture-boundaries.mdc"
+  $ bash scripts/init-llm-context.sh "$TMP_DIR"
+  ```
+  Result: printed the normal setup prompt, exit 0 — confirms no false
+  positive against a complete target.
+  Command run (real repository):
+  ```
+  $ bash scripts/init-llm-context.sh .
+  ```
+  Result: printed the normal setup prompt, exit 0 — confirms no regression
+  against the real, complete repository.
+  Risks considered: (1) the check loop logic (lines 64-75) might need
+  changing too — confirmed by `git diff` that only the `required_files`
+  array's data changed, loop logic untouched. (2) a throwaway-target copy
+  built via `git archive` might not faithfully reproduce a real `cp -r`
+  copy's directory structure — confirmed by listing `$TMP_DIR/.cursor/rules/`
+  before and after file removal/restoration, showing the expected 3 files
+  each time.
+  Why each does not occur: (1) `git diff scripts/init-llm-context.sh` shows
+  exactly a 3-line data addition, no logic change. (2) directly verified via
+  `ls` on the throwaway target at each reproduction step.
 
 ## Verification
 

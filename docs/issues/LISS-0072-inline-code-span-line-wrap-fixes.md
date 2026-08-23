@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0072
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -121,6 +121,53 @@ removed, or changed).
   writing this issue's acceptance notes; found the backlog item's file
   list still fully current, with no fifth file needing this fix and none
   of the four already fixed.
+- 2026-08-23 — Implementer persona. Rewrapped all six instances, each by
+  reading the exact surrounding paragraph first and moving the wrap point
+  around the code span only — no wording changed in any instance.
+
+  Phase/finding: Fast Path implementation.
+  Command run (before):
+  ```
+  $ grep -n '`[A-Za-z0-9/_.-]*/$' docs/architecture/external-resource-adoption-contract.md
+  14:This document extends `docs/architecture/adr/
+  106:verified/inferred/unknown compatibility state in `docs/collaboration/
+  124:  deleted or overwritten on resume (see `docs/collaboration/
+  $ grep -n '`[A-Za-z0-9/_.-]*/$' docs/architecture/io-reasoning-contracts.md
+  25:dependencies) into trusted use, see the optional `docs/architecture/
+  $ grep -n '`[A-Za-z0-9/_.-]*/$' docs/collaboration/ai-failure-recovery.md
+  8:long-running external AI jobs (see `docs/collaboration/
+  $ grep -n '`[A-Za-z0-9/_.-]*/$' docs/collaboration/model-tool-capability-matrix.md
+  75:using one of three states, per `docs/architecture/adr/
+  ```
+  Command run (after, all four files, one combined call):
+  ```
+  $ grep -n '`[A-Za-z0-9/_.-]*/$' docs/architecture/external-resource-adoption-contract.md docs/architecture/io-reasoning-contracts.md docs/collaboration/ai-failure-recovery.md docs/collaboration/model-tool-capability-matrix.md
+  (no output — zero matches in all four files)
+  ```
+  `git diff` reviewed per file: every hunk is a pure line-rewrap; the
+  concatenated wording of each affected paragraph is byte-identical
+  before and after (verified by reading each diff hunk and confirming only
+  whitespace/line-break position moved, no word added, removed, or
+  changed).
+  Risks considered: (1) rewrapping might accidentally change a word or
+  drop punctuation while moving text between lines — checked each of the 6
+  diffs by re-reading the full reconstructed sentence. (2) the fix might
+  miss an instance or catch a false positive elsewhere in a file — the
+  before/after `grep` counts (3+1+1+1=6 before, 0 after, across exactly
+  the 4 named files) match the issue's own count exactly. (3) this
+  cosmetic fix might mask or interact with a real reference defect that
+  `check-contract-consistency.py` was not previously checking due to the
+  split span — found to be true for one instance (see this issue's own
+  Dependencies section and LISS-0073, opened separately to fix it; not
+  fixed under this issue since that would be a wording/meaning change,
+  outside this issue's own "rewrap only" scope).
+  Why each does not occur: (1) confirmed by direct reconstruction of each
+  paragraph's full text from the diff hunks (see this issue's own
+  Acceptance Notes' six line/content pairs, each matched word-for-word
+  in the reconstructed after-state). (2) confirmed by the exact 6-before/
+  0-after count. (3) explicitly reported rather than silently fixed or
+  silently ignored — see LISS-0073, opened by the Design & Review group
+  after this Implementer attempt reported the finding.
 
 ## Verification
 

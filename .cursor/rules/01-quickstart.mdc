@@ -158,3 +158,7 @@ Cursor-side reminders that must stay visible with this rule set:
   reconstructability without chat (`docs/collaboration/post-hoc-audit.md`).
 - Spikes: `docs/spike/`; backlog: `docs/backlog/` — not executable until
   promoted.
+- External resource adoption contract:
+  `docs/architecture/external-resource-adoption-contract.md`.
+- AI failure and recovery: `docs/collaboration/ai-failure-recovery.md`.
+- Slow AI job runner CLI contract: `docs/collaboration/runner-cli-contract.md`.

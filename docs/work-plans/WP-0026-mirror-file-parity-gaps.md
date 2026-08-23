@@ -28,10 +28,10 @@
 
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LISS-0070 | ready | S | S | N/A | - | - | process/promote-item-0022 |
-| LISS-0071 | ready | S | S | N/A | - | - | process/promote-item-0022 |
-| LISS-0072 | ready | S | S | N/A | - | - | process/promote-item-0022 |
-| LISS-0073 | ready | S | S | N/A | LISS-0072 | - | process/promote-item-0022 |
+| LISS-0070 | done | S | S | N/A | - | - | process/promote-item-0022 |
+| LISS-0071 | done | S | S | N/A | - | - | process/promote-item-0022 |
+| LISS-0072 | done | S | S | N/A | - | - | process/promote-item-0022 |
+| LISS-0073 | done | S | S | N/A | LISS-0072 | - | process/promote-item-0022 |
 
 ## Recommended Order
 
@@ -65,12 +65,185 @@ usual self-contained handling does not waive ADR 0006's contract-file rule.
 
 ## Preflight Validation
 
-Filled in by the Implementation group once every issue above is
-self-reviewed and complete.
+Run by the Implementation group on branch `wp-0026-mirror-file-parity-gaps`
+(created from local branch `process/promote-item-0022` because that branch
+was already checked out in a sibling worktree and could not be checked out
+twice in this session; later merged with `process/promote-item-0022`
+commit `63b1e95` once it existed). **Final result: pass**, after one
+intermediate `fail` recorded below as history, not erased.
+
+### Attempt 1 (LISS-0070/0071/0072 landed, before LISS-0073 existed) — fail
+
+Each of LISS-0070, LISS-0071, and LISS-0072's own scoped edits was
+independently verified against its own issue's acceptance criteria and
+required reproduction (all passed — see each issue's own Work Notes).
+Running the work-plan-level check found a newly surfaced, pre-existing
+defect outside any of the three issues' own scope:
+
+```text
+$ python3 scripts/check-contract-consistency.py
+references:
+  docs/architecture/external-resource-adoption-contract.md:15 names 'docs/architecture/adr/0002-input-output-reasoning-contracts.md', which does not exist
+
+contract consistency: 1 failure(s)
+```
+
+Root cause (full account in
+`docs/collaboration/traces/2026-08-23-wp-0026-mirror-file-parity-gaps.md`):
+LISS-0072's rewrap of this file's first split code span unmasked a
+pre-existing stale "ADR 0002" reference (should be ADR 0003) that
+`check-contract-consistency.py`'s `CODE_PATH` regex could never see while
+the span was split across a line break. Confirmed pre-existing, not
+introduced, via `git stash` against the pre-edit tree:
+
+```text
+$ git stash && python3 scripts/check-contract-consistency.py && git stash pop
+contract consistency: all checks passed
+```
+
+Reported rather than fixed, since correcting the ADR number is outside
+LISS-0072's own wording-preserving scope and outside this design
+agreement's original Boundaries. The Design & Review group reopened the
+design agreement (Reopening Log, 2026-08-23) and opened LISS-0073 to cover
+exactly this fix.
+
+### Attempt 2 (after merging LISS-0073 and applying it) — pass
+
+1. `python3 scripts/check-contract-consistency.py` — full output:
+
+   ```text
+   $ python3 scripts/check-contract-consistency.py
+   contract consistency: all checks passed
+   ```
+
+   (One intermediate regression was found and fixed as part of this same
+   Preflight step, before this final pass: LISS-0070/0071/0072's
+   `Status: done` was initially out of sync with this file's own Issue
+   Graph, which still read `ready` for all four issues. Corrected in the
+   Issue Graph table above, not silently pre-fixed — the checker's
+   "issue status sync" failure that caught this is itself pasted below for
+   the record:)
+
+   ```text
+   $ python3 scripts/check-contract-consistency.py
+   issue status sync:
+     docs/issues/LISS-0070-cursor-quickstart-mirror-gaps.md states Status: done, but docs/work-plans/WP-0026-mirror-file-parity-gaps.md's Issue Graph lists LISS-0070 as 'ready'
+     docs/issues/LISS-0071-init-llm-context-cursor-required-files.md states Status: done, but docs/work-plans/WP-0026-mirror-file-parity-gaps.md's Issue Graph lists LISS-0071 as 'ready'
+     docs/issues/LISS-0072-inline-code-span-line-wrap-fixes.md states Status: done, but docs/work-plans/WP-0026-mirror-file-parity-gaps.md's Issue Graph lists LISS-0072 as 'ready'
+
+   contract consistency: 3 failure(s)
+   ```
+
+2. `git diff --name-only main HEAD` (mirroring `.github/workflows/ci.yml`'s
+   "Check agent operating contract change traceability" step, using `main`
+   as this worktree's available local stand-in for a PR base):
+
+   ```text
+   $ git diff --name-only main HEAD
+   .cursor/rules/01-quickstart.mdc
+   .grok/rules/01-quickstart.md
+   docs/architecture/external-resource-adoption-contract.md
+   docs/architecture/io-reasoning-contracts.md
+   docs/collaboration/agreements/2026-08-23-mirror-file-parity-gaps.md
+   docs/collaboration/ai-failure-recovery.md
+   docs/collaboration/model-tool-capability-matrix.md
+   docs/collaboration/traces/2026-08-23-wp-0026-mirror-file-parity-gaps.md
+   docs/issues/LISS-0070-cursor-quickstart-mirror-gaps.md
+   docs/issues/LISS-0071-init-llm-context-cursor-required-files.md
+   docs/issues/LISS-0072-inline-code-span-line-wrap-fixes.md
+   docs/issues/LISS-0073-external-resource-adoption-adr-number-drift.md
+   docs/work-plans/WP-0026-mirror-file-parity-gaps.md
+   scripts/init-llm-context.sh
+   ```
+
+   Contract files changed: `.cursor/rules/01-quickstart.mdc`,
+   `.grok/rules/01-quickstart.md`, `docs/collaboration/ai-failure-recovery.md`,
+   `docs/collaboration/model-tool-capability-matrix.md` (all on
+   `prompt-instruction-change-control.md`'s Agent Operating Contract Files
+   list). A trace file is present
+   (`docs/collaboration/traces/2026-08-23-wp-0026-mirror-file-parity-gaps.md`),
+   satisfying the CI check's `trace_added` condition —
+   `docs/collaboration/agreements/2026-08-23-mirror-file-parity-gaps.md` is
+   a record, not itself a contract file, per that same document's own
+   distinction (agreements/reviews/traces are records produced by
+   following the contract). `docs/architecture/external-resource-adoption-contract.md`,
+   `docs/architecture/io-reasoning-contracts.md`, and
+   `scripts/init-llm-context.sh` are not on the contract-file list (the
+   first two are under `docs/architecture/`, not `docs/collaboration/`;
+   the script is explicitly not an ADR-0006 contract file per the design
+   agreement).
+
+3. Per-issue before/after reproduction summary (full pasted output in each
+   issue's own Work Notes):
+   - LISS-0070: `grep -n` before (0 matches for the 3 new bullets; grok
+     sentence lacked "Cursor") / after (3 matches; sentence now names
+     Cursor) — pass.
+   - LISS-0071: 7-step throwaway-target reproduction, pre-fix script does
+     not flag a missing `.cursor/rules/*.mdc` file (exit 0), post-fix flags
+     it (exit 1, "Missing required file:"), complete target and real
+     repository both still pass (exit 0) — pass.
+   - LISS-0072: `grep -n '`[A-Za-z0-9/_.-]*/$'` before (6 matches across
+     4 files) / after (0 matches) — pass.
+   - LISS-0073: `grep -n "ADR 0002"` on the target file before (4 total
+     instances) / after (0) — pass. Repository-wide `grep -rn "ADR 0002"`
+     confirms only the two pre-existing, correct mentions remain,
+     unaffected — pass.
+4. `git diff` reviewed per file against the design agreement's Scope and
+   Boundaries (including the amended Boundaries covering LISS-0073): no
+   file outside the agreed scope was touched; no wording changed beyond
+   what each issue's own Acceptance Notes specify.
+
+**Scope result**: pass — every changed file is named in the design
+agreement's Scope (as amended by the 2026-08-23 Reopening Log entry for
+LISS-0073); no file outside that list was touched.
+
+**Next action**: submit to the work-plan-level Reviewer, in a separate
+context, per the design agreement's Plan step 6.
 
 ## Review Summary Packet
 
-Filled in by the Implementation group once Preflight passes.
+- **Scope**: close the 5 mirror-parity gaps
+  `docs/backlog/item-0022-mirror-file-parity-gaps.md` names (as re-verified
+  and corrected by the design agreement), plus one in-scope-extension fix
+  (LISS-0073) for a pre-existing ADR-number reference defect that
+  LISS-0072's own fix surfaced. Full scope statement:
+  `docs/collaboration/agreements/2026-08-23-mirror-file-parity-gaps.md`
+  (Scope section, as amended by its 2026-08-23 Reopening Log entry).
+- **Current canonical documents**: this work plan
+  (`docs/work-plans/WP-0026-mirror-file-parity-gaps.md`); the design
+  agreement (`docs/collaboration/agreements/2026-08-23-mirror-file-parity-gaps.md`);
+  issues LISS-0070, LISS-0071, LISS-0072, LISS-0073; the AI work trace
+  (`docs/collaboration/traces/2026-08-23-wp-0026-mirror-file-parity-gaps.md`).
+- **Changed files**: `.cursor/rules/01-quickstart.mdc` (3 bullets added);
+  `.grok/rules/01-quickstart.md` (Cursor named in 2 sentences);
+  `scripts/init-llm-context.sh` (3 `required_files` entries added);
+  `docs/architecture/external-resource-adoption-contract.md` (3 line-wrap
+  rewraps + 4 ADR-number corrections); `docs/architecture/io-reasoning-contracts.md`
+  (1 line-wrap rewrap); `docs/collaboration/ai-failure-recovery.md` (1
+  line-wrap rewrap); `docs/collaboration/model-tool-capability-matrix.md`
+  (1 line-wrap rewrap); the 4 issue files (`Status`/Work Notes); this work
+  plan (Issue Graph, Preflight Validation, Review Summary Packet); the new
+  AI work trace file; the design agreement (Plan table, Falsification
+  Criteria, Reopening Log — amended by the Design & Review group, not by
+  the Implementer).
+- **Findings**: none raised as `Type: review-finding` issues by this
+  Implementer attempt. One genuinely new fact was found mid-execution (the
+  pre-existing ADR-0002-vs-0003 reference drift) and was routed through a
+  proper design-agreement reopening (LISS-0073) rather than through the
+  review-finding mechanism, since it was caught before Reviewer submission,
+  not after.
+- **Disposition**: all four issues (LISS-0070, LISS-0071, LISS-0072,
+  LISS-0073) complete, self-reviewed, and independently verified against
+  their own acceptance criteria and required reproductions.
+- **Remaining blockers**: none for Preflight. The work-plan-level Reviewer
+  pass (separate context) has not yet occurred — that is the next step,
+  not a blocker on this Implementer attempt's own completion.
+- **Verification result**: pass — `python3 scripts/check-contract-consistency.py`
+  reports "all checks passed" against the real repository (see Preflight
+  Validation, Attempt 2, above).
+- **Next approval required**: the work-plan-level Reviewer pass, in a
+  separate context, per the design agreement's Plan step 6 and ADR 0006's
+  independent-Reviewer requirement for the contract-file edits.
 
 ## Work-Plan Review
 

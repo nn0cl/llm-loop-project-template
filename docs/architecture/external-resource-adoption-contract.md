@@ -11,9 +11,10 @@ tools, or test helpers — those go through
 `docs/architecture/dependency-policy.md`'s adoption checklist instead. If a
 resource is a software dependency, use that document, not this one.
 
-This document extends `docs/architecture/adr/
-0002-input-output-reasoning-contracts.md` for the resources it covers. It
-does not modify ADR 0002 for any other AI-assisted task type. See
+This document extends
+`docs/architecture/adr/0003-input-output-reasoning-contracts.md` for the
+resources it covers. It does not modify ADR 0003 for any other AI-assisted
+task type. See
 `docs/architecture/adr/0011-external-resource-adoption-contract.md` for the
 full decision record.
 
@@ -57,10 +58,10 @@ skips `checked`.
 
 ## Check Record
 
-Every check produces a record. Reuse ADR 0002's source-reference and
+Every check produces a record. Reuse ADR 0003's source-reference and
 review-status shape rather than inventing a new schema:
 
-- `source`: where the resource came from (matches ADR 0002's source
+- `source`: where the resource came from (matches ADR 0003's source
   reference shape: `source_id`, `source_type`, `uri_or_path`, `captured_at`
   when safe to expose).
 - `what_was_checked`: the specific criteria evaluated.
@@ -103,10 +104,10 @@ permanent split. Use this general steer instead:
 
 Whether a specific deterministic check can actually be trusted for a given
 provider/tool configuration is itself tracked using the
-verified/inferred/unknown compatibility state in `docs/collaboration/
-model-tool-capability-matrix.md`. Re-verify which bucket a given criterion
-falls into per project rather than assuming today's split is permanent —
-what is mechanically checkable can change as tooling improves.
+verified/inferred/unknown compatibility state in
+`docs/collaboration/model-tool-capability-matrix.md`. Re-verify which bucket
+a given criterion falls into per project rather than assuming today's split
+is permanent — what is mechanically checkable can change as tooling improves.
 
 ## Optional Scope Field
 
@@ -121,11 +122,11 @@ for your project.
 
 - `docs/architecture/adr/0010-ai-failure-recovery-and-runner-cli-contract.md`'s
   rule that a candidate record already carrying a human verdict is never
-  deleted or overwritten on resume (see `docs/collaboration/
-  ai-failure-recovery.md`, `docs/collaboration/runner-cli-contract.md`) is
-  one domain-specific instance of this document's general adoption-check
-  rule, applied to AI generation job outputs. It does not duplicate this
-  document's schema.
+  deleted or overwritten on resume (see
+  `docs/collaboration/ai-failure-recovery.md`,
+  `docs/collaboration/runner-cli-contract.md`) is one domain-specific
+  instance of this document's general adoption-check rule, applied to AI
+  generation job outputs. It does not duplicate this document's schema.
 - `docs/architecture/io-reasoning-contracts.md` defines the general
   input/output/reasoning contract for AI-assisted tasks; this document
   reuses its source-reference and review-status shape rather than replacing
