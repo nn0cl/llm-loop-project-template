@@ -284,10 +284,33 @@ Per `docs/architecture/adr/0014-work-plan-scoped-self-review-and-combined-checkp
 one combined Director action, after the Reviewer approves — not performed
 by the Design & Review group itself.
 
-- Date:
-- Result read:
-- Next direction:
-- New design agreement (if any):
+- Date: 2026-08-23
+- Result read: the Director read the Reviewer approval
+  (`docs/collaboration/reviews/2026-08-23-wp-0026-mirror-file-parity-gaps-review.md`,
+  Approved) via the Backlog thread, which independently re-verified from
+  a fresh, isolated `git worktree add --detach` checkout of
+  `process/promote-item-0022` (tip `370daeb`) before presenting this
+  close: a clean `check-contract-consistency.py` run; all 7 commits
+  present in the described sequence; the Reviewer record's own
+  `[x] Approved` line; all 4 issues (LISS-0070 through LISS-0073) at
+  `Status: done`; `.cursor/rules/01-quickstart.mdc` now carrying the
+  External resource adoption contract cross-reference and the two other
+  previously-missing bullets; `.grok/rules/01-quickstart.md` now naming
+  Cursor; `scripts/init-llm-context.sh` now requiring all three
+  `.cursor/rules/*.mdc` files; and
+  `docs/architecture/external-resource-adoption-contract.md` now citing
+  ADR 0003 (confirmed that file exists) instead of the stale ADR 0002 in
+  all 4 places.
+- Next direction: closed (Director resumed the Design & Review session
+  twice after a rate-limit interruption; it reported this work plan at
+  close-readiness, including two refused "coordinator" impersonation
+  messages and one genuine, independently-verified scope amendment for
+  the ADR-number drift it found) — merging `process/promote-item-0022`
+  into `main` and pushing now.
+- New design agreement (if any): none opened by this close — the one
+  in-flight amendment (LISS-0073) was folded into this same work plan's
+  own design agreement via its Reopening Log, per this repo's own
+  amendment mechanism, not a new agreement.
 
 ## Risks
 
