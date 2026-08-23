@@ -31,11 +31,16 @@
 | LISS-0070 | ready | S | S | N/A | - | - | process/promote-item-0022 |
 | LISS-0071 | ready | S | S | N/A | - | - | process/promote-item-0022 |
 | LISS-0072 | ready | S | S | N/A | - | - | process/promote-item-0022 |
+| LISS-0073 | ready | S | S | N/A | LISS-0072 | - | process/promote-item-0022 |
 
 ## Recommended Order
 
 1. LISS-0070, LISS-0071, LISS-0072 — disjoint files, no dependency between
    them; may be done in any order or together in one Implementer pass.
+2. LISS-0073 — added 2026-08-23 per the design agreement's Reopening Log;
+   fixes a pre-existing defect LISS-0072's own fix unmasked. Depends on
+   LISS-0072 having landed on the same file first (easiest to locate the
+   4 "ADR 0002" instances after the rewrap, though not strictly required).
 
 ## Current Next Issue
 
