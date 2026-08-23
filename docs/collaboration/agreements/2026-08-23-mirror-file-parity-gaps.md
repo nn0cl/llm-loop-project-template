@@ -94,8 +94,9 @@ see "Settled Ambiguities" below for the full account.
 | 1 | LISS-0070: add the 3 missing bullets to `.cursor/rules/01-quickstart.mdc`'s "Cursor-side reminders" section; update `.grok/rules/01-quickstart.md`'s "prepared for multiple AI coding agents" sentence to name Cursor | Implementer | Fast Path | `grep` confirms all 3 bullets present in the Cursor file; grok sentence names Cursor | `grep -n` before/after, pasted |
 | 2 | LISS-0071: add the 3 `.cursor/rules/*.mdc` entries to `scripts/init-llm-context.sh`'s `required_files` array | Implementer | Fast Path | Script exits non-zero with "Missing required file" when a `.cursor/rules/*.mdc` file is absent from a throwaway target; exits 0 against the real repo | Reproduction against a throwaway copy with one `.cursor` file removed, before/after |
 | 3 | LISS-0072: rewrap the 6 split inline-code-span instances in the 4 named files | Implementer | Fast Path | No line in any of the 4 files ends with an unclosed backtick-opened path fragment; rendered meaning unchanged | `grep -n` pattern re-run showing zero matches; `git diff` reviewed for wording-only rewrap |
-| 4 | Preflight Validation over the whole work plan, including `python3 scripts/check-contract-consistency.py` | Implementer | Preflight | All checks pass, pasted | WP-0026's own Preflight Validation section |
-| 5 | Work-plan-level Reviewer pass, separate context | Reviewer | Review | Approval record addressing evidence-sufficiency and boundary-conformance | `docs/collaboration/reviews/2026-08-23-wp-0026-....md` |
+| 4 | LISS-0073 (added 2026-08-23, see Reopening Log): fix all 4 "ADR 0002" -> "ADR 0003" instances in `docs/architecture/external-resource-adoption-contract.md` only | Implementer | Fast Path | `grep -n "ADR 0002"` on this file returns zero matches; `check-contract-consistency.py`'s broken-reference failure is gone | `grep -n` before/after; `python3 scripts/check-contract-consistency.py` |
+| 5 | Preflight Validation over the whole work plan, including `python3 scripts/check-contract-consistency.py` | Implementer | Preflight | All checks pass, pasted | WP-0026's own Preflight Validation section |
+| 6 | Work-plan-level Reviewer pass, separate context | Reviewer | Review | Approval record addressing evidence-sufficiency and boundary-conformance | `docs/collaboration/reviews/2026-08-23-wp-0026-....md` |
 
 Sequencing: 1, 2, and 3 may proceed in any order or concurrently (disjoint
 files) within the same Implementation-group worktree; all three complete
@@ -174,6 +175,13 @@ This design was wrong if, after execution:
   rewrapping.
 - `python3 scripts/check-contract-consistency.py` regresses.
 - Any file outside this agreement's Scope is touched.
+- (Added 2026-08-23, per the Reopening Log entry above) Any "ADR 0002"
+  instance in `docs/architecture/external-resource-adoption-contract.md`
+  is changed to something other than "ADR 0003", or a change is made
+  to any "ADR 0002" reference anywhere else in the repository, or a
+  change is made to `docs/architecture/adr/0002-design-first-ai-request-routing.md`
+  or `docs/architecture/adr/0003-input-output-reasoning-contracts.md`
+  themselves.
 
 ## Agreement
 
@@ -199,4 +207,4 @@ regardless of the Director's readiness to proceed.
 
 | Date | What was unsettled | Resolution |
 |---|---|---|
-|  |  |  |
+| 2026-08-23 | The Implementation group's LISS-0072 fix (rewrapping `docs/architecture/external-resource-adoption-contract.md:14-15`'s split code span) unmasked a pre-existing, previously-undetectable broken reference: the span names `docs/architecture/adr/0002-input-output-reasoning-contracts.md`, which does not exist — the real file is `docs/architecture/adr/0003-input-output-reasoning-contracts.md` (confirmed: ADR 0002 is actually `0002-design-first-ai-request-routing.md`, a different topic; ADR 0003 itself, line 10, correctly says "ADR 0002 defines design-first payload routing", confirming 0002 and 0003 are distinct, correctly-numbered ADRs and this file's references are the ones that drifted). `check-contract-consistency.py`'s `CODE_PATH` regex does not match a code span split across a newline, so this broken reference was invisible to the checker before LISS-0072's fix, not introduced by it. This is a decision the original agreement does not settle (it authorized only a wording-preserving rewrap, not a reference correction) and is outside `docs/backlog/item-0022-...md`'s own stated scope (line-wrap cosmetics only). Independently re-grepped the same file for every "ADR 0002" mention: 3 more prose instances exist (lines 16, 60, 63, pre-fix numbering), all confirmed to be about the same IO/reasoning-contracts topic (source-reference record shape), i.e. all 4 total instances in this one file are the same drift, not a legitimate reference to the real ADR 0002 (routing). No other file in the repository was found to have this same drift (checked via `grep -rn "ADR 0002"` across `docs/`, `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.grok/`, `.cursor/`). | **Resolution**: scope extended by exactly one bounded addition — LISS-0073, fixing all 4 "ADR 0002" -> "ADR 0003" instances in this one file only, nothing else. Decided by the Design & Review group (Planner/Specifier) under ADR 0016 Rule 2's standing autonomy over this backlog item's execution, on the grounds that the fix is single-file, single-pattern, zero architectural/behavioral risk, and independently fact-verified (file existence and topic match) rather than guessed — not escalated to a fresh Director round-trip given its size and the direct, mechanical verification available. The 4 falsification criteria below are added to cover this extension. If the Reviewer disagrees this was within Design & Review's own autonomy to decide, the Reviewer records that as a rejection reason rather than silently approving. |
