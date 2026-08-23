@@ -15,13 +15,24 @@ outcomes than not using it?
 
 ## What data exists
 
-At investigation time: 358 commits over 2026-07-05..2026-08-23, 26 design
-agreements, 20 ADRs, 20 AI work traces, 46 review records (including
-Preflight self-review filings), 34 local issues (24 of them
-`Type: review-finding`), 16 active work plans plus 9 retroactively archived
-under `docs/archive/work-plans/`. This is a substantial artifact set — the
-question was never whether there was enough data, but whether the data
-measures what a benchmark needs it to measure.
+At commit `68848c6` (this template's `main` tip throughout this
+investigation): 373 commits over 2026-07-05..2026-08-23, 28 design
+agreements, 20 ADRs, 32 AI work traces (21 active, 11 archived), 59 review
+records (48 active, 11 archived, including Preflight self-review filings),
+38 local issues (24 of them `Type: review-finding`), 26 work plans (17
+active, 9 archived under `docs/archive/work-plans/`). This is a substantial
+artifact set — the question was never whether there was enough data, but
+whether the data measures what a benchmark needs it to measure.
+
+*Note on verification:* an earlier draft of this section under-counted
+several of these figures (e.g. it stated 358 commits and 16 active work
+plans, missing `WP-0026`), from a first pass that summarized long directory
+listings by eye rather than re-deriving each count mechanically. A
+separate-context Reviewer pass on this document caught two of the resulting
+arithmetic errors (see the review-finding closure rate below); re-deriving
+every count here directly from `git show 68848c6:<path> | grep -c
+'\.md$'` — rather than trusting an earlier summary — caught the rest. The
+figures above are that mechanical re-derivation, not a restated summary.
 
 A sibling template, `llm-project-template` (this template's predecessor
 lineage, forked 2026-07-05), was considered as a comparison point and
@@ -47,10 +58,13 @@ trailing round number) and counted. This produced a striking split:
   across 4 topics, including a Preflight/Reviewer round on
   `contract-consistency` reaching round 6, and one Arbiter escalation on the
   archived `WP-0001` (`review-issues-minor-fix-path`).
-- 2026-08-18 onward (21 items — 16 numbered work plans WP-0010..WP-0025, 8
-  archived work plans WP-0002..WP-0009, 4 minor-fix-path LISS reviews, and 1
-  recent contract-consistency-checker fix): zero rework rounds. Every item
-  passed on its first Reviewer pass.
+- 2026-08-18 onward: 31 review records (every filename dated 2026-08-18 or
+  later under `docs/collaboration/reviews/` and its archived equivalent —
+  spanning the numbered work plans WP-0010..WP-0026, the archived WP-0002..
+  WP-0008 batch, the WP-0009 `contract-reviewer-v230` review, the
+  minor-fix-path LISS reviews, and the most recent
+  contract-consistency-checker fix): zero topics reached a second round.
+  Every item passed on its first Reviewer pass.
 
 Read naively, this looks like strong evidence that ADR 0014/0015 (adopted
 2026-08-03, operational from 2026-08-18) fixed the process. It is not
@@ -93,7 +107,7 @@ two things:
    artifact (the review-finding issue).
 
    Following that thread: 24 `Type: review-finding` issues exist in
-   `docs/issues/`; 21 of 24 (87.5%) have reached `closed`, `done`, or
+   `docs/issues/`; 22 of 24 (91.7%) have reached `closed`, `done`, or
    `resolved` status (7 closed, 14 done, 1 resolved, 2 still `proposed`).
    Findings routed this way are being tracked to closure at a high rate, not
    silently dropped — this weighs against a pure rubber-stamping
@@ -111,12 +125,12 @@ by a different party under different constraints (no context separation).
 | --- | --- | --- | --- | --- | --- |
 | Before 2026-08-18 — Reviewer records only | 15 | 8.5 | 127 | 46 | 36.2% |
 | Before 2026-08-18 — Preflight (self-review) records only | 12 | 9.2 | 110 | 0 | 0.0% |
-| 2026-08-18 onward — Reviewer records | 27 | 7.7 | 208 | 8 | 3.8% |
+| 2026-08-18 onward — Reviewer records | 28 | 7.8 | 217 | 8 | 3.7% |
 
-Scenario depth per review stayed roughly flat (8.5 → 7.7, about a 10%
+Scenario depth per review stayed roughly flat (8.5 → 7.8, about a 10%
 decrease — not the sharp drop a "reviewer stopped trying" explanation would
-predict). The reproduced rate, however, fell by roughly 9.5x (36.2% →
-3.8%). This is the actual open question the naive rounds-per-topic metric
+predict). The reproduced rate, however, fell by roughly 9.8x (36.2% →
+3.7%). This is the actual open question the naive rounds-per-topic metric
 had been hiding: is the process finding fewer real defects because
 implementers now produce better work up front (a real governance effect,
 consistent with Preflight/self-review having been strengthened by ADR
