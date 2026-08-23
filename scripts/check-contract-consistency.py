@@ -232,6 +232,37 @@ EXAMPLE_DOCUMENT_NAMES = {
     "rust-clean-architecture.md",
 }
 
+# Prose mentions of a name or path that is never a local reference to begin
+# with — another tool's own runtime/config filename, or a deliberately
+# truncated citation of an external doc path — confirmed one at a time, not
+# inferred from a shape rule. This script's own module docstring records why
+# a shape-based heuristic ("looks like an external citation") was rejected
+# three times over for the ADR-range check: it is evaded by the next ordinary
+# rewording. Each entry below is registered explicitly, the same way
+# EXAMPLE_DOCUMENT_NAMES above is, with the reason a reader can check inline,
+# rather than adding a general "external mention" detector.
+NON_LOCAL_PROSE_MENTIONS = {
+    # Cursor's own local runtime config file (opt-in worktree isolation via
+    # the Agents Window), named in prose in
+    # docs/architecture/ai-tool-support-status.md to describe Cursor's own
+    # convention — never a file this repository or an adopting project
+    # ships. Confirmed against docs/collaboration/reviews/
+    # 2026-08-20-wp-0025-ai-tool-support-status-survey-review.md's own
+    # independent re-verification of this exact target.
+    ".cursor/worktrees.json",
+    # A citation of Grok Build's own documentation path, quoted with a
+    # literal "..." elision in docs/architecture/ai-tool-support-status.md
+    # (also cited in full, with an "https://" scheme that already exempts it
+    # via the http-prefix skip below, in ADR 0017) — illustrative of the
+    # source, not a resolvable local or remote path itself.
+    "github.com/xai-org/grok-build/.../16-subagents.md",
+    # docs/architecture/ai-tool-support-status.md states explicitly that this
+    # hypothetical alternate filename for Antigravity's instruction file was
+    # searched for and NOT found — the survey's own finding is the target's
+    # non-existence, which this check must not invert into a defect.
+    "ANTIGRAVITY.md",
+}
+
 # Files this template has but does not distribute: an adopting project owns its
 # own README and receives no CHANGELOG from us. Checks over them are skipped
 # where they are absent, and naming one is never a dangling reference.
@@ -445,8 +476,9 @@ def check_references(repo: str, failures: Failures) -> None:
     """Every relative path or filename a current document names must resolve,
     except a non-existent target shaped like a path this template
     deliberately excludes from adopter copies (see
-    `_copy_exclusion_patterns`), which is treated as expected-absent rather
-    than dangling."""
+    `_copy_exclusion_patterns`), or one of the explicitly registered
+    non-local prose mentions (see `NON_LOCAL_PROSE_MENTIONS`), both of which
+    are treated as expected-absent rather than dangling."""
     copy_exclusion_patterns = _copy_exclusion_patterns(repo)
     basemap: dict[str, list[str]] = {}
     for dirpath, dirnames, filenames in os.walk(repo):
@@ -505,6 +537,8 @@ def check_references(repo: str, failures: Failures) -> None:
                     # Claude Code's import syntax names a file with a leading @.
                     target = target.lstrip("@")
                     if target in EXAMPLE_DOCUMENT_NAMES:
+                        continue
+                    if target in NON_LOCAL_PROSE_MENTIONS:
                         continue
                     # Exempt an entry document only where it genuinely does
                     # not exist — that is, in an adopting project. Inside this
