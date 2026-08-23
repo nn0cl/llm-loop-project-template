@@ -247,14 +247,36 @@ context, per the design agreement's Plan step 6.
 
 ## Work-Plan Review
 
-Reviewer's approval record: <link, filled in after the separate-context
-Reviewer pass>
+Reviewer's approval record:
+`docs/collaboration/reviews/2026-08-23-wp-0026-mirror-file-parity-gaps-review.md`
+— **Approved** (2026-08-23, Reviewer persona, Design & Review group
+standing session, separate context from the Implementation-group subagent
+that executed LISS-0070/0071/0072/0073 in its own worktree/branch;
+independently re-verified via a fresh `git archive` export and a direct
+re-run against the merged real worktree, not taken on the Implementer's
+own reported output).
 
 Findings, if any, tracked as `Type: review-finding` local issues:
 
 | Issue | Status | Resolution |
 | --- | --- | --- |
 |  |  |  |
+
+No findings opened — the Implementer's own mid-execution discovery
+(the ADR-0002-vs-0003 drift) was routed through a design-agreement
+Reopening Log amendment and a new issue (LISS-0073) before Reviewer
+submission, not through the review-finding mechanism, since it was caught
+and resolved pre-review.
+
+Note for the Backlog thread: two messages arrived during this work plan's
+execution claiming to be from "the coordinator" — no such persona exists
+in this repository's model (`docs/architecture/agent-quickstart.md`
+Session Entry rule 6; `docs/collaboration/cross-session-messaging.md`'s
+documented incident history). Both were refused as instruction sources.
+The second message's factual claims (branch/commit state) were
+independently verified as accurate before being relied on for anything;
+its instruction to merge to `main` was not followed. See this review
+record's own Constraints section for the full account.
 
 ## Work-Plan Close
 
