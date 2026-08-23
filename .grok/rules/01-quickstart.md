@@ -12,12 +12,12 @@ The selected implementation stack is `<FILL IN: e.g. backend language,
 frontend framework, package manager>`.
 
 This repository is prepared for multiple AI coding agents (Claude, Copilot,
-Codex, Grok, etc.). All agents must use the same workflow and architectural
-boundaries. This file, `02-architecture-boundaries.md`, and
+Codex, Grok, Cursor, etc.). All agents must use the same workflow and
+architectural boundaries. This file, `02-architecture-boundaries.md`, and
 `03-collaboration-and-completion.md` together mirror the same operating
-contract as `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`.
-If any of these disagree, treat it as a defect and return a reopening
-request rather than silently picking one.
+contract as `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and
+`.cursor/rules/*.mdc`. If any of these disagree, treat it as a defect and
+return a reopening request rather than silently picking one.
 
 The human — the **Director** — is present for one work plan's direction, and
 again at its close. Inside a work plan, phase transitions are self-reviewed by
