@@ -5,7 +5,7 @@
 - Item ID: item-0022
 - Title: Fix 5 remaining agent-instruction mirror-parity gaps (Cursor
   behind the other mirrors, missing cross-references)
-- Status: captured
+- Status: promoted
 - Created: 2026-08-23
 - Updated: 2026-08-23
 - Priority hint: low
@@ -120,6 +120,8 @@ files at all.
 
 Filled when status becomes `promoted` or `spiked` or `dropped`.
 
-- Date:
-- Decision:
-- Reason:
+- Date: 2026-08-23
+- Decision: Promoted, in the Backlog-layer thread ("承認"). Per ADR 0016
+  Rule 2, Design & Review proceeds autonomously from here.
+- Reason: All 5 gaps are concretely named with exact files and exact
+  missing content; no spike or human decision needed, ready to run.
