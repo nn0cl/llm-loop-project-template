@@ -70,8 +70,9 @@ changepoint numbered a single record).
 
 **Pitfall this avoids:** starting metric computation before knowing whether
 a governance change happened mid-history. In this template's own repository,
-skipping this step is exactly what produced the misleading "22 rounds → 0
-rounds" headline number in the first pass of this investigation.
+skipping this step is exactly what produced the misleading "22 rounds,
+almost all rework, dropping to near-zero" headline number in the first pass
+of this investigation.
 
 ---
 
@@ -300,8 +301,10 @@ established, not just what was.
 
 This prompt set exists because running an equivalent of Prompts 2-3 directly
 against `llm-loop-project-template`'s own history produced a misleadingly
-clean-looking result (rework rounds dropping from 22 to 0) that fell apart
-under two follow-up checks: reading review record bodies instead of trusting
+clean-looking result (rework concentrated in 22 rounds across 4 topics
+before a governance change, then a single bounded reject-and-redo across 31
+items after it) that fell apart under two follow-up checks: reading review
+record bodies instead of trusting
 pass/fail verdicts (Prompt 2's disposition-split check), and splitting the
 reproduced-rate by subject-matter category instead of by time period alone
 (Prompt 3's category split). Both checks are now built into the prompts
