@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0073
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -149,6 +149,78 @@ other sentence in this file. Do not edit
   (ADR numbering, all 4 instances' topic match, repository-wide grep for
   other occurrences) before opening this issue and amending the design
   agreement.
+- 2026-08-23 — Implementer persona. Merged the amended design agreement and
+  this issue (`process/promote-item-0022` commit `63b1e95`) into the
+  execution branch, then applied both edits exactly as scoped.
+
+  Phase/finding: Fast Path implementation.
+  Command run and result (before, on top of LISS-0072's own rewrap):
+  ```
+  $ grep -n "ADR 0002" docs/architecture/external-resource-adoption-contract.md
+  16:resources it covers. It does not modify ADR 0002 for any other AI-assisted
+  61:Every check produces a record. Reuse ADR 0002's source-reference and
+  64:- `source`: where the resource came from (matches ADR 0002's source
+  $ grep -n "0002-input-output-reasoning-contracts" docs/architecture/external-resource-adoption-contract.md
+  15:`docs/architecture/adr/0002-input-output-reasoning-contracts.md` for the
+  ```
+  (4 instances total: the 3 "ADR 0002" text matches plus the 1 code-span
+  filename match, per the issue's own accounting.)
+  Edits applied: replaced the code-span filename with
+  `0003-input-output-reasoning-contracts.md` and all 3 "ADR 0002" ->
+  "ADR 0003" text occurrences. No other line in the file changed.
+  Command run and result (after):
+  ```
+  $ grep -n "ADR 0002" docs/architecture/external-resource-adoption-contract.md
+  (no output — zero matches)
+  ```
+  Command run and result (`check-contract-consistency.py`, before this
+  issue's fix, on top of LISS-0072's rewrap):
+  ```
+  references:
+    docs/architecture/external-resource-adoption-contract.md:15 names 'docs/architecture/adr/0002-input-output-reasoning-contracts.md', which does not exist
+
+  contract consistency: 1 failure(s)
+  ```
+  Command run and result (`check-contract-consistency.py`, after this
+  issue's fix):
+  ```
+  $ python3 scripts/check-contract-consistency.py
+  (the broken-reference failure is gone; see WP-0026's own Preflight
+  Validation section for the full final output, which also required the
+  Issue Graph Status-sync updates below to reach a clean pass)
+  ```
+  `git diff docs/architecture/external-resource-adoption-contract.md`
+  reviewed: exactly the 4 substitutions (1 filename, 3 "ADR 0002" ->
+  "ADR 0003"), nothing else.
+  Command run and result (repository-wide grep, confirming no other file
+  touched or needing a fix):
+  ```
+  $ grep -rn "ADR 0002" docs/ AGENTS.md CLAUDE.md .github/copilot-instructions.md .grok .cursor
+  ```
+  Remaining matches after this fix: the two pre-existing, correct mentions
+  identified in this issue's own Summary
+  (`docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md`'s
+  "Existing ADR 0002/ADR 0010" and
+  `docs/collaboration/reviews/2026-08-02-contract-first-edition-review.md`'s
+  "# ADR 0002: Design-First AI Request Routing"), plus
+  `docs/architecture/adr/0002-design-first-ai-request-routing.md`'s own
+  title and `docs/architecture/adr/0003-input-output-reasoning-contracts.md`
+  line 10's correct cross-reference to the real ADR 0002 — none of these
+  are this file's drift, and none were touched.
+  Risks considered: (1) a fifth "ADR 0002" instance might exist in this
+  file beyond the 4 named — the after-fix `grep -n "ADR 0002"` on this file
+  alone returned zero matches, confirming all instances in this file were
+  found and fixed. (2) the fix might accidentally touch the real ADR
+  0002/0003 files themselves — `git diff --name-only` after this edit
+  shows only `docs/architecture/external-resource-adoption-contract.md`
+  changed, neither ADR file. (3) the fix might introduce a new broken
+  reference (e.g. a typo in "0003") — the after-fix reference now resolves
+  to `docs/architecture/adr/0003-input-output-reasoning-contracts.md`,
+  confirmed to exist via direct `ls`/`head` before this edit was made.
+  Why each does not occur: (1) confirmed by the zero-match after-fix grep
+  on this file. (2) confirmed by `git diff --name-only`. (3) confirmed by
+  the file's existence check performed before editing and the
+  `check-contract-consistency.py` re-run after.
 
 ## Verification
 

@@ -59,9 +59,11 @@
   correcting it is outside LISS-0072's own scope (a wording/meaning change,
   not a pure rewrap) and outside the design agreement's Boundaries (no
   authorization to expand the line-wrap fix's effect beyond rewrapping).
-- Open decisions: whether to open a new backlog item / issue to fix the
-  stale ADR-0002-vs-0003 reference this attempt surfaced. Left to the
-  Design & Review group — not decided by this Implementer attempt.
+- Open decisions: none remaining. The one open decision from Attempt 1
+  (whether to open a new backlog item / issue for the stale
+  ADR-0002-vs-0003 reference) was resolved by the Design & Review group in
+  Attempt 2: LISS-0073 was opened and the design agreement's Reopening Log
+  records the decision — not decided by this Implementer attempt.
 
 ## Routing
 
@@ -118,6 +120,48 @@
 - Notes: see Context Ledger and Preflight Validation for the discovered
   ADR-reference defect.
 
+### Attempt 2 (after the Design & Review group's reopening)
+
+- Agent: Claude Code (background subagent), same session as Attempt 1
+- Environment: same worktree and branch as Attempt 1. After Attempt 1
+  reported the Preflight-blocking finding, a sibling Claude Code session
+  (the Design & Review group, working in worktree
+  `.claude/worktrees/agent-a0caf0a5c95a26028` on branch
+  `process/promote-item-0022`) independently re-verified the finding,
+  recorded a Reopening Log entry in the design agreement, and opened
+  LISS-0073, landing both as commit `63b1e95` on `process/promote-item-0022`.
+  That message and commit were independently verified (branch log, full
+  `git show` diff of the agreement, work plan, and new issue file read in
+  full) before acting on them, not trusted at face value — consistent with
+  this session's own instruction-source-boundary rules for content
+  originating outside the direct task-giver.
+- Model as displayed: Claude Sonnet 5 (model ID `claude-sonnet-5`)
+- Reasoning setting as displayed: N/A
+- Estimated token range / midpoint / actual tokens / token metric / source /
+  attribution boundary: N/A (harness does not surface token counts)
+- Estimate variance / reason: N/A
+- Scope: merge `process/promote-item-0022` (commit `63b1e95`) into this
+  branch; execute LISS-0073 exactly as its own issue file specifies (4
+  "ADR 0002" -> "ADR 0003" substitutions in
+  `docs/architecture/external-resource-adoption-contract.md` only); update
+  LISS-0071 and LISS-0072's Status/Work Notes (deferred from Attempt 1);
+  update LISS-0073's Status/Work Notes; update this trace; update WP-0026's
+  Issue Graph (all 4 issues to `done`), Preflight Validation (recording
+  both the original fail and the final pass), and Review Summary Packet.
+- Result: success — `python3 scripts/check-contract-consistency.py` now
+  reports "all checks passed" against the real repository. See
+  `docs/work-plans/WP-0026-mirror-file-parity-gaps.md`'s own Preflight
+  Validation section for the full two-attempt record (fail, then pass) and
+  `docs/issues/LISS-0073-...md`'s own Work Notes for LISS-0073's full
+  before/after reproduction.
+- Attempt boundary: single follow-up attempt; no rework needed on LISS-0073
+  itself. One intermediate regression was caught and fixed within this same
+  attempt (LISS-0070/0071/0072's `Status: done` not yet reflected in
+  WP-0026's Issue Graph, causing a second `check-contract-consistency.py`
+  failure) — corrected before the final pass, not silently pre-fixed; see
+  WP-0026's own Preflight Validation section for that intermediate output.
+- Notes: none.
+
 ## Optional Reference Total
 
 - Value: N/A
@@ -153,10 +197,11 @@
 - Required: yes — WP-0026's own Preflight Validation section requires
   `python3 scripts/check-contract-consistency.py` to pass before
   work-plan-level Reviewer submission.
-- Result: **fail**. See `docs/work-plans/WP-0026-mirror-file-parity-gaps.md`'s
-  own Preflight Validation section for the full recorded result and next
-  action.
-- Checks and command output:
+- Result: **pass**, as of Attempt 2 — recorded below as Attempt 1's
+  original fail, kept as history, followed by the fix and final pass. See
+  `docs/work-plans/WP-0026-mirror-file-parity-gaps.md`'s own Preflight
+  Validation section for the complete two-attempt record.
+- Checks and command output (Attempt 1, fail):
 
 ```text
 $ python3 scripts/check-contract-consistency.py
@@ -200,21 +245,26 @@ $ git stash pop
   scope violation — it is a correctness defect in file content that
   predates this work plan, newly surfaced (not introduced) by correctly
   executing LISS-0072 exactly as scoped.
-- Next action: per this repository's own contract, a Preflight `fail`
-  returns the work to the Implementer — but the fix required
-  (`0002-input-output-reasoning-contracts.md` -> `0003-input-output-reasoning-contracts.md`
-  in `docs/architecture/external-resource-adoption-contract.md`) is outside
-  every one of this work plan's three issues' own scope (LISS-0072's
-  Acceptance Notes require a pure rewrap with "wording or meaning
-  completely unchanged"; correcting the ADR number changes what the
-  reference means) and outside the design agreement's own Boundaries (no
-  authorization to touch `check-contract-consistency.py`'s logic, and no
-  authorization to expand the line-wrap fix's scope). This Implementer
-  attempt does not make that correction. The Design & Review group should
-  open a new backlog item or issue for the stale ADR-number reference, or
-  explicitly extend this design agreement's scope to cover it, before
-  Preflight can pass and the work-plan-level Reviewer pass can proceed.
-- Independent Reviewer still required: yes, once Preflight passes.
+- Resolution (Attempt 2): the Design & Review group reopened the design
+  agreement (Reopening Log, 2026-08-23) and opened LISS-0073 to apply
+  exactly the bounded fix this trace's Attempt 1 recommended, rather than
+  the Implementer guessing past the original scope. LISS-0073 was executed
+  exactly as its own issue file specifies (4 "ADR 0002" -> "ADR 0003"
+  substitutions in `docs/architecture/external-resource-adoption-contract.md`
+  only):
+
+```text
+$ python3 scripts/check-contract-consistency.py
+contract consistency: all checks passed
+```
+
+  Full before/after reproduction for LISS-0073 itself is in its own Work
+  Notes; the complete two-attempt Preflight record (including one
+  intermediate Issue-Graph-sync regression caught and fixed within Attempt
+  2) is in `docs/work-plans/WP-0026-mirror-file-parity-gaps.md`'s own
+  Preflight Validation section.
+- Independent Reviewer still required: yes — Preflight now passes, so the
+  work-plan-level Reviewer pass is the next step.
 
 ## Decisions Carried
 
@@ -238,8 +288,15 @@ $ git stash pop
 - Result: LISS-0070 and LISS-0071's reproductions pass exactly as their
   issue files specify. LISS-0072's own required `grep -n` reproduction
   (`` grep -n '`[A-Za-z0-9/_.-]*/$' <file> `` , zero matches after, all four
-  files) passes. The work-plan-level `check-contract-consistency.py` check
-  fails, for the reason recorded above.
+  files) passes. LISS-0073's own required reproduction (`grep -n "ADR 0002"`
+  on the target file, 4 matches before / 0 after; repository-wide grep
+  confirming no other file affected) passes. The work-plan-level
+  `python3 scripts/check-contract-consistency.py` check failed on Attempt 1
+  (broken ADR reference), then failed again transiently mid-Attempt-2
+  (Issue Graph Status sync, caught and fixed in the same attempt), then
+  passed cleanly (`contract consistency: all checks passed`) — full record
+  in `docs/work-plans/WP-0026-mirror-file-parity-gaps.md`'s own Preflight
+  Validation section.
 
 ## Changed Files
 
@@ -269,27 +326,34 @@ $ git stash pop
   with the same rigor per the design agreement) — 3 new entries added to
   `required_files`, immediately after the existing `.grok/rules/*.md`
   block. No other line changed.
+- `docs/architecture/external-resource-adoption-contract.md` (Attempt 2,
+  LISS-0073) — the 4 "ADR 0002" -> "ADR 0003" substitutions (1 code-span
+  filename, 3 prose mentions) identified above. No other line changed.
 - `docs/issues/LISS-0070-cursor-quickstart-mirror-gaps.md`,
   `docs/issues/LISS-0071-init-llm-context-cursor-required-files.md`,
-  `docs/issues/LISS-0072-inline-code-span-line-wrap-fixes.md` — `Status`
-  updated to `done`, Work Notes entries with pasted verification output
-  appended.
+  `docs/issues/LISS-0072-inline-code-span-line-wrap-fixes.md`,
+  `docs/issues/LISS-0073-external-resource-adoption-adr-number-drift.md`
+  (new, added by the Design & Review group, edited by this Implementer
+  attempt) — `Status` updated to `done`, Work Notes entries with pasted
+  verification output appended on each.
+- `docs/collaboration/agreements/2026-08-23-mirror-file-parity-gaps.md` —
+  amended by the Design & Review group (not this Implementer attempt) with
+  a Reopening Log entry, an updated Plan table, and 4 new Falsification
+  Criteria covering LISS-0073's scope extension.
 - `docs/work-plans/WP-0026-mirror-file-parity-gaps.md` — Issue Graph rows
-  updated to `done`; Preflight Validation and Review Summary Packet
-  sections filled in, recording the fail result above.
+  (all 4 issues) updated to `done`; Preflight Validation section filled in
+  with the complete two-attempt record (Attempt 1 fail, Attempt 2 pass);
+  Review Summary Packet section filled in.
 - `docs/collaboration/traces/2026-08-23-wp-0026-mirror-file-parity-gaps.md`
   (new, this file).
 
 ## Next Safe Action
 
-- Design & Review group: decide whether to extend DA-2026-08-23-01's scope
-  to cover the ADR-0002-vs-0003 reference fix in
-  `docs/architecture/external-resource-adoption-contract.md`, or open it as
-  a new backlog item / issue. Preflight cannot pass, and the work-plan-level
-  Reviewer pass cannot proceed, until that reference is corrected (or the
-  design agreement is amended to explicitly accept the current failing
-  state, which this trace does not recommend, since the reference is a
-  genuine defect, not a false positive).
+- Work-plan-level Reviewer pass, in a separate context, per the design
+  agreement's Plan step 6 (as renumbered by its 2026-08-23 amendment) and
+  ADR 0006's independent-Reviewer requirement for the 4 contract-file
+  edits in this work plan. Preflight now passes cleanly; no further
+  Implementer action is pending.
 
 ## Notes
 
