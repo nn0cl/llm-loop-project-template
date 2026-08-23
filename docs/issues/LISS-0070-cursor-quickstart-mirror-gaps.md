@@ -4,7 +4,7 @@
 
 - Local issue ID: LISS-0070
 - GitHub issue: none
-- Status: ready
+- Status: done
 - `Status` is the authoritative lifecycle field. For `Type: review-finding`,
   use `proposed | accepted | in_progress | resolved | closed | wont_do`.
 - Phase: Fast Path
@@ -117,6 +117,48 @@ after Grok's mirror was written and this sentence was never backfilled.
   dispatched. Independently confirmed via direct `grep`/read that gap 1's
   actual footprint (per the backlog item) was stale for 4 of 5 mirrors —
   only this file needs it — before writing this issue's acceptance notes.
+- 2026-08-23 — Implementer persona. Applied both edits exactly as scoped.
+
+  Phase/finding: Fast Path implementation.
+  Command run and result (before):
+  ```
+  $ grep -n "external-resource-adoption-contract\|ai-failure-recovery\|runner-cli-contract" .cursor/rules/01-quickstart.mdc
+  (no output — zero matches)
+  $ grep -n "Claude, Copilot, Codex, Grok" .grok/rules/01-quickstart.md
+  14:This repository is prepared for multiple AI coding agents (Claude, Copilot,
+  ```
+  Edits applied: added the 3 bullets to `.cursor/rules/01-quickstart.mdc`'s
+  "Cursor-side reminders" section; reworded `.grok/rules/01-quickstart.md`
+  line 14 to name Cursor and updated its adjacent mirror-list sentence
+  (lines 16-18) to also name `.cursor/rules/*.mdc`, per the issue's own
+  instruction to check that adjacent sentence.
+  Command run and result (after):
+  ```
+  $ grep -n "external-resource-adoption-contract\|ai-failure-recovery\|runner-cli-contract" .cursor/rules/01-quickstart.mdc
+  162:  `docs/architecture/external-resource-adoption-contract.md`.
+  163:- AI failure and recovery: `docs/collaboration/ai-failure-recovery.md`.
+  164:- Slow AI job runner CLI contract: `docs/collaboration/runner-cli-contract.md`.
+
+  $ grep -n "Claude, Copilot, Codex, Grok" .grok/rules/01-quickstart.md
+  (no output — sentence reworded, now reads "Grok, Cursor, etc.")
+  ```
+  `git diff` reviewed: confined to the 3 new bullet lines in
+  `.cursor/rules/01-quickstart.mdc` and the two sentences (line 14's
+  parenthetical, lines 16-18's mirror list) in `.grok/rules/01-quickstart.md`
+  — no other line changed in either file.
+  Risks considered: (1) the new bullets might duplicate `AGENTS.md` prose
+  instead of staying terse — checked against the existing 4-bullet style,
+  matched it (one line each, file name plus short label). (2) editing near
+  the `.mdc` YAML frontmatter might corrupt it — the edit is far below the
+  frontmatter (line ~158 of ~164), frontmatter untouched. (3) rewording the
+  grok "mirror list" sentence might drift from `.cursor/rules/01-quickstart.mdc`'s
+  own equivalent sentence shape — compared directly, wording now matches
+  (both list `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`,
+  and the other tool's mirror-file glob).
+  Why each does not occur: (1) verified by direct comparison of the new
+  bullets' line length/style against the existing 4. (2) confirmed by
+  `git diff` showing no change above line 158. (3) confirmed by side-by-side
+  read of both files' equivalent sentences after the edit.
 
 ## Verification
 
