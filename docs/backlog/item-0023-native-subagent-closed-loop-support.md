@@ -107,3 +107,13 @@ No retrieved source establishes that the entire approved-backlog-to-close loop n
 - Decision: promoted.
 - Director statement: “バックログ承認。進めて”.
 - Scope: existing-loop compatibility research and necessary support within this item; different billing remains deferred. Earlier captured notes are historical.
+
+## Work-plan close disposition
+- Date: 2026-10-01.
+- Active persona: Planner, recording the Director close.
+- Director statement: “クローズ、コミット、プッシュしてPRを作って”.
+- WP-0027: closed after independent four-type approval; LISS-0074/0075 done and finding LISS-0076 closed.
+- Status remains `promoted`: the backlog vocabulary has no `closed` value; the promoted work plan is completed.
+- Accepted result: six-tool documentation support package and partial Codex active-parent fixture. No full eight-stage certification is asserted.
+- Remaining live/billing adoption conditions remain deferred; this close authorizes publication of the completed package, not additional implementation.
+- PR: https://github.com/nn0cl/llm-loop-project-template/pull/25.

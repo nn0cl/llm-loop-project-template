@@ -29,7 +29,7 @@ In: DA-2026-10-01-01. Out: paid/hosted orchestration, runtime code, authority ch
 Research -> close case-0005 with one next action -> documentation implementation -> deterministic preflight -> separate Reviewer -> Director checkpoint.
 
 ## Current Next Issue
-None; Director close pending. LISS-0075 is done and independently approved.
+None. WP-0027 is closed by the Director; LISS-0074 and LISS-0075 are done.
 
 ## Preflight Validation
 Implementer, docs-only Architecture Path. Result: pass. Raw outputs are linked in the packet below; contract consistency, document/link checks and isolated copy smoke passed; whitespace check passed. This pass permits review submission only.
@@ -54,7 +54,14 @@ Record: ../collaboration/reviews/2026-10-01-wp-0027-source-correction-confirmati
 Original rejection is preserved; LISS-0076 independently confirmed and closed.
 
 ## Work-Plan Close
-Pending Director read and next direction after review. Backlog remains promoted, not dropped or automatically closed.
+Closed on 2026-10-01 after independent approval and the Director statement: “クローズ、コミット、プッシュしてPRを作って”.
+- Active persona recording close: Planner; Fast Path lifecycle/publication only.
+- Covering agreement: DA-2026-10-01-01.
+- Disposition: accepted documentation support package and partial native probe; all issues done and LISS-0076 closed.
+- Backlog item-0023 remains `promoted` under the backlog status vocabulary; its promoted WP-0027 is completed. Full-loop live adoption remains conditional and no further implementation is authorized by this close.
+- Next direction: commit/push the close records and publish PR #25 for review. No next work plan requested.
+- Deferred scope remains unchanged: full eight-stage six-tool certification and billing-changing cloud/API adoption.
+- Verification/close trace: ../collaboration/traces/2026-10-01-wp-0027-director-close.md.
 
 ## Risks
 Installed Codex CLI predates researched releases. Other accounts unavailable. Native context isolation and worktree isolation must be tested separately. Source claims do not certify workflow authority or continuous runtime.
@@ -107,4 +114,4 @@ See agreement; exact outputs stored under case-0005/evidence and work trace.
 - Initial review: Rejected, record ../collaboration/reviews/2026-10-01-wp-0027-native-subagent-loop-support-review.md.
 - LISS-0076: closed by independent Reviewer; source-grounding correction confirmed.
 - Preflight refreshed for changed guide/source records in source-correction-check.txt; no native probe claim expanded.
-- Independent whole-plan review approved; Director close remains pending.
+- Independent whole-plan review approved; subsequent Director close is recorded above.
