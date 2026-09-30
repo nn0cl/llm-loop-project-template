@@ -9,3 +9,12 @@ Cursor: /usr/local/bin/cursor; 3.20.21 f09fca384ceca23f7bf21f9c23655b162641d740 
 gh: /opt/homebrew/bin/gh
 Codex help exposes agents, exec, resume, queue, fork, features. Help presence is not successful execution or entitlement evidence.
 Branch creation first failed: cannot lock ref (sandbox). Approved escalation succeeded: Switched to a new branch codex/native-subagent-loop-support.
+
+Further help-only probes:
+Codex agents: Browse all agent sessions on the shared local app-server daemon.
+Codex queue: Usage codex queue [OPTIONS] --thread <THREAD> --message <TEXT>.
+These do not prove runtime discoverability, authorization, or idle/closed-client delivery.
+Remote: git@github.com:nn0cl/llm-loop-project-template.git
+gh auth status (sandbox): Failed to log in; token reported invalid. No token content read or recorded.
+
+Correction: gh auth status outside sandbox exited 0: Logged in to github.com account nn0cl (keyring); Git protocol ssh; scopes gist/read:org/repo. Sandbox invalid-token result is not actual account failure. Masked token omitted from evidence.

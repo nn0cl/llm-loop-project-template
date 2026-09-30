@@ -2,14 +2,14 @@
 
 ## Metadata
 - Local issue ID: LISS-0075
-- Status: ready
+- Status: review
 - Phase: docs-only
 - Type: process
 - Priority: high
 - Initial planning size: M
 - Current planning size: M
 - Owner/agent: Implementer
-- Related branch: codex/native-subagent-loop-support
+- Related branch: codex/native-subagent-guide
 
 ## Summary
 Execute the corresponding task in DA-2026-10-01-01 and WP-0027.
@@ -32,4 +32,8 @@ Included: canonical contracts, backlog, prior case-0004, official documentation.
 AIP-WP0027-001 in WP-0027 is canonical.
 
 ## Verification
-Pending.
+Documentation implementation complete, pending independent contract Reviewer.
+Evidence: case-0005/evidence/implementation-contract-check.txt,
+implementation-copy-smoke.txt, implementation-document-check.txt and
+implementation-diff-check.txt. No producer contract approval issued.
+Trace: docs/collaboration/traces/2026-10-01-liss-0075-native-subagent-guide-implementation.md.

@@ -185,6 +185,14 @@ documented while the session still skipped the mandatory design check, so
 inlining was kept but the indirection was not — see ADR 0006's 2026-07-25
 revisit.
 
+## Optional Native Subagent Compatibility
+
+For a tool-specific local dispatch and recovery assessment, use
+[native subagent loop compatibility](native-subagent-loop-compatibility.md)
+and its [conformance evidence template](../templates/agent-tool-conformance.md).
+These companions are copied by the existing collaboration/template paths. They
+do not change the session reading sequence or certify a tool for the full loop.
+
 ## Adding Stack-Specific Scoped Rules
 
 Once a stack ADR is accepted, a project may need rules that apply only to a

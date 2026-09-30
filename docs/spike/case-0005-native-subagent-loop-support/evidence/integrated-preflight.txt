@@ -1,0 +1,16 @@
+Command: python3 scripts/check-contract-consistency.py --repo .
+contract consistency: all checks passed
+
+Exit: 0
+Command: python3 docs/spike/case-0005-native-subagent-loop-support/evidence/implementation-document-check.py
+PASS six tool sections, eight stage cells, evidence/failure fields, touched relative links
+LIMIT: structural checks do not certify native behavior, source correctness or account entitlement
+
+Exit: 0
+Command: git diff --check
+
+Exit: 0
+PASS: shipped guide/template/adoption bytes unchanged during integration
+PASS: native rejection/correction snapshot replay and artifact hashes
+Scope: documentation support package and active-parent primitive probe; no full-loop certification
+Next: fresh independent whole-plan Reviewer
