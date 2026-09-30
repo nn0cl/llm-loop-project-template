@@ -1,0 +1,26 @@
+# Research evidence, 2026-10-01
+
+Persona: Planner. Read-only research by root, claude_cursor_research, and grok_copilot_antigravity_research. All external capabilities below are documentation-derived (Inferred), not live certified. No new subscription, API charge, cloud task, or scheduler created.
+
+## Codex
+[Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents): native spawn/follow-up/wait/close; current local delegation requires direct request or applicable project/skill instruction. Permissions inherit; noninteractive fresh approval can fail. [Worktrees](https://learn.chatgpt.com/docs/environments/git-worktrees): opt-in managed worktrees, normally detached HEAD. [Troubleshooting](https://learn.chatgpt.com/docs/reference/troubleshooting): CLI and desktop can run different Codex versions. [Scheduled tasks](https://learn.chatgpt.com/docs/automations?translationFallback=pt-BR): desktop local schedules require computer and app running; CLI/IDE do not expose schedule management. No schedule enabled by this work.
+
+[Changelog](https://learn.chatgpt.com/docs/changelog): CLI 0.156.0 (September 22) adds worktree session creation and fixes streamed plans/completion/interruption preservation and Plan-mode restoration; CLI 0.159.0 adds opt-in instant_interrupt; 0.159.1 adds Sol 6.1 catalog default (September 29). Installed CLI 0.153.4 predates these. [Responses multi-agent](https://developers.openai.com/api/docs/guides/responses-multi-agent) is a separate API surface, not assumed included in existing billing.
+
+## Claude Code
+[Subagents](https://code.claude.com/docs/en/sub-agents): ordinary children start fresh; forked children inherit history. Worktree isolation is opt-in. Background completion can reach parent later; resumable IDs have agent-type limitations. [Agent teams](https://code.claude.com/docs/en/agent-teams): experimental; resume does not restore in-process teammates and completion can lag. [Hooks](https://code.claude.com/docs/en/hooks): lifecycle hooks expose agent IDs/transcript paths, with version-dependent handback details. [Costs](https://code.claude.com/docs/en/costs): subscription use and separately metered provider/Console use must be distinguished. Local binary absent; no live claim.
+
+## Cursor
+[Subagents](https://cursor.com/docs/subagents): clean initial context, parent-selected input, default shared checkout; opt-in isolated local worktree or cloud VM. [Hooks](https://cursor.com/docs/hooks): completed subagentStop can supply followup_message, default continuation limit five; errors/aborts need recovery and critical hook failure behavior needs explicit configuration. [Pricing](https://cursor.com/docs/models-and-pricing): included usage and optional on-demand charges are distinct. Cloud adoption deferred. Installed editor version alone does not verify Agent CLI features.
+
+## Grok Build
+[Subagents](https://docs.x.ai/build/features/subagents): separate contexts and completion summaries. [Worktrees](https://docs.x.ai/build/features/worktrees): opt-in detached checkout; default may include uncommitted changes; explicit clean ref and branch matter. [Sessions](https://docs.x.ai/build/features/sessions): resume IDs and saved calls; fork inherits history. [Hooks](https://docs.x.ai/build/features/hooks): passive stdout ignored, only PreToolUse blocks, failure can be open. SubagentStop is not itself continuation. [Billing](https://docs.x.ai/console/billing): API billing separate; Build entitlement not inspected. Old case-0004 nesting claims remain dated history, not current guarantees.
+
+## GitHub Copilot
+[CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference): /new worktree starts fresh; fork worktree carries history. Per-fleet-worker isolation still unconfirmed. [Hooks](https://docs.github.com/en/copilot/reference/hooks-reference): stop blocking can continue for at most eight consecutive blocks; built-in general-purpose omits subagent start/stop events. [Fleet](https://docs.github.com/en/copilot/how-tos/copilot-sdk/features/fleet-mode): parent coordination and dependency/event mechanisms. [Custom agents](https://docs.github.com/en/copilot/how-tos/copilot-sdk/features/custom-agents): context/tool controls. [Autopilot](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/autopilot): bounded continuation, model use consumes credits. Account coverage unverified.
+
+## Antigravity
+[Subagents](https://www.antigravity.google/docs/subagents/): fresh history, branch worktrees, completion messages, known-ID messaging and idle-child wake; shared transcripts still possible. [Projects](https://www.antigravity.google/docs/projects/): explicit worktree mode; non-Git folders may remain shared. [Hooks](https://www.antigravity.google/docs/hooks/): Stop can request continuation; parent wake after client exit unconfirmed. [Plans](https://www.antigravity.google/docs/plans/): quotas and purchased overages, some orchestration modes paid. Account coverage unverified.
+
+## Common limits
+Native lifecycle events do not validate repository authority. Every tool still needs approval/agreement validation, durable phase/evidence/finding records and Director close. Closed-client continuation is unconfirmed across the surveyed configurations. Do not report a complete-loop percentage hiding a missing gate.
