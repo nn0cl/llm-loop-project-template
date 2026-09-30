@@ -10,7 +10,7 @@ In: DA-2026-10-01-01. Out: paid/hosted orchestration, runtime code, authority ch
 | Issue | Status | Initial size | Current size | Planning record | Depends on | Blocks | Branch |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | LISS-0074 | done | M | M | AIP-WP0027-001 | approved item-0023 | LISS-0075 | codex/native-subagent-loop-support |
-| LISS-0075 | review | M | M | AIP-WP0027-001 | closed case-0005 | preflight | dedicated worktree |
+| LISS-0075 | done | M | M | AIP-WP0027-001 | closed case-0005 | preflight | dedicated worktree |
 
 ## AI Planning Records
 ### AIP-WP0027-001
@@ -29,7 +29,7 @@ In: DA-2026-10-01-01. Out: paid/hosted orchestration, runtime code, authority ch
 Research -> close case-0005 with one next action -> documentation implementation -> deterministic preflight -> separate Reviewer -> Director checkpoint.
 
 ## Current Next Issue
-Independent whole-plan Reviewer after deterministic preflight. LISS-0075 documentation is complete and in review; contract approval remains pending.
+None; Director close pending. LISS-0075 is done and independently approved.
 
 ## Preflight Validation
 Implementer, docs-only Architecture Path. Result: pass. Raw outputs are linked in the packet below; contract consistency, document/link checks and isolated copy smoke passed; whitespace check passed. This pass permits review submission only.
@@ -49,7 +49,9 @@ review findings identified. Independent review required after pass.
 - Next action: fresh separate-context Reviewer; no final approval from Implementer.
 
 ## Work-Plan Review
-Pending separate context.
+Approved in all four types for the bounded documentation support package and partial active-parent fixture.
+Record: ../collaboration/reviews/2026-10-01-wp-0027-source-correction-confirmation.md.
+Original rejection is preserved; LISS-0076 independently confirmed and closed.
 
 ## Work-Plan Close
 Pending Director read and next direction after review. Backlog remains promoted, not dropped or automatically closed.
@@ -103,6 +105,6 @@ See agreement; exact outputs stored under case-0005/evidence and work trace.
 
 ## Review finding correction
 - Initial review: Rejected, record ../collaboration/reviews/2026-10-01-wp-0027-native-subagent-loop-support-review.md.
-- LISS-0076: resolved, source-grounding correction only; pending separate Reviewer confirmation.
+- LISS-0076: closed by independent Reviewer; source-grounding correction confirmed.
 - Preflight refreshed for changed guide/source records in source-correction-check.txt; no native probe claim expanded.
-- Work-plan remains review-pending and Director close remains pending.
+- Independent whole-plan review approved; Director close remains pending.

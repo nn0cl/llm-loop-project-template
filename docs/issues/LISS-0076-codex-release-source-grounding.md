@@ -2,7 +2,7 @@
 
 ## Metadata
 - Local issue ID: LISS-0076
-- Status: resolved
+- Status: closed
 - Type: review-finding
 - Phase: docs-only Architecture Path correction
 - Priority: medium
@@ -41,3 +41,8 @@ Finding/review record validation after writing: `python3 scripts/check-contract-
 - Minimum correction: versioned links in the three affected files; release/date/tag/commit grounds in case-0005/evidence/codex-versioned-release-grounds.md.
 - Verification record: case-0005/evidence/source-correction-check.txt.
 - Separate confirmation: pending fresh-context Reviewer; remains a blocking plan finding until confirmation.
+
+## Independent confirmation
+- Active persona: Reviewer. Correction snapshot ed507e6 independently approved on 2026-10-01.
+- Confirmation: ../collaboration/reviews/2026-10-01-wp-0027-source-correction-confirmation.md.
+- Lifecycle: resolved -> closed after source/date verification and independent deterministic reruns; Director work-plan close remains pending. Earlier pending statements are historical.

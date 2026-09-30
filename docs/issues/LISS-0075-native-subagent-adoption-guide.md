@@ -2,7 +2,7 @@
 
 ## Metadata
 - Local issue ID: LISS-0075
-- Status: review
+- Status: done
 - Phase: docs-only
 - Type: process
 - Priority: high
@@ -32,7 +32,8 @@ Included: canonical contracts, backlog, prior case-0004, official documentation.
 AIP-WP0027-001 in WP-0027 is canonical.
 
 ## Verification
-Documentation implementation complete, pending independent contract Reviewer.
+Documentation implementation complete and independently approved.
+Confirmation: docs/collaboration/reviews/2026-10-01-wp-0027-source-correction-confirmation.md.
 Evidence: case-0005/evidence/implementation-contract-check.txt,
 implementation-copy-smoke.txt, implementation-document-check.txt and
 implementation-diff-check.txt. No producer contract approval issued.

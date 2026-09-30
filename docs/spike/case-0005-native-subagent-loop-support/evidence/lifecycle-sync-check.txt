@@ -1,0 +1,9 @@
+COMMAND: python3 scripts/check-contract-consistency.py --repo .
+contract consistency: all checks passed
+
+
+exit: 0
+COMMAND: git diff --check
+
+
+exit: 0
