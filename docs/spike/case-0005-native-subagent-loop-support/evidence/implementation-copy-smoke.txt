@@ -1,0 +1,242 @@
+COMMAND: bash scripts/copy-ai-collaboration-files.sh --target /var/folders/z6/qzgjxw4n1mq1xvb9y33g611h0000gn/T/wp0027-copy-3_ezfl3_ --non-interactive
+copy AGENTS.md
+copy CLAUDE.md
+copy .gitignore
+copy .github/copilot-instructions.md
+merge .grok/rules
+merge .cursor/rules
+copy .github/dependabot.yml
+copy .github/pull_request_template.md
+merge .github/ISSUE_TEMPLATE
+copy .github/workflows/ci.yml
+merge docs/architecture
+merge docs/at-tdd
+merge docs/collaboration
+skip template-history docs/collaboration/traces/2026-08-03-review-cost-discipline-correction.md
+skip template-history docs/collaboration/traces/2026-08-20-check-and-spawn-wake-protocol.md
+skip template-history docs/collaboration/traces/2026-08-02-mirror-parity-and-adr-range.md
+skip template-history docs/collaboration/traces/2026-08-10-loop-ledgers-and-settings.md
+skip template-history docs/collaboration/traces/2026-08-02-contract-first-edition.md
+skip template-history docs/collaboration/traces/2026-08-19-liss-0048-drift-prevention-entry-docs-and-ci-checks.md
+skip template-history docs/collaboration/traces/2026-08-02-preflight-validation.md
+skip template-history docs/collaboration/traces/2026-08-02-reviewer-rejection-fixes.md
+skip template-history docs/collaboration/traces/2026-08-19-liss-0041-branch-worktree-cleanup-rule.md
+skip template-history docs/collaboration/traces/2026-10-01-cross-tool-release-design-intake.md
+skip template-history docs/collaboration/traces/2026-08-19-liss-0043-document-log-lifecycle-model.md
+skip template-history docs/collaboration/traces/2026-08-02-contract-consistency-check.md
+skip template-history docs/collaboration/traces/2026-08-19-liss-0053-review-summary-packet.md
+skip template-history docs/collaboration/traces/2026-08-02-liss-0003-review-issues-minor-fix.md
+skip template-history docs/collaboration/traces/2026-08-20-wp-0019-contract-file-edits.md
+skip template-history docs/collaboration/traces/2026-08-19-liss-0046-contract-sync-diff-records.md
+skip template-history docs/collaboration/traces/2026-08-18-liss-0027-at-tdd-process-adr-0016-qualification.md
+skip template-history docs/collaboration/traces/2026-08-03-work-plan-scoped-governance.md
+skip template-history docs/collaboration/traces/2026-08-23-wp-0026-mirror-file-parity-gaps.md
+skip template-history docs/collaboration/traces/2026-08-20-ai-tool-support-status-survey.md
+skip template-history docs/collaboration/traces/2026-08-19-liss-0042-pre-commit-branch-confirmation-rule.md
+skip template-history docs/collaboration/traces/2026-08-03-review-cost-discipline.md
+skip template-history docs/collaboration/traces/2026-10-01-liss-0075-native-subagent-guide-implementation.md
+skip template-history docs/collaboration/agreements/2026-08-03-review-cost-discipline-correction.md
+skip template-history docs/collaboration/agreements/2026-08-02-review-issue-and-minor-fix-path.md
+skip template-history docs/collaboration/agreements/2026-08-20-wp-0019-missing-trace.md
+skip template-history docs/collaboration/agreements/2026-08-19-adr-loop-ledgers.md
+skip template-history docs/collaboration/agreements/2026-08-19-drift-prevention-entry-docs-and-ci-checks.md
+skip template-history docs/collaboration/agreements/2026-08-02-mirror-parity-and-adr-range.md
+skip template-history docs/collaboration/agreements/2026-08-19-document-log-lifecycle-model.md
+skip template-history docs/collaboration/agreements/2026-08-02-contract-first-edition.md
+skip template-history docs/collaboration/agreements/2026-08-19-ci-open-finding-gate.md
+skip template-history docs/collaboration/agreements/2026-08-20-self-sustaining-wakeup-protocol.md
+skip template-history docs/collaboration/agreements/2026-08-02-preflight-validation.md
+skip template-history docs/collaboration/agreements/2026-08-19-contract-sync-diff-records.md
+skip template-history docs/collaboration/agreements/2026-08-19-prevent-direct-to-main-commits.md
+skip template-history docs/collaboration/agreements/2026-08-20-retroactive-adr-0020-batch-1.md
+skip template-history docs/collaboration/agreements/2026-08-20-archive-copy-exclusion-gap.md
+skip template-history docs/collaboration/agreements/2026-08-02-contract-consistency-check.md
+skip template-history docs/collaboration/agreements/2026-08-19-copy-target-refs-and-branch-cleanup.md
+skip template-history docs/collaboration/agreements/2026-08-20-checker-excludes-claude-worktrees.md
+skip template-history docs/collaboration/agreements/2026-10-01-native-subagent-loop-support.md
+skip template-history docs/collaboration/agreements/2026-08-23-mirror-file-parity-gaps.md
+skip template-history docs/collaboration/agreements/2026-08-18-two-group-send-message-loop.md
+skip template-history docs/collaboration/agreements/2026-08-19-review-summary-packet.md
+skip template-history docs/collaboration/agreements/2026-08-18-multi-agent-tool-loop-portability.md
+skip template-history docs/collaboration/agreements/2026-08-20-interactive-copy-script.md
+skip template-history docs/collaboration/agreements/2026-08-20-retroactive-adr-0020-batch-2.md
+skip template-history docs/collaboration/agreements/2026-08-03-work-plan-scoped-governance.md
+skip template-history docs/collaboration/agreements/2026-08-18-quality-gate-hooks-and-perspectives-doc.md
+skip template-history docs/collaboration/agreements/2026-08-20-ai-tool-support-status-survey.md
+skip template-history docs/collaboration/agreements/2026-08-03-review-cost-discipline.md
+skip template-history docs/collaboration/loop-settings.toml
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0019-retroactive-adr-0020-archival-batch-1-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0010-adr-loop-ledgers-review.md
+skip template-history docs/collaboration/reviews/2026-08-03-review-cost-discipline-review.md
+skip template-history docs/collaboration/reviews/2026-08-24-adopter-benchmark-research-review.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0021-archive-copy-exclusion-gap-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-liss-0045-wp-0014-post-close-ci-fixes-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-liss-0003-review.md
+skip template-history docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-review.md
+skip template-history docs/collaboration/reviews/2026-08-03-review-cost-discipline-correction-preflight.md
+skip template-history docs/collaboration/reviews/2026-08-02-mirror-parity-review-2.md
+skip template-history docs/collaboration/reviews/2026-08-02-liss-0003-preflight.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0017-review-summary-packet-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0011-ci-open-finding-gate-review.md
+skip template-history docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-review-2.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-review-5.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0018-interactive-copy-script-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-preflight-validation.md
+skip template-history docs/collaboration/reviews/2026-08-02-mirror-parity-preflight.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-preflight.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-preflight-3.md
+skip template-history docs/collaboration/reviews/2026-08-19-liss-0049-liss-0050-word-boundary-and-line-wrap-fix-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-liss-0050-attempt2-liss-0051-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-preflight-2.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0012-copy-target-refs-and-branch-cleanup-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-review-4.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-preflight-6.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-review-3.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0013-prevent-direct-to-main-commits-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-preflight-5.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-first-edition-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-review-6.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-preflight-4.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0023-self-sustaining-wakeup-protocol-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-liss-0047-facet-4-split-wording-fix-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-contract-consistency-review-2.md
+skip template-history docs/collaboration/reviews/2026-08-02-mirror-parity-and-v101-review.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0024-retroactive-adr-0020-archival-batch-2-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0015-contract-sync-diff-records-review.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0020-checker-excludes-claude-worktrees-review.md
+skip template-history docs/collaboration/reviews/2026-08-23-wp-0026-mirror-file-parity-gaps-review.md
+skip template-history docs/collaboration/reviews/2026-08-02-mirror-parity-preflight-2.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0016-drift-prevention-entry-docs-and-ci-checks-review.md
+skip template-history docs/collaboration/reviews/2026-08-03-review-cost-discipline-correction-review.md
+skip template-history docs/collaboration/reviews/2026-08-23-ci-red-check-references-false-positive-fix-review.md
+skip template-history docs/collaboration/reviews/2026-08-19-wp-0014-document-log-lifecycle-model-review.md
+skip template-history docs/collaboration/reviews/2026-08-03-work-plan-scoped-governance-preflight.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0022-wp-0019-missing-trace-review.md
+skip template-history docs/collaboration/reviews/2026-08-20-wp-0025-ai-tool-support-status-survey-review.md
+merge docs/evaluation
+merge docs/issues
+skip template-history docs/issues/LISS-0047-facet-4-template-target-split-granularity.md
+skip template-history docs/issues/LISS-0052-entry-archive-reference-fenced-code-block-gap.md
+skip template-history docs/issues/LISS-0066-archive-batch-2-eligible-set.md
+skip template-history docs/issues/LISS-0071-init-llm-context-cursor-required-files.md
+skip template-history docs/issues/LISS-0065-retroactive-adr-0020-batch-2-proposal.md
+skip template-history docs/issues/LISS-0038-adr-0019-loop-ledgers.md
+skip template-history docs/issues/LISS-0042-pre-commit-branch-confirmation-rule.md
+skip template-history docs/issues/LISS-0053-review-summary-packet.md
+skip template-history docs/issues/LISS-0041-self-directed-worktree-branch-cleanup-rule.md
+skip template-history docs/issues/LISS-0061-wp-0019-missing-trace.md
+skip template-history docs/issues/LISS-0054-interactive-copy-script.md
+skip template-history docs/issues/LISS-0058-checker-excludes-claude-worktrees.md
+skip template-history docs/issues/LISS-0060-wp-0021-issue-graph-status-sync.md
+skip template-history docs/issues/LISS-0050-entry-archive-reference-line-wrap-gap.md
+skip template-history docs/issues/LISS-0063-check-and-spawn-wake-protocol.md
+skip template-history docs/issues/LISS-0064-wp-0023-issue-graph-status-sync.md
+skip template-history docs/issues/LISS-0072-inline-code-span-line-wrap-fixes.md
+skip template-history docs/issues/LISS-0043-document-log-lifecycle-model.md
+skip template-history docs/issues/LISS-0073-external-resource-adoption-adr-number-drift.md
+skip template-history docs/issues/LISS-0059-archive-copy-exclusion-gap.md
+skip template-history docs/issues/LISS-0075-native-subagent-adoption-guide.md
+skip template-history docs/issues/LISS-0044-record-dirs-archive-exclusion-gap.md
+skip template-history docs/issues/LISS-0048-drift-prevention-entry-docs-and-ci-checks.md
+skip template-history docs/issues/LISS-0049-retired-terminology-substring-false-positive.md
+skip template-history docs/issues/LISS-0039-ci-open-finding-gate.md
+skip template-history docs/issues/LISS-0055-retroactive-adr-0020-batching-aggressiveness-decision.md
+skip template-history docs/issues/LISS-0074-native-subagent-support-research.md
+skip template-history docs/issues/LISS-0051-retired-terminology-punctuation-edged-term-gap.md
+skip template-history docs/issues/LISS-0056-archive-wp-0001-under-adr-0020.md
+skip template-history docs/issues/LISS-0045-wp-0014-post-close-ci-fixes.md
+skip template-history docs/issues/LISS-0067-archive-batch-2-blocked-agreement-set.md
+skip template-history docs/issues/LISS-0046-contract-sync-diff-records-and-agent-registry.md
+skip template-history docs/issues/LISS-0057-archive-wp-0002-under-adr-0020.md
+skip template-history docs/issues/LISS-0040-contract-consistency-copy-target-exemption.md
+skip template-history docs/issues/LISS-0069-antigravity-contract-registry-entry.md
+skip template-history docs/issues/LISS-0070-cursor-quickstart-mirror-gaps.md
+skip template-history docs/issues/LISS-0002-preflight-validation.md
+skip template-history docs/issues/LISS-0068-batch-2-housekeeping-fixes.md
+skip template-history docs/issues/LISS-0003-code-path-filter-and-disclosure-history.md
+skip template-history docs/issues/LISS-0062-self-sustaining-wakeup-mechanism-decision.md
+merge docs/spike
+skip template-history docs/spike/case-0003-self-sustaining-group-wakeup-loop/case.md
+skip template-history docs/spike/case-0003-self-sustaining-group-wakeup-loop/evidence/scheduled-tasks-list-output.txt
+skip template-history docs/spike/case-0001-document-log-lifecycle-management/case.md
+skip template-history docs/spike/case-0004-ai-tool-support-status-survey/case.md
+skip template-history docs/spike/case-0005-native-subagent-loop-support/case.md
+skip template-history docs/spike/case-0005-native-subagent-loop-support/evidence/local-inventory.txt
+skip template-history docs/spike/case-0005-native-subagent-loop-support/evidence/implementation-copy-smoke.txt
+skip template-history docs/spike/case-0005-native-subagent-loop-support/evidence/research.md
+skip template-history docs/spike/case-0005-native-subagent-loop-support/evidence/implementation-contract-check.txt
+skip template-history docs/spike/case-0002-retroactive-adr-0020-lifecycle-application/case.md
+merge docs/backlog
+skip template-history docs/backlog/item-0010-coordinator-role-inoculation-rule.md
+skip template-history docs/backlog/item-0009-document-consistency-drift-on-completion.md
+skip template-history docs/backlog/item-0013-prevent-direct-to-main-commits.md
+skip template-history docs/backlog/item-0001-contract-reviewer-v230.md
+skip template-history docs/backlog/item-0022-mirror-file-parity-gaps.md
+skip template-history docs/backlog/item-0007-multi-agent-tool-loop-portability.md
+skip template-history docs/backlog/item-0019-wp-0019-missing-trace.md
+skip template-history docs/backlog/item-0004-two-group-send-message-loop.md
+skip template-history docs/backlog/item-0005-template-propagation-script-for-two-group-loop.md
+skip template-history docs/backlog/item-0015-interactive-copy-script.md
+skip template-history docs/backlog/item-0008-coordinator-message-hallucination-correction.md
+skip template-history docs/backlog/item-0017-checker-excludes-claude-worktrees.md
+skip template-history docs/backlog/item-0003-ci-open-finding-gate.md
+skip template-history docs/backlog/item-0021-ai-tool-support-status-survey.md
+skip template-history docs/backlog/item-0020-self-sustaining-group-wakeup-loop.md
+skip template-history docs/backlog/item-0011-copy-target-references-and-branch-cleanup.md
+skip template-history docs/backlog/item-0014-wp-0014-post-close-ci-fixes.md
+skip template-history docs/backlog/item-0002-adr-loop-ledgers.md
+skip template-history docs/backlog/item-0012-document-and-log-lifecycle-management.md
+skip template-history docs/backlog/item-0023-native-subagent-closed-loop-support.md
+skip template-history docs/backlog/item-0018-archive-copy-exclusion-gap.md
+skip template-history docs/backlog/item-0006-quality-gate-hooks-and-review-perspectives-doc.md
+skip template-history docs/backlog/item-0016-retroactive-adr-0020-lifecycle-application.md
+merge docs/specs
+skip template-history docs/specs/preflight-validation.feature.md
+skip template-history docs/specs/interactive-copy-script.feature.md
+skip template-history docs/specs/review-issue-and-minor-fix-path.feature.md
+merge docs/templates
+merge docs/work-plans
+skip template-history docs/work-plans/WP-0010-adr-loop-ledgers.md
+skip template-history docs/work-plans/WP-0025-ai-tool-support-status-survey.md
+skip template-history docs/work-plans/WP-0022-wp-0019-missing-trace.md
+skip template-history docs/work-plans/WP-0019-retroactive-adr-0020-archival-batch-1.md
+skip template-history docs/work-plans/WP-0016-drift-prevention-entry-docs-and-ci-checks.md
+skip template-history docs/work-plans/WP-0018-interactive-copy-script.md
+skip template-history docs/work-plans/WP-0011-ci-open-finding-gate.md
+skip template-history docs/work-plans/WP-0021-archive-copy-exclusion-gap.md
+skip template-history docs/work-plans/WP-0012-copy-target-refs-and-branch-cleanup.md
+skip template-history docs/work-plans/WP-0014-document-log-lifecycle-model.md
+skip template-history docs/work-plans/WP-0017-review-summary-packet.md
+skip template-history docs/work-plans/WP-0024-retroactive-adr-0020-archival-batch-2.md
+skip template-history docs/work-plans/WP-0013-prevent-direct-to-main-commits.md
+skip template-history docs/work-plans/WP-0023-self-sustaining-wakeup-protocol.md
+skip template-history docs/work-plans/WP-0026-mirror-file-parity-gaps.md
+skip template-history docs/work-plans/WP-0020-checker-excludes-claude-worktrees.md
+skip template-history docs/work-plans/WP-0027-native-subagent-loop-support.md
+skip template-history docs/work-plans/WP-0015-contract-sync-diff-records.md
+copy scripts/copy-ai-collaboration-files.sh
+copy scripts/update-ai-collaboration-files.sh
+copy scripts/init-llm-context.sh
+copy scripts/init-loop-settings.sh
+copy scripts/check-contract-consistency.py
+copy scripts/lib/collaboration-template-paths.sh
+copy scripts/lib/emit-tooling-setup-prompt.sh
+
+Done.
+Target: /var/folders/z6/qzgjxw4n1mq1xvb9y33g611h0000gn/T/wp0027-copy-3_ezfl3_
+Existing files were left unchanged
+Recorded sync point in .collaboration-template-version for future updates.
+
+Next:
+  cd "/var/folders/z6/qzgjxw4n1mq1xvb9y33g611h0000gn/T/wp0027-copy-3_ezfl3_"
+  scripts/init-llm-context.sh .
+
+Later, to pull in template updates:
+  scripts/update-ai-collaboration-files.sh --target "/var/folders/z6/qzgjxw4n1mq1xvb9y33g611h0000gn/T/wp0027-copy-3_ezfl3_"
+
+exit: 0
+PASS byte-identical docs/collaboration/native-subagent-loop-compatibility.md 7ea32b6094de61c2e39b3617160d8bcbdf4f1fed806a98d0c4edf388d40bf886
+PASS byte-identical docs/templates/agent-tool-conformance.md 45ae31090759014042cf7f454ce85ab2962d7646a3f1edfdea343c59d4f06874
+PASS byte-identical docs/collaboration/adoption-guide.md 9674199ec88becb1259367554c5b516dd9672ae432029c9b23d603f3ce2ed566
+PASS isolated copy delivers guide, template, adoption entry

@@ -1,0 +1,7 @@
+Command: python3 scripts/check-contract-consistency.py --repo .
+Initial run before generic Cursor sample wording correction:
+
+references:
+  docs/collaboration/native-subagent-loop-compatibility.md:125 names '.cursor/agents/loop-implementer.md', which does not exist
+
+contract consistency: 1 failure(s)

@@ -1,0 +1,2 @@
+PASS six tool sections, eight stage cells, evidence/failure fields, touched relative links
+LIMIT: structural checks do not certify native behavior, source correctness or account entitlement

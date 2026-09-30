@@ -1,0 +1,14 @@
+Active persona: Implementer (publication/integration only)
+PR: https://github.com/nn0cl/llm-loop-project-template/pull/25 (draft)
+Reviewed content snapshot: ed507e6; review/status synchronization: aa6c6d3.
+COMMAND: git push -u origin codex/native-subagent-loop-support
+exit: 0; remote branch created; tracking set.
+COMMAND: gh pr create --draft --base main --head codex/native-subagent-loop-support --title 'docs: strengthen native agent loop compatibility guidance' --body-file /private/tmp/wp0027-pr-body.md
+exit: 0
+https://github.com/nn0cl/llm-loop-project-template/pull/25
+COMMAND: gh pr checks 25 --watch --interval 10
+exit: 0
+Repository sanity pass 12s https://github.com/nn0cl/llm-loop-project-template/actions/runs/36763316708/job/110051106127
+COMMAND: git status --short
+exit: 0; no output before this publication record.
+Next action: existing Director close checkpoint. WP-0027 remains pending Director close; promoted backlog not automatically closed.

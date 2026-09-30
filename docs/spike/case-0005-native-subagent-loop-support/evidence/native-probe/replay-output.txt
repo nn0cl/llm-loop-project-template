@@ -1,0 +1,2 @@
+PASS: saved seeded decision rejected; corrected decision conforms; acceptance preserved
+Replay command: Python json loads and exact dict comparisons of acceptance.required_output against attempt-1-decision and decision.

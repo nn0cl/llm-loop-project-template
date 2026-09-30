@@ -1,0 +1,20 @@
+Commands: git worktree list; command -v codex/claude/grok/cursor/gh; codex --version; grok --version; cursor --version; codex --help
+Observed 2026-10-01
+Primary branch before work: main, 4587e05
+Existing unrelated Claude worktrees: agent-a2635caef695879a4, practical-diffie-24ed86, reverent-keller-ef053e (not touched)
+Codex: /Users/nn0cl/.local/bin/codex; codex-cli 0.153.4; PATH aliases permission warning
+Claude: not found on PATH
+Grok: /Users/nn0cl/.grok/bin/grok; 1.0.41 (4220f3b224a6) stable
+Cursor: /usr/local/bin/cursor; 3.20.21 f09fca384ceca23f7bf21f9c23655b162641d740 arm64; macOS codesign warning
+gh: /opt/homebrew/bin/gh
+Codex help exposes agents, exec, resume, queue, fork, features. Help presence is not successful execution or entitlement evidence.
+Branch creation first failed: cannot lock ref (sandbox). Approved escalation succeeded: Switched to a new branch codex/native-subagent-loop-support.
+
+Further help-only probes:
+Codex agents: Browse all agent sessions on the shared local app-server daemon.
+Codex queue: Usage codex queue [OPTIONS] --thread <THREAD> --message <TEXT>.
+These do not prove runtime discoverability, authorization, or idle/closed-client delivery.
+Remote: git@github.com:nn0cl/llm-loop-project-template.git
+gh auth status (sandbox): Failed to log in; token reported invalid. No token content read or recorded.
+
+Correction: gh auth status outside sandbox exited 0: Logged in to github.com account nn0cl (keyring); Git protocol ssh; scopes gist/read:org/repo. Sandbox invalid-token result is not actual account failure. Masked token omitted from evidence.

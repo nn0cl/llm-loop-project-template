@@ -1,0 +1,1 @@
+{"fixture_only":true,"input":{"backlog_status":"captured"},"required_output":{"execute":false},"reviewer_inputs":["acceptance.json","decision.json"],"close_requires_director":true}
