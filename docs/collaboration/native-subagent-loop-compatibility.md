@@ -21,8 +21,10 @@ editor 3.20.21; Claude Code was absent from PATH. Other authenticated surfaces
 were unavailable. Codex CLI help exposes `agents` and `queue --thread <THREAD>
 --message <TEXT>`; that is discovery/message syntax evidence only, not proof of
 idle wake or client-exit delivery. Desktop native children and installed CLI
-are different surfaces. Current Codex release notes describe CLI 0.156.0 and
-0.159.x capabilities beyond the installed version. Recheck versions before use.
+are different surfaces. Versioned Codex releases [C6/C7/C8] describe CLI 0.156.0 and
+0.159.x capabilities beyond the installed version. Their page date labels are
+September 22 (0.156.0) and September 29 (0.159.0/0.159.1), 2026. C4 is navigation
+only and may omit CLI release entries. Recheck versions before use.
 
 No complete eight-stage live certification is issued here. A later partial
 probe must name exactly the tested primitives and keep the other stages Unknown.
@@ -199,7 +201,10 @@ when the surface/version changes; do not copy release facts to another surface.
 - C1: https://learn.chatgpt.com/docs/agent-configuration/subagents
 - C2: https://learn.chatgpt.com/docs/environments/git-worktrees
 - C3: https://learn.chatgpt.com/docs/reference/troubleshooting
-- C4: https://learn.chatgpt.com/docs/changelog
+- C4 (navigation only): https://learn.chatgpt.com/docs/changelog
+- C6 (0.156.0 release): https://github.com/openai/codex/releases/tag/rust-v0.156.0
+- C7 (0.159.0 release): https://github.com/openai/codex/releases/tag/rust-v0.159.0
+- C8 (0.159.1 release): https://github.com/openai/codex/releases/tag/rust-v0.159.1
 - C5 (deferred API surface): https://developers.openai.com/api/docs/guides/responses-multi-agent
 - L1: https://code.claude.com/docs/en/sub-agents
 - L2: https://code.claude.com/docs/en/agent-teams

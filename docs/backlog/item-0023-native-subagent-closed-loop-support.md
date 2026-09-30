@@ -60,15 +60,15 @@ Produce a per-tool, per-stage coverage matrix for approved-backlog intake, desig
 
 ## Codex update grounds and adoption checks
 
-Source: [official ChatGPT and Codex changelog](https://learn.chatgpt.com/docs/changelog), retrieved 2026-10-01. These are CLI release facts; equivalent availability in the desktop app must be checked separately.
+Sources: OpenAI’s versioned release pages linked in each row, retrieved 2026-10-01. Dates below follow the release-page date labels. The [unified changelog](https://learn.chatgpt.com/docs/changelog) is optional navigation and may omit CLI entries. These are CLI release facts; equivalent availability in the desktop app must be checked separately.
 
 | Release | Documented change | Relevance and remaining check |
 | --- | --- | --- |
-| 2026-09-22, CLI 0.156.0 | Agent Command Center can create worktree sessions; worktree support enabled by default | Easier workspace isolation. Does not establish automatic worktree isolation for every subagent; verify dispatch configuration. |
-| 2026-09-22, CLI 0.156.0 | Preserve streamed answers and plans when turns fail, are interrupted, or receive subagent completion events | Reduces information loss. Does not prove completion starts the next phase or wakes an idle parent; exercise those cases. |
-| 2026-09-22, CLI 0.156.0 | Restore Plan mode when resuming sessions | Relevant to recovery. Verify repository phase/persona state from artifacts rather than relying on the UI mode. |
-| 2026-09-29, CLI 0.159.0 | Opt-in `instant_interrupt` permits steering during model responses and long-running Code Mode calls | Relevant to Director intervention. Verify partial execution evidence and safe continuation. |
-| 2026-09-29, CLI 0.159.1 | Add GPT-6.1 Sol as the default in bundled model catalogs | Model-selection update, not evidence of a new orchestration or automatic-closing capability. |
+| 2026-09-22, CLI [0.156.0](https://github.com/openai/codex/releases/tag/rust-v0.156.0) | Agent Command Center can create worktree sessions; worktree support enabled by default | Easier workspace isolation. Does not establish automatic worktree isolation for every subagent; verify dispatch configuration. |
+| 2026-09-22, CLI [0.156.0](https://github.com/openai/codex/releases/tag/rust-v0.156.0) | Preserve streamed answers and plans when turns fail, are interrupted, or receive subagent completion events | Reduces information loss. Does not prove completion starts the next phase or wakes an idle parent; exercise those cases. |
+| 2026-09-22, CLI [0.156.0](https://github.com/openai/codex/releases/tag/rust-v0.156.0) | Restore Plan mode when resuming sessions | Relevant to recovery. Verify repository phase/persona state from artifacts rather than relying on the UI mode. |
+| 2026-09-29, CLI [0.159.0](https://github.com/openai/codex/releases/tag/rust-v0.159.0) | Opt-in `instant_interrupt` permits steering during model responses and long-running Code Mode calls | Relevant to Director intervention. Verify partial execution evidence and safe continuation. |
+| 2026-09-29, CLI [0.159.1](https://github.com/openai/codex/releases/tag/rust-v0.159.1) | Add GPT-6.1 Sol as the default in bundled model catalogs | Model-selection update, not evidence of a new orchestration or automatic-closing capability. |
 
 [Current Codex subagent documentation](https://learn.chatgpt.com/docs/agent-configuration/subagents) describes spawning, follow-up instructions, waiting, and closing agent threads. These capabilities are existing baseline support; the documentation alone does not date them to the recent release. Agent-thread closure is not the repository's backlog disposition or Director work-plan close.
 

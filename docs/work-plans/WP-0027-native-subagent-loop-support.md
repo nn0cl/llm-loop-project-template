@@ -100,3 +100,9 @@ See agreement; exact outputs stored under case-0005/evidence and work trace.
 - docs/spike/case-0005-native-subagent-loop-support/evidence/research.md
 - docs/templates/agent-tool-conformance.md
 - docs/work-plans/WP-0027-native-subagent-loop-support.md
+
+## Review finding correction
+- Initial review: Rejected, record ../collaboration/reviews/2026-10-01-wp-0027-native-subagent-loop-support-review.md.
+- LISS-0076: resolved, source-grounding correction only; pending separate Reviewer confirmation.
+- Preflight refreshed for changed guide/source records in source-correction-check.txt; no native probe claim expanded.
+- Work-plan remains review-pending and Director close remains pending.
